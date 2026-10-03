@@ -1,20 +1,54 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["react", "typescript", "oxc", "import"],
-  "ignorePatterns": [
-    "src/app/router/routeTree.gen.ts",
-    "dist/**",
-    "coverage/**"
-  ],
+  "jsPlugins": ["eslint-plugin-perfectionist", "@stylistic/eslint-plugin"],
+  "ignorePatterns": ["src/app/router/routeTree.gen.ts", "dist/**", "coverage/**"],
   "rules": {
     "react/rules-of-hooks": "error",
-    "react/only-export-components": ["warn", { "allowConstantExport": true }],
+    "react/only-export-components": [
+      "warn",
+      {
+        "allowConstantExport": true
+      }
+    ],
     "import/no-default-export": "error",
     "func-style": ["error", "expression"],
     "prefer-arrow-callback": "error",
     "no-var": "error",
     "prefer-const": "error",
     "eqeqeq": ["error", "always"],
-    "curly": ["error", "all"]
-  }
+    "curly": ["error", "all"],
+    "perfectionist/sort-imports": [
+      "error",
+      {
+        "type": "alphabetical",
+        "order": "asc",
+        "newlinesBetween": 0,
+        "newlinesInside": 0,
+        "partitionByNewLine": false,
+        "groups": ["import", "unknown"]
+      }
+    ],
+    "@stylistic/padding-line-between-statements": [
+      "error",
+      {
+        "blankLine": "always",
+        "prev": "*",
+        "next": "*"
+      },
+      {
+        "blankLine": "never",
+        "prev": "import",
+        "next": "import"
+      }
+    ]
+  },
+  "overrides": [
+    {
+      "files": ["vite.config.ts"],
+      "rules": {
+        "import/no-default-export": "off"
+      }
+    }
+  ]
 }
