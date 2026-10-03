@@ -1,13 +1,67 @@
 {
-  "name": "web",
+  "name": "@comunidade-viva/web",
+  "version": "0.1.0",
   "private": true,
-  "version": "0.0.0",
+  "description": "Aplicação Web/PWA da Comunidade Viva",
+  "author": {
+    "name": "Comunidade Viva - TI",
+    "email": "comunidadeviva@gmail.com"
+  },
+  "license": "UNLICENSED",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/comunidadevivati/web.git"
+  },
+  "bugs": {
+    "url": "https://github.com/comunidadevivati/web/issues"
+  },
+  "keywords": [
+    "comunidade-viva",
+    "react",
+    "typescript",
+    "vite",
+    "pwa",
+    "ddd",
+    "mvvm"
+  ],
   "type": "module",
+  "packageManager": "pnpm@12.6.0",
+  "engines": {
+    "node": ">=24.21.0 <25",
+    "pnpm": ">=12.6.0 <13"
+  },
+  "devEngines": {
+    "runtime": {
+      "name": "node",
+      "version": "24.21.0",
+      "onFail": "error"
+    },
+    "packageManager": {
+      "name": "pnpm",
+      "version": "12.6.0",
+      "onFail": "error"
+    }
+  },
   "scripts": {
     "dev": "vite",
     "build": "tsc -b && vite build",
-    "lint": "oxlint",
-    "preview": "vite preview"
+    "build:ci": "pnpm validate && pnpm build",
+    "preview": "vite preview",
+    "typecheck": "tsc -b --pretty false",
+    "lint": "oxlint .",
+    "lint:fix": "oxlint . --fix",
+    "format": "prettier . --write",
+    "format:check": "prettier . --check",
+    "test": "vitest",
+    "test:run": "vitest run",
+    "test:coverage": "vitest run --coverage",
+    "test:e2e": "playwright test",
+    "test:e2e:ui": "playwright test --ui",
+    "validate": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test:run",
+    "deps:check": "pnpm outdated",
+    "deps:audit": "pnpm audit",
+    "deps:audit:prod": "pnpm audit --prod",
+    "clean": "node -e \"require('node:fs').rmSync('dist',{recursive:true,force:true})\""
   },
   "dependencies": {
     "react": "^19.2.8",
