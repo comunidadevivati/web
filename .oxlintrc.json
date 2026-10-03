@@ -26,7 +26,11 @@
         "newlinesBetween": 0,
         "newlinesInside": 0,
         "partitionByNewLine": false,
-        "groups": ["import", "unknown"]
+        "groups": [
+          ["builtin", "external", "internal", "parent", "sibling", "index", "side-effect", "style"],
+          "unknown"
+        ],
+        "sortSideEffects": true
       }
     ],
     "@stylistic/padding-line-between-statements": [
