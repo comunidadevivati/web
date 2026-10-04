@@ -76,6 +76,7 @@
   },
   "devDependencies": {
     "@babel/core": "^8.0.6",
+    "@playwright/test": "^1.63.0",
     "@rolldown/plugin-babel": "^0.2.4",
     "@stylistic/eslint-plugin": "^5.10.0",
     "@tanstack/router-plugin": "^1.168.42",
