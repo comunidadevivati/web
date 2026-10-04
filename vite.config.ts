@@ -13,6 +13,13 @@ export default defineConfig({
     },
   },
 
+  server: {
+    watch: {
+      usePolling: true,
+      interval: 100,
+    },
+  },
+
   plugins: [
     tanstackRouter({
       target: 'react',
