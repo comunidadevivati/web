@@ -1,8 +1,17 @@
 {
   "$schema": "./node_modules/oxlint/configuration_schema.json",
   "plugins": ["react", "typescript", "oxc", "import"],
-  "jsPlugins": ["eslint-plugin-perfectionist", "@stylistic/eslint-plugin"],
-  "ignorePatterns": ["src/app/router/routeTree.gen.ts", "dist/**", "coverage/**"],
+  "jsPlugins": [
+    "eslint-plugin-perfectionist",
+    "@stylistic/eslint-plugin",
+    "./.config/oxlint/project-plugin.mjs"
+  ],
+  "ignorePatterns": [
+    "src/app/router/routeTree.gen.ts",
+    "dist/**",
+    "coverage/**",
+    ".config/oxlint/**"
+  ],
   "rules": {
     "react/rules-of-hooks": "error",
     "react/only-export-components": [
@@ -52,13 +61,42 @@
         "patterns": ["./**", "../**"]
       }
     ],
-    "@stylistic/semi": ["error", "always"]
+    "@stylistic/semi": ["error", "always"],
+    "project/direct-export": "error",
+    "@stylistic/no-multiple-empty-lines": [
+      "error",
+      {
+        "max": 1,
+        "maxBOF": 0,
+        "maxEOF": 0
+      }
+    ],
+    "@stylistic/eol-last": ["error", "always"],
+    "no-unused-vars": [
+      "error",
+      {
+        "vars": "all",
+        "args": "all",
+        "argsIgnorePattern": "^_",
+        "varsIgnorePattern": "^_",
+        "caughtErrors": "all",
+        "caughtErrorsIgnorePattern": "^_"
+      }
+    ],
+    "no-unused-expressions": "error",
+    "import/no-empty-named-blocks": "error"
   },
   "overrides": [
     {
       "files": ["vite.config.ts"],
       "rules": {
         "import/no-default-export": "off"
+      }
+    },
+    {
+      "files": ["src/components/ui/**/*.tsx"],
+      "rules": {
+        "react/only-export-components": "off"
       }
     }
   ]
