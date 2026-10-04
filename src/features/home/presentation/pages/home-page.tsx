@@ -1,3 +1,5 @@
+import { Heading } from '@/components/ui/heading';
+
 export const HomePage = () => {
-  return <h1>Comunidade Viva</h1>;
+  return <Heading>Comunidade Viva</Heading>;
 };
