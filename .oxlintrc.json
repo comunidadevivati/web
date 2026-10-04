@@ -92,13 +92,6 @@
         "SwitchCase": 1
       }
     ],
-    "@stylistic/jsx-indent": [
-      "error",
-      2,
-      {
-        "checkAttributes": true
-      }
-    ],
     "@stylistic/jsx-indent-props": ["error", 2]
   },
   "overrides": [
