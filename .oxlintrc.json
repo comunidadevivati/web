@@ -45,6 +45,12 @@
         "prev": "import",
         "next": "import"
       }
+    ],
+    "no-restricted-imports": [
+      "error",
+      {
+        "patterns": ["./**", "../**"]
+      }
     ]
   },
   "overrides": [

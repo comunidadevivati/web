@@ -1,4 +1,4 @@
-import { env } from '../../app/config/env'
+import { env } from '@/app/config/env'
 import ky from 'ky'
 
 export const apiClient = ky.create({
