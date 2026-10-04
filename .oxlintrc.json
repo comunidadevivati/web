@@ -84,7 +84,22 @@
       }
     ],
     "no-unused-expressions": "error",
-    "import/no-empty-named-blocks": "error"
+    "import/no-empty-named-blocks": "error",
+    "@stylistic/indent": [
+      "error",
+      2,
+      {
+        "SwitchCase": 1
+      }
+    ],
+    "@stylistic/jsx-indent": [
+      "error",
+      2,
+      {
+        "checkAttributes": true
+      }
+    ],
+    "@stylistic/jsx-indent-props": ["error", 2]
   },
   "overrides": [
     {
