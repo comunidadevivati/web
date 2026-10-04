@@ -1,5 +1,5 @@
-import { Spinner } from '@/components/ui/spinner';
+import { LoadingOverlay } from '@/components/ui/loading-overlay';
 
 export const RoutePending = () => {
-  return <Spinner className="mx-auto my-10 size-6" />;
+  return <LoadingOverlay />;
 };
