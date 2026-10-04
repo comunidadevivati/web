@@ -3,6 +3,7 @@ import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
 import { defineConfig } from 'vite';
+import { VitePWA } from 'vite-plugin-pwa';
 
 export default defineConfig({
   resolve: {
@@ -24,6 +25,33 @@ export default defineConfig({
 
     babel({
       presets: [reactCompilerPreset()],
+    }),
+
+    VitePWA({
+      strategies: 'generateSW',
+      registerType: 'prompt',
+      injectRegister: 'auto',
+      includeAssets: ['favicon.svg'],
+      manifest: {
+        id: '/',
+        name: 'Comunidade Viva',
+        short_name: 'Comunidade Viva',
+        description: 'Aplicação oficial da Comunidade Viva',
+        lang: 'pt-BR',
+        start_url: '/',
+        scope: '/',
+        display: 'standalone',
+        orientation: 'any',
+        theme_color: '#ffffff',
+        background_color: '#ffffff',
+      },
+      workbox: {
+        cleanupOutdatedCaches: true,
+        clientsClaim: true,
+      },
+      devOptions: {
+        enabled: false,
+      },
     }),
   ],
 });
