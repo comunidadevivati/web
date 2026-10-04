@@ -1,13 +1,61 @@
 {
   "editor.formatOnSave": true,
+  "editor.formatOnPaste": true,
+  "editor.rulers": [100],
+  "editor.tabSize": 2,
+  "editor.insertSpaces": true,
+  "editor.detectIndentation": false,
+  "editor.trimAutoWhitespace": true,
   "editor.codeActionsOnSave": {
-    "source.fixAll.oxc": "always"
+    "source.fixAll.oxc": "always",
+    "source.organizeImports": "never"
   },
-
+  "editor.quickSuggestions": {
+    "other": true,
+    "comments": false,
+    "strings": true
+  },
+  "files.eol": "\n",
+  "files.insertFinalNewline": true,
+  "files.trimFinalNewlines": true,
+  "files.trimTrailingWhitespace": true,
   "oxc.enable.oxlint": true,
   "oxc.enable.oxfmt": true,
   "oxc.lint.run": "onType",
-
+  "js/ts.tsdk.path": "./node_modules/typescript/lib",
+  "js/ts.tsdk.promptToUseWorkspaceVersion": true,
+  "js/ts.suggest.autoImports": true,
+  "js/ts.updateImportsOnFileMove.enabled": "always",
+  "js/ts.preferences.importModuleSpecifier": "non-relative",
+  "js/ts.preferences.importModuleSpecifierEnding": "minimal",
+  "js/ts.preferences.includePackageJsonAutoImports": "auto",
+  "tailwindCSS.classFunctions": ["cn", "cva"],
+  "tailwindCSS.validate": true,
+  "tailwindCSS.hovers": true,
+  "tailwindCSS.suggestions": true,
+  "tailwindCSS.colorDecorators": true,
+  "tailwindCSS.showPixelEquivalents": true,
+  "tailwindCSS.rootFontSize": 16,
+  "files.associations": {
+    "*.css": "tailwindcss"
+  },
+  "cSpell.language": "en,pt,pt_BR",
+  "cSpell.words": [
+    "BaseUI",
+    "clsx",
+    "hookform",
+    "oxc",
+    "oxfmt",
+    "oxlint",
+    "shadcn",
+    "TanStack",
+    "tsx",
+    "Vite",
+    "Vitest",
+    "Workbox",
+    "Zod",
+    "Zustand"
+  ],
   "[javascript]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
@@ -28,5 +76,8 @@
   },
   "[jsonc]": {
     "editor.defaultFormatter": "vscode.json-language-features"
+  },
+  "[yaml]": {
+    "editor.defaultFormatter": "redhat.vscode-yaml"
   }
 }
