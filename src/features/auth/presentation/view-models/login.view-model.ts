@@ -1,9 +1,13 @@
+import { loginUseCase } from '@/features/auth/application/use-cases/login.use-case';
 import { loginSchema, type LoginFormData } from '@/features/auth/presentation/models/login.model';
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useNavigate } from '@tanstack/react-router';
 import { useState } from 'react';
 import { useForm } from 'react-hook-form';
 
 export const useLoginViewModel = () => {
+  const navigate = useNavigate();
+
   const [isPasswordVisible, setIsPasswordVisible] = useState(false);
 
   const form = useForm<LoginFormData>({
@@ -25,9 +29,13 @@ export const useLoginViewModel = () => {
     setIsPasswordVisible((currentValue) => !currentValue);
   };
 
-  const submit = form.handleSubmit(async (_data) => {
-    await new Promise<void>((resolve) => {
-      setTimeout(resolve, 1_000);
+  const submit = form.handleSubmit(async ({ email }) => {
+    loginUseCase({
+      email,
+    });
+
+    await navigate({
+      to: '/',
     });
   });
 
