@@ -1,5 +1,5 @@
-import { env } from '@/app/config/env'
-import ky from 'ky'
+import { env } from '@/app/config/env';
+import ky from 'ky';
 
 export const apiClient = ky.create({
   prefix: env.VITE_API_URL,
@@ -12,8 +12,8 @@ export const apiClient = ky.create({
   hooks: {
     beforeRequest: [
       ({ request }) => {
-        request.headers.set('Accept', 'application/json')
+        request.headers.set('Accept', 'application/json');
       },
     ],
   },
-})
+});

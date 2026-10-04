@@ -1,10 +1,10 @@
-import { create } from 'zustand'
-import { devtools } from 'zustand/middleware'
+import { create } from 'zustand';
+import { devtools } from 'zustand/middleware';
 
 interface AppState {
-  sidebarOpen: boolean
-  setSidebarOpen: (open: boolean) => void
-  toggleSidebar: () => void
+  sidebarOpen: boolean;
+  setSidebarOpen: (open: boolean) => void;
+  toggleSidebar: () => void;
 }
 
 export const useAppStore = create<AppState>()(
@@ -13,17 +13,17 @@ export const useAppStore = create<AppState>()(
       sidebarOpen: true,
 
       setSidebarOpen: (sidebarOpen) => {
-        set({ sidebarOpen })
+        set({ sidebarOpen });
       },
 
       toggleSidebar: () => {
         set((state) => ({
           sidebarOpen: !state.sidebarOpen,
-        }))
+        }));
       },
     }),
     {
       name: 'ComunidadeVivaAppStore',
     },
   ),
-)
+);

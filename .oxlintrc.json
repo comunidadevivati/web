@@ -51,7 +51,8 @@
       {
         "patterns": ["./**", "../**"]
       }
-    ]
+    ],
+    "@stylistic/semi": ["error", "always"]
   },
   "overrides": [
     {
