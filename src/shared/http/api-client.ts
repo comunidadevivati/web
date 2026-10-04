@@ -1,7 +1,8 @@
+import { env } from '../../app/config/env'
 import ky from 'ky'
 
 export const apiClient = ky.create({
-  prefix: import.meta.env.VITE_API_URL,
+  prefix: env.VITE_API_URL,
   timeout: 10_000,
   retry: {
     limit: 2,
