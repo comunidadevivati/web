@@ -64,33 +64,33 @@ A interface deve usar a identidade visual da Comunidade Viva como base e evitar 
 
 Versões atuais de referência do projeto:
 
-| Tecnologia | Versão / linha atual |
-| --- | --- |
-| Node.js | `24.21.0` |
-| pnpm | `12.6.0` |
-| React | `19.3.x` |
-| React DOM | `19.3.x` |
-| TypeScript | `6.0.x` |
-| Vite | `8.3.x` |
-| React Compiler | habilitado |
-| TanStack Router | `1.170.x` |
-| TanStack Query | `5.104.x` |
-| Zustand | `5.x` |
-| Ky | `2.x` |
-| React Hook Form | `7.89.x` |
-| Zod | `4.6.x` |
-| Tailwind CSS | `4.3.x` |
-| shadcn/ui | `4.21.x` |
-| Base UI | `1.8.x` |
-| Lucide React | `1.51.x` |
-| Vitest | `5.x` |
-| Testing Library | `16.x` |
-| Playwright | `1.63.x` |
-| Oxlint | `1.86.x` |
-| Oxfmt | `0.71.x` |
-| vite-plugin-pwa | `1.3.x` |
-| Workbox | `7.4.x` |
-| Wrangler | `4.147.x` |
+| Tecnologia      | Versão / linha atual |
+| --------------- | -------------------- |
+| Node.js         | `24.21.0`            |
+| pnpm            | `12.6.0`             |
+| React           | `19.3.x`             |
+| React DOM       | `19.3.x`             |
+| TypeScript      | `6.0.x`              |
+| Vite            | `8.3.x`              |
+| React Compiler  | habilitado           |
+| TanStack Router | `1.170.x`            |
+| TanStack Query  | `5.104.x`            |
+| Zustand         | `5.x`                |
+| Ky              | `2.x`                |
+| React Hook Form | `7.89.x`             |
+| Zod             | `4.6.x`              |
+| Tailwind CSS    | `4.3.x`              |
+| shadcn/ui       | `4.21.x`             |
+| Base UI         | `1.8.x`              |
+| Lucide React    | `1.51.x`             |
+| Vitest          | `5.x`                |
+| Testing Library | `16.x`               |
+| Playwright      | `1.63.x`             |
+| Oxlint          | `1.86.x`             |
+| Oxfmt           | `0.71.x`             |
+| vite-plugin-pwa | `1.3.x`              |
+| Workbox         | `7.4.x`              |
+| Wrangler        | `4.147.x`            |
 
 ### Restrições de versão
 
@@ -617,19 +617,67 @@ Isso também mantém melhor integração com Tailwind IntelliSense.
 
 Usar `cn(...)`.
 
-### Identidade atual do shell autenticado
+### Cores e tokens de design
 
-Paleta base já adotada:
+**Nunca usar valores de cor fixos/chumbados em componentes.** A aplicação terá modo claro, modo escuro e temas futuros; toda cor deve vir de um token semântico.
+
+Proibido em `src/**/*.{ts,tsx}`:
+
+- hex em classes arbitrárias: `bg-[#081519]`, `text-[#65e3e8]`, `shadow-[inset_3px_0_0_#16b3bb]`;
+- funções de cor literais: `rgb()`, `rgba()`, `hsl()`, `oklch()` etc.;
+- paleta padrão do Tailwind: `bg-white`, `text-black`, `text-slate-500`, `bg-cyan-500/10` etc.;
+- cores em `style={{ ... }}`.
+
+A regra de lint `project/no-hardcoded-colors` bloqueia esses padrões em `src/`.
+
+#### Onde os tokens vivem
+
+Todos os tokens ficam em `src/index.css`, arquivo usado pelo Tailwind v4 e pelo shadcn (`components.json`). Estrutura em três camadas:
+
+1. **Paleta da marca** (`--viva-*` em `:root`): valores brutos (hex/oklch). Nunca usados diretamente em componentes.
+2. **Tokens semânticos** (`:root` e `.dark`): descrevem o papel da cor (`--primary`, `--shell`, `--canvas`...) e referenciam a paleta. É aqui que modos e temas mudam valores.
+3. **`@theme inline`**: expõe cada token semântico como utilitário Tailwind (`--color-shell: var(--shell)` → `bg-shell`, `text-shell`, `border-shell`...).
+
+Novos temas devem ser criados redefinindo apenas a camada semântica (ex.: um seletor `.theme-x` ou `[data-theme='x']`), sem alterar componentes.
+
+#### Tokens disponíveis
+
+| Token                                                                                                                                                                                         | Uso                                                                                                |
+| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `background` / `foreground`                                                                                                                                                                   | fundo e texto base da aplicação                                                                    |
+| `card`, `popover`, `muted`, `accent`, `secondary`, `destructive`, `border`, `input`, `ring`                                                                                                   | tokens base do shadcn                                                                              |
+| `primary` / `primary-foreground`                                                                                                                                                              | cor da marca (turquesa) e texto sobre ela                                                          |
+| `primary-strong`                                                                                                                                                                              | variação de maior contraste da marca (texto sobre superfícies claras, hover)                       |
+| `primary-gradient-middle`, `primary-gradient-end`                                                                                                                                             | paradas do gradiente da marca (`from-primary via-primary-gradient-middle to-primary-gradient-end`) |
+| `canvas`, `canvas-start`, `canvas-middle`                                                                                                                                                     | área de conteúdo do app autenticado e seu gradiente                                                |
+| `shell`, `shell-foreground`                                                                                                                                                                   | superfícies escuras de marca (headers) e texto sobre elas                                          |
+| `shell-border`, `shell-divider`, `shell-subtle`                                                                                                                                               | bordas, divisórias e separadores no shell                                                          |
+| `shell-accent`, `shell-accent-foreground`                                                                                                                                                     | acento turquesa do shell e texto/ícone em destaque                                                 |
+| `sidebar`, `sidebar-foreground`, `sidebar-muted-foreground`, `sidebar-primary`, `sidebar-primary-foreground`, `sidebar-accent`, `sidebar-accent-foreground`, `sidebar-border`, `sidebar-ring` | sidebar do app autenticado                                                                         |
+| `overlay`, `overlay-foreground`                                                                                                                                                               | camadas sobre fotos/mídia (controles de carrossel etc.) e base das sombras                         |
+| `chart-1` … `chart-5`                                                                                                                                                                         | cores categóricas de indicadores e gráficos                                                        |
+
+Sombras com cor também são tokens (`@theme inline`): `shadow-elevated`, `shadow-elevated-lg`, `shadow-sidebar-active`.
+
+#### Regras de uso
+
+- usar sempre o utilitário semântico (`bg-shell`, `text-primary-strong`, `border-border`);
+- transparência via modificador de opacidade sobre o token (`bg-shell-accent/10`, `text-shell-foreground/75`) é permitida;
+- precisa de uma cor nova? Adicionar primeiro na paleta (`--viva-*`), depois criar o token semântico em `:root` **e** `.dark`, e expor em `@theme inline`;
+- não criar tokens com nome de cor (`--turquoise`); nomear pelo papel (`--primary-strong`);
+- exceções fora de `src/` (ex.: `theme_color` do manifesto PWA em `vite.config.ts`) não são componentes e podem usar valor literal.
+
+### Identidade visual
+
+Os valores atuais da paleta (`--viva-*`) mantêm a identidade já aprovada:
 
 ```text
-Header:        #081519
-Sidebar:       #10272D
-SPA claro 1:   #C5D7DA
-SPA claro 2:   #BCD1D5
-SPA claro 3:   #AFC6CB
-Turquesa:      #01A9B1
-Acento:        #16B3BB
-Acento claro:  #65E3E8
+Shell / header:   --viva-petrol-950   #081519  → token shell
+Sidebar:          --viva-petrol-850   #10272D  → token sidebar
+Canvas 1/2/3:     --viva-mist-100/200/300      → tokens canvas-start / canvas-middle / canvas
+Turquesa:         --viva-turquoise-500 #01A9B1 → token primary
+Acento:           --viva-aqua-500     #16B3BB  → tokens shell-accent / sidebar-primary
+Acento claro:     --viva-aqua-300     #65E3E8  → tokens shell-accent-foreground / sidebar-primary-foreground
 ```
 
 ### Direção de design
@@ -646,6 +694,36 @@ O dashboard deve manter:
 - hover elegante;
 - boa densidade de informação;
 - sem exagero de efeitos.
+
+### Responsividade e mobile-first
+
+O projeto é um PWA: **toda tela é desenvolvida em mobile-first**, sem exceção.
+
+Regras:
+
+- as classes base (sem prefixo) descrevem o layout de celular;
+- breakpoints (`sm`, `md`, `lg`, `xl`, `2xl`) apenas **acrescentam** ajustes para telas maiores;
+- não escrever o layout desktop primeiro para depois "desfazer" no mobile (evitar `max-*:` como estratégia principal);
+- a largura máxima de conteúdo é **1440px** (`max-w-360` no Tailwind v4, equivalente a 90rem);
+- conteúdo é centralizado com `mx-auto w-full max-w-360`; fundos e faixas de cor podem ocupar a largura total da viewport, mas o conteúdo interno respeita o limite;
+- espaçamento lateral progressivo: `px-4` → `sm:px-6` → `lg:px-8`;
+- tipografia, espaçamentos, alturas e ícones também crescem progressivamente por breakpoint;
+- alturas de seções visuais (hero, carrossel, banners) usam proporção (`aspect-*`) adaptada por breakpoint e limitada pela viewport (`max-h-[calc(100dvh-...)]`), em vez de alturas fixas;
+- usar unidades dinâmicas de viewport (`dvh`/`svh`) em vez de `vh`;
+- nenhuma tela pode ter scroll horizontal, de 320px até 1440px ou mais;
+- alvos de toque com no mínimo 40px (preferencialmente 44px) no mobile;
+- navegação com muitos itens deve colapsar em menu no mobile;
+- imagens com tamanho adequado ao uso (WebP, dimensão máxima compatível com 1440px em telas de alta densidade) e `loading="lazy"` quando fora da primeira dobra.
+
+Larguras de referência para validação:
+
+```text
+320px   celular pequeno
+390px   celular padrão
+768px   tablet
+1024px  notebook pequeno
+1440px  largura máxima de conteúdo
+```
 
 ### Assets de marca
 
@@ -1053,7 +1131,9 @@ O conjunto definitivo de ícones PWA 192/512/maskable ainda deve ser tratado qua
 Uso atual:
 
 ```tsx
-{isSubmitting && <LoadingOverlay />}
+{
+  isSubmitting && <LoadingOverlay />;
+}
 ```
 
 Não criar spinners globais concorrentes sem necessidade.
@@ -1670,10 +1750,10 @@ Evitar lint/format manual em artefatos gerados quando eles já estiverem ignorad
 
 Cards de resumo usam diferenciação funcional de cor:
 
-- Membros: ciano;
-- Visitantes: violeta;
-- Eventos: âmbar;
-- Ministérios: verde.
+- Membros: ciano (`chart-1`);
+- Visitantes: violeta (`chart-2`);
+- Eventos: âmbar (`chart-3`);
+- Ministérios: verde (`chart-4`).
 
 Padrão visual:
 
@@ -1733,6 +1813,9 @@ Antes de concluir qualquer tarefa:
 - [ ] Não há `export default` no app?
 - [ ] Props React usam `type`?
 - [ ] Sem HTML nativo em camada proibida?
+- [ ] Todas as cores usam tokens semânticos (sem hex, rgb/oklch ou paleta padrão do Tailwind)?
+- [ ] A tela foi construída mobile-first e validada de 320px até 1440px?
+- [ ] O conteúdo respeita a largura máxima de 1440px (`max-w-360`)?
 - [ ] Acessibilidade foi considerada?
 - [ ] Loading/error/empty state foram considerados quando aplicável?
 - [ ] Nenhum secret foi introduzido?
@@ -1857,6 +1940,9 @@ Sem default export no app
 Alias @/
 Sem imports relativos manuais
 Sem HTML nativo em Views/layouts/composição
+Mobile-first sempre (PWA)
+Cores somente via tokens semânticos (src/index.css)
+Conteúdo com largura máxima de 1440px (max-w-360)
 VIEW       = nome.view.tsx
 VIEW-MODEL = nome.view-model.ts
 MODEL      = nome.model.ts
