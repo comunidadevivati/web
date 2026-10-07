@@ -50,12 +50,66 @@ const noNativeJsxElementsRule = {
   },
 };
 
+const tailwindPaletteColors =
+  'white|black|slate|gray|zinc|neutral|stone|red|orange|amber|yellow|lime|green|emerald|teal|cyan|sky|blue|indigo|violet|purple|fuchsia|pink|rose';
+
+const tailwindColorUtilities =
+  'bg|text|border(?:-[trblxyse])?|ring|ring-offset|outline|from|via|to|fill|stroke|shadow|inset-shadow|divide|decoration|accent|caret|placeholder';
+
+const hardcodedColorPatterns = [
+  /\[[^\]]*#[0-9a-f]{3,8}\b/i,
+  /^#(?:[0-9a-f]{3,4}|[0-9a-f]{6}|[0-9a-f]{8})$/i,
+  /(?<![a-z-])(?:rgba?|hsla?|hwb|oklch|oklab|lab|lch)\(/i,
+  new RegExp(
+    String.raw`(?:^|[\s:'"])(?:${tailwindColorUtilities})-(?:${tailwindPaletteColors})(?:-\d{2,3})?(?:\/[\d.]+)?(?=$|[\s'"\]])`,
+  ),
+];
+
+const containsHardcodedColor = (value) => {
+  return hardcodedColorPatterns.some((pattern) => pattern.test(value));
+};
+
+const noHardcodedColorsRule = {
+  meta: {
+    type: 'problem',
+    messages: {
+      hardcodedColor:
+        'Não use cores fixas (hex, rgb/oklch, paleta padrão do Tailwind). Use tokens semânticos definidos em "src/index.css" (ex.: bg-shell, text-primary).',
+    },
+  },
+  create(context) {
+    return {
+      Literal(node) {
+        if (typeof node.value !== 'string' || node.parent?.type === 'ImportDeclaration') {
+          return;
+        }
+
+        if (containsHardcodedColor(node.value)) {
+          context.report({
+            node,
+            messageId: 'hardcodedColor',
+          });
+        }
+      },
+      TemplateElement(node) {
+        if (containsHardcodedColor(node.value.raw)) {
+          context.report({
+            node,
+            messageId: 'hardcodedColor',
+          });
+        }
+      },
+    };
+  },
+};
+
 const plugin = {
   meta: {
     name: 'project',
   },
   rules: {
     'direct-export': directExportRule,
+    'no-hardcoded-colors': noHardcodedColorsRule,
     'no-native-jsx-elements': noNativeJsxElementsRule,
   },
 };
