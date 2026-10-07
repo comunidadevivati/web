@@ -6,4 +6,10 @@ test.describe('Home', () => {
 
     await expect(page.getByRole('heading', { level: 1, name: 'Comunidade Viva' })).toBeVisible();
   });
+
+  test('displays the page name in the document title', async ({ page }) => {
+    await page.goto('/');
+
+    await expect(page).toHaveTitle('VIVA - Home');
+  });
 });
