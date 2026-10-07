@@ -1,0 +1,142 @@
+﻿"Issue Id","Parent Id","Issue Type","Summary","Description","Status","Labels"
+"1","","Epic","Site público da Comunidade Viva","Parte pública do site, acessível por qualquer pessoa sem login. Apresenta a Comunidade Viva a visitantes e dá acesso à área de membros.
+
+* Rota: /
+* Mobile-first, conteúdo com largura máxima de 1440px
+* Seções previstas: Home, História, Eventos, Contato","In Progress","site-publico"
+"2","1","Story","Como visitante, quero acessar a página inicial sem precisar fazer login","*Critérios de aceite:*
+* A rota / é pública (fora do guard de autenticação)
+* Layout mobile-first, validado de 320px a 1440px
+* Sem scroll horizontal em nenhuma largura
+* Conteúdo limitado a 1440px e centralizado em telas maiores","Done","site-publico"
+"3","2","Subtask","Criar rota pública / com a feature home (MVVM)","","Done",""
+"4","2","Subtask","Aplicar layout mobile-first com largura máxima de 1440px","","Done",""
+"5","1","Story","Como visitante, quero um menu no topo do site para me orientar","*Critérios de aceite:*
+* Logo à esquerda leva para a página inicial
+* Itens Home, História, Eventos, Contato e Login à direita
+* No celular, os itens ficam em um menu recolhível (botão de menu)
+* Alvos de toque com no mínimo 40px no celular
+* Item Home leva para a página inicial","In Progress","site-publico"
+"6","5","Subtask","Criar componente PublicHeader com logo e itens de menu","","Done",""
+"7","5","Subtask","Implementar menu recolhível no celular","","Done",""
+"8","5","Subtask","Fazer o logo levar para a página inicial","","Done",""
+"9","5","Subtask","Ligar o item ""Home"" à página inicial","","To Do",""
+"10","1","Story","Como visitante, quero acessar a tela de login pelo menu","*Critérios de aceite:*
+* Clicar em ""Login"" no menu leva para /login
+* Funciona no menu desktop e no menu recolhível do celular","Done","site-publico"
+"11","10","Subtask","Ligar o item ""Login"" à rota /login","","Done",""
+"12","1","Story","Como visitante, quero ver fotos da comunidade na página inicial","*Critérios de aceite:*
+* Carrossel com as fotos da comunidade logo abaixo do header
+* Troca automática a cada 6 segundos, com transição suave
+* Setas de anterior/próxima e indicadores clicáveis
+* Autoplay pausa ao passar o mouse ou focar no carrossel
+* Sem autoplay quando o usuário prefere movimento reduzido
+* Fotos em retrato e paisagem aparecem inteiras, sem corte
+* Cada foto tem texto alternativo em português","Done","site-publico"
+"13","12","Subtask","Criar componente Carousel em components/ui","","Done",""
+"14","12","Subtask","Otimizar as imagens do carrossel para WebP (máx. 2000px)","","Done",""
+"15","1","Story","Como visitante, quero conhecer a história da Comunidade Viva","*Critérios de aceite:*
+* Seção ou página História acessível pelo item ""História"" do menu
+* Conteúdo definido pela liderança (texto e imagens)
+* Layout mobile-first","To Do","site-publico"
+"16","15","Subtask","Definir o conteúdo da seção História (texto e imagens)","","To Do",""
+"17","15","Subtask","Implementar a seção História e ligar ao item do menu","","To Do",""
+"18","1","Story","Como visitante, quero ver os próximos eventos da comunidade","*Critérios de aceite:*
+* Seção ou página Eventos acessível pelo item ""Eventos"" do menu
+* Lista de próximos eventos com nome, data e horário
+* Layout mobile-first","To Do","site-publico"
+"19","18","Subtask","Definir a origem dos dados de eventos (API/BFF ou conteúdo fixo)","","To Do",""
+"20","18","Subtask","Implementar a seção Eventos e ligar ao item do menu","","To Do",""
+"21","1","Story","Como visitante, quero entrar em contato com a comunidade","*Critérios de aceite:*
+* Seção ou página Contato acessível pelo item ""Contato"" do menu
+* Canais de contato definidos pela liderança
+* Layout mobile-first","To Do","site-publico"
+"22","21","Subtask","Definir os canais de contato (formulário, WhatsApp, e-mail, endereço)","","To Do",""
+"23","21","Subtask","Implementar a seção Contato e ligar ao item do menu","","To Do",""
+"24","1","Task","Ajustar título da aba e idioma do documento","O index.html ainda usa o título ""web"" e o idioma ""en"".
+
+* Trocar o título para o nome da Comunidade Viva
+* Trocar o idioma para pt-BR
+* Adicionar meta description","To Do","site-publico seo"
+"25","1","Bug","Teste e2e da home desatualizado e executado pelo Vitest","*Problema:*
+* O vitest.config.ts não exclui a pasta e2e/, então o Vitest tenta rodar o e2e/home.spec.ts (Playwright) e o pnpm validate falha.
+* O spec abre / e espera um título ""Comunidade Viva"" que não existe na página.
+
+*Correção:*
+* Excluir e2e/** no vitest.config.ts
+* Reescrever o spec para a home pública (header, carrossel, navegação para /login)","To Do","site-publico testes"
+"26","","Epic","Login e autenticação","Tela de login (/login) e controle de acesso à área de membros.
+
+Situação atual: a autenticação é temporária e só existe no frontend. Qualquer e-mail válido com senha não vazia entra, e o usuário fica salvo no localStorage. Não é autenticação segura e deve ser substituída quando o BFF estiver pronto.","In Progress","autenticacao"
+"27","26","Story","Como membro, quero entrar com e-mail e senha para acessar a área de membros","*Critérios de aceite:*
+* Campos E-mail e Senha, com foco automático no e-mail
+* Botão para mostrar/ocultar a senha
+* Validação ao sair do campo, com mensagens em português
+* Botão ""Entrar"" desabilitado até o formulário ficar válido e durante o envio
+* Loading global bloqueia a tela durante o envio
+* Após entrar, o membro vai para /dashboard
+* Em telas grandes, painel com a marca ao lado do formulário","Done","autenticacao"
+"28","27","Subtask","Criar a tela de login no padrão MVVM","","Done",""
+"29","27","Subtask","Validar o formulário com React Hook Form + Zod","","Done",""
+"30","27","Subtask","Mostrar/ocultar senha","","Done",""
+"31","27","Subtask","Exibir loading global durante o envio","","Done",""
+"32","26","Story","Como visitante, quero ser levado ao login ao tentar abrir a área de membros","*Critérios de aceite:*
+* Sem usuário logado, qualquer rota da área de membros redireciona para /login","Done","autenticacao"
+"33","32","Subtask","Criar a rota protegida /_authenticated com guard em beforeLoad","","Done",""
+"34","26","Story","Como membro logado, quero ir direto ao dashboard ao abrir a tela de login","*Critérios de aceite:*
+* Com usuário logado, abrir /login redireciona para /dashboard","Done","autenticacao"
+"35","34","Subtask","Redirecionar /login para /dashboard quando houver usuário logado","","Done",""
+"36","26","Story","Como membro, quero sair da minha conta","*Critérios de aceite:*
+* Botão ""Sair"" no header e no rodapé do menu lateral
+* Ao sair, os dados do usuário são removidos e o membro volta para /login
+* O botão Voltar do navegador não retorna para a área de membros","Done","autenticacao"
+"37","36","Subtask","Implementar o logout (limpar usuário e navegar para /login com replace)","","Done",""
+"38","26","Story","Como membro, quero que minhas credenciais sejam validadas pelo servidor","*Critérios de aceite:*
+* O login consulta o BFF de autenticação
+* Credenciais inválidas mostram mensagem de erro clara
+* A sessão é guardada de forma segura (não um objeto simples no localStorage)
+* O logout encerra a sessão também no servidor","To Do","autenticacao backend"
+"39","38","Subtask","Integrar o login com o endpoint de autenticação do BFF (TanStack Query + Ky)","","To Do",""
+"40","38","Subtask","Substituir o armazenamento temporário no localStorage por sessão segura","","To Do",""
+"41","38","Subtask","Tratar erros de autenticação (credenciais inválidas, servidor indisponível)","","To Do",""
+"42","","Epic","Área de membros e dashboard","Área logada da aplicação: layout com header e menu lateral, e o dashboard com a visão geral da comunidade (/dashboard).
+
+Situação atual: o dashboard usa dados mockados.","In Progress","area-membros"
+"43","42","Story","Como membro, quero uma área logada com menu lateral para navegar","*Critérios de aceite:*
+* Header com marca, logo central, e-mail do usuário e botão ""Sair""
+* Menu lateral com três modos: expandido, recolhido (só ícones) e oculto
+* Ao mostrar de novo o menu oculto, ele volta ao último modo usado
+* O item do menu da página atual aparece destacado","Done","area-membros"
+"44","43","Subtask","Criar o layout autenticado (header, menu lateral e área de conteúdo)","","Done",""
+"45","43","Subtask","Implementar os modos do menu lateral (expandido, recolhido, oculto)","","Done",""
+"46","42","Story","Como membro, quero navegar pela área logada no celular","Hoje o menu lateral fica escondido em telas menores que 768px, e o botão de menu do header não mostra nenhum menu no celular.
+
+*Critérios de aceite:*
+* No celular, o botão de menu abre o menu lateral sobre o conteúdo (drawer)
+* O menu fecha ao escolher um item, ao tocar fora ou com Esc
+* Validado de 320px a 768px","To Do","area-membros mobile"
+"47","46","Subtask","Implementar o menu lateral em drawer no celular","","To Do",""
+"48","42","Story","Como membro, quero ver no dashboard um resumo da comunidade","*Critérios de aceite:*
+* Rota /dashboard
+* Cards de Membros, Visitantes, Eventos e Ministérios, cada um com sua cor
+* Lista de próximos eventos com data e horário
+* Lista de atividades recentes
+* Dados mockados nesta etapa","Done","area-membros"
+"49","48","Subtask","Criar o dashboard no padrão MVVM com dados mockados","","Done",""
+"50","48","Subtask","Refinar o design visual do dashboard","","Done",""
+"51","48","Subtask","Mover o dashboard para a rota /dashboard","","Done",""
+"52","42","Story","Como membro, quero ver dados reais no dashboard","*Critérios de aceite:*
+* Indicadores, eventos e atividades vêm do BFF
+* Estados de carregamento, erro e lista vazia
+* O layout visual atual é mantido","To Do","area-membros backend"
+"53","52","Subtask","Definir os contratos do BFF para indicadores, eventos e atividades","","To Do",""
+"54","52","Subtask","Integrar o dashboard com TanStack Query, substituindo os mocks","","To Do",""
+"55","52","Subtask","Tratar estados de carregamento, erro e vazio","","To Do",""
+"56","","Task","Substituir cores fixas por tokens semânticos de cor","Tokens estruturados em src/index.css: paleta da marca (--viva-*), tokens semânticos (:root e .dark) e @theme inline.
+Login, dashboard, layout autenticado e home convertidos.","Done","design-system"
+"57","","Task","Criar regra de lint que bloqueia cores fixas","Regra project/no-hardcoded-colors no Oxlint: bloqueia hex, rgb/oklch e a paleta padrão do Tailwind em src/.","Done","design-system"
+"58","","Task","Implementar a alternância de tema claro/escuro","Os valores do modo escuro já existem nos tokens (.dark), mas nada ativa a classe na tela.
+
+* Seguir a preferência do sistema por padrão
+* Permitir troca manual e lembrar a escolha
+* Validar contraste nas telas existentes","To Do","design-system"
