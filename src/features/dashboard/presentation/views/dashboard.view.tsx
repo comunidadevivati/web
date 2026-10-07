@@ -2,7 +2,7 @@ import { Box } from '@/components/ui/box';
 import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
 import { Heading } from '@/components/ui/heading';
 import { Text } from '@/components/ui/text';
-import { useHomeViewModel } from '@/features/home/presentation/view-models/home.view-model';
+import { useDashboardViewModel } from '@/features/dashboard/presentation/view-models/dashboard.view-model';
 import {
   CalendarDaysIcon,
   ChurchIcon,
@@ -49,8 +49,8 @@ const dashboardStyles = {
   },
 };
 
-export const HomeView = () => {
-  const { activities, events, summaries } = useHomeViewModel();
+export const DashboardView = () => {
+  const { activities, events, summaries } = useDashboardViewModel();
 
   return (
     <Box className="grid gap-8">

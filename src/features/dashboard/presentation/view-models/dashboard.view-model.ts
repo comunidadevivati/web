@@ -2,7 +2,7 @@ import type {
   DashboardActivity,
   DashboardEvent,
   DashboardSummary,
-} from '@/features/home/presentation/models/home.model';
+} from '@/features/dashboard/presentation/models/dashboard.model';
 
 const summaries: DashboardSummary[] = [
   {
@@ -70,7 +70,7 @@ const activities: DashboardActivity[] = [
   },
 ];
 
-export const useHomeViewModel = () => {
+export const useDashboardViewModel = () => {
   return {
     activities,
     events,

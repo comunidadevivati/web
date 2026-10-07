@@ -8,7 +8,7 @@ export const RouteNotFound = () => {
 
       <AlertDescription>
         A página que você tentou acessar não existe.{' '}
-        <Link className="font-medium underline underline-offset-4" to="/">
+        <Link className="font-medium underline underline-offset-4" to="/dashboard">
           Voltar para o início
         </Link>
       </AlertDescription>

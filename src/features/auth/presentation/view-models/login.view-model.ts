@@ -35,7 +35,7 @@ export const useLoginViewModel = () => {
     });
 
     await navigate({
-      to: '/',
+      to: '/dashboard',
     });
   });
 

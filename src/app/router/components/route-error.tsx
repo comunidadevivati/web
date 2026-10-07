@@ -7,7 +7,7 @@ export const RouteError = ({ reset }: ErrorComponentProps) => {
 
   const handleGoHome = () => {
     void navigate({
-      to: '/',
+      to: '/dashboard',
     });
   };
 

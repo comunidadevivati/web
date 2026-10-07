@@ -40,9 +40,9 @@ export const AuthenticatedLayoutView = () => {
         {!isHidden && (
           <Box className="flex items-center justify-center border-r border-[#163036]">
             <Link
-              aria-label="Ir para a página inicial"
+              aria-label="Ir para o dashboard"
               className="flex items-center justify-center rounded-lg transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16b3bb]"
-              to="/"
+              to="/dashboard"
             >
               <Image
                 alt="Comunidade Viva"
@@ -70,9 +70,9 @@ export const AuthenticatedLayoutView = () => {
           </Button>
 
           <Link
-            aria-label="Ir para a página inicial"
+            aria-label="Ir para o dashboard"
             className="absolute left-1/2 -translate-x-1/2"
-            to="/"
+            to="/dashboard"
           >
             <Image
               alt="Comunidade Viva e Eficaz"
@@ -152,7 +152,7 @@ export const AuthenticatedLayoutView = () => {
                   isCollapsed ? 'justify-center px-0' : 'gap-3 px-3',
                 )}
                 title={isCollapsed ? 'Dashboard' : undefined}
-                to="/"
+                to="/dashboard"
               >
                 <LayoutDashboardIcon className="size-[1.1rem] shrink-0" />
 
