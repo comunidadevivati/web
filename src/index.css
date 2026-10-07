@@ -5,8 +5,38 @@
 
 @custom-variant dark (&:is(.dark *));
 
+/*
+ * Tokens de design
+ *
+ * Camadas:
+ * 1. Paleta da marca (--viva-*): valores brutos, nunca usados diretamente em componentes.
+ * 2. Tokens semânticos (:root / .dark): referenciam a paleta e mudam por modo/tema.
+ * 3. @theme inline: expõe os tokens semânticos como utilitários do Tailwind (bg-*, text-*, ...).
+ *
+ * Componentes usam apenas utilitários semânticos (ex.: bg-shell, text-primary, border-border).
+ */
+
 @theme inline {
   --font-heading: var(--font-sans);
+  --color-primary-strong: var(--primary-strong);
+  --color-primary-gradient-middle: var(--primary-gradient-middle);
+  --color-primary-gradient-end: var(--primary-gradient-end);
+  --color-canvas: var(--canvas);
+  --color-canvas-start: var(--canvas-start);
+  --color-canvas-middle: var(--canvas-middle);
+  --color-shell: var(--shell);
+  --color-shell-foreground: var(--shell-foreground);
+  --color-shell-border: var(--shell-border);
+  --color-shell-divider: var(--shell-divider);
+  --color-shell-subtle: var(--shell-subtle);
+  --color-shell-accent: var(--shell-accent);
+  --color-shell-accent-foreground: var(--shell-accent-foreground);
+  --color-sidebar-muted-foreground: var(--sidebar-muted-foreground);
+  --color-overlay: var(--overlay);
+  --color-overlay-foreground: var(--overlay-foreground);
+  --shadow-elevated: 0 8px 30px color-mix(in oklab, var(--overlay) 20%, transparent);
+  --shadow-elevated-lg: 0 16px 30px color-mix(in oklab, var(--overlay) 30%, transparent);
+  --shadow-sidebar-active: inset 3px 0 0 var(--sidebar-primary);
   --font-sans: 'Geist Variable', sans-serif;
   --color-sidebar-ring: var(--sidebar-ring);
   --color-sidebar-border: var(--sidebar-border);
@@ -49,14 +79,40 @@
 }
 
 :root {
+  /* Paleta da marca Comunidade Viva */
+  --viva-petrol-950: #081519;
+  --viva-petrol-900: #0b1c21;
+  --viva-petrol-850: #10272d;
+  --viva-petrol-800: #11262c;
+  --viva-petrol-750: #163036;
+  --viva-petrol-700: #1d3a41;
+  --viva-petrol-600: #2f5a61;
+  --viva-petrol-450: #6f9299;
+  --viva-petrol-400: #91a8ad;
+  --viva-mist-300: #afc6cb;
+  --viva-mist-200: #bcd1d5;
+  --viva-mist-100: #c5d7da;
+  --viva-turquoise-700: #047d85;
+  --viva-turquoise-600: #018f96;
+  --viva-turquoise-550: #029da5;
+  --viva-turquoise-500: #01a9b1;
+  --viva-aqua-500: #16b3bb;
+  --viva-aqua-300: #65e3e8;
+  --viva-white: #ffffff;
+  --viva-black: #000000;
+
+  /* Base (shadcn) */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
   --card: oklch(1 0 0);
   --card-foreground: oklch(0.145 0 0);
   --popover: oklch(1 0 0);
   --popover-foreground: oklch(0.145 0 0);
-  --primary: oklch(0.205 0 0);
-  --primary-foreground: oklch(0.985 0 0);
+  --primary: var(--viva-turquoise-500);
+  --primary-foreground: var(--viva-white);
+  --primary-strong: var(--viva-turquoise-600);
+  --primary-gradient-middle: var(--viva-turquoise-550);
+  --primary-gradient-end: var(--viva-turquoise-700);
   --secondary: oklch(0.97 0 0);
   --secondary-foreground: oklch(0.205 0 0);
   --muted: oklch(0.97 0 0);
@@ -67,20 +123,42 @@
   --border: oklch(0.922 0 0);
   --input: oklch(0.922 0 0);
   --ring: oklch(0.708 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
+  /* Cores categóricas (indicadores e gráficos) */
+  --chart-1: oklch(0.609 0.126 221.723);
+  --chart-2: oklch(0.541 0.281 293.009);
+  --chart-3: oklch(0.666 0.179 58.318);
+  --chart-4: oklch(0.596 0.145 163.225);
   --chart-5: oklch(0.269 0 0);
   --radius: 0.625rem;
-  --sidebar: oklch(0.985 0 0);
-  --sidebar-foreground: oklch(0.145 0 0);
-  --sidebar-primary: oklch(0.205 0 0);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.97 0 0);
-  --sidebar-accent-foreground: oklch(0.205 0 0);
-  --sidebar-border: oklch(0.922 0 0);
-  --sidebar-ring: oklch(0.708 0 0);
+
+  /* Área de conteúdo do app autenticado */
+  --canvas: var(--viva-mist-300);
+  --canvas-start: var(--viva-mist-100);
+  --canvas-middle: var(--viva-mist-200);
+
+  /* Shell escuro: headers e superfícies de marca */
+  --shell: var(--viva-petrol-950);
+  --shell-foreground: var(--viva-white);
+  --shell-border: var(--viva-petrol-700);
+  --shell-divider: var(--viva-petrol-750);
+  --shell-subtle: var(--viva-petrol-600);
+  --shell-accent: var(--viva-aqua-500);
+  --shell-accent-foreground: var(--viva-aqua-300);
+
+  /* Sidebar do app autenticado */
+  --sidebar: var(--viva-petrol-850);
+  --sidebar-foreground: var(--viva-petrol-400);
+  --sidebar-muted-foreground: var(--viva-petrol-450);
+  --sidebar-primary: var(--viva-aqua-500);
+  --sidebar-primary-foreground: var(--viva-aqua-300);
+  --sidebar-accent: var(--viva-petrol-800);
+  --sidebar-accent-foreground: var(--viva-white);
+  --sidebar-border: var(--viva-petrol-700);
+  --sidebar-ring: var(--viva-aqua-500);
+
+  /* Sobreposições sobre fotos/mídia e sombras */
+  --overlay: var(--viva-black);
+  --overlay-foreground: var(--viva-white);
 }
 
 .dark {
@@ -90,8 +168,9 @@
   --card-foreground: oklch(0.985 0 0);
   --popover: oklch(0.205 0 0);
   --popover-foreground: oklch(0.985 0 0);
-  --primary: oklch(0.922 0 0);
-  --primary-foreground: oklch(0.205 0 0);
+  --primary: var(--viva-aqua-500);
+  --primary-foreground: var(--viva-petrol-950);
+  --primary-strong: var(--viva-aqua-300);
   --secondary: oklch(0.269 0 0);
   --secondary-foreground: oklch(0.985 0 0);
   --muted: oklch(0.269 0 0);
@@ -102,19 +181,16 @@
   --border: oklch(1 0 0 / 10%);
   --input: oklch(1 0 0 / 15%);
   --ring: oklch(0.556 0 0);
-  --chart-1: oklch(0.87 0 0);
-  --chart-2: oklch(0.556 0 0);
-  --chart-3: oklch(0.439 0 0);
-  --chart-4: oklch(0.371 0 0);
+  --chart-1: oklch(0.789 0.154 211.53);
+  --chart-2: oklch(0.702 0.183 293.541);
+  --chart-3: oklch(0.828 0.189 84.429);
+  --chart-4: oklch(0.765 0.177 163.223);
   --chart-5: oklch(0.269 0 0);
-  --sidebar: oklch(0.205 0 0);
-  --sidebar-foreground: oklch(0.985 0 0);
-  --sidebar-primary: oklch(0.488 0.243 264.376);
-  --sidebar-primary-foreground: oklch(0.985 0 0);
-  --sidebar-accent: oklch(0.269 0 0);
-  --sidebar-accent-foreground: oklch(0.985 0 0);
-  --sidebar-border: oklch(1 0 0 / 10%);
-  --sidebar-ring: oklch(0.556 0 0);
+  --canvas: var(--viva-petrol-950);
+  --canvas-start: var(--viva-petrol-850);
+  --canvas-middle: var(--viva-petrol-900);
+
+  /* Shell, sidebar e overlay compartilham os valores do :root. */
 }
 
 @layer base {

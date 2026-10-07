@@ -20,32 +20,32 @@ const dashboardIcons = {
 
 const dashboardStyles = {
   members: {
-    accent: 'bg-cyan-500',
-    border: 'border-cyan-500/20',
-    glow: 'bg-cyan-500/10',
-    icon: 'bg-cyan-500/10 text-cyan-600',
-    value: 'text-cyan-700',
+    accent: 'bg-chart-1',
+    border: 'border-chart-1/20',
+    glow: 'bg-chart-1/10',
+    icon: 'bg-chart-1/10 text-chart-1',
+    value: 'text-chart-1',
   },
   visitors: {
-    accent: 'bg-violet-500',
-    border: 'border-violet-500/20',
-    glow: 'bg-violet-500/10',
-    icon: 'bg-violet-500/10 text-violet-600',
-    value: 'text-violet-700',
+    accent: 'bg-chart-2',
+    border: 'border-chart-2/20',
+    glow: 'bg-chart-2/10',
+    icon: 'bg-chart-2/10 text-chart-2',
+    value: 'text-chart-2',
   },
   events: {
-    accent: 'bg-amber-500',
-    border: 'border-amber-500/20',
-    glow: 'bg-amber-500/10',
-    icon: 'bg-amber-500/10 text-amber-600',
-    value: 'text-amber-700',
+    accent: 'bg-chart-3',
+    border: 'border-chart-3/20',
+    glow: 'bg-chart-3/10',
+    icon: 'bg-chart-3/10 text-chart-3',
+    value: 'text-chart-3',
   },
   ministries: {
-    accent: 'bg-emerald-500',
-    border: 'border-emerald-500/20',
-    glow: 'bg-emerald-500/10',
-    icon: 'bg-emerald-500/10 text-emerald-600',
-    value: 'text-emerald-700',
+    accent: 'bg-chart-4',
+    border: 'border-chart-4/20',
+    glow: 'bg-chart-4/10',
+    icon: 'bg-chart-4/10 text-chart-4',
+    value: 'text-chart-4',
   },
 };
 
@@ -55,11 +55,11 @@ export const DashboardView = () => {
   return (
     <Box className="grid gap-8">
       <Box>
-        <Heading className="text-2xl font-semibold tracking-tight text-slate-900">
+        <Heading className="text-2xl font-semibold tracking-tight text-foreground">
           Dashboard
         </Heading>
 
-        <Text className="mt-1 text-slate-500">Visão geral da Comunidade Viva.</Text>
+        <Text className="mt-1 text-muted-foreground">Visão geral da Comunidade Viva.</Text>
       </Box>
 
       <Box className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -71,7 +71,7 @@ export const DashboardView = () => {
           return (
             <Card
               key={summary.label}
-              className={`group relative border ${styles.border} bg-white shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}
+              className={`group relative border ${styles.border} bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}
             >
               <Box
                 aria-hidden="true"
@@ -85,7 +85,7 @@ export const DashboardView = () => {
 
               <CardHeader className="relative flex flex-row items-center justify-between">
                 <Box>
-                  <CardDescription className="font-medium text-slate-500">
+                  <CardDescription className="font-medium text-muted-foreground">
                     {summary.label}
                   </CardDescription>
 
@@ -104,7 +104,7 @@ export const DashboardView = () => {
               </CardHeader>
 
               <CardContent className="relative">
-                <Text className="text-xs text-slate-500">{summary.description}</Text>
+                <Text className="text-xs text-muted-foreground">{summary.description}</Text>
               </CardContent>
             </Card>
           );
@@ -112,15 +112,15 @@ export const DashboardView = () => {
       </Box>
 
       <Box className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
-        <Card className="overflow-hidden border-slate-200/80 bg-white shadow-sm">
-          <CardHeader className="border-b border-slate-100 bg-linear-to-r from-slate-50 to-white">
+        <Card className="overflow-hidden border-border bg-card shadow-sm">
+          <CardHeader className="border-b border-border/60 bg-linear-to-r from-muted/60 to-card">
             <Box className="flex items-center gap-3">
-              <Box className="flex size-10 items-center justify-center rounded-xl bg-[#01A9B1]/10 text-[#018f96]">
+              <Box className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary-strong">
                 <CalendarDaysIcon className="size-5" />
               </Box>
 
               <Box>
-                <CardTitle className="text-base font-semibold text-slate-900">
+                <CardTitle className="text-base font-semibold text-foreground">
                   Próximos eventos
                 </CardTitle>
 
@@ -133,54 +133,54 @@ export const DashboardView = () => {
             {events.map((event, index) => (
               <Box
                 key={event.id}
-                className="group relative flex items-center gap-4 overflow-hidden rounded-xl border border-slate-200/80 bg-white p-4 transition-all duration-200 hover:border-[#01A9B1]/30 hover:bg-[#01A9B1]/[0.025] hover:shadow-md"
+                className="group relative flex items-center gap-4 overflow-hidden rounded-xl border border-border bg-card p-4 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.025] hover:shadow-md"
               >
                 <Box
                   aria-hidden="true"
-                  className="absolute top-0 left-0 h-full w-1 bg-[#01A9B1] opacity-0 transition-opacity group-hover:opacity-100"
+                  className="absolute top-0 left-0 h-full w-1 bg-primary opacity-0 transition-opacity group-hover:opacity-100"
                 />
 
-                <Box className="flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-[#0b191e] text-white shadow-sm">
-                  <Text className="text-[0.6rem] font-semibold tracking-wider text-[#65e3e8] uppercase">
+                <Box className="flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-shell text-shell-foreground shadow-sm">
+                  <Text className="text-[0.6rem] font-semibold tracking-wider text-shell-accent-foreground uppercase">
                     Evento
                   </Text>
 
-                  <Text className="text-sm font-semibold text-white">
+                  <Text className="text-sm font-semibold text-shell-foreground">
                     {String(index + 1).padStart(2, '0')}
                   </Text>
                 </Box>
 
                 <Box className="min-w-0 flex-1">
-                  <Text className="truncate text-sm font-semibold text-slate-900">
+                  <Text className="truncate text-sm font-semibold text-foreground">
                     {event.title}
                   </Text>
 
                   <Box className="mt-1.5 flex flex-wrap items-center gap-x-4 gap-y-1">
                     <Box className="flex items-center gap-1.5">
-                      <CalendarDaysIcon className="size-3.5 text-[#01A9B1]" />
+                      <CalendarDaysIcon className="size-3.5 text-primary" />
 
-                      <Text className="text-xs text-slate-500">{event.date}</Text>
+                      <Text className="text-xs text-muted-foreground">{event.date}</Text>
                     </Box>
 
                     <Box className="flex items-center gap-1.5">
-                      <Clock3Icon className="size-3.5 text-[#01A9B1]" />
+                      <Clock3Icon className="size-3.5 text-primary" />
 
-                      <Text className="text-xs text-slate-500">{event.time}</Text>
+                      <Text className="text-xs text-muted-foreground">{event.time}</Text>
                     </Box>
                   </Box>
                 </Box>
 
-                <Box className="hidden rounded-full border border-[#01A9B1]/20 bg-[#01A9B1]/5 px-3 py-1 sm:block">
-                  <Text className="text-xs font-medium text-[#018f96]">Próximo</Text>
+                <Box className="hidden rounded-full border border-primary/20 bg-primary/5 px-3 py-1 sm:block">
+                  <Text className="text-xs font-medium text-primary-strong">Próximo</Text>
                 </Box>
               </Box>
             ))}
           </CardContent>
         </Card>
 
-        <Card className="overflow-hidden border-slate-200/80 bg-white shadow-sm">
-          <CardHeader className="border-b border-slate-100 bg-linear-to-r from-slate-50 to-white">
-            <CardTitle className="text-base font-semibold text-slate-900">
+        <Card className="overflow-hidden border-border bg-card shadow-sm">
+          <CardHeader className="border-b border-border/60 bg-linear-to-r from-muted/60 to-card">
+            <CardTitle className="text-base font-semibold text-foreground">
               Atividades recentes
             </CardTitle>
 
@@ -191,21 +191,21 @@ export const DashboardView = () => {
             {activities.map((activity) => (
               <Box
                 key={activity.id}
-                className="flex items-center gap-3 rounded-lg px-2 py-3 transition-colors hover:bg-slate-50"
+                className="flex items-center gap-3 rounded-lg px-2 py-3 transition-colors hover:bg-muted/60"
               >
                 <Box className="relative flex size-8 shrink-0 items-center justify-center">
-                  <Box className="absolute size-3 rounded-full bg-[#01A9B1]/20" />
+                  <Box className="absolute size-3 rounded-full bg-primary/20" />
 
-                  <Box className="relative size-1.5 rounded-full bg-[#01A9B1]" />
+                  <Box className="relative size-1.5 rounded-full bg-primary" />
                 </Box>
 
                 <Box className="min-w-0 flex-1">
-                  <Text className="truncate text-sm font-medium text-slate-700">
+                  <Text className="truncate text-sm font-medium text-foreground/80">
                     {activity.description}
                   </Text>
                 </Box>
 
-                <Text className="shrink-0 text-xs text-slate-400">{activity.date}</Text>
+                <Text className="shrink-0 text-xs text-muted-foreground/80">{activity.date}</Text>
               </Box>
             ))}
           </CardContent>

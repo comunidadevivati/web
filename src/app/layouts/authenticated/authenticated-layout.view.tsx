@@ -30,18 +30,18 @@ export const AuthenticatedLayoutView = () => {
   const isHidden = sidebarMode === 'hidden';
 
   return (
-    <Box className="grid min-h-dvh grid-rows-[4.5rem_minmax(0,1fr)] bg-[#afc6cb]">
+    <Box className="grid min-h-dvh grid-rows-[4.5rem_minmax(0,1fr)] bg-canvas">
       <Box
         className={cn(
-          'grid border-b border-[#1d3a41] bg-[#081519] shadow-[0_8px_30px_rgba(0,0,0,0.20)]',
+          'grid border-b border-shell-border bg-shell shadow-elevated',
           layoutColumns[sidebarMode],
         )}
       >
         {!isHidden && (
-          <Box className="flex items-center justify-center border-r border-[#163036]">
+          <Box className="flex items-center justify-center border-r border-shell-divider">
             <Link
               aria-label="Ir para o dashboard"
-              className="flex items-center justify-center rounded-lg transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[#16b3bb]"
+              className="flex items-center justify-center rounded-lg transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shell-accent"
               to="/dashboard"
             >
               <Image
@@ -59,7 +59,7 @@ export const AuthenticatedLayoutView = () => {
         <Box className="relative flex min-w-0 items-center px-4 md:px-6">
           <Button
             aria-label={isHidden ? 'Mostrar menu lateral' : 'Ocultar menu lateral'}
-            className="shrink-0 text-white/70 hover:bg-[#16b3bb]/10 hover:text-[#65e3e8]"
+            className="shrink-0 text-shell-foreground/70 hover:bg-shell-accent/10 hover:text-shell-accent-foreground"
             size="icon"
             title={isHidden ? 'Mostrar menu lateral' : 'Ocultar menu lateral'}
             type="button"
@@ -82,16 +82,16 @@ export const AuthenticatedLayoutView = () => {
           </Link>
 
           <Box className="ml-auto flex min-w-0 items-center gap-3">
-            <Text className="hidden max-w-56 truncate text-sm font-medium text-white/75 lg:block">
+            <Text className="hidden max-w-56 truncate text-sm font-medium text-shell-foreground/75 lg:block">
               {userEmail}
             </Text>
 
-            <Text aria-hidden="true" className="hidden text-sm text-[#2f5a61] lg:block">
+            <Text aria-hidden="true" className="hidden text-sm text-shell-subtle lg:block">
               |
             </Text>
 
             <Button
-              className="text-white/80 hover:bg-[#16b3bb]/10 hover:text-[#65e3e8]"
+              className="text-shell-foreground/80 hover:bg-shell-accent/10 hover:text-shell-accent-foreground"
               type="button"
               variant="ghost"
               onClick={logout}
@@ -111,7 +111,7 @@ export const AuthenticatedLayoutView = () => {
         )}
       >
         {!isHidden && (
-          <Box className="hidden min-h-0 flex-col border-r border-[#1d3a41] bg-[#10272d] md:flex">
+          <Box className="hidden min-h-0 flex-col border-r border-sidebar-border bg-sidebar md:flex">
             <Box className="flex min-h-0 flex-1 flex-col p-3">
               <Box
                 className={cn(
@@ -120,14 +120,14 @@ export const AuthenticatedLayoutView = () => {
                 )}
               >
                 {!isCollapsed && (
-                  <Text className="text-[0.65rem] font-semibold tracking-[0.18em] text-[#588088] uppercase">
+                  <Text className="text-[0.65rem] font-semibold tracking-[0.18em] text-sidebar-muted-foreground/80 uppercase">
                     Navegação
                   </Text>
                 )}
 
                 <Button
                   aria-label={isCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
-                  className="text-[#6f9299] hover:bg-[#11262c] hover:text-[#65e3e8]"
+                  className="text-sidebar-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-primary-foreground"
                   size="icon-sm"
                   title={isCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
                   type="button"
@@ -144,11 +144,11 @@ export const AuthenticatedLayoutView = () => {
                 }}
                 activeProps={{
                   className:
-                    'border-[#16b3bb]/25 bg-[#16b3bb]/10 text-[#65e3e8] shadow-[inset_3px_0_0_#16b3bb]',
+                    'border-sidebar-primary/25 bg-sidebar-primary/10 text-sidebar-primary-foreground shadow-sidebar-active',
                 }}
                 aria-label="Dashboard"
                 className={cn(
-                  'flex h-11 items-center rounded-lg border border-transparent text-sm font-medium text-[#91a8ad] transition-all duration-200 hover:border-[#1f4147] hover:bg-[#11262c] hover:text-white',
+                  'flex h-11 items-center rounded-lg border border-transparent text-sm font-medium text-sidebar-foreground transition-all duration-200 hover:border-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
                   isCollapsed ? 'justify-center px-0' : 'gap-3 px-3',
                 )}
                 title={isCollapsed ? 'Dashboard' : undefined}
@@ -160,11 +160,11 @@ export const AuthenticatedLayoutView = () => {
               </Link>
             </Box>
 
-            <Box className="border-t border-[#163036] p-3">
+            <Box className="border-t border-shell-divider p-3">
               <Button
                 aria-label="Sair"
                 className={cn(
-                  'h-11 w-full text-[#91a8ad] hover:bg-[#11262c] hover:text-[#65e3e8]',
+                  'h-11 w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-primary-foreground',
                   isCollapsed ? 'justify-center px-0' : 'justify-start gap-3',
                 )}
                 title={isCollapsed ? 'Sair' : undefined}
@@ -181,7 +181,7 @@ export const AuthenticatedLayoutView = () => {
         )}
 
         <Box className="relative min-w-0 overflow-auto">
-          <Box className="pointer-events-none absolute inset-0 bg-linear-to-br from-[#c5d7da] via-[#bcd1d5] to-[#afc6cb]" />
+          <Box className="pointer-events-none absolute inset-0 bg-linear-to-br from-canvas-start via-canvas-middle to-canvas" />
 
           <Box className="relative min-h-full p-4 md:p-6 lg:p-8">
             <Outlet />

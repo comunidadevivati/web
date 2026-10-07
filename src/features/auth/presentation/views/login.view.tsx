@@ -26,8 +26,8 @@ export const LoginView = () => {
       {isSubmitting && <LoadingOverlay />}
 
       <Box className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-        <Box className="relative hidden overflow-hidden bg-[#01A9B1] lg:flex lg:items-center lg:justify-center">
-          <Box className="absolute inset-0 bg-linear-to-br from-[#01A9B1] via-[#029da5] to-[#047d85]" />
+        <Box className="relative hidden overflow-hidden bg-primary lg:flex lg:items-center lg:justify-center">
+          <Box className="absolute inset-0 bg-linear-to-br from-primary via-primary-gradient-middle to-primary-gradient-end" />
 
           <Box className="relative z-10 flex max-w-xl flex-col items-center gap-8 px-12 text-center">
             <Image
@@ -36,9 +36,9 @@ export const LoginView = () => {
               src={logoVivaWhite}
             />
 
-            <Box className="h-px w-24 bg-white/40" />
+            <Box className="h-px w-24 bg-primary-foreground/40" />
 
-            <Text className="max-w-md text-base leading-7 text-white/85">
+            <Text className="max-w-md text-base leading-7 text-primary-foreground/85">
               Um ambiente criado para conectar pessoas, ministérios e propósitos.
             </Text>
           </Box>
@@ -113,7 +113,7 @@ export const LoginView = () => {
               </Box>
 
               <Button
-                className="mt-2 h-11 w-full bg-[#01A9B1] text-white hover:bg-[#018f96]"
+                className="mt-2 h-11 w-full hover:bg-primary-strong"
                 disabled={isSubmitDisabled}
                 type="submit"
               >
