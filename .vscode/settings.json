@@ -47,6 +47,8 @@
   "css.lint.unknownAtRules": "ignore",
   "scss.validate": true,
   "scss.lint.unknownAtRules": "ignore",
+  "html.validate.scripts": true,
+  "html.validate.styles": true,
   "files.associations": {
     "*.css": "tailwindcss"
   },
@@ -86,6 +88,9 @@
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[scss]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[html]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[json]": {
