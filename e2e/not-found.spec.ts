@@ -12,4 +12,27 @@ test.describe('Not found', () => {
 
     await expect(page.getByRole('link', { name: 'Ir para o início' })).toHaveAttribute('href', '/');
   });
+
+  test('returns to the page the user came from', async ({ page }) => {
+    await page.goto('/contato');
+
+    await page.goto('/rota-que-nao-existe');
+
+    await page.getByRole('button', { name: 'Voltar' }).click();
+
+    await expect(page).toHaveURL('/contato');
+  });
+
+  test('hides the back button when there is no previous page', async ({ context, page }) => {
+    await page.goto('/contato');
+
+    const [popup] = await Promise.all([
+      context.waitForEvent('page'),
+      page.evaluate(() => window.open('/rota-que-nao-existe')),
+    ]);
+
+    await popup.getByRole('heading', { name: 'Página não encontrada' }).waitFor();
+
+    await expect(popup.getByRole('button', { name: 'Voltar' })).toHaveCount(0);
+  });
 });

@@ -29,10 +29,17 @@ test.describe('Under construction', () => {
     await expect(page).toHaveURL('/contato');
   });
 
-  test('hides the back button when opened directly', async ({ page }) => {
-    await page.goto('/eventos');
+  test('hides the back button when there is no previous page', async ({ context, page }) => {
+    await page.goto('/contato');
 
-    await expect(page.getByRole('button', { name: 'Voltar' })).toHaveCount(0);
+    const [popup] = await Promise.all([
+      context.waitForEvent('page'),
+      page.evaluate(() => window.open('/eventos')),
+    ]);
+
+    await popup.getByRole('heading', { name: 'Página em construção' }).waitFor();
+
+    await expect(popup.getByRole('button', { name: 'Voltar' })).toHaveCount(0);
   });
 
   test('links to the home page', async ({ page }) => {
