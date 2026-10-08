@@ -46,6 +46,18 @@ test.describe('Guest Wi-Fi', () => {
     await expect(page.getByRole('heading', { name: 'Você está conectado!' })).toBeVisible();
   });
 
+  test('takes the visitor to the church home page after connecting', async ({ page }) => {
+    await page.route('**/api/guest-wifi/authorize', (route) => route.fulfill({ status: 204 }));
+
+    await acceptTermsAndFillForm(page);
+
+    await page.getByRole('button', { name: 'Conectar' }).click();
+
+    await page.getByRole('link', { name: 'Continuar navegando' }).click();
+
+    await expect(page).toHaveURL('/');
+  });
+
   test('sends the portal client and visitor data to the authorization endpoint', async ({
     page,
   }) => {

@@ -1,6 +1,5 @@
 import logoVivaWhite from '@/assets/brand/logo-viva-white.png';
 import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Anchor } from '@/components/ui/anchor';
 import { Box } from '@/components/ui/box';
 import { Button } from '@/components/ui/button';
 import { Checkbox } from '@/components/ui/checkbox';
@@ -14,6 +13,7 @@ import { Text } from '@/components/ui/text';
 import { GuestWifiTerms } from '@/features/guest-wifi/presentation/components/guest-wifi-terms';
 import { useGuestWifiViewModel } from '@/features/guest-wifi/presentation/view-models/guest-wifi.view-model';
 import { cn } from '@/lib/utils';
+import { Link } from '@tanstack/react-router';
 import {
   ArrowLeftIcon,
   ArrowRightIcon,
@@ -41,7 +41,6 @@ export const GuestWifiView = () => {
   const {
     backToTerms,
     continueToForm,
-    continueUrl,
     errorCode,
     form,
     hasAcceptedTerms,
@@ -285,20 +284,18 @@ export const GuestWifiView = () => {
                 </Text>
               </Box>
 
-              {continueUrl && (
-                <Anchor
-                  className="
-                    inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-6
-                    text-base font-medium text-primary-foreground transition-colors
-                    hover:bg-primary-strong focus-visible:ring-3 focus-visible:ring-ring/50
-                    focus-visible:outline-none
-                  "
-                  href={continueUrl}
-                >
-                  Continuar navegando
-                  <ArrowRightIcon className="size-4" />
-                </Anchor>
-              )}
+              <Link
+                className="
+                  inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-6
+                  text-base font-medium text-primary-foreground transition-colors
+                  hover:bg-primary-strong focus-visible:ring-3 focus-visible:ring-ring/50
+                  focus-visible:outline-none
+                "
+                to="/"
+              >
+                Continuar navegando
+                <ArrowRightIcon className="size-4" />
+              </Link>
             </Box>
           )}
         </Box>

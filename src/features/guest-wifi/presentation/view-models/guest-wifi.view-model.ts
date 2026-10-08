@@ -96,7 +96,6 @@ export const useGuestWifiViewModel = () => {
   return {
     backToTerms,
     continueToForm,
-    continueUrl: access?.redirectUrl ?? null,
     form,
     hasAcceptedTerms,
     hasAccess: access !== null,
