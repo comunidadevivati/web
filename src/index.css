@@ -36,6 +36,14 @@
   --color-sidebar-muted-foreground: var(--sidebar-muted-foreground);
   --color-overlay: var(--overlay);
   --color-overlay-foreground: var(--overlay-foreground);
+  --color-social-foreground: var(--social-foreground);
+  --color-social-whatsapp: var(--social-whatsapp);
+  --color-social-whatsapp-foreground: var(--social-whatsapp-foreground);
+  --color-social-facebook: var(--social-facebook);
+  --color-social-youtube: var(--social-youtube);
+  --color-social-instagram-start: var(--social-instagram-start);
+  --color-social-instagram-middle: var(--social-instagram-middle);
+  --color-social-instagram-end: var(--social-instagram-end);
   --shadow-elevated: 0 8px 30px color-mix(in oklab, var(--overlay) 20%, transparent);
   --shadow-elevated-lg: 0 16px 30px color-mix(in oklab, var(--overlay) 30%, transparent);
   --shadow-sidebar-active: inset 3px 0 0 var(--sidebar-primary);
@@ -103,6 +111,14 @@
   --viva-white: #ffffff;
   --viva-black: #000000;
 
+  /* Cores oficiais de marcas de terceiros (redes sociais) */
+  --brand-whatsapp-green: #25d366;
+  --brand-facebook-blue: #0866ff;
+  --brand-youtube-red: #ff0000;
+  --brand-instagram-orange: #f58529;
+  --brand-instagram-pink: #dd2a7b;
+  --brand-instagram-purple: #8134af;
+
   /* Base (shadcn) */
   --background: oklch(1 0 0);
   --foreground: oklch(0.145 0 0);
@@ -161,6 +177,16 @@
   /* Sobreposições sobre fotos/mídia e sombras */
   --overlay: var(--viva-black);
   --overlay-foreground: var(--viva-white);
+
+  /* Redes sociais: identidade oficial de cada marca */
+  --social-foreground: var(--viva-white);
+  --social-whatsapp: var(--brand-whatsapp-green);
+  --social-whatsapp-foreground: var(--viva-petrol-950);
+  --social-facebook: var(--brand-facebook-blue);
+  --social-youtube: var(--brand-youtube-red);
+  --social-instagram-start: var(--brand-instagram-orange);
+  --social-instagram-middle: var(--brand-instagram-pink);
+  --social-instagram-end: var(--brand-instagram-purple);
 }
 
 .dark {
@@ -192,7 +218,7 @@
   --canvas-start: var(--viva-petrol-850);
   --canvas-middle: var(--viva-petrol-900);
 
-  /* Shell, sidebar e overlay compartilham os valores do :root. */
+  /* Shell, sidebar, overlay e redes sociais compartilham os valores do :root. */
 }
 
 @layer base {

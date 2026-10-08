@@ -1,16 +1,27 @@
 import logoVivaWhite from '@/assets/brand/logo-viva-white.png';
 import { Box } from '@/components/ui/box';
-import { Button } from '@/components/ui/button';
+import { Button, buttonVariants } from '@/components/ui/button';
 import { Image } from '@/components/ui/image';
-import { Link } from '@tanstack/react-router';
+import { Link, type LinkProps } from '@tanstack/react-router';
 import { cn } from 'cn';
 import { LogInIcon, MenuIcon, XIcon } from 'lucide-react';
 import { useState } from 'react';
 
-const menuItems = ['Home', 'História', 'Eventos', 'Contato'];
+type MenuItem = {
+  label: string;
+  to?: LinkProps['to'];
+};
+
+// Itens sem `to` ainda não possuem página.
+const menuItems: MenuItem[] = [
+  { label: 'Home', to: '/' },
+  { label: 'História' },
+  { label: 'Eventos' },
+  { label: 'Contato', to: '/contato' },
+];
 
 const menuItemClassName =
-  'h-11 justify-start px-3 text-base font-medium text-shell-foreground/75 hover:bg-shell-accent/10 hover:text-shell-accent-foreground md:h-10 md:justify-center md:text-sm';
+  'h-11 justify-start px-3 text-base font-medium text-shell-foreground/75 hover:bg-shell-accent/10 hover:text-shell-accent-foreground data-[status=active]:bg-shell-accent/10 data-[status=active]:text-shell-accent-foreground md:h-10 md:justify-center md:text-sm';
 
 const loginClassName =
   'mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-shell-accent/40 bg-shell-accent/10 px-4 text-base font-semibold text-shell-accent-foreground transition-all duration-200 hover:border-shell-accent hover:bg-shell-accent hover:text-shell focus-visible:ring-2 focus-visible:ring-shell-accent focus-visible:outline-none md:mt-0 md:ml-2 md:h-10 md:text-sm lg:ml-3';
@@ -59,11 +70,23 @@ export const PublicHeader = () => {
           id="public-header-menu"
           role="navigation"
         >
-          {menuItems.map((item) => (
-            <Button key={item} className={menuItemClassName} type="button" variant="ghost">
-              {item}
-            </Button>
-          ))}
+          {menuItems.map(({ label, to }) =>
+            to ? (
+              <Link
+                key={label}
+                activeOptions={{ exact: true }}
+                className={cn(buttonVariants({ variant: 'ghost' }), menuItemClassName)}
+                to={to}
+                onClick={() => setIsMenuOpen(false)}
+              >
+                {label}
+              </Link>
+            ) : (
+              <Button key={label} className={menuItemClassName} type="button" variant="ghost">
+                {label}
+              </Button>
+            ),
+          )}
 
           <Link className={loginClassName} to="/login">
             <LogInIcon className="size-4" />
