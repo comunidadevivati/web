@@ -1,4 +1,5 @@
 import logoVivaWhite from '@/assets/brand/logo-viva-white.png';
+import { AppFooter } from '@/components/organisms';
 import {
   Alert,
   AlertDescription,
@@ -28,7 +29,7 @@ import {
 } from 'lucide-react';
 
 const cardClassName = cn(`
-  grid gap-5 rounded-2xl bg-card p-5 text-card-foreground shadow-elevated-lg sm:gap-6 sm:p-8
+  grid gap-5 rounded-2xl surface-card p-5 shadow-elevated-lg sm:gap-6 sm:p-8
 `);
 
 const primaryButtonClassName = cn('h-11 w-full text-base sm:w-auto sm:px-6');
@@ -72,7 +73,7 @@ export const GuestWifiView = () => {
   } = form;
 
   return (
-    <Box className="min-h-dvh overflow-x-hidden bg-background">
+    <Box className="flex min-h-dvh flex-col overflow-x-clip bg-background">
       <Box className="border-b border-header-border bg-header shadow-elevated" role="banner">
         <Box className="mx-auto flex h-16 w-full max-w-360 items-center justify-center px-4 md:h-18">
           <Image
@@ -83,7 +84,7 @@ export const GuestWifiView = () => {
         </Box>
       </Box>
 
-      <Box role="main">
+      <Box className="flex-1" role="main">
         <Box className="mx-auto grid w-full max-w-2xl gap-6 px-4 py-8 sm:gap-8 sm:px-6 sm:py-12">
           <Box className="grid justify-items-center gap-3 text-center">
             <Box
@@ -312,6 +313,8 @@ export const GuestWifiView = () => {
           )}
         </Box>
       </Box>
+
+      <AppFooter />
 
       {isSubmitting && <LoadingOverlay />}
     </Box>

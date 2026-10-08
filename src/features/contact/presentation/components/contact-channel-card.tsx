@@ -15,9 +15,8 @@ export const ContactChannelCard = ({ channel }: ContactChannelCardProps) => {
     <Box
       aria-labelledby={titleId}
       className="
-        flex flex-col gap-5 rounded-xl border border-border bg-card p-5 text-card-foreground
-        shadow-elevated transition-all duration-200 hover:border-primary hover:shadow-elevated-lg
-        sm:p-6
+        flex flex-col gap-5 rounded-xl border border-border surface-card p-5 shadow-elevated
+        transition-all duration-200 hover:border-primary hover:shadow-elevated-lg sm:p-6
       "
       role="region"
     >

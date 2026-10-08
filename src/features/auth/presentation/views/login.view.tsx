@@ -61,11 +61,7 @@ export const LoginView = () => {
             flex min-h-dvh items-center justify-center bg-background px-4 py-10 sm:px-10 lg:px-16
           "
         >
-          <Box
-            className="
-              w-full max-w-md rounded-2xl bg-card p-6 text-card-foreground shadow-elevated-lg sm:p-8
-            "
-          >
+          <Box className="w-full max-w-md rounded-2xl surface-card p-6 shadow-elevated-lg sm:p-8">
             <Box className="mb-10 flex flex-col items-center text-center">
               <Image
                 alt=""

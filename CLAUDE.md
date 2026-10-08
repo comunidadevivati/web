@@ -731,8 +731,8 @@ Além dela existem apenas `--viva-white`, `--viva-black` e as cores oficiais de 
 
 | Token                                                                                                                                                                         | Uso                                                                          | Claro              | Escuro             |
 | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------ | ------------------ |
-| `background` / `foreground`                                                                                                                                                   | fundo de todas as páginas e texto sobre ele                                  | teal-200 / 950     | teal-800 / 50      |
-| `card` / `card-foreground`                                                                                                                                                    | cards, formulários e painéis sobre o fundo                                   | white / teal-950   | teal-900 / 50      |
+| `background` / `foreground`                                                                                                                                                   | fundo de todas as páginas e texto sobre ele                                  | teal-50 / 950      | teal-800 / 50      |
+| `card` / `card-foreground`                                                                                                                                                    | cards, formulários e painéis sobre o fundo (via `surface-card`)              | teal-200 / 950     | teal-900 / 50      |
 | `muted` / `muted-foreground`                                                                                                                                                  | superfícies sutis e texto secundário (sobre `background` e `card`)           | teal-50 / 800      | teal-950 / 200     |
 | `secondary` / `secondary-foreground`                                                                                                                                          | botões e superfícies secundárias                                             | teal-100 / 950     | teal-700 / 50      |
 | `border`, `input`, `ring`                                                                                                                                                     | bordas, campos e foco                                                        | teal-300/300/600   | teal-700/700/300   |
@@ -745,6 +745,10 @@ Além dela existem apenas `--viva-white`, `--viva-black` e as cores oficiais de 
 | `overlay`, `overlay-foreground`                                                                                                                                               | camadas sobre fotos/mídia (carrossel) e base das sombras                     | black / white      | igual              |
 | `chart-1` … `chart-4`                                                                                                                                                         | cores categóricas de indicadores e gráficos                                  | ajustadas por modo | ajustadas por modo |
 | `social-*`                                                                                                                                                                    | identidade oficial das redes sociais                                         | igual              | igual              |
+
+**Superfície de card:** cards usam o utilitário `surface-card` (definido com `@utility` no `src/index.css`) em vez de `bg-card`. Ele aplica o fundo do card e reescopa os tokens de conteúdo (`foreground`, `muted`, `muted-foreground`, `primary`, `primary-foreground`, `primary-strong`, `border`, `input`, `ring`) para os valores `--card-*`, mantendo o contraste de tudo que está dentro do card nos dois modos. Componentes dentro do card continuam usando os utilitários de sempre (`text-muted-foreground`, `bg-primary`...).
+
+**Header e footer:** o `AppFooter` usa os mesmos tokens `header-*` e a mesma altura do header (`h-16 md:h-18`), fica fixo no rodapé (`sticky bottom-0`) e aparece em todas as telas com header. Páginas com header/footer fixos usam `overflow-x-clip` (não `overflow-x-hidden`, que quebra o `sticky`).
 
 Sombras com cor também são tokens (`@theme inline`): `shadow-elevated`, `shadow-elevated-lg`, `shadow-sidebar-active`.
 
@@ -1828,7 +1832,7 @@ src/components/
 
 - **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Spinner`, `Text`, `Tooltip`. Única camada que pode usar HTML nativo.
 - **`molecules/`:** `TooltipHint` (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido).
-- **`organisms/`:** `PublicHeader`, `AppSidebar`, `StatusPage`.
+- **`organisms/`:** `PublicHeader`, `AppFooter`, `AppSidebar`, `StatusPage`.
 
 Cada componente fica em sua própria pasta (`molecules/theme-toggle/theme-toggle.tsx`), junto do seu teste, e é exportado pelo `index.ts` do grupo (ver 7.12).
 

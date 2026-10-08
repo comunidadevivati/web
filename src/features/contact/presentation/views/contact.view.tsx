@@ -1,4 +1,4 @@
-import { PublicHeader } from '@/components/organisms';
+import { AppFooter, PublicHeader } from '@/components/organisms';
 import { Box, Heading, Text } from '@/components/ui';
 import { ContactChannelCard } from '@/features/contact/presentation/components/contact-channel-card';
 import { ContactSocialLink } from '@/features/contact/presentation/components/contact-social-link';
@@ -8,10 +8,10 @@ export const ContactView = () => {
   const { channels, socialLinks } = useContactViewModel();
 
   return (
-    <Box className="min-h-dvh overflow-x-hidden bg-background">
+    <Box className="flex min-h-dvh flex-col overflow-x-clip bg-background">
       <PublicHeader />
 
-      <Box role="main">
+      <Box className="flex-1" role="main">
         <Box
           className="
             mx-auto grid w-full max-w-360 gap-8 px-4 py-10 sm:gap-10 sm:px-6 sm:py-12 lg:gap-12
@@ -64,6 +64,8 @@ export const ContactView = () => {
           </Box>
         </Box>
       </Box>
+
+      <AppFooter />
     </Box>
   );
 };

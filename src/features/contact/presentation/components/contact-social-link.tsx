@@ -33,9 +33,9 @@ export const ContactSocialLink = ({ link }: ContactSocialLinkProps) => {
     <Anchor
       aria-label={`${name} da Comunidade Viva (abre em nova aba)`}
       className="
-        group flex min-h-16 items-center gap-4 rounded-xl border border-border bg-card px-4 py-3
-        text-card-foreground shadow-elevated transition-all duration-200 hover:-translate-y-0.5
-        hover:border-primary hover:shadow-elevated-lg focus-visible:ring-2 focus-visible:ring-ring
+        group flex min-h-16 items-center gap-4 rounded-xl border border-border surface-card px-4
+        py-3 shadow-elevated transition-all duration-200 hover:-translate-y-0.5 hover:border-primary
+        hover:shadow-elevated-lg focus-visible:ring-2 focus-visible:ring-ring
         focus-visible:outline-none
       "
       href={href}

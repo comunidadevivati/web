@@ -80,7 +80,7 @@ export const DashboardView = () => {
               key={summary.label}
               className={cn(
                 `
-                  group relative border bg-card shadow-sm transition-all duration-300
+                  group relative border surface-card shadow-sm transition-all duration-300
                   hover:-translate-y-1 hover:shadow-xl
                 `,
                 styles.border,
@@ -137,7 +137,7 @@ export const DashboardView = () => {
       </Box>
 
       <Box className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
-        <Card className="overflow-hidden border-border bg-card shadow-sm">
+        <Card className="overflow-hidden border-border surface-card shadow-sm">
           <CardHeader className="border-b border-border/60 bg-linear-to-r from-muted/60 to-card">
             <Box className="flex items-center gap-3">
               <Box
@@ -165,7 +165,7 @@ export const DashboardView = () => {
                 key={event.id}
                 className="
                   group relative flex items-center gap-4 overflow-hidden rounded-xl border
-                  border-border bg-card p-4 transition-all duration-200 hover:border-primary/30
+                  border-border surface-card p-4 transition-all duration-200 hover:border-primary/30
                   hover:bg-primary/[0.025] hover:shadow-md
                 "
               >
@@ -229,7 +229,7 @@ export const DashboardView = () => {
           </CardContent>
         </Card>
 
-        <Card className="overflow-hidden border-border bg-card shadow-sm">
+        <Card className="overflow-hidden border-border surface-card shadow-sm">
           <CardHeader className="border-b border-border/60 bg-linear-to-r from-muted/60 to-card">
             <CardTitle className="text-base font-semibold text-foreground">
               Atividades recentes

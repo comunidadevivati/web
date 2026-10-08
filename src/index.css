@@ -134,7 +134,7 @@
   /* Página e superfícies */
   --background: var(--viva-teal-200);
   --foreground: var(--viva-teal-950);
-  --card: var(--viva-white);
+  --card: var(--viva-teal-50);
   --card-foreground: var(--viva-teal-950);
   --muted: var(--viva-teal-50);
   --muted-foreground: var(--viva-teal-800);
@@ -144,6 +144,15 @@
   --input: var(--viva-teal-400);
   --ring: var(--viva-teal-600);
   --destructive: oklch(0.577 0.245 27.325);
+
+  /* Conteúdo dentro de cards (aplicado pelo utilitário surface-card) */
+  --card-muted: var(--viva-teal-100);
+  --card-muted-foreground: var(--viva-teal-900);
+  --card-primary: var(--viva-teal-700);
+  --card-primary-foreground: var(--viva-white);
+  --card-primary-strong: var(--viva-teal-800);
+  --card-border: var(--viva-teal-500);
+  --card-ring: var(--viva-teal-700);
 
   /* Marca */
   --primary: var(--viva-teal-500);
@@ -202,7 +211,7 @@
   --background: var(--viva-teal-800);
   --foreground: var(--viva-teal-50);
   --card: var(--viva-teal-900);
-  --card-foreground: var(--viva-teal-50);
+  --card-foreground: var(--viva-teal-900);
   --muted: var(--viva-teal-950);
   --muted-foreground: var(--viva-teal-200);
   --secondary: var(--viva-teal-700);
@@ -211,6 +220,15 @@
   --input: var(--viva-teal-700);
   --ring: var(--viva-teal-300);
   --destructive: oklch(0.704 0.191 22.216);
+
+  /* Conteúdo dentro de cards */
+  --card-muted: var(--viva-teal-950);
+  --card-muted-foreground: var(--viva-teal-200);
+  --card-primary: var(--viva-teal-500);
+  --card-primary-foreground: var(--viva-teal-950);
+  --card-primary-strong: var(--viva-teal-200);
+  --card-border: var(--viva-teal-700);
+  --card-ring: var(--viva-teal-300);
 
   /* Marca */
   --primary-strong: var(--viva-teal-200);
@@ -235,6 +253,24 @@
   --elevation: var(--viva-black);
 
   /* Primary, gradiente da marca, header, overlay e redes sociais compartilham os valores do :root. */
+}
+
+/*
+ * Superfície de card: aplica o fundo do card e reescopa os tokens de conteúdo para que textos,
+ * bordas, botões e foco dentro dele mantenham contraste (o card não tem o mesmo tom do fundo).
+ */
+@utility surface-card {
+  background-color: var(--card);
+  color: var(--card-foreground);
+  --foreground: var(--card-foreground);
+  --muted: var(--card-muted);
+  --muted-foreground: var(--card-muted-foreground);
+  --primary: var(--card-primary);
+  --primary-foreground: var(--card-primary-foreground);
+  --primary-strong: var(--card-primary-strong);
+  --border: var(--card-border);
+  --input: var(--card-border);
+  --ring: var(--card-ring);
 }
 
 @layer base {

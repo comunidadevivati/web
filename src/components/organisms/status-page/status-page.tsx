@@ -1,3 +1,4 @@
+import { AppFooter } from '@/components/organisms/app-footer/app-footer';
 import { PublicHeader } from '@/components/organisms/public-header/public-header';
 import { Box, Button, Heading, Image, Text } from '@/components/ui';
 import { cn } from '@/lib/utils';
@@ -46,7 +47,7 @@ export const StatusPage = ({
   title,
 }: StatusPageProps) => {
   return (
-    <Box className="flex min-h-dvh flex-col overflow-x-hidden bg-background">
+    <Box className="flex min-h-dvh flex-col overflow-x-clip bg-background">
       <PublicHeader />
 
       <Box className="flex flex-1 items-center" role="main">
@@ -104,6 +105,8 @@ export const StatusPage = ({
           </Box>
         </Box>
       </Box>
+
+      <AppFooter />
     </Box>
   );
 };

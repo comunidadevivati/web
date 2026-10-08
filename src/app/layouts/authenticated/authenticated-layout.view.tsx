@@ -2,7 +2,7 @@ import { useAuthenticatedLayoutViewModel } from '@/app/layouts/authenticated/aut
 import livingStoneGreen from '@/assets/brand/living-stone-green.png';
 import logoVivaWhite from '@/assets/brand/logo-viva-white.png';
 import { TooltipHint } from '@/components/molecules';
-import { AppSidebar, type AppSidebarItem } from '@/components/organisms';
+import { AppFooter, AppSidebar, type AppSidebarItem } from '@/components/organisms';
 import { Box, Button, Image, Text } from '@/components/ui';
 import { Link, Outlet } from '@tanstack/react-router';
 import { cn } from 'cn';
@@ -29,7 +29,7 @@ export const AuthenticatedLayoutView = () => {
   const sidebarVisibilityLabel = isHidden ? 'Mostrar menu lateral' : 'Ocultar menu lateral';
 
   return (
-    <Box className="grid min-h-dvh grid-rows-[4.5rem_minmax(0,1fr)] bg-background">
+    <Box className="grid h-dvh grid-rows-[4.5rem_minmax(0,1fr)_auto] bg-background">
       <Box
         className={cn(
           'grid border-b border-header-border bg-header shadow-elevated',
@@ -139,6 +139,8 @@ export const AuthenticatedLayoutView = () => {
           </Box>
         </Box>
       </Box>
+
+      <AppFooter />
     </Box>
   );
 };
