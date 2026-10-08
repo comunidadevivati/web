@@ -41,7 +41,11 @@ export const AuthenticatedLayoutView = () => {
           <Box className="flex items-center justify-center border-r border-shell-divider">
             <Link
               aria-label="Ir para o dashboard"
-              className="flex items-center justify-center rounded-lg transition-all duration-200 hover:scale-105 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-shell-accent"
+              className="
+                flex items-center justify-center rounded-lg transition-all duration-200
+                hover:scale-105 focus-visible:outline-none focus-visible:ring-2
+                focus-visible:ring-shell-accent
+              "
               to="/dashboard"
             >
               <Image
@@ -59,7 +63,10 @@ export const AuthenticatedLayoutView = () => {
         <Box className="relative flex min-w-0 items-center px-4 md:px-6">
           <Button
             aria-label={isHidden ? 'Mostrar menu lateral' : 'Ocultar menu lateral'}
-            className="shrink-0 text-shell-foreground/70 hover:bg-shell-accent/10 hover:text-shell-accent-foreground"
+            className="
+              shrink-0 text-shell-foreground/70 hover:bg-shell-accent/10
+              hover:text-shell-accent-foreground
+            "
             size="icon"
             title={isHidden ? 'Mostrar menu lateral' : 'Ocultar menu lateral'}
             type="button"
@@ -82,7 +89,11 @@ export const AuthenticatedLayoutView = () => {
           </Link>
 
           <Box className="ml-auto flex min-w-0 items-center gap-3">
-            <Text className="hidden max-w-56 truncate text-sm font-medium text-shell-foreground/75 lg:block">
+            <Text
+              className="
+                hidden max-w-56 truncate text-sm font-medium text-shell-foreground/75 lg:block
+              "
+            >
               {userEmail}
             </Text>
 
@@ -91,7 +102,9 @@ export const AuthenticatedLayoutView = () => {
             </Text>
 
             <Button
-              className="text-shell-foreground/80 hover:bg-shell-accent/10 hover:text-shell-accent-foreground"
+              className="
+                text-shell-foreground/80 hover:bg-shell-accent/10 hover:text-shell-accent-foreground
+              "
               type="button"
               variant="ghost"
               onClick={logout}
@@ -120,14 +133,22 @@ export const AuthenticatedLayoutView = () => {
                 )}
               >
                 {!isCollapsed && (
-                  <Text className="text-[0.65rem] font-semibold tracking-[0.18em] text-sidebar-muted-foreground/80 uppercase">
+                  <Text
+                    className="
+                      text-[0.65rem] font-semibold tracking-[0.18em]
+                      text-sidebar-muted-foreground/80 uppercase
+                    "
+                  >
                     Navegação
                   </Text>
                 )}
 
                 <Button
                   aria-label={isCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
-                  className="text-sidebar-muted-foreground hover:bg-sidebar-accent hover:text-sidebar-primary-foreground"
+                  className="
+                    text-sidebar-muted-foreground hover:bg-sidebar-accent
+                    hover:text-sidebar-primary-foreground
+                  "
                   size="icon-sm"
                   title={isCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral'}
                   type="button"
@@ -148,7 +169,11 @@ export const AuthenticatedLayoutView = () => {
                 }}
                 aria-label="Dashboard"
                 className={cn(
-                  'flex h-11 items-center rounded-lg border border-transparent text-sm font-medium text-sidebar-foreground transition-all duration-200 hover:border-sidebar-border hover:bg-sidebar-accent hover:text-sidebar-accent-foreground',
+                  `
+                    flex h-11 items-center rounded-lg border border-transparent text-sm font-medium
+                    text-sidebar-foreground transition-all duration-200 hover:border-sidebar-border
+                    hover:bg-sidebar-accent hover:text-sidebar-accent-foreground
+                  `,
                   isCollapsed ? 'justify-center px-0' : 'gap-3 px-3',
                 )}
                 title={isCollapsed ? 'Dashboard' : undefined}
@@ -164,7 +189,10 @@ export const AuthenticatedLayoutView = () => {
               <Button
                 aria-label="Sair"
                 className={cn(
-                  'h-11 w-full text-sidebar-foreground hover:bg-sidebar-accent hover:text-sidebar-primary-foreground',
+                  `
+                    h-11 w-full text-sidebar-foreground hover:bg-sidebar-accent
+                    hover:text-sidebar-primary-foreground
+                  `,
                   isCollapsed ? 'justify-center px-0' : 'justify-start gap-3',
                 )}
                 title={isCollapsed ? 'Sair' : undefined}
@@ -181,7 +209,12 @@ export const AuthenticatedLayoutView = () => {
         )}
 
         <Box className="relative min-w-0 overflow-auto">
-          <Box className="pointer-events-none absolute inset-0 bg-linear-to-br from-canvas-start via-canvas-middle to-canvas" />
+          <Box
+            className="
+              pointer-events-none absolute inset-0 bg-linear-to-br from-canvas-start
+              via-canvas-middle to-canvas
+            "
+          />
 
           <Box className="relative min-h-full p-4 md:p-6 lg:p-8">
             <Outlet />

@@ -20,24 +20,42 @@ const menuItems: MenuItem[] = [
   { label: 'Contato', to: '/contato' },
 ];
 
-const menuItemClassName =
-  'h-11 justify-start px-3 text-base font-medium text-shell-foreground/75 hover:bg-shell-accent/10 hover:text-shell-accent-foreground data-[status=active]:bg-shell-accent/10 data-[status=active]:text-shell-accent-foreground md:h-10 md:justify-center md:text-sm';
+const menuItemClassName = `
+  h-11 justify-start px-3 text-base font-medium text-shell-foreground/75 hover:bg-shell-accent/10
+  hover:text-shell-accent-foreground data-[status=active]:bg-shell-accent/10
+  data-[status=active]:text-shell-accent-foreground md:h-10 md:justify-center md:text-sm
+`;
 
-const loginClassName =
-  'mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-shell-accent/40 bg-shell-accent/10 px-4 text-base font-semibold text-shell-accent-foreground transition-all duration-200 hover:border-shell-accent hover:bg-shell-accent hover:text-shell focus-visible:ring-2 focus-visible:ring-shell-accent focus-visible:outline-none md:mt-0 md:ml-2 md:h-10 md:text-sm lg:ml-3';
+const loginClassName = `
+  mt-2 inline-flex h-11 items-center justify-center gap-2 rounded-lg border border-shell-accent/40
+  bg-shell-accent/10 px-4 text-base font-semibold text-shell-accent-foreground transition-all
+  duration-200 hover:border-shell-accent hover:bg-shell-accent hover:text-shell focus-visible:ring-2
+  focus-visible:ring-shell-accent focus-visible:outline-none md:mt-0 md:ml-2 md:h-10 md:text-sm
+  lg:ml-3
+`;
 
 export const PublicHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
 
   return (
     <Box
-      className="sticky top-0 z-40 border-b border-shell-border bg-shell/95 shadow-elevated backdrop-blur"
+      className="
+        sticky top-0 z-40 border-b border-shell-border bg-shell/95 shadow-elevated backdrop-blur
+      "
       role="banner"
     >
-      <Box className="mx-auto flex h-16 w-full max-w-360 items-center justify-between px-4 sm:px-6 md:h-18 lg:px-8">
+      <Box
+        className="
+          mx-auto flex h-16 w-full max-w-360 items-center justify-between px-4 sm:px-6 md:h-18
+          lg:px-8
+        "
+      >
         <Link
           aria-label="Ir para a página inicial"
-          className="flex shrink-0 items-center rounded-lg transition-opacity duration-200 hover:opacity-85 focus-visible:ring-2 focus-visible:ring-shell-accent focus-visible:outline-none"
+          className="
+            flex shrink-0 items-center rounded-lg transition-opacity duration-200 hover:opacity-85
+            focus-visible:ring-2 focus-visible:ring-shell-accent focus-visible:outline-none
+          "
           to="/"
         >
           <Image
@@ -51,7 +69,10 @@ export const PublicHeader = () => {
           aria-controls="public-header-menu"
           aria-expanded={isMenuOpen}
           aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
-          className="size-11 text-shell-foreground/75 hover:bg-shell-accent/10 hover:text-shell-accent-foreground md:hidden [&_svg:not([class*='size-'])]:size-5"
+          className="
+            size-11 text-shell-foreground/75 hover:bg-shell-accent/10
+            hover:text-shell-accent-foreground md:hidden [&_svg:not([class*='size-'])]:size-5
+          "
           size="icon-lg"
           type="button"
           variant="ghost"
@@ -63,8 +84,14 @@ export const PublicHeader = () => {
         <Box
           aria-label="Menu principal"
           className={cn(
-            'absolute inset-x-0 top-full flex-col gap-1 border-b border-shell-border bg-shell px-4 py-4 shadow-elevated-lg sm:px-6',
-            'md:static md:flex md:flex-row md:items-center md:gap-0.5 md:border-0 md:bg-transparent md:p-0 md:shadow-none lg:gap-1',
+            `
+              absolute inset-x-0 top-full flex-col gap-1 border-b border-shell-border bg-shell px-4
+              py-4 shadow-elevated-lg sm:px-6
+            `,
+            `
+              md:static md:flex md:flex-row md:items-center md:gap-0.5 md:border-0 md:bg-transparent
+              md:p-0 md:shadow-none lg:gap-1
+            `,
             isMenuOpen ? 'flex' : 'hidden',
           )}
           id="public-header-menu"

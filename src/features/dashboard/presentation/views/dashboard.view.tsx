@@ -71,11 +71,17 @@ export const DashboardView = () => {
           return (
             <Card
               key={summary.label}
-              className={`group relative border ${styles.border} bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl`}
+              className={`group relative border ${styles.border}
+                bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl
+              `}
             >
               <Box
                 aria-hidden="true"
-                className={`absolute top-0 right-0 h-28 w-28 translate-x-10 -translate-y-10 rounded-full blur-2xl ${styles.glow}`}
+                className={`
+                  absolute top-0 right-0 h-28 w-28 translate-x-10 -translate-y-10 rounded-full
+                  blur-2xl
+                  ${styles.glow}
+                `}
               />
 
               <Box
@@ -97,7 +103,9 @@ export const DashboardView = () => {
                 </Box>
 
                 <Box
-                  className={`flex size-12 items-center justify-center rounded-xl ${styles.icon} transition-transform duration-300 group-hover:scale-110`}
+                  className={`flex size-12 items-center justify-center rounded-xl ${styles.icon}
+                    transition-transform duration-300 group-hover:scale-110
+                  `}
                 >
                   <Icon className="size-5" />
                 </Box>
@@ -115,7 +123,12 @@ export const DashboardView = () => {
         <Card className="overflow-hidden border-border bg-card shadow-sm">
           <CardHeader className="border-b border-border/60 bg-linear-to-r from-muted/60 to-card">
             <Box className="flex items-center gap-3">
-              <Box className="flex size-10 items-center justify-center rounded-xl bg-primary/10 text-primary-strong">
+              <Box
+                className="
+                  flex size-10 items-center justify-center rounded-xl bg-primary/10
+                  text-primary-strong
+                "
+              >
                 <CalendarDaysIcon className="size-5" />
               </Box>
 
@@ -133,15 +146,32 @@ export const DashboardView = () => {
             {events.map((event, index) => (
               <Box
                 key={event.id}
-                className="group relative flex items-center gap-4 overflow-hidden rounded-xl border border-border bg-card p-4 transition-all duration-200 hover:border-primary/30 hover:bg-primary/[0.025] hover:shadow-md"
+                className="
+                  group relative flex items-center gap-4 overflow-hidden rounded-xl border
+                  border-border bg-card p-4 transition-all duration-200 hover:border-primary/30
+                  hover:bg-primary/[0.025] hover:shadow-md
+                "
               >
                 <Box
                   aria-hidden="true"
-                  className="absolute top-0 left-0 h-full w-1 bg-primary opacity-0 transition-opacity group-hover:opacity-100"
+                  className="
+                    absolute top-0 left-0 h-full w-1 bg-primary opacity-0 transition-opacity
+                    group-hover:opacity-100
+                  "
                 />
 
-                <Box className="flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-shell text-shell-foreground shadow-sm">
-                  <Text className="text-[0.6rem] font-semibold tracking-wider text-shell-accent-foreground uppercase">
+                <Box
+                  className="
+                    flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-shell
+                    text-shell-foreground shadow-sm
+                  "
+                >
+                  <Text
+                    className="
+                      text-[0.6rem] font-semibold tracking-wider text-shell-accent-foreground
+                      uppercase
+                    "
+                  >
                     Evento
                   </Text>
 
@@ -170,7 +200,11 @@ export const DashboardView = () => {
                   </Box>
                 </Box>
 
-                <Box className="hidden rounded-full border border-primary/20 bg-primary/5 px-3 py-1 sm:block">
+                <Box
+                  className="
+                    hidden rounded-full border border-primary/20 bg-primary/5 px-3 py-1 sm:block
+                  "
+                >
                   <Text className="text-xs font-medium text-primary-strong">Próximo</Text>
                 </Box>
               </Box>
@@ -191,7 +225,9 @@ export const DashboardView = () => {
             {activities.map((activity) => (
               <Box
                 key={activity.id}
-                className="flex items-center gap-3 rounded-lg px-2 py-3 transition-colors hover:bg-muted/60"
+                className="
+                  flex items-center gap-3 rounded-lg px-2 py-3 transition-colors hover:bg-muted/60
+                "
               >
                 <Box className="relative flex size-8 shrink-0 items-center justify-center">
                   <Box className="absolute size-3 rounded-full bg-primary/20" />

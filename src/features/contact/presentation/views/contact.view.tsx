@@ -14,9 +14,19 @@ export const ContactView = () => {
       <PublicHeader />
 
       <Box role="main">
-        <Box className="mx-auto grid w-full max-w-360 gap-8 px-4 py-10 sm:gap-10 sm:px-6 sm:py-12 lg:gap-12 lg:px-8 lg:py-16">
+        <Box
+          className="
+            mx-auto grid w-full max-w-360 gap-8 px-4 py-10 sm:gap-10 sm:px-6 sm:py-12 lg:gap-12
+            lg:px-8 lg:py-16
+          "
+        >
           <Box className="grid max-w-2xl gap-3">
-            <Text className="text-xs font-semibold tracking-widest text-shell-accent-foreground uppercase sm:text-sm">
+            <Text
+              className="
+                text-xs font-semibold tracking-widest text-shell-accent-foreground uppercase
+                sm:text-sm
+              "
+            >
               Fale conosco
             </Text>
 

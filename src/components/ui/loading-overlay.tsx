@@ -23,7 +23,10 @@ export const LoadingOverlay = () => {
     <div
       aria-busy="true"
       aria-label="Carregando"
-      className="fixed inset-0 z-[9999] flex h-dvh w-dvw cursor-wait items-center justify-center overflow-hidden bg-background/70 text-foreground backdrop-blur-sm"
+      className="
+        fixed inset-0 z-[9999] flex h-dvh w-dvw cursor-wait items-center justify-center
+        overflow-hidden bg-background/70 text-foreground backdrop-blur-sm
+      "
       role="status"
     >
       <Spinner aria-hidden="true" className="size-10 text-primary" />

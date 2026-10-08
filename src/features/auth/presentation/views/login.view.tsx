@@ -26,8 +26,17 @@ export const LoginView = () => {
       {isSubmitting && <LoadingOverlay />}
 
       <Box className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
-        <Box className="relative hidden overflow-hidden bg-primary lg:flex lg:items-center lg:justify-center">
-          <Box className="absolute inset-0 bg-linear-to-br from-primary via-primary-gradient-middle to-primary-gradient-end" />
+        <Box
+          className="
+            relative hidden overflow-hidden bg-primary lg:flex lg:items-center lg:justify-center
+          "
+        >
+          <Box
+            className="
+              absolute inset-0 bg-linear-to-br from-primary via-primary-gradient-middle
+              to-primary-gradient-end
+            "
+          />
 
           <Box className="relative z-10 flex max-w-xl flex-col items-center gap-8 px-12 text-center">
             <Image
@@ -44,7 +53,11 @@ export const LoginView = () => {
           </Box>
         </Box>
 
-        <Box className="flex min-h-dvh items-center justify-center bg-background px-6 py-10 sm:px-10 lg:px-16">
+        <Box
+          className="
+            flex min-h-dvh items-center justify-center bg-background px-6 py-10 sm:px-10 lg:px-16
+          "
+        >
           <Box className="w-full max-w-md">
             <Box className="mb-10 flex flex-col items-center text-center">
               <Image

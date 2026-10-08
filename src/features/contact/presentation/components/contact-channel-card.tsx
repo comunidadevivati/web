@@ -16,11 +16,19 @@ export const ContactChannelCard = ({ channel }: ContactChannelCardProps) => {
   return (
     <Box
       aria-labelledby={titleId}
-      className="flex flex-col gap-5 rounded-xl border border-shell-border bg-shell-foreground/3 p-5 shadow-elevated transition-colors duration-200 hover:border-shell-accent/40 sm:p-6"
+      className="
+        flex flex-col gap-5 rounded-xl border border-shell-border bg-shell-foreground/3 p-5
+        shadow-elevated transition-colors duration-200 hover:border-shell-accent/40 sm:p-6
+      "
       role="region"
     >
       <Box className="flex items-start gap-4">
-        <Box className="flex size-11 shrink-0 items-center justify-center rounded-lg bg-shell-accent/10 text-shell-accent-foreground ring-1 ring-shell-accent/20">
+        <Box
+          className="
+            flex size-11 shrink-0 items-center justify-center rounded-lg bg-shell-accent/10
+            text-shell-accent-foreground ring-1 ring-shell-accent/20
+          "
+        >
           <Icon className="size-5" />
         </Box>
 

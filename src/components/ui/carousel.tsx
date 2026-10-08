@@ -69,7 +69,10 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
             aria-label={`${index + 1} de ${slidesCount}`}
             aria-roledescription="slide"
             className={cn(
-              'absolute inset-0 transition-opacity duration-1000 ease-out motion-reduce:transition-none',
+              `
+                absolute inset-0 transition-opacity duration-1000 ease-out
+                motion-reduce:transition-none
+              `,
               isCurrent ? 'opacity-100' : 'pointer-events-none opacity-0',
             )}
             role="group"
@@ -98,7 +101,11 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
         <>
           <Button
             aria-label="Imagem anterior"
-            className="absolute top-1/2 left-2 size-10 -translate-y-1/2 rounded-full bg-overlay/35 text-overlay-foreground backdrop-blur-sm hover:bg-shell-accent/80 hover:text-overlay-foreground sm:left-4 md:size-11 lg:left-6"
+            className="
+              absolute top-1/2 left-2 size-10 -translate-y-1/2 rounded-full bg-overlay/35
+              text-overlay-foreground backdrop-blur-sm hover:bg-shell-accent/80
+              hover:text-overlay-foreground sm:left-4 md:size-11 lg:left-6
+            "
             size="icon-lg"
             type="button"
             variant="ghost"
@@ -109,7 +116,11 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
 
           <Button
             aria-label="Próxima imagem"
-            className="absolute top-1/2 right-2 size-10 -translate-y-1/2 rounded-full bg-overlay/35 text-overlay-foreground backdrop-blur-sm hover:bg-shell-accent/80 hover:text-overlay-foreground sm:right-4 md:size-11 lg:right-6"
+            className="
+              absolute top-1/2 right-2 size-10 -translate-y-1/2 rounded-full bg-overlay/35
+              text-overlay-foreground backdrop-blur-sm hover:bg-shell-accent/80
+              hover:text-overlay-foreground sm:right-4 md:size-11 lg:right-6
+            "
             size="icon-lg"
             type="button"
             variant="ghost"
@@ -118,7 +129,12 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
             <ChevronRightIcon className="size-5 md:size-6" />
           </Button>
 
-          <div className="absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center rounded-full bg-overlay/35 px-1.5 backdrop-blur-sm sm:bottom-5 sm:px-2">
+          <div
+            className="
+              absolute bottom-3 left-1/2 flex -translate-x-1/2 items-center rounded-full
+              bg-overlay/35 px-1.5 backdrop-blur-sm sm:bottom-5 sm:px-2
+            "
+          >
             {slides.map((slide, index) => {
               const isCurrent = index === currentIndex;
 
@@ -127,7 +143,11 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
                   key={slide.id}
                   aria-current={isCurrent}
                   aria-label={`Ir para a imagem ${index + 1}`}
-                  className="group flex h-8 cursor-pointer items-center justify-center rounded-full px-1 focus-visible:ring-2 focus-visible:ring-shell-accent-foreground focus-visible:outline-none sm:h-9 sm:px-1.5"
+                  className="
+                    group flex h-8 cursor-pointer items-center justify-center rounded-full px-1
+                    focus-visible:ring-2 focus-visible:ring-shell-accent-foreground
+                    focus-visible:outline-none sm:h-9 sm:px-1.5
+                  "
                   type="button"
                   onClick={() => setCurrentIndex(index)}
                 >
