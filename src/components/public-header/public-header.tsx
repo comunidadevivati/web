@@ -9,14 +9,13 @@ import { useState } from 'react';
 
 type MenuItem = {
   label: string;
-  to?: LinkProps['to'];
+  to: LinkProps['to'];
 };
 
-// Itens sem `to` ainda não possuem página.
 const menuItems: MenuItem[] = [
   { label: 'Home', to: '/' },
-  { label: 'História' },
-  { label: 'Eventos' },
+  { label: 'História', to: '/historia' },
+  { label: 'Eventos', to: '/eventos' },
   { label: 'Contato', to: '/contato' },
 ];
 
@@ -97,23 +96,17 @@ export const PublicHeader = () => {
           id="public-header-menu"
           role="navigation"
         >
-          {menuItems.map(({ label, to }) =>
-            to ? (
-              <Link
-                key={label}
-                activeOptions={{ exact: true }}
-                className={cn(buttonVariants({ variant: 'ghost' }), menuItemClassName)}
-                to={to}
-                onClick={() => setIsMenuOpen(false)}
-              >
-                {label}
-              </Link>
-            ) : (
-              <Button key={label} className={menuItemClassName} type="button" variant="ghost">
-                {label}
-              </Button>
-            ),
-          )}
+          {menuItems.map(({ label, to }) => (
+            <Link
+              key={label}
+              activeOptions={{ exact: true }}
+              className={cn(buttonVariants({ variant: 'ghost' }), menuItemClassName)}
+              to={to}
+              onClick={() => setIsMenuOpen(false)}
+            >
+              {label}
+            </Link>
+          ))}
 
           <Link className={loginClassName} to="/login">
             <LogInIcon className="size-4" />

@@ -12,6 +12,8 @@ import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
 import { Route as ContatoRouteImport } from './routes/contato'
+import { Route as EventosRouteImport } from './routes/eventos'
+import { Route as HistoriaRouteImport } from './routes/historia'
 import { Route as LoginRouteImport } from './routes/login'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 
@@ -29,6 +31,16 @@ const ContatoRoute = ContatoRouteImport.update({
   path: '/contato',
   getParentRoute: () => rootRouteImport,
 } as any)
+const EventosRoute = EventosRouteImport.update({
+  id: '/eventos',
+  path: '/eventos',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HistoriaRoute = HistoriaRouteImport.update({
+  id: '/historia',
+  path: '/historia',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const LoginRoute = LoginRouteImport.update({
   id: '/login',
   path: '/login',
@@ -43,12 +55,16 @@ const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
+  '/eventos': typeof EventosRoute
+  '/historia': typeof HistoriaRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
   '/contato': typeof ContatoRoute
+  '/eventos': typeof EventosRoute
+  '/historia': typeof HistoriaRoute
   '/login': typeof LoginRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
 }
@@ -57,19 +73,24 @@ export interface FileRoutesById {
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
   '/contato': typeof ContatoRoute
+  '/eventos': typeof EventosRoute
+  '/historia': typeof HistoriaRoute
   '/login': typeof LoginRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
-  fullPaths: '/' | '/contato' | '/login' | '/dashboard'
+  fullPaths:
+    '/' | '/contato' | '/eventos' | '/historia' | '/login' | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
-  to: '/' | '/contato' | '/login' | '/dashboard'
+  to: '/' | '/contato' | '/eventos' | '/historia' | '/login' | '/dashboard'
   id:
     | '__root__'
     | '/'
     | '/_authenticated'
     | '/contato'
+    | '/eventos'
+    | '/historia'
     | '/login'
     | '/_authenticated/dashboard'
   fileRoutesById: FileRoutesById
@@ -78,6 +99,8 @@ export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
   ContatoRoute: typeof ContatoRoute
+  EventosRoute: typeof EventosRoute
+  HistoriaRoute: typeof HistoriaRoute
   LoginRoute: typeof LoginRoute
 }
 
@@ -102,6 +125,20 @@ declare module '@tanstack/react-router' {
       path: '/contato'
       fullPath: '/contato'
       preLoaderRoute: typeof ContatoRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/eventos': {
+      id: '/eventos'
+      path: '/eventos'
+      fullPath: '/eventos'
+      preLoaderRoute: typeof EventosRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/historia': {
+      id: '/historia'
+      path: '/historia'
+      fullPath: '/historia'
+      preLoaderRoute: typeof HistoriaRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/login': {
@@ -137,6 +174,8 @@ const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
   ContatoRoute: ContatoRoute,
+  EventosRoute: EventosRoute,
+  HistoriaRoute: HistoriaRoute,
   LoginRoute: LoginRoute,
 }
 export const routeTree = rootRouteImport
