@@ -4,6 +4,7 @@
   "jsPlugins": [
     "eslint-plugin-perfectionist",
     "@stylistic/eslint-plugin",
+    "eslint-plugin-better-tailwindcss",
     "./.config/oxlint/project-plugin.mjs"
   ],
   "ignorePatterns": [
@@ -92,7 +93,82 @@
         "SwitchCase": 1
       }
     ],
-    "@stylistic/jsx-indent-props": ["error", 2]
+    "@stylistic/jsx-indent-props": ["error", 2],
+    "better-tailwindcss/enforce-consistent-line-wrapping": [
+      "error",
+      {
+        "entryPoint": "src/index.css",
+        "printWidth": 100,
+        "indent": 2,
+        "group": "never",
+        "preferSingleLine": true,
+        "selectors": [
+          {
+            "kind": "attribute",
+            "name": "^className$"
+          },
+          {
+            "kind": "attribute",
+            "name": "^className$",
+            "match": [
+              {
+                "type": "strings"
+              }
+            ]
+          },
+          {
+            "kind": "callee",
+            "name": "^cn$",
+            "match": [
+              {
+                "type": "strings"
+              },
+              {
+                "type": "objectKeys"
+              }
+            ]
+          },
+          {
+            "kind": "callee",
+            "name": "^cva$",
+            "match": [
+              {
+                "type": "strings"
+              }
+            ]
+          },
+          {
+            "kind": "callee",
+            "name": "^cva$",
+            "match": [
+              {
+                "type": "objectValues",
+                "path": "^variants.*$"
+              }
+            ]
+          },
+          {
+            "kind": "callee",
+            "name": "^cva$",
+            "match": [
+              {
+                "type": "objectValues",
+                "path": "^compoundVariants\\[\\d+\\]\\.(?:className|class)$"
+              }
+            ]
+          },
+          {
+            "kind": "variable",
+            "name": "^(?:classNames?|\\w+ClassNames?)$",
+            "match": [
+              {
+                "type": "strings"
+              }
+            ]
+          }
+        ]
+      }
+    ]
   },
   "overrides": [
     {

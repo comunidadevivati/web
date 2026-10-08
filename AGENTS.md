@@ -618,6 +618,10 @@ Isso também mantém melhor integração com Tailwind IntelliSense.
 
 Usar `cn(...)`.
 
+### Quebra de linha das classes
+
+Listas de classes que passam de 100 colunas são quebradas automaticamente em várias linhas pela regra `better-tailwindcss/enforce-consistent-line-wrapping` (Oxlint + `eslint-plugin-better-tailwindcss`). Vale para `className`, `cn(...)`, `cva(...)` (incluindo `variants`) e variáveis `*ClassName`. Não quebrar manualmente; rodar `pnpm quality:fix` (a primeira execução pode precisar de uma segunda para estabilizar a indentação).
+
 ### Cores e tokens de design
 
 **Nunca usar valores de cor fixos/chumbados em componentes.** A aplicação terá modo claro, modo escuro e temas futuros; toda cor deve vir de um token semântico.
