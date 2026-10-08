@@ -957,7 +957,7 @@ O último modo visível deve ser lembrado em memória da View enquanto ela estiv
 
 O dashboard é a página inicial autenticada, com dados mockados, servida na rota `/dashboard` (`_authenticated.dashboard.tsx`).
 
-Nenhuma página está vinculada à rota `/` no momento. Links do layout, redirects do login e fallbacks de erro/não encontrado apontam para `/dashboard`.
+Nenhuma página está vinculada à rota `/` no momento. Links do layout, redirects do login e o fallback de erro apontam para `/dashboard`. As páginas públicas de status (não encontrada e em construção, via `StatusPage`) levam para a home pública `/`.
 
 Estrutura MVVM:
 

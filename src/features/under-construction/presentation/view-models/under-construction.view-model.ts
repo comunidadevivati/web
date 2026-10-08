@@ -1,17 +1,10 @@
-import { useCanGoBack, useRouter } from '@tanstack/react-router';
+import { useHistoryBack } from '@/shared/navigation/use-history-back';
 
 export const useUnderConstructionViewModel = () => {
-  const router = useRouter();
-
-  // Falso quando a página é aberta diretamente (link externo, nova aba, URL digitada).
-  const canGoBack = useCanGoBack();
-
-  const handleGoBack = () => {
-    router.history.back();
-  };
+  const { canGoBack, goBack } = useHistoryBack();
 
   return {
     canGoBack,
-    handleGoBack,
+    handleGoBack: goBack,
   };
 };

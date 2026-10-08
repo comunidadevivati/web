@@ -1,17 +1,23 @@
-import { Alert, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Link } from '@tanstack/react-router';
+import pageNotFound from '@/assets/images/page-not-found.webp';
+import { StatusPage } from '@/components/status-page/status-page';
+import { useHistoryBack } from '@/shared/navigation/use-history-back';
 
 export const RouteNotFound = () => {
-  return (
-    <Alert className="mx-auto mt-10 max-w-lg">
-      <AlertTitle>Página não encontrada</AlertTitle>
+  const { canGoBack, goBack } = useHistoryBack();
 
-      <AlertDescription>
-        A página que você tentou acessar não existe.{' '}
-        <Link className="font-medium underline underline-offset-4" to="/dashboard">
-          Voltar para o início
-        </Link>
-      </AlertDescription>
-    </Alert>
+  return (
+    <StatusPage
+      canGoBack={canGoBack}
+      description="O endereço que você tentou acessar não existe ou foi alterado. Você pode voltar para onde estava ou ir para a página inicial."
+      eyebrow="Erro 404"
+      image={{
+        src: pageNotFound,
+        width: 1200,
+        height: 553,
+        className: 'rounded-2xl shadow-elevated-lg',
+      }}
+      title="Página não encontrada"
+      onGoBack={goBack}
+    />
   );
 };
