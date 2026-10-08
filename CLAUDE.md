@@ -130,7 +130,9 @@ src/
 │   └── store/
 ├── assets/
 ├── components/
-│   └── ui/
+│   ├── ui/
+│   ├── molecules/
+│   └── organisms/
 ├── features/
 │   └── <feature>/
 │       ├── domain/
@@ -491,6 +493,48 @@ const execute = (_context: Context) => {};
 - `const` sempre que possível;
 - nunca `var`.
 
+### 7.12 Desestruturação (regra obrigatória)
+
+Sempre usar desestruturação em imports, retornos de hooks e objetos consumidos.
+
+**Imports de componentes:** um único import por grupo, pelo barrel (`index.ts`) do grupo.
+
+Correto:
+
+```ts
+import { Box, Button, Heading, Image, Text } from '@/components/ui';
+import { ThemeToggle, TooltipHint } from '@/components/molecules';
+import { AppSidebar } from '@/components/organisms';
+```
+
+Evitar:
+
+```ts
+import { Box } from '@/components/ui/box';
+import { Button } from '@/components/ui/button';
+```
+
+- cada grupo (`ui`, `molecules`, `organisms`) tem um `index.ts` com `export * from '...'` de cada componente; ao criar um componente, adicioná-lo ao barrel do grupo;
+- dentro do próprio grupo, importar o arquivo direto (ex.: uma molécula importando outra usa `@/components/molecules/tooltip-hint/tooltip-hint`) para evitar import circular pelo barrel.
+
+**Hooks e objetos:** desestruturar o que for usado.
+
+```ts
+const { error, isError, isPending, mutate, reset } = useMutation({ ... });
+
+const { preference, setPreference } = useThemeStore();
+
+const { history } = useRouter();
+
+const {
+  formState: { isDirty, isValid },
+  handleSubmit,
+  register,
+} = form;
+```
+
+Exceções: hooks que retornam uma função ou valor único (`const navigate = useNavigate();`) e objetos repassados inteiros adiante (ex.: `form` entregue à View).
+
 ---
 
 ## 8. Imports
@@ -612,9 +656,43 @@ Quando um componente tiver variantes de classe reutilizáveis, preferir `cva`.
 
 Isso também mantém melhor integração com Tailwind IntelliSense.
 
-### Classes condicionais
+### Onde escrever as classes (regra obrigatória)
 
-Usar `cn(...)`.
+Classes do Tailwind precisam estar sempre em um lugar que o Tailwind IntelliSense reconhece (autocomplete, hover e validação no VS Code):
+
+1. **Preferencial:** direto na prop `className`.
+2. **Variantes reutilizáveis:** `cva(...)`.
+3. **Classes condicionais, combinadas ou guardadas em variáveis/objetos:** sempre dentro de `cn(...)`.
+
+Nunca guardar classes em string ou template literal solto.
+
+Correto:
+
+```tsx
+<Link className="inline-flex h-11 items-center gap-2 rounded-lg px-4" to="/login" />;
+
+const cardClassName = cn('grid gap-5 rounded-2xl bg-card p-5');
+
+const layoutColumns = {
+  collapsed: cn('md:grid-cols-[4.5rem_minmax(0,1fr)]'),
+};
+
+<Box className={cn('absolute top-0 left-0 h-1 w-full', styles.accent)} />;
+```
+
+Evitar:
+
+```tsx
+const loginClassName = `
+  mt-2 inline-flex h-11 items-center ...
+`;
+
+const layoutColumns = { collapsed: 'md:grid-cols-[4.5rem_minmax(0,1fr)]' };
+
+<Box className={`absolute top-0 left-0 h-1 w-full ${styles.accent}`} />;
+```
+
+Classes usadas uma única vez ficam no `className` do próprio elemento. Variável só se justifica quando a mesma lista é reutilizada.
 
 ### Quebra de linha das classes
 
@@ -637,63 +715,71 @@ A regra de lint `project/no-hardcoded-colors` bloqueia esses padrões em `src/`.
 
 Todos os tokens ficam em `src/index.css`, arquivo usado pelo Tailwind v4 e pelo shadcn (`components.json`). Estrutura em três camadas:
 
-1. **Paleta da marca** (`--viva-*` em `:root`): valores brutos (hex/oklch). Nunca usados diretamente em componentes.
-2. **Tokens semânticos** (`:root` e `.dark`): descrevem o papel da cor (`--primary`, `--shell`, `--canvas`...) e referenciam a paleta. É aqui que modos e temas mudam valores.
-3. **`@theme inline`**: expõe cada token semântico como utilitário Tailwind (`--color-shell: var(--shell)` → `bg-shell`, `text-shell`, `border-shell`...).
+1. **Paleta da marca** (`--viva-*` em `:root`): valores brutos. Nunca usados diretamente em componentes.
+2. **Tokens semânticos** (`:root` = modo claro, `.dark` = modo escuro): descrevem o papel da cor (`--background`, `--header`, `--sidebar`, `--primary`...) e referenciam a paleta. É aqui que os modos mudam valores.
+3. **`@theme inline`**: expõe cada token semântico como utilitário Tailwind (`--color-header: var(--header)` → `bg-header`, `text-header`, `border-header`...).
 
 Novos temas devem ser criados redefinindo apenas a camada semântica (ex.: um seletor `.theme-x` ou `[data-theme='x']`), sem alterar componentes.
 
+#### Paleta da marca
+
+A paleta é **somente Teal**: a escala oficial do Tailwind CSS (https://tailwindcss.com/docs/colors), com o **Teal 500** como cor de referência da marca. A escala completa (`--viva-teal-50` … `--viva-teal-950`) usa os mesmos valores OKLCH do Tailwind.
+
+Além dela existem apenas `--viva-white`, `--viva-black` e as cores oficiais de marcas de terceiros (`--brand-*`, redes sociais). Não reintroduzir outras famílias de cor sem decisão explícita.
+
 #### Tokens disponíveis
 
-| Token                                                                                                                                                                         | Uso                                                                                                |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `background` / `foreground`                                                                                                                                                   | fundo e texto base da aplicação                                                                    |
-| `card`, `muted`, `secondary`, `destructive`, `border`, `input`, `ring`                                                                                                        | tokens base do shadcn                                                                              |
-| `primary` / `primary-foreground`                                                                                                                                              | cor da marca (Teal 500) e texto sobre ela                                                          |
-| `primary-strong`                                                                                                                                                              | variação de maior contraste da marca (texto sobre superfícies claras, hover)                       |
-| `primary-gradient-middle`, `primary-gradient-end`                                                                                                                             | paradas do gradiente da marca (`from-primary via-primary-gradient-middle to-primary-gradient-end`) |
-| `canvas`, `canvas-start`, `canvas-middle`                                                                                                                                     | área de conteúdo do app autenticado e seu gradiente                                                |
-| `shell`, `shell-foreground`                                                                                                                                                   | superfícies escuras de marca (headers) e texto sobre elas                                          |
-| `shell-border`, `shell-divider`, `shell-subtle`                                                                                                                               | bordas, divisórias e separadores no shell                                                          |
-| `shell-accent`, `shell-accent-foreground`                                                                                                                                     | acento teal do shell e texto/ícone em destaque                                                     |
-| `sidebar`, `sidebar-foreground`, `sidebar-muted-foreground`, `sidebar-primary`, `sidebar-primary-foreground`, `sidebar-accent`, `sidebar-accent-foreground`, `sidebar-border` | sidebar do app autenticado                                                                         |
-| `overlay`, `overlay-foreground`                                                                                                                                               | camadas sobre fotos/mídia (controles de carrossel etc.) e base das sombras                         |
-| `chart-1` … `chart-4`                                                                                                                                                         | cores categóricas de indicadores e gráficos                                                        |
+| Token                                                                                                                                                                         | Uso                                                                          | Claro              | Escuro             |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------- | ------------------ | ------------------ |
+| `background` / `foreground`                                                                                                                                                   | fundo de todas as páginas e texto sobre ele                                  | teal-200 / 950     | teal-800 / 50      |
+| `card` / `card-foreground`                                                                                                                                                    | cards, formulários e painéis sobre o fundo                                   | white / teal-950   | teal-900 / 50      |
+| `muted` / `muted-foreground`                                                                                                                                                  | superfícies sutis e texto secundário (sobre `background` e `card`)           | teal-50 / 800      | teal-950 / 200     |
+| `secondary` / `secondary-foreground`                                                                                                                                          | botões e superfícies secundárias                                             | teal-100 / 950     | teal-700 / 50      |
+| `border`, `input`, `ring`                                                                                                                                                     | bordas, campos e foco                                                        | teal-300/300/600   | teal-700/700/300   |
+| `destructive`                                                                                                                                                                 | erros e ações destrutivas                                                    | vermelho           | vermelho           |
+| `primary` / `primary-foreground`                                                                                                                                              | cor da marca (Teal 500) e texto sobre ela                                    | teal-500 / 950     | teal-500 / 950     |
+| `primary-strong`                                                                                                                                                              | texto/ícone da marca sobre `background` e `card` (eyebrows, links, destaque) | teal-800           | teal-200           |
+| `brand-gradient-start`, `brand-gradient-middle`, `brand-gradient-end`, `brand-foreground`                                                                                     | painel de marca com gradiente (login) e texto sobre ele                      | teal-600→800→950   | igual              |
+| `header`, `header-foreground`, `header-border`, `header-accent`, `header-accent-foreground`                                                                                   | headers (público, autenticado e Wi-Fi), iguais nos dois modos                | teal-950 / white   | igual              |
+| `sidebar`, `sidebar-foreground`, `sidebar-muted-foreground`, `sidebar-primary`, `sidebar-primary-foreground`, `sidebar-accent`, `sidebar-accent-foreground`, `sidebar-border` | menu lateral do app autenticado                                              | teal-400 / 950     | teal-600 / white   |
+| `overlay`, `overlay-foreground`                                                                                                                                               | camadas sobre fotos/mídia (carrossel) e base das sombras                     | black / white      | igual              |
+| `chart-1` … `chart-4`                                                                                                                                                         | cores categóricas de indicadores e gráficos                                  | ajustadas por modo | ajustadas por modo |
+| `social-*`                                                                                                                                                                    | identidade oficial das redes sociais                                         | igual              | igual              |
 
 Sombras com cor também são tokens (`@theme inline`): `shadow-elevated`, `shadow-elevated-lg`, `shadow-sidebar-active`.
 
 #### Regras de uso
 
-- usar sempre o utilitário semântico (`bg-shell`, `text-primary-strong`, `border-border`);
-- transparência via modificador de opacidade sobre o token (`bg-shell-accent/10`, `text-shell-foreground/75`) é permitida;
-- precisa de uma cor nova? Adicionar primeiro na paleta (`--viva-*`), depois criar o token semântico em `:root` **e** `.dark`, e expor em `@theme inline`;
+- usar sempre o utilitário semântico (`bg-background`, `text-primary-strong`, `border-border`);
+- texto da marca sobre o fundo ou sobre cards usa `text-primary-strong`, nunca `text-primary` (contraste insuficiente);
+- tokens `header-*` só dentro de headers; tokens `sidebar-*` só dentro do menu lateral;
+- transparência via modificador de opacidade sobre o token (`bg-primary/10`, `text-header-foreground/75`) é permitida;
+- precisa de uma cor nova? Adicionar primeiro na paleta (`--viva-*`), depois criar o token semântico em `:root` **e** revisar o `.dark`, e expor em `@theme inline`;
 - não criar tokens semânticos com nome de cor (`--teal`); nomear pelo papel (`--primary-strong`);
-- exceções fora de `src/` (ex.: `theme_color` do manifesto PWA em `vite.config.ts`) não são componentes e podem usar valor literal.
+- não usar o variant `dark:` em Views para trocar cores: o modo escuro é resolvido pelos tokens. `dark:` fica restrito a ajustes finos em `src/components/ui/**`;
+- exceções fora de `src/` (ex.: `theme_color` do manifesto PWA em `vite.config.ts` e a meta `theme-color` do `index.html`, ambos teal-950 `#022f2e`) não são componentes e podem usar valor literal.
 
-### Identidade visual
+### Tema claro / escuro
 
-A cor da marca segue a escala **Teal** da paleta oficial do Tailwind CSS (https://tailwindcss.com/docs/colors), com o **Teal 500** como referência. A escala completa (`--viva-teal-50` … `--viva-teal-950`) fica na paleta da marca, com os mesmos valores OKLCH do Tailwind.
+O tema é **global**: vale para todas as páginas (públicas, Wi-Fi de visitantes, login e área autenticada).
 
-Mapeamento atual da paleta (`--viva-*`):
+- preferências: `system` (padrão, segue o sistema operacional), `light` e `dark`;
+- a preferência fica salva no aparelho (Zustand `persist`, chave `@comunidade-viva:web:theme`) em `src/app/theme/theme.store.ts`;
+- o `ThemeProvider` (`src/app/providers/theme-provider.tsx`, montado no `main.tsx`) usa `useThemeSync`, que aplica a classe `.dark` no `<html>` com `useLayoutEffect` (antes da primeira pintura) e acompanha a troca de tema do sistema enquanto a preferência for `system`;
+- o store hidrata a preferência do `localStorage` de forma síncrona, então o primeiro render já usa o tema certo;
+- não aplicar o tema com scripts inline no `index.html` nem com manipulação de DOM fora do React;
+- o controle de troca é o componente `ThemeToggle` (`src/components/molecules/theme-toggle`), com os tons `header` e `sidebar`. Hoje ele aparece no header público (inclusive no menu mobile) e no rodapé da sidebar.
 
-```text
-Shell / header:   --viva-petrol-950   #081519  → token shell
-Sidebar:          --viva-petrol-850   #10272D  → token sidebar
-Canvas 1/2/3:     --viva-mist-100/200/300      → tokens canvas-start / canvas-middle / canvas
-Marca:            --viva-teal-500         → token primary
-Marca forte:      --viva-teal-600/700     → tokens primary-strong / gradiente da marca
-Acento:           --viva-teal-400         → tokens shell-accent / sidebar-primary
-Acento claro:     --viva-teal-300         → tokens shell-accent-foreground / sidebar-primary-foreground
-```
+Toda tela nova deve ser validada nos dois modos.
 
 ### Direção de design
 
-O dashboard deve manter:
+Todas as telas devem manter:
 
-- header escuro premium;
-- sidebar em variação mais clara do header;
-- área SPA em variação clara da mesma família azul-petróleo;
-- cards claros com contraste;
+- header teal-950 premium, igual nos dois modos;
+- menu lateral em teal vivo (teal-400 no claro, teal-600 no escuro);
+- fundo das páginas em teal claro (teal-200) no modo claro e teal profundo (teal-800) no escuro;
+- cards com contraste sobre o fundo;
 - cores funcionais nos indicadores;
 - shadows discretas;
 - bordas finas;
@@ -924,6 +1010,7 @@ Sidebar
 ├── modo collapsed
 ├── modo hidden
 ├── Dashboard
+├── Tema (sistema/claro/escuro) no rodapé
 └── Sair no rodapé
 
 SPA
@@ -944,7 +1031,7 @@ export type SidebarMode = 'expanded' | 'collapsed' | 'hidden';
 #### `collapsed`
 
 - somente ícones;
-- tooltips/title acessíveis;
+- tooltips do shadcn (`TooltipHint`);
 - largura reduzida.
 
 #### `hidden`
@@ -1588,7 +1675,7 @@ Toda funcionalidade nova deve considerar:
 - `alt` significativo em imagens informativas;
 - `aria-hidden` em imagens puramente decorativas;
 - contraste suficiente;
-- tooltips/title quando sidebar estiver apenas com ícones.
+- tooltips (`TooltipHint`, shadcn) quando a sidebar estiver apenas com ícones.
 
 Não remover acessibilidade para simplificar CSS.
 
@@ -1724,28 +1811,35 @@ export const useMembersViewModel = () => {
 
 ---
 
-## 39. Componentes UI existentes e filosofia
+## 39. Componentes: shadcn + atomic design
 
-A pasta `src/components/ui` é a fronteira para primitivas visuais.
+### Regra obrigatória
 
-Alguns componentes já estabelecidos:
+**Sempre usar os componentes de UI do shadcn** (base: Base UI). Antes de implementar qualquer elemento de interface (tooltip, dialog, dropdown, popover, tabs, select, toast etc.), adicionar o componente oficial com `pnpm dlx shadcn@<versão> add <componente>` e adaptá-lo ao padrão do projeto (seção 47). Não reimplementar comportamento que o shadcn já oferece, nem usar atributos nativos como substitutos (ex.: `title` no lugar de `Tooltip`).
 
-- `Alert`;
-- `Box`;
-- `Button`;
-- `Card`;
-- `Form`;
-- `Heading`;
-- `Image`;
-- `Input`;
-- `Label`;
-- `LoadingOverlay`;
-- `Spinner`;
-- `Text`.
+### Grupos em `src/components`
+
+```text
+src/components/
+├── ui/          átomos: componentes do shadcn e primitivas que encapsulam HTML nativo
+├── molecules/   moléculas: combinam alguns átomos em uma peça reutilizável
+└── organisms/   organismos: blocos maiores de interface, compostos por moléculas e átomos
+```
+
+- **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Spinner`, `Text`, `Tooltip`. Única camada que pode usar HTML nativo.
+- **`molecules/`:** `TooltipHint` (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido).
+- **`organisms/`:** `PublicHeader`, `AppSidebar`, `StatusPage`.
+
+Cada componente fica em sua própria pasta (`molecules/theme-toggle/theme-toggle.tsx`), junto do seu teste, e é exportado pelo `index.ts` do grupo (ver 7.12).
+
+Regras:
+
+- moléculas e organismos compõem átomos de `ui/`; nunca usam HTML nativo;
+- componentes usados por uma única feature ficam em `features/<feature>/presentation/components`; quando passam a ser reutilizados, sobem para `src/components`;
+- tooltips usam sempre `TooltipHint` (ou `Tooltip` do shadcn). O `TooltipProvider` é montado no `main.tsx`;
+- o tooltip é só uma dica visual: o elemento continua com seu nome acessível (`aria-label`).
 
 Antes de criar uma nova tag nativa encapsulada, verificar se já existe uma primitiva adequada.
-
-Antes de criar um componente visual novo, verificar se o shadcn possui equivalente útil.
 
 ---
 
@@ -1790,7 +1884,7 @@ Padrão visual:
 - ícone em container destacado;
 - glow discreto;
 - hover com elevação;
-- cards brancos contra SPA azul-petróleo clara.
+- cards (`card`) contra o fundo da página (`background`), nos dois modos.
 
 Eventos:
 
@@ -1838,10 +1932,12 @@ Antes de concluir qualquer tarefa:
 - [ ] Server state está no TanStack Query?
 - [ ] Não há imports relativos manuais?
 - [ ] Só há arrow functions?
+- [ ] Imports de componentes vêm do barrel do grupo e hooks/objetos estão desestruturados?
 - [ ] Exports são diretos?
 - [ ] Não há `export default` no app?
 - [ ] Props React usam `type`?
 - [ ] Sem HTML nativo em camada proibida?
+- [ ] Classes Tailwind estão no `className`, em `cva(...)` ou em `cn(...)` (nunca em string solta)?
 - [ ] Todas as cores usam tokens semânticos (sem hex, rgb/oklch ou paleta padrão do Tailwind)?
 - [ ] A tela foi construída mobile-first e validada de 320px até 1440px?
 - [ ] O conteúdo respeita a largura máxima de 1440px (`max-w-360`)?
