@@ -1482,6 +1482,18 @@ https://comunidade-viva-web.comvivati.workers.dev
 
 Build de produção usa o build Vite do projeto e deploy via Wrangler.
 
+### Worker (/api)
+
+O Worker em `worker/index.ts` executa **somente** para `/api/*` (`run_worker_first`); o restante continua servido como asset estático.
+
+Uso atual: `POST /api/guest-wifi/authorize`, que libera a rede "VIVA - Visitantes" no Omada Controller (External Portal Server). A rota pública `/wifi-visitantes` (fora de qualquer menu) é o portal cativo configurado no Omada.
+
+- credenciais do Omada ficam apenas em secrets do Worker (`pnpm exec wrangler secret put <NOME>`): `OMADA_CONTROLLER_URL`, `OMADA_CONTROLLER_ID`, `OMADA_SITE_ID`, `OMADA_OPERATOR_USERNAME`, `OMADA_OPERATOR_PASSWORD`;
+- localmente, usar `.dev.vars` (não versionado; modelo em `.dev.vars.example`);
+- após alterar `wrangler.jsonc`, regenerar os tipos com `pnpm exec wrangler types worker/worker-configuration.d.ts`;
+- o front chama o Worker via `workerApiClient` (`src/shared/http/worker-api-client.ts`), não via `VITE_API_URL`;
+- nunca registrar dados pessoais (nome, telefone) em logs do Worker.
+
 ### SPA fallback
 
 `not_found_handling: 'single-page-application'` é necessário para rotas client-side como `/login` funcionarem em acesso direto.

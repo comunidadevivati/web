@@ -1,12 +1,23 @@
 {
   "$schema": "./node_modules/wrangler/config-schema.json",
   "name": "comunidade-viva-web",
+  "main": "./worker/index.ts",
   "compatibility_date": "2026-10-04",
   "workers_dev": true,
   "preview_urls": true,
   "assets": {
     "directory": "./dist",
+    "binding": "ASSETS",
     "not_found_handling": "single-page-application",
+    // Somente /api/* executa o Worker; o restante é servido direto como asset estático.
+    "run_worker_first": ["/api/*"],
   },
+  "vars": {
+    // Duração da liberação do Wi-Fi de visitantes, em minutos.
+    "GUEST_WIFI_SESSION_MINUTES": "240",
+  },
+  // Secrets (não versionados): pnpm exec wrangler secret put <NOME>
+  // OMADA_CONTROLLER_URL, OMADA_CONTROLLER_ID, OMADA_SITE_ID, OMADA_OPERATOR_USERNAME,
+  // OMADA_OPERATOR_PASSWORD
   "previews": {},
 }

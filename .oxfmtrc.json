@@ -13,5 +13,10 @@
     "partitionByNewline": false,
     "groups": ["import", "unknown"]
   },
-  "ignorePatterns": ["dist/**", "coverage/**", "src/app/router/routeTree.gen.ts"]
+  "ignorePatterns": [
+    "dist/**",
+    "coverage/**",
+    "src/app/router/routeTree.gen.ts",
+    "worker/worker-configuration.d.ts"
+  ]
 }

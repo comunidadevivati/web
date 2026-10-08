@@ -1,0 +1,9 @@
+# Copie para .dev.vars (não versionado) para rodar o Worker localmente com `wrangler dev`.
+# Em produção, cadastre cada valor com: pnpm exec wrangler secret put <NOME>
+# Omada Cloud: use o host da API (<regiao>-api-omada-controller), não o da interface web.
+OMADA_CONTROLLER_URL=https://<regiao>-api-omada-controller.tplinkcloud.com
+OMADA_CONTROLLER_ID=<omadac-id>
+OMADA_SITE_ID=<site-id>
+OMADA_OPERATOR_USERNAME=<usuario-hotspot-operator>
+# Valores com "#" precisam de aspas, senão o restante vira comentário.
+OMADA_OPERATOR_PASSWORD="<senha-hotspot-operator>"
