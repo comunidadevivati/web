@@ -647,20 +647,20 @@ Novos temas devem ser criados redefinindo apenas a camada semântica (ex.: um se
 
 #### Tokens disponíveis
 
-| Token                                                                                                                                                                                         | Uso                                                                                                |
-| --------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
-| `background` / `foreground`                                                                                                                                                                   | fundo e texto base da aplicação                                                                    |
-| `card`, `popover`, `muted`, `accent`, `secondary`, `destructive`, `border`, `input`, `ring`                                                                                                   | tokens base do shadcn                                                                              |
-| `primary` / `primary-foreground`                                                                                                                                                              | cor da marca (turquesa) e texto sobre ela                                                          |
-| `primary-strong`                                                                                                                                                                              | variação de maior contraste da marca (texto sobre superfícies claras, hover)                       |
-| `primary-gradient-middle`, `primary-gradient-end`                                                                                                                                             | paradas do gradiente da marca (`from-primary via-primary-gradient-middle to-primary-gradient-end`) |
-| `canvas`, `canvas-start`, `canvas-middle`                                                                                                                                                     | área de conteúdo do app autenticado e seu gradiente                                                |
-| `shell`, `shell-foreground`                                                                                                                                                                   | superfícies escuras de marca (headers) e texto sobre elas                                          |
-| `shell-border`, `shell-divider`, `shell-subtle`                                                                                                                                               | bordas, divisórias e separadores no shell                                                          |
-| `shell-accent`, `shell-accent-foreground`                                                                                                                                                     | acento turquesa do shell e texto/ícone em destaque                                                 |
-| `sidebar`, `sidebar-foreground`, `sidebar-muted-foreground`, `sidebar-primary`, `sidebar-primary-foreground`, `sidebar-accent`, `sidebar-accent-foreground`, `sidebar-border`, `sidebar-ring` | sidebar do app autenticado                                                                         |
-| `overlay`, `overlay-foreground`                                                                                                                                                               | camadas sobre fotos/mídia (controles de carrossel etc.) e base das sombras                         |
-| `chart-1` … `chart-5`                                                                                                                                                                         | cores categóricas de indicadores e gráficos                                                        |
+| Token                                                                                                                                                                         | Uso                                                                                                |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------- |
+| `background` / `foreground`                                                                                                                                                   | fundo e texto base da aplicação                                                                    |
+| `card`, `muted`, `secondary`, `destructive`, `border`, `input`, `ring`                                                                                                        | tokens base do shadcn                                                                              |
+| `primary` / `primary-foreground`                                                                                                                                              | cor da marca (Teal 500) e texto sobre ela                                                          |
+| `primary-strong`                                                                                                                                                              | variação de maior contraste da marca (texto sobre superfícies claras, hover)                       |
+| `primary-gradient-middle`, `primary-gradient-end`                                                                                                                             | paradas do gradiente da marca (`from-primary via-primary-gradient-middle to-primary-gradient-end`) |
+| `canvas`, `canvas-start`, `canvas-middle`                                                                                                                                     | área de conteúdo do app autenticado e seu gradiente                                                |
+| `shell`, `shell-foreground`                                                                                                                                                   | superfícies escuras de marca (headers) e texto sobre elas                                          |
+| `shell-border`, `shell-divider`, `shell-subtle`                                                                                                                               | bordas, divisórias e separadores no shell                                                          |
+| `shell-accent`, `shell-accent-foreground`                                                                                                                                     | acento teal do shell e texto/ícone em destaque                                                     |
+| `sidebar`, `sidebar-foreground`, `sidebar-muted-foreground`, `sidebar-primary`, `sidebar-primary-foreground`, `sidebar-accent`, `sidebar-accent-foreground`, `sidebar-border` | sidebar do app autenticado                                                                         |
+| `overlay`, `overlay-foreground`                                                                                                                                               | camadas sobre fotos/mídia (controles de carrossel etc.) e base das sombras                         |
+| `chart-1` … `chart-4`                                                                                                                                                         | cores categóricas de indicadores e gráficos                                                        |
 
 Sombras com cor também são tokens (`@theme inline`): `shadow-elevated`, `shadow-elevated-lg`, `shadow-sidebar-active`.
 
@@ -669,20 +669,23 @@ Sombras com cor também são tokens (`@theme inline`): `shadow-elevated`, `shado
 - usar sempre o utilitário semântico (`bg-shell`, `text-primary-strong`, `border-border`);
 - transparência via modificador de opacidade sobre o token (`bg-shell-accent/10`, `text-shell-foreground/75`) é permitida;
 - precisa de uma cor nova? Adicionar primeiro na paleta (`--viva-*`), depois criar o token semântico em `:root` **e** `.dark`, e expor em `@theme inline`;
-- não criar tokens com nome de cor (`--turquoise`); nomear pelo papel (`--primary-strong`);
+- não criar tokens semânticos com nome de cor (`--teal`); nomear pelo papel (`--primary-strong`);
 - exceções fora de `src/` (ex.: `theme_color` do manifesto PWA em `vite.config.ts`) não são componentes e podem usar valor literal.
 
 ### Identidade visual
 
-Os valores atuais da paleta (`--viva-*`) mantêm a identidade já aprovada:
+A cor da marca segue a escala **Teal** da paleta oficial do Tailwind CSS (https://tailwindcss.com/docs/colors), com o **Teal 500** como referência. A escala completa (`--viva-teal-50` … `--viva-teal-950`) fica na paleta da marca, com os mesmos valores OKLCH do Tailwind.
+
+Mapeamento atual da paleta (`--viva-*`):
 
 ```text
 Shell / header:   --viva-petrol-950   #081519  → token shell
 Sidebar:          --viva-petrol-850   #10272D  → token sidebar
 Canvas 1/2/3:     --viva-mist-100/200/300      → tokens canvas-start / canvas-middle / canvas
-Turquesa:         --viva-turquoise-500 #01A9B1 → token primary
-Acento:           --viva-aqua-500     #16B3BB  → tokens shell-accent / sidebar-primary
-Acento claro:     --viva-aqua-300     #65E3E8  → tokens shell-accent-foreground / sidebar-primary-foreground
+Marca:            --viva-teal-500         → token primary
+Marca forte:      --viva-teal-600/700     → tokens primary-strong / gradiente da marca
+Acento:           --viva-teal-400         → tokens shell-accent / sidebar-primary
+Acento claro:     --viva-teal-300         → tokens shell-accent-foreground / sidebar-primary-foreground
 ```
 
 ### Direção de design
@@ -1784,7 +1787,7 @@ Eventos:
 
 - cards compactos;
 - data + horário com ícones;
-- realce turquesa;
+- realce teal;
 - borda/hover refinados.
 
 Preservar essa linguagem ao expandir o dashboard.

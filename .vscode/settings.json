@@ -36,6 +36,17 @@
   "tailwindCSS.colorDecorators": true,
   "tailwindCSS.showPixelEquivalents": true,
   "tailwindCSS.rootFontSize": 16,
+  "tailwindCSS.lint.cssConflict": "error",
+  "tailwindCSS.lint.invalidApply": "error",
+  "tailwindCSS.lint.invalidConfigPath": "error",
+  "tailwindCSS.lint.invalidScreen": "error",
+  "tailwindCSS.lint.invalidTailwindDirective": "error",
+  "tailwindCSS.lint.invalidVariant": "error",
+  "tailwindCSS.lint.recommendedVariantOrder": "warning",
+  "css.validate": true,
+  "css.lint.unknownAtRules": "ignore",
+  "scss.validate": true,
+  "scss.lint.unknownAtRules": "ignore",
   "files.associations": {
     "*.css": "tailwindcss"
   },
@@ -69,6 +80,12 @@
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[css]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[tailwindcss]": {
+    "editor.defaultFormatter": "oxc.oxc-vscode"
+  },
+  "[scss]": {
     "editor.defaultFormatter": "oxc.oxc-vscode"
   },
   "[json]": {
