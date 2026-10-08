@@ -36,8 +36,8 @@ export const COMMUNITY_CONTACT: CommunityContact = {
     country: 'Brasil',
   },
   phone: {
-    display: '+55 (67) 9 9106-6631',
-    e164: '+5567991066631',
+    display: '+55 (67) 9 9255-0858',
+    e164: '+5567992550858',
   },
   email: 'comunidadevivaoficial@gmail.com',
   socialNetworks: {

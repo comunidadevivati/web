@@ -19,7 +19,7 @@ test.describe('Contact', () => {
 
     await expect(
       page.getByRole('link', { name: 'Conversar pelo WhatsApp (abre em nova aba)' }),
-    ).toHaveAttribute('href', 'https://wa.me/5567991066631');
+    ).toHaveAttribute('href', 'https://wa.me/5567992550858');
   });
 
   test('opens social networks in a new tab', async ({ page }) => {
