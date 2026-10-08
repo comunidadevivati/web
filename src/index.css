@@ -12,10 +12,11 @@
  *
  * Camadas:
  * 1. Paleta da marca (--viva-*): valores brutos, nunca usados diretamente em componentes.
- * 2. Tokens semânticos (:root / .dark): referenciam a paleta e mudam por modo/tema.
+ * 2. Tokens semânticos (:root = modo claro / .dark = modo escuro): referenciam a paleta.
  * 3. @theme inline: expõe os tokens semânticos como utilitários do Tailwind (bg-*, text-*, ...).
  *
- * Componentes usam apenas utilitários semânticos (ex.: bg-shell, text-primary, border-border).
+ * Componentes usam apenas utilitários semânticos (ex.: bg-background, text-primary-strong).
+ * O modo escuro é aplicado pela classe .dark no <html> (ver src/app/theme).
  */
 
 @theme inline {
@@ -29,48 +30,37 @@
   --radius-xl: calc(var(--radius) * 1.4);
   --radius-2xl: calc(var(--radius) * 1.8);
 
-  /* Base (shadcn) */
+  /* Página e superfícies */
   --color-background: var(--background);
   --color-foreground: var(--foreground);
   --color-card: var(--card);
   --color-card-foreground: var(--card-foreground);
-  --color-primary: var(--primary);
-  --color-primary-foreground: var(--primary-foreground);
-  --color-secondary: var(--secondary);
-  --color-secondary-foreground: var(--secondary-foreground);
   --color-muted: var(--muted);
   --color-muted-foreground: var(--muted-foreground);
-  --color-destructive: var(--destructive);
+  --color-secondary: var(--secondary);
+  --color-secondary-foreground: var(--secondary-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-ring: var(--ring);
+  --color-destructive: var(--destructive);
 
-  /* Marca: variação de contraste e gradiente */
+  /* Marca */
+  --color-primary: var(--primary);
+  --color-primary-foreground: var(--primary-foreground);
   --color-primary-strong: var(--primary-strong);
-  --color-primary-gradient-middle: var(--primary-gradient-middle);
-  --color-primary-gradient-end: var(--primary-gradient-end);
+  --color-brand-gradient-start: var(--brand-gradient-start);
+  --color-brand-gradient-middle: var(--brand-gradient-middle);
+  --color-brand-gradient-end: var(--brand-gradient-end);
+  --color-brand-foreground: var(--brand-foreground);
 
-  /* Indicadores e gráficos */
-  --color-chart-1: var(--chart-1);
-  --color-chart-2: var(--chart-2);
-  --color-chart-3: var(--chart-3);
-  --color-chart-4: var(--chart-4);
+  /* Header */
+  --color-header: var(--header);
+  --color-header-foreground: var(--header-foreground);
+  --color-header-border: var(--header-border);
+  --color-header-accent: var(--header-accent);
+  --color-header-accent-foreground: var(--header-accent-foreground);
 
-  /* Área de conteúdo do app autenticado */
-  --color-canvas: var(--canvas);
-  --color-canvas-start: var(--canvas-start);
-  --color-canvas-middle: var(--canvas-middle);
-
-  /* Shell */
-  --color-shell: var(--shell);
-  --color-shell-foreground: var(--shell-foreground);
-  --color-shell-border: var(--shell-border);
-  --color-shell-divider: var(--shell-divider);
-  --color-shell-subtle: var(--shell-subtle);
-  --color-shell-accent: var(--shell-accent);
-  --color-shell-accent-foreground: var(--shell-accent-foreground);
-
-  /* Sidebar */
+  /* Menu lateral */
   --color-sidebar: var(--sidebar);
   --color-sidebar-foreground: var(--sidebar-foreground);
   --color-sidebar-muted-foreground: var(--sidebar-muted-foreground);
@@ -79,6 +69,12 @@
   --color-sidebar-accent: var(--sidebar-accent);
   --color-sidebar-accent-foreground: var(--sidebar-accent-foreground);
   --color-sidebar-border: var(--sidebar-border);
+
+  /* Indicadores e gráficos */
+  --color-chart-1: var(--chart-1);
+  --color-chart-2: var(--chart-2);
+  --color-chart-3: var(--chart-3);
+  --color-chart-4: var(--chart-4);
 
   /* Sobreposições */
   --color-overlay: var(--overlay);
@@ -95,15 +91,19 @@
   --color-social-instagram-end: var(--social-instagram-end);
 
   /* Sombras */
-  --shadow-elevated: 0 8px 30px color-mix(in oklab, var(--overlay) 20%, transparent);
-  --shadow-elevated-lg: 0 16px 30px color-mix(in oklab, var(--overlay) 30%, transparent);
+  --shadow-elevated:
+    0 1px 2px color-mix(in oklab, var(--elevation) 10%, transparent),
+    0 6px 20px color-mix(in oklab, var(--elevation) 14%, transparent);
+  --shadow-elevated-lg:
+    0 2px 4px color-mix(in oklab, var(--elevation) 12%, transparent),
+    0 16px 32px color-mix(in oklab, var(--elevation) 22%, transparent);
   --shadow-sidebar-active: inset 3px 0 0 var(--sidebar-primary);
 }
 
 :root {
   /* Paleta da marca Comunidade Viva */
 
-  /* Teal: cor da marca (referência: Teal 500 da paleta do Tailwind CSS) */
+  /* Teal: escala oficial do Tailwind CSS, com o Teal 500 como cor de referência da marca */
   --viva-teal-50: oklch(98.4% 0.014 180.72);
   --viva-teal-100: oklch(95.3% 0.051 180.801);
   --viva-teal-200: oklch(91% 0.096 180.426);
@@ -116,20 +116,6 @@
   --viva-teal-900: oklch(38.6% 0.063 188.416);
   --viva-teal-950: oklch(27.7% 0.046 192.524);
 
-  /* Azul-petróleo: shell, sidebar e área de conteúdo */
-  --viva-petrol-950: #081519;
-  --viva-petrol-900: #0b1c21;
-  --viva-petrol-850: #10272d;
-  --viva-petrol-800: #11262c;
-  --viva-petrol-750: #163036;
-  --viva-petrol-700: #1d3a41;
-  --viva-petrol-600: #2f5a61;
-  --viva-petrol-450: #6f9299;
-  --viva-petrol-400: #91a8ad;
-  --viva-mist-300: #afc6cb;
-  --viva-mist-200: #bcd1d5;
-  --viva-mist-100: #c5d7da;
-
   --viva-white: #ffffff;
   --viva-black: #000000;
 
@@ -141,27 +127,49 @@
   --brand-instagram-pink: #dd2a7b;
   --brand-instagram-purple: #8134af;
 
-  /* Base (shadcn) */
+  /* Modo claro */
+  color-scheme: light;
   --radius: 0.625rem;
-  --background: oklch(1 0 0);
-  --foreground: oklch(0.145 0 0);
-  --card: oklch(1 0 0);
-  --card-foreground: oklch(0.145 0 0);
-  --primary: var(--viva-teal-500);
-  --primary-foreground: var(--viva-white);
-  --secondary: oklch(0.97 0 0);
-  --secondary-foreground: oklch(0.205 0 0);
-  --muted: oklch(0.97 0 0);
-  --muted-foreground: oklch(0.556 0 0);
-  --destructive: oklch(0.577 0.245 27.325);
-  --border: oklch(0.922 0 0);
-  --input: oklch(0.922 0 0);
-  --ring: oklch(0.708 0 0);
 
-  /* Marca: variação de contraste e gradiente */
-  --primary-strong: var(--viva-teal-600);
-  --primary-gradient-middle: var(--viva-teal-600);
-  --primary-gradient-end: var(--viva-teal-700);
+  /* Página e superfícies */
+  --background: var(--viva-teal-200);
+  --foreground: var(--viva-teal-950);
+  --card: var(--viva-white);
+  --card-foreground: var(--viva-teal-950);
+  --muted: var(--viva-teal-50);
+  --muted-foreground: var(--viva-teal-800);
+  --secondary: var(--viva-teal-100);
+  --secondary-foreground: var(--viva-teal-950);
+  --border: var(--viva-teal-400);
+  --input: var(--viva-teal-400);
+  --ring: var(--viva-teal-600);
+  --destructive: oklch(0.577 0.245 27.325);
+
+  /* Marca */
+  --primary: var(--viva-teal-500);
+  --primary-foreground: var(--viva-teal-950);
+  --primary-strong: var(--viva-teal-800);
+  --brand-gradient-start: var(--viva-teal-600);
+  --brand-gradient-middle: var(--viva-teal-800);
+  --brand-gradient-end: var(--viva-teal-950);
+  --brand-foreground: var(--viva-white);
+
+  /* Header: igual nos dois modos */
+  --header: var(--viva-teal-950);
+  --header-foreground: var(--viva-white);
+  --header-border: var(--viva-teal-900);
+  --header-accent: var(--viva-teal-400);
+  --header-accent-foreground: var(--viva-teal-300);
+
+  /* Menu lateral */
+  --sidebar: var(--viva-teal-400);
+  --sidebar-foreground: var(--viva-teal-950);
+  --sidebar-muted-foreground: var(--viva-teal-900);
+  --sidebar-primary: var(--viva-teal-900);
+  --sidebar-primary-foreground: var(--viva-teal-950);
+  --sidebar-accent: var(--viva-teal-300);
+  --sidebar-accent-foreground: var(--viva-teal-950);
+  --sidebar-border: var(--viva-teal-500);
 
   /* Cores categóricas (indicadores e gráficos) */
   --chart-1: oklch(0.609 0.126 221.723);
@@ -169,38 +177,17 @@
   --chart-3: oklch(0.666 0.179 58.318);
   --chart-4: oklch(0.596 0.145 163.225);
 
-  /* Área de conteúdo do app autenticado */
-  --canvas: var(--viva-mist-300);
-  --canvas-start: var(--viva-mist-100);
-  --canvas-middle: var(--viva-mist-200);
-
-  /* Shell escuro: headers e superfícies de marca */
-  --shell: var(--viva-petrol-950);
-  --shell-foreground: var(--viva-white);
-  --shell-border: var(--viva-petrol-700);
-  --shell-divider: var(--viva-petrol-750);
-  --shell-subtle: var(--viva-petrol-600);
-  --shell-accent: var(--viva-teal-400);
-  --shell-accent-foreground: var(--viva-teal-300);
-
-  /* Sidebar do app autenticado */
-  --sidebar: var(--viva-petrol-850);
-  --sidebar-foreground: var(--viva-petrol-400);
-  --sidebar-muted-foreground: var(--viva-petrol-450);
-  --sidebar-primary: var(--viva-teal-400);
-  --sidebar-primary-foreground: var(--viva-teal-300);
-  --sidebar-accent: var(--viva-petrol-800);
-  --sidebar-accent-foreground: var(--viva-white);
-  --sidebar-border: var(--viva-petrol-700);
-
-  /* Sobreposições sobre fotos/mídia e sombras */
+  /* Sobreposições sobre fotos/mídia */
   --overlay: var(--viva-black);
   --overlay-foreground: var(--viva-white);
+
+  /* Cor base das sombras: teal escuro no claro, para a sombra não parecer cinza sobre o fundo teal */
+  --elevation: var(--viva-teal-950);
 
   /* Redes sociais: identidade oficial de cada marca */
   --social-foreground: var(--viva-white);
   --social-whatsapp: var(--brand-whatsapp-green);
-  --social-whatsapp-foreground: var(--viva-petrol-950);
+  --social-whatsapp-foreground: var(--viva-teal-950);
   --social-facebook: var(--brand-facebook-blue);
   --social-youtube: var(--brand-youtube-red);
   --social-instagram-start: var(--brand-instagram-orange);
@@ -209,30 +196,45 @@
 }
 
 .dark {
-  --background: oklch(0.145 0 0);
-  --foreground: oklch(0.985 0 0);
-  --card: oklch(0.205 0 0);
-  --card-foreground: oklch(0.985 0 0);
-  --primary: var(--viva-teal-400);
-  --primary-foreground: var(--viva-teal-950);
-  --secondary: oklch(0.269 0 0);
-  --secondary-foreground: oklch(0.985 0 0);
-  --muted: oklch(0.269 0 0);
-  --muted-foreground: oklch(0.708 0 0);
+  color-scheme: dark;
+
+  /* Página e superfícies */
+  --background: var(--viva-teal-800);
+  --foreground: var(--viva-teal-50);
+  --card: var(--viva-teal-900);
+  --card-foreground: var(--viva-teal-50);
+  --muted: var(--viva-teal-950);
+  --muted-foreground: var(--viva-teal-200);
+  --secondary: var(--viva-teal-700);
+  --secondary-foreground: var(--viva-teal-50);
+  --border: var(--viva-teal-700);
+  --input: var(--viva-teal-700);
+  --ring: var(--viva-teal-300);
   --destructive: oklch(0.704 0.191 22.216);
-  --border: oklch(1 0 0 / 10%);
-  --input: oklch(1 0 0 / 15%);
-  --ring: oklch(0.556 0 0);
-  --primary-strong: var(--viva-teal-300);
+
+  /* Marca */
+  --primary-strong: var(--viva-teal-200);
+
+  /* Menu lateral */
+  --sidebar: var(--viva-teal-600);
+  --sidebar-foreground: var(--viva-white);
+  --sidebar-muted-foreground: var(--viva-teal-100);
+  --sidebar-primary: var(--viva-teal-50);
+  --sidebar-primary-foreground: var(--viva-white);
+  --sidebar-accent: var(--viva-teal-700);
+  --sidebar-accent-foreground: var(--viva-white);
+  --sidebar-border: var(--viva-teal-700);
+
+  /* Cores categóricas (indicadores e gráficos) */
   --chart-1: oklch(0.789 0.154 211.53);
   --chart-2: oklch(0.702 0.183 293.541);
   --chart-3: oklch(0.828 0.189 84.429);
   --chart-4: oklch(0.765 0.177 163.223);
-  --canvas: var(--viva-petrol-950);
-  --canvas-start: var(--viva-petrol-850);
-  --canvas-middle: var(--viva-petrol-900);
 
-  /* Gradiente da marca, shell, sidebar, overlay e redes sociais compartilham os valores do :root. */
+  /* Sombras */
+  --elevation: var(--viva-black);
+
+  /* Primary, gradiente da marca, header, overlay e redes sociais compartilham os valores do :root. */
 }
 
 @layer base {

@@ -1,5 +1,4 @@
-import { Alert, AlertAction, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { Alert, AlertAction, AlertDescription, AlertTitle, Button } from '@/components/ui';
 import { useNavigate, type ErrorComponentProps } from '@tanstack/react-router';
 
 export const RouteError = ({ reset }: ErrorComponentProps) => {

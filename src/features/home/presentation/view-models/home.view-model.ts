@@ -6,7 +6,7 @@ import mg1232 from '@/assets/home-carrousel/mg-1232.webp';
 import mg1339 from '@/assets/home-carrousel/mg-1339.webp';
 import mg1387 from '@/assets/home-carrousel/mg-1387.webp';
 import mg9923 from '@/assets/home-carrousel/mg-9923.webp';
-import type { CarouselSlide } from '@/components/ui/carousel';
+import { type CarouselSlide } from '@/components/ui';
 
 const carouselSlides: CarouselSlide[] = [
   {

@@ -1,8 +1,15 @@
-import { Box } from '@/components/ui/box';
-import { Card, CardContent, CardDescription, CardHeader, CardTitle } from '@/components/ui/card';
-import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
+import {
+  Box,
+  Card,
+  CardContent,
+  CardDescription,
+  CardHeader,
+  CardTitle,
+  Heading,
+  Text,
+} from '@/components/ui';
 import { useDashboardViewModel } from '@/features/dashboard/presentation/view-models/dashboard.view-model';
+import { cn } from '@/lib/utils';
 import {
   CalendarDaysIcon,
   ChurchIcon,
@@ -20,32 +27,32 @@ const dashboardIcons = {
 
 const dashboardStyles = {
   members: {
-    accent: 'bg-chart-1',
-    border: 'border-chart-1/20',
-    glow: 'bg-chart-1/10',
-    icon: 'bg-chart-1/10 text-chart-1',
-    value: 'text-chart-1',
+    accent: cn('bg-chart-1'),
+    border: cn('border-chart-1/20'),
+    glow: cn('bg-chart-1/10'),
+    icon: cn('bg-chart-1/10 text-chart-1'),
+    value: cn('text-chart-1'),
   },
   visitors: {
-    accent: 'bg-chart-2',
-    border: 'border-chart-2/20',
-    glow: 'bg-chart-2/10',
-    icon: 'bg-chart-2/10 text-chart-2',
-    value: 'text-chart-2',
+    accent: cn('bg-chart-2'),
+    border: cn('border-chart-2/20'),
+    glow: cn('bg-chart-2/10'),
+    icon: cn('bg-chart-2/10 text-chart-2'),
+    value: cn('text-chart-2'),
   },
   events: {
-    accent: 'bg-chart-3',
-    border: 'border-chart-3/20',
-    glow: 'bg-chart-3/10',
-    icon: 'bg-chart-3/10 text-chart-3',
-    value: 'text-chart-3',
+    accent: cn('bg-chart-3'),
+    border: cn('border-chart-3/20'),
+    glow: cn('bg-chart-3/10'),
+    icon: cn('bg-chart-3/10 text-chart-3'),
+    value: cn('text-chart-3'),
   },
   ministries: {
-    accent: 'bg-chart-4',
-    border: 'border-chart-4/20',
-    glow: 'bg-chart-4/10',
-    icon: 'bg-chart-4/10 text-chart-4',
-    value: 'text-chart-4',
+    accent: cn('bg-chart-4'),
+    border: cn('border-chart-4/20'),
+    glow: cn('bg-chart-4/10'),
+    icon: cn('bg-chart-4/10 text-chart-4'),
+    value: cn('text-chart-4'),
   },
 };
 
@@ -71,22 +78,28 @@ export const DashboardView = () => {
           return (
             <Card
               key={summary.label}
-              className={`group relative border ${styles.border}
-                bg-card shadow-sm transition-all duration-300 hover:-translate-y-1 hover:shadow-xl
-              `}
+              className={cn(
+                `
+                  group relative border bg-card shadow-sm transition-all duration-300
+                  hover:-translate-y-1 hover:shadow-xl
+                `,
+                styles.border,
+              )}
             >
               <Box
                 aria-hidden="true"
-                className={`
-                  absolute top-0 right-0 h-28 w-28 translate-x-10 -translate-y-10 rounded-full
-                  blur-2xl
-                  ${styles.glow}
-                `}
+                className={cn(
+                  `
+                    absolute top-0 right-0 h-28 w-28 translate-x-10 -translate-y-10 rounded-full
+                    blur-2xl
+                  `,
+                  styles.glow,
+                )}
               />
 
               <Box
                 aria-hidden="true"
-                className={`absolute top-0 left-0 h-1 w-full ${styles.accent}`}
+                className={cn('absolute top-0 left-0 h-1 w-full', styles.accent)}
               />
 
               <CardHeader className="relative flex flex-row items-center justify-between">
@@ -96,16 +109,20 @@ export const DashboardView = () => {
                   </CardDescription>
 
                   <CardTitle
-                    className={`mt-2 text-3xl font-semibold tracking-tight ${styles.value}`}
+                    className={cn('mt-2 text-3xl font-semibold tracking-tight', styles.value)}
                   >
                     {summary.value}
                   </CardTitle>
                 </Box>
 
                 <Box
-                  className={`flex size-12 items-center justify-center rounded-xl ${styles.icon}
-                    transition-transform duration-300 group-hover:scale-110
-                  `}
+                  className={cn(
+                    `
+                      flex size-12 items-center justify-center rounded-xl transition-transform
+                      duration-300 group-hover:scale-110
+                    `,
+                    styles.icon,
+                  )}
                 >
                   <Icon className="size-5" />
                 </Box>
@@ -162,20 +179,20 @@ export const DashboardView = () => {
 
                 <Box
                   className="
-                    flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-shell
-                    text-shell-foreground shadow-sm
+                    flex size-12 shrink-0 flex-col items-center justify-center rounded-xl bg-primary
+                    text-primary-foreground shadow-sm
                   "
                 >
                   <Text
                     className="
-                      text-[0.6rem] font-semibold tracking-wider text-shell-accent-foreground
+                      text-[0.6rem] font-semibold tracking-wider text-primary-foreground/80
                       uppercase
                     "
                   >
                     Evento
                   </Text>
 
-                  <Text className="text-sm font-semibold text-shell-foreground">
+                  <Text className="text-sm font-semibold text-primary-foreground">
                     {String(index + 1).padStart(2, '0')}
                   </Text>
                 </Box>

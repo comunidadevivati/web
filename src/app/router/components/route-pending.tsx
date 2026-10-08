@@ -1,4 +1,4 @@
-import { LoadingOverlay } from '@/components/ui/loading-overlay';
+import { LoadingOverlay } from '@/components/ui';
 
 export const RoutePending = () => {
   return <LoadingOverlay />;

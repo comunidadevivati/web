@@ -1,6 +1,4 @@
-import { Box } from '@/components/ui/box';
-import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
+import { Box, Heading, Text } from '@/components/ui';
 import { ContactActionLink } from '@/features/contact/presentation/components/contact-action-link';
 import type { ContactChannel } from '@/features/contact/presentation/models/contact.model';
 
@@ -17,28 +15,29 @@ export const ContactChannelCard = ({ channel }: ContactChannelCardProps) => {
     <Box
       aria-labelledby={titleId}
       className="
-        flex flex-col gap-5 rounded-xl border border-shell-border bg-shell-foreground/3 p-5
-        shadow-elevated transition-colors duration-200 hover:border-shell-accent/40 sm:p-6
+        flex flex-col gap-5 rounded-xl border border-border bg-card p-5 text-card-foreground
+        shadow-elevated transition-all duration-200 hover:border-primary hover:shadow-elevated-lg
+        sm:p-6
       "
       role="region"
     >
       <Box className="flex items-start gap-4">
         <Box
           className="
-            flex size-11 shrink-0 items-center justify-center rounded-lg bg-shell-accent/10
-            text-shell-accent-foreground ring-1 ring-shell-accent/20
+            flex size-11 shrink-0 items-center justify-center rounded-lg bg-primary/15
+            text-primary-strong ring-1 ring-primary/30
           "
         >
           <Icon className="size-5" />
         </Box>
 
         <Box className="grid min-w-0 gap-1">
-          <Heading className="text-base text-shell-foreground sm:text-lg" id={titleId} level={2}>
+          <Heading className="text-base text-card-foreground sm:text-lg" id={titleId} level={2}>
             {title}
           </Heading>
 
           {details.map((detail) => (
-            <Text key={detail} className="text-base wrap-anywhere text-shell-foreground/75">
+            <Text key={detail} className="text-base wrap-anywhere text-muted-foreground">
               {detail}
             </Text>
           ))}

@@ -70,20 +70,22 @@ export const useGuestWifiViewModel = () => {
 
   const {
     formState: { isDirty, isValid },
+    handleSubmit,
+    register,
   } = form;
 
-  const authorization = useMutation({
+  const { error, isError, isPending, mutate, reset } = useMutation({
     mutationFn: (variables: GuestWifiAuthorization) => authorizeGuestWifiUseCase(variables),
     onSuccess: () => {
       setStep('success');
     },
   });
 
-  const isSubmitting = authorization.isPending;
+  const isSubmitting = isPending;
 
   const isSubmitDisabled = !isDirty || !isValid || isSubmitting;
 
-  const phoneRegistration = form.register('phone');
+  const phoneRegistration = register('phone');
 
   const handlePhoneChange = (event: ChangeEvent<HTMLInputElement>) => {
     event.target.value = formatPhone(event.target.value);
@@ -102,17 +104,17 @@ export const useGuestWifiViewModel = () => {
   };
 
   const backToTerms = () => {
-    authorization.reset();
+    reset();
 
     setStep('terms');
   };
 
-  const submit = form.handleSubmit(({ fullName, phone }) => {
+  const submit = handleSubmit(({ fullName, phone }) => {
     if (!access || isSubmitting) {
       return;
     }
 
-    authorization.mutate({
+    mutate({
       client: access.client,
       visitor: {
         fullName: fullName.trim().replace(/\s+/g, ' '),
@@ -131,9 +133,8 @@ export const useGuestWifiViewModel = () => {
     form,
     hasAcceptedTerms,
     hasAccess: access !== null,
-    errorCode:
-      authorization.error instanceof GuestWifiAuthorizationError ? authorization.error.code : null,
-    hasError: authorization.isError,
+    errorCode: error instanceof GuestWifiAuthorizationError ? error.code : null,
+    hasError: isError,
     isSubmitDisabled,
     isSubmitting,
     redirectMessage,

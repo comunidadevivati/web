@@ -53,7 +53,7 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
     <section
       aria-label={label}
       aria-roledescription="carrossel"
-      className={cn('relative overflow-hidden bg-shell', className)}
+      className={cn('relative overflow-hidden bg-overlay', className)}
       onBlur={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
       onMouseEnter={() => setIsPaused(true)}
@@ -103,8 +103,8 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
             aria-label="Imagem anterior"
             className="
               absolute top-1/2 left-2 size-10 -translate-y-1/2 rounded-full bg-overlay/35
-              text-overlay-foreground backdrop-blur-sm hover:bg-shell-accent/80
-              hover:text-overlay-foreground sm:left-4 md:size-11 lg:left-6
+              text-overlay-foreground backdrop-blur-sm hover:bg-primary/80
+              hover:text-primary-foreground sm:left-4 md:size-11 lg:left-6
             "
             size="icon-lg"
             type="button"
@@ -118,8 +118,8 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
             aria-label="Próxima imagem"
             className="
               absolute top-1/2 right-2 size-10 -translate-y-1/2 rounded-full bg-overlay/35
-              text-overlay-foreground backdrop-blur-sm hover:bg-shell-accent/80
-              hover:text-overlay-foreground sm:right-4 md:size-11 lg:right-6
+              text-overlay-foreground backdrop-blur-sm hover:bg-primary/80
+              hover:text-primary-foreground sm:right-4 md:size-11 lg:right-6
             "
             size="icon-lg"
             type="button"
@@ -145,7 +145,7 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
                   aria-label={`Ir para a imagem ${index + 1}`}
                   className="
                     group flex h-8 cursor-pointer items-center justify-center rounded-full px-1
-                    focus-visible:ring-2 focus-visible:ring-shell-accent-foreground
+                    focus-visible:ring-2 focus-visible:ring-overlay-foreground
                     focus-visible:outline-none sm:h-9 sm:px-1.5
                   "
                   type="button"
@@ -155,7 +155,7 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
                     className={cn(
                       'h-2 rounded-full transition-all duration-300',
                       isCurrent
-                        ? 'w-6 bg-shell-accent-foreground'
+                        ? 'w-6 bg-primary'
                         : 'w-2 bg-overlay-foreground/50 group-hover:bg-overlay-foreground/80',
                     )}
                   />

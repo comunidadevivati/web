@@ -1,28 +1,24 @@
-import { PublicHeader } from '@/components/public-header/public-header';
-import { Box } from '@/components/ui/box';
-import { Button } from '@/components/ui/button';
-import { Heading } from '@/components/ui/heading';
-import { Image } from '@/components/ui/image';
-import { Text } from '@/components/ui/text';
+import { PublicHeader } from '@/components/organisms/public-header/public-header';
+import { Box, Button, Heading, Image, Text } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon, HouseIcon } from 'lucide-react';
 
-const actionClassName = `
+const actionClassName = cn(`
   inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border px-5 text-base
-  font-semibold transition-all duration-200 focus-visible:ring-2 focus-visible:ring-shell-accent
-  focus-visible:ring-offset-2 focus-visible:ring-offset-shell focus-visible:outline-none sm:w-auto
-`;
+  font-semibold transition-all duration-200 focus-visible:ring-2 focus-visible:ring-ring
+  focus-visible:ring-offset-2 focus-visible:ring-offset-background focus-visible:outline-none
+  sm:w-auto
+`);
 
-const primaryActionClassName = `
-  border-shell-accent bg-shell-accent text-shell hover:border-shell-accent-foreground
-  hover:bg-shell-accent-foreground
-`;
+const primaryActionClassName = cn(`
+  border-primary bg-primary text-primary-foreground hover:border-primary/80 hover:bg-primary/80
+`);
 
-const secondaryActionClassName = `
-  border-shell-accent/40 bg-shell-accent/10 text-shell-accent-foreground hover:border-shell-accent
-  hover:bg-shell-accent/20 hover:text-shell-accent-foreground
-`;
+const secondaryActionClassName = cn(`
+  border-primary/40 bg-primary/10 text-primary-strong hover:border-primary hover:bg-primary/20
+  hover:text-primary-strong
+`);
 
 export type StatusPageImage = {
   src: string;
@@ -50,7 +46,7 @@ export const StatusPage = ({
   title,
 }: StatusPageProps) => {
   return (
-    <Box className="flex min-h-dvh flex-col overflow-x-hidden bg-shell">
+    <Box className="flex min-h-dvh flex-col overflow-x-hidden bg-background">
       <PublicHeader />
 
       <Box className="flex flex-1 items-center" role="main">
@@ -75,18 +71,15 @@ export const StatusPage = ({
           <Box className="grid max-w-xl gap-3">
             <Text
               className="
-                text-xs font-semibold tracking-widest text-shell-accent-foreground uppercase
-                sm:text-sm
+                text-xs font-semibold tracking-widest text-primary-strong uppercase sm:text-sm
               "
             >
               {eyebrow}
             </Text>
 
-            <Heading className="text-3xl text-shell-foreground sm:text-4xl lg:text-5xl">
-              {title}
-            </Heading>
+            <Heading className="text-3xl text-foreground sm:text-4xl lg:text-5xl">{title}</Heading>
 
-            <Text className="text-base leading-relaxed text-shell-foreground/75 sm:text-lg">
+            <Text className="text-base leading-relaxed text-muted-foreground sm:text-lg">
               {description}
             </Text>
           </Box>

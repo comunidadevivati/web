@@ -74,7 +74,7 @@ const noHardcodedColorsRule = {
     type: 'problem',
     messages: {
       hardcodedColor:
-        'Não use cores fixas (hex, rgb/oklch, paleta padrão do Tailwind). Use tokens semânticos definidos em "src/index.css" (ex.: bg-shell, text-primary).',
+        'Não use cores fixas (hex, rgb/oklch, paleta padrão do Tailwind). Use tokens semânticos definidos em "src/index.css" (ex.: bg-header, text-primary-strong).',
     },
   },
   create(context) {

@@ -1,13 +1,12 @@
-import { PublicHeader } from '@/components/public-header/public-header';
-import { Box } from '@/components/ui/box';
-import { Carousel } from '@/components/ui/carousel';
+import { PublicHeader } from '@/components/organisms';
+import { Box, Carousel } from '@/components/ui';
 import { useHomeViewModel } from '@/features/home/presentation/view-models/home.view-model';
 
 export const HomeView = () => {
   const { carouselSlides } = useHomeViewModel();
 
   return (
-    <Box className="min-h-dvh overflow-x-hidden bg-shell">
+    <Box className="min-h-dvh overflow-x-hidden bg-background">
       <PublicHeader />
 
       <Box role="main">

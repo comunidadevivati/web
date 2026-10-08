@@ -1,5 +1,4 @@
-import { Alert, AlertAction, AlertDescription, AlertTitle } from '@/components/ui/alert';
-import { Button } from '@/components/ui/button';
+import { Alert, AlertAction, AlertDescription, AlertTitle, Button } from '@/components/ui';
 import { RefreshCw } from 'lucide-react';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 

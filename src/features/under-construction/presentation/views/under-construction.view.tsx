@@ -1,5 +1,5 @@
 import maintenancePage from '@/assets/images/maintenance-page.webp';
-import { StatusPage } from '@/components/status-page/status-page';
+import { StatusPage } from '@/components/organisms';
 import { useUnderConstructionViewModel } from '@/features/under-construction/presentation/view-models/under-construction.view-model';
 
 type UnderConstructionViewProps = {

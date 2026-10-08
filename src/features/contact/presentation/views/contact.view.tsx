@@ -1,7 +1,5 @@
-import { PublicHeader } from '@/components/public-header/public-header';
-import { Box } from '@/components/ui/box';
-import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
+import { PublicHeader } from '@/components/organisms';
+import { Box, Heading, Text } from '@/components/ui';
 import { ContactChannelCard } from '@/features/contact/presentation/components/contact-channel-card';
 import { ContactSocialLink } from '@/features/contact/presentation/components/contact-social-link';
 import { useContactViewModel } from '@/features/contact/presentation/view-models/contact.view-model';
@@ -10,7 +8,7 @@ export const ContactView = () => {
   const { channels, socialLinks } = useContactViewModel();
 
   return (
-    <Box className="min-h-dvh overflow-x-hidden bg-shell">
+    <Box className="min-h-dvh overflow-x-hidden bg-background">
       <PublicHeader />
 
       <Box role="main">
@@ -23,18 +21,15 @@ export const ContactView = () => {
           <Box className="grid max-w-2xl gap-3">
             <Text
               className="
-                text-xs font-semibold tracking-widest text-shell-accent-foreground uppercase
-                sm:text-sm
+                text-xs font-semibold tracking-widest text-primary-strong uppercase sm:text-sm
               "
             >
               Fale conosco
             </Text>
 
-            <Heading className="text-3xl text-shell-foreground sm:text-4xl lg:text-5xl">
-              Contato
-            </Heading>
+            <Heading className="text-3xl text-foreground sm:text-4xl lg:text-5xl">Contato</Heading>
 
-            <Text className="text-base text-shell-foreground/75 sm:text-lg">
+            <Text className="text-base text-muted-foreground sm:text-lg">
               Quer conhecer a Comunidade Viva ou tirar uma dúvida? Fale com a gente por um dos
               canais abaixo.
             </Text>
@@ -49,14 +44,14 @@ export const ContactView = () => {
           <Box aria-labelledby="contact-social-title" className="grid gap-4 sm:gap-5" role="region">
             <Box className="grid gap-1">
               <Heading
-                className="text-xl text-shell-foreground sm:text-2xl"
+                className="text-xl text-foreground sm:text-2xl"
                 id="contact-social-title"
                 level={2}
               >
                 Redes sociais
               </Heading>
 
-              <Text className="text-base text-shell-foreground/75">
+              <Text className="text-base text-muted-foreground">
                 Acompanhe a Comunidade Viva e fique por dentro das novidades.
               </Text>
             </Box>

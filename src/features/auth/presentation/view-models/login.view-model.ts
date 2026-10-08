@@ -21,6 +21,7 @@ export const useLoginViewModel = () => {
 
   const {
     formState: { isDirty, isSubmitting, isValid },
+    handleSubmit,
   } = form;
 
   const isSubmitDisabled = !isDirty || !isValid || isSubmitting;
@@ -29,7 +30,7 @@ export const useLoginViewModel = () => {
     setIsPasswordVisible((currentValue) => !currentValue);
   };
 
-  const submit = form.handleSubmit(async ({ email }) => {
+  const submit = handleSubmit(async ({ email }) => {
     loginUseCase({
       email,
     });

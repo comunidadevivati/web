@@ -1,6 +1,4 @@
-import { Box } from '@/components/ui/box';
-import { Heading } from '@/components/ui/heading';
-import { Text } from '@/components/ui/text';
+import { Box, Heading, Text } from '@/components/ui';
 import {
   GUEST_WIFI_TERMS_UPDATED_AT,
   guestWifiTermsSections,

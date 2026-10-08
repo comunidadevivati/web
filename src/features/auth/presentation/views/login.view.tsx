@@ -1,14 +1,16 @@
 import livingStoneGreen from '@/assets/brand/living-stone-green.png';
 import logoVivaWhite from '@/assets/brand/logo-viva-white.png';
-import { Box } from '@/components/ui/box';
-import { Button } from '@/components/ui/button';
-import { Form } from '@/components/ui/form';
-import { Heading } from '@/components/ui/heading';
-import { Image } from '@/components/ui/image';
-import { Input } from '@/components/ui/input';
-import { Label } from '@/components/ui/label';
-import { LoadingOverlay } from '@/components/ui/loading-overlay';
-import { Text } from '@/components/ui/text';
+import {
+  Box,
+  Button,
+  Form,
+  Heading,
+  Image,
+  Input,
+  Label,
+  LoadingOverlay,
+  Text,
+} from '@/components/ui';
 import { useLoginViewModel } from '@/features/auth/presentation/view-models/login.view-model';
 import { EyeIcon, EyeOffIcon, LogInIcon } from 'lucide-react';
 
@@ -28,13 +30,14 @@ export const LoginView = () => {
       <Box className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <Box
           className="
-            relative hidden overflow-hidden bg-primary lg:flex lg:items-center lg:justify-center
+            relative hidden overflow-hidden bg-brand-gradient-middle lg:flex lg:items-center
+            lg:justify-center
           "
         >
           <Box
             className="
-              absolute inset-0 bg-linear-to-br from-primary via-primary-gradient-middle
-              to-primary-gradient-end
+              absolute inset-0 bg-linear-to-br from-brand-gradient-start via-brand-gradient-middle
+              to-brand-gradient-end
             "
           />
 
@@ -45,9 +48,9 @@ export const LoginView = () => {
               src={logoVivaWhite}
             />
 
-            <Box className="h-px w-24 bg-primary-foreground/40" />
+            <Box className="h-px w-24 bg-brand-foreground/40" />
 
-            <Text className="max-w-md text-base leading-7 text-primary-foreground/85">
+            <Text className="max-w-md text-base leading-7 text-brand-foreground/85">
               Um ambiente criado para conectar pessoas, ministérios e propósitos.
             </Text>
           </Box>
@@ -55,10 +58,14 @@ export const LoginView = () => {
 
         <Box
           className="
-            flex min-h-dvh items-center justify-center bg-background px-6 py-10 sm:px-10 lg:px-16
+            flex min-h-dvh items-center justify-center bg-background px-4 py-10 sm:px-10 lg:px-16
           "
         >
-          <Box className="w-full max-w-md">
+          <Box
+            className="
+              w-full max-w-md rounded-2xl bg-card p-6 text-card-foreground shadow-elevated-lg sm:p-8
+            "
+          >
             <Box className="mb-10 flex flex-col items-center text-center">
               <Image
                 alt=""
@@ -125,11 +132,7 @@ export const LoginView = () => {
                 )}
               </Box>
 
-              <Button
-                className="mt-2 h-11 w-full hover:bg-primary-strong"
-                disabled={isSubmitDisabled}
-                type="submit"
-              >
+              <Button className="mt-2 h-11 w-full" disabled={isSubmitDisabled} type="submit">
                 <LogInIcon data-icon="inline-start" />
                 Entrar
               </Button>

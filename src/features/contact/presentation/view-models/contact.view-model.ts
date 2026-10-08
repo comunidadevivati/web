@@ -1,9 +1,4 @@
-import {
-  FacebookIcon,
-  InstagramIcon,
-  WhatsAppIcon,
-  YouTubeIcon,
-} from '@/components/ui/brand-icons';
+import { FacebookIcon, InstagramIcon, WhatsAppIcon, YouTubeIcon } from '@/components/ui';
 import { COMMUNITY_CONTACT } from '@/features/contact/domain/community-contact';
 import type {
   ContactChannel,

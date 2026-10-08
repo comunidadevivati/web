@@ -1,7 +1,7 @@
 import { useCanGoBack, useRouter } from '@tanstack/react-router';
 
 export const useHistoryBack = () => {
-  const router = useRouter();
+  const { history } = useRouter();
 
   const canGoBackInApp = useCanGoBack();
 
@@ -10,7 +10,7 @@ export const useHistoryBack = () => {
   const canGoBack = canGoBackInApp || window.history.length > 1;
 
   const goBack = () => {
-    router.history.back();
+    history.back();
   };
 
   return {
