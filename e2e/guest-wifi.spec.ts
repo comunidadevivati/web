@@ -24,6 +24,16 @@ test.describe('Guest Wi-Fi', () => {
     await expect(page.getByText('Acesso indisponível')).toBeVisible();
   });
 
+  test('lets the visitor go to the public site when opened outside the portal', async ({
+    page,
+  }) => {
+    await page.goto('/wifi-visitantes');
+
+    await page.getByRole('link', { name: 'Ir para o site da Comunidade Viva' }).click();
+
+    await expect(page).toHaveURL('/');
+  });
+
   test('requires accepting the terms before continuing', async ({ page }) => {
     await page.goto(portalUrl);
 
@@ -56,6 +66,26 @@ test.describe('Guest Wi-Fi', () => {
     await page.getByRole('link', { name: 'Continuar navegando' }).click();
 
     await expect(page).toHaveURL('/');
+  });
+
+  test('shows the countdown before redirecting to the home page', async ({ page }) => {
+    await page.route('**/api/guest-wifi/authorize', (route) => route.fulfill({ status: 204 }));
+
+    await acceptTermsAndFillForm(page);
+
+    await page.getByRole('button', { name: 'Conectar' }).click();
+
+    await expect(page.getByText('Você será levado ao site em 3 segundos.')).toBeVisible();
+  });
+
+  test('redirects to the home page automatically after the countdown', async ({ page }) => {
+    await page.route('**/api/guest-wifi/authorize', (route) => route.fulfill({ status: 204 }));
+
+    await acceptTermsAndFillForm(page);
+
+    await page.getByRole('button', { name: 'Conectar' }).click();
+
+    await expect(page).toHaveURL('/', { timeout: 6_000 });
   });
 
   test('sends the portal client and visitor data to the authorization endpoint', async ({

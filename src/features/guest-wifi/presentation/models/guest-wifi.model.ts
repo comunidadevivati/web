@@ -2,6 +2,9 @@ import { z } from 'zod';
 
 export type GuestWifiStep = 'terms' | 'form' | 'success';
 
+// Tempo até levar o visitante para a home depois de liberar a internet.
+export const GUEST_WIFI_REDIRECT_SECONDS = 3;
+
 // O router converte valores numéricos da URL (ex.: radioId=0) em number.
 const searchValueSchema = z
   .union([z.string(), z.number()])

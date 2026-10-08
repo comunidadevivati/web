@@ -18,6 +18,7 @@ import {
   ArrowLeftIcon,
   ArrowRightIcon,
   CircleCheckIcon,
+  HouseIcon,
   TriangleAlertIcon,
   WifiIcon,
 } from 'lucide-react';
@@ -27,6 +28,12 @@ const cardClassName = `
 `;
 
 const primaryButtonClassName = 'h-11 w-full text-base hover:bg-primary-strong sm:w-auto sm:px-6';
+
+const homeLinkClassName = `
+  inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-6 text-base
+  font-medium text-primary-foreground transition-colors hover:bg-primary-strong focus-visible:ring-3
+  focus-visible:ring-ring/50 focus-visible:outline-none
+`;
 
 const stepClassName = `
   flex items-center gap-2 text-sm font-medium text-shell-foreground/60
@@ -49,6 +56,7 @@ export const GuestWifiView = () => {
     isSubmitDisabled,
     isSubmitting,
     phoneRegistration,
+    redirectMessage,
     step,
     submit,
     toggleTermsAcceptance,
@@ -103,16 +111,23 @@ export const GuestWifiView = () => {
           </Box>
 
           {!hasAccess && (
-            <Alert>
-              <TriangleAlertIcon />
+            <Box className="grid justify-items-center gap-6">
+              <Alert>
+                <TriangleAlertIcon />
 
-              <AlertTitle>Acesso indisponível</AlertTitle>
+                <AlertTitle>Acesso indisponível</AlertTitle>
 
-              <AlertDescription>
-                Esta página é aberta automaticamente quando você se conecta à rede Wi-Fi &quot;VIVA
-                - Visitantes&quot;. Conecte-se à rede e aguarde a página abrir.
-              </AlertDescription>
-            </Alert>
+                <AlertDescription>
+                  Esta página é aberta automaticamente quando você se conecta à rede Wi-Fi
+                  &quot;VIVA - Visitantes&quot;. Conecte-se à rede e aguarde a página abrir.
+                </AlertDescription>
+              </Alert>
+
+              <Link className={homeLinkClassName} to="/">
+                <HouseIcon className="size-4" />
+                Ir para o site da Comunidade Viva
+              </Link>
+            </Box>
           )}
 
           {hasAccess && step !== 'success' && (
@@ -284,18 +299,12 @@ export const GuestWifiView = () => {
                 </Text>
               </Box>
 
-              <Link
-                className="
-                  inline-flex h-11 items-center justify-center gap-2 rounded-lg bg-primary px-6
-                  text-base font-medium text-primary-foreground transition-colors
-                  hover:bg-primary-strong focus-visible:ring-3 focus-visible:ring-ring/50
-                  focus-visible:outline-none
-                "
-                to="/"
-              >
+              <Link className={homeLinkClassName} to="/">
                 Continuar navegando
                 <ArrowRightIcon className="size-4" />
               </Link>
+
+              <Text className="text-sm">{redirectMessage}</Text>
             </Box>
           )}
         </Box>

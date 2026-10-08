@@ -7,6 +7,7 @@ import {
 import { GUEST_WIFI_TERMS_VERSION } from '@/features/guest-wifi/presentation/models/guest-wifi-terms.model';
 import {
   formatPhone,
+  GUEST_WIFI_REDIRECT_SECONDS,
   getPhoneDigits,
   guestWifiFormSchema,
   type GuestWifiFormData,
@@ -14,8 +15,8 @@ import {
 } from '@/features/guest-wifi/presentation/models/guest-wifi.model';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
-import { useSearch } from '@tanstack/react-router';
-import { useState, type ChangeEvent } from 'react';
+import { useNavigate, useSearch } from '@tanstack/react-router';
+import { useEffect, useState, type ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
 
 export const useGuestWifiViewModel = () => {
@@ -23,7 +24,38 @@ export const useGuestWifiViewModel = () => {
 
   const access = resolveGuestWifiAccessUseCase(search);
 
+  const navigate = useNavigate();
+
   const [step, setStep] = useState<GuestWifiStep>('terms');
+
+  const [redirectCountdown, setRedirectCountdown] = useState(GUEST_WIFI_REDIRECT_SECONDS);
+
+  // Após a liberação, conta os segundos e leva o visitante para a home se ele não clicar antes.
+  useEffect(() => {
+    if (step !== 'success') {
+      return;
+    }
+
+    if (redirectCountdown <= 0) {
+      void navigate({
+        to: '/',
+      });
+
+      return;
+    }
+
+    const timeoutId = window.setTimeout(() => {
+      setRedirectCountdown((seconds) => seconds - 1);
+    }, 1_000);
+
+    return () => {
+      window.clearTimeout(timeoutId);
+    };
+  }, [navigate, redirectCountdown, step]);
+
+  const redirectMessage = `Você será levado ao site em ${redirectCountdown} ${
+    redirectCountdown === 1 ? 'segundo' : 'segundos'
+  }.`;
 
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
@@ -104,6 +136,7 @@ export const useGuestWifiViewModel = () => {
     hasError: authorization.isError,
     isSubmitDisabled,
     isSubmitting,
+    redirectMessage,
     phoneRegistration: {
       ...phoneRegistration,
       onChange: handlePhoneChange,
