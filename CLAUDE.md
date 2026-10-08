@@ -603,7 +603,8 @@ após geração.
 - shadcn/ui.
 - Base UI.
 - Lucide para ícones.
-- Geist Variable como fonte principal atual.
+- Roboto (`@fontsource-variable/roboto`, auto-hospedada) como fonte oficial: todos os pesos, larguras e itálico.
+- Tipografia padrão em `body`: Roboto Regular, peso 400, `1rem`, `line-height: 1`.
 
 ### Variantes
 
