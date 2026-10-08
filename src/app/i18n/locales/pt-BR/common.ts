@@ -1,0 +1,96 @@
+// Textos compartilhados por toda a aplicação (shell, navegação, preferências e estados globais).
+export const common = {
+  app: {
+    name: 'Comunidade Viva',
+    fullName: 'Comunidade Viva e Eficaz',
+  },
+  pageTitles: {
+    home: 'Home',
+    history: 'História',
+    events: 'Eventos',
+    contact: 'Contato',
+    login: 'Login',
+    dashboard: 'Dashboard',
+    guestWifi: 'Wi-Fi Visitantes',
+  },
+  navigation: {
+    home: 'Home',
+    history: 'História',
+    events: 'Eventos',
+    contact: 'Contato',
+    dashboard: 'Dashboard',
+    login: 'Login',
+    logout: 'Sair',
+    accountMenu: 'Menu da conta',
+    greeting: 'Olá, {{name}}',
+    mainMenu: 'Menu principal',
+    openMenu: 'Abrir menu',
+    closeMenu: 'Fechar menu',
+    goToHome: 'Ir para a página inicial',
+    goToDashboard: 'Ir para o dashboard',
+    sidebar: 'Menu lateral',
+    sidebarHeading: 'Navegação',
+    showSidebar: 'Mostrar menu lateral',
+    hideSidebar: 'Ocultar menu lateral',
+    expandSidebar: 'Expandir menu lateral',
+    collapseSidebar: 'Recolher menu lateral',
+  },
+  preferences: {
+    label: 'Preferências',
+    open: 'Abrir preferências de idioma e tema',
+  },
+  theme: {
+    label: 'Tema',
+    system: 'Tema do sistema',
+    light: 'Tema claro',
+    dark: 'Tema escuro',
+  },
+  language: {
+    label: 'Idioma',
+    ptBR: 'Português (Brasil)',
+    ptBRShort: 'PT',
+    enUS: 'English (US)',
+    enUSShort: 'EN',
+  },
+  footer: {
+    copyright: '© {{year}} Comunidade Viva.',
+    rightsReserved: 'Todos os direitos reservados.',
+    developedBy: 'Desenvolvido por',
+    institution: 'IGREJA EVANGÉLICA VIVA E EFICAZ - CNPJ: 14.158.325/0001-01',
+  },
+  carousel: {
+    roleDescription: 'carrossel',
+    slideRoleDescription: 'slide',
+    slidePosition: '{{current}} de {{total}}',
+    previous: 'Imagem anterior',
+    next: 'Próxima imagem',
+    goTo: 'Ir para a imagem {{number}}',
+  },
+  loading: 'Carregando',
+  pwa: {
+    title: 'Nova versão disponível',
+    description: 'Uma nova versão da Comunidade Viva está disponível.',
+    update: 'Atualizar',
+  },
+  routeError: {
+    title: 'Não foi possível carregar esta página',
+    description: 'Ocorreu um erro inesperado. Tente novamente.',
+    retry: 'Tentar novamente',
+    goHome: 'Voltar para o início',
+  },
+  statusPage: {
+    goBack: 'Voltar',
+    goHome: 'Ir para o início',
+    notFound: {
+      eyebrow: 'Erro 404',
+      title: 'Página não encontrada',
+      description:
+        'O endereço que você tentou acessar não existe ou foi alterado. Você pode voltar para onde estava ou ir para a página inicial.',
+    },
+    underConstruction: {
+      title: 'Página em construção',
+      description:
+        'Esta página ainda está sendo preparada e estará disponível em breve. Enquanto isso, você pode voltar para onde estava ou ir para a página inicial.',
+    },
+  },
+} as const;

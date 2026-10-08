@@ -19,6 +19,7 @@ import {
   UserRoundPlusIcon,
   UsersIcon,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const dashboardIcons = {
   events: CalendarDaysIcon,
@@ -61,14 +62,16 @@ const dashboardStyles = {
 export const DashboardView = () => {
   const { activities, events, summaries } = useDashboardViewModel();
 
+  const { t } = useTranslation('dashboard');
+
   return (
     <Box className="grid gap-8">
       <Box>
         <Heading className="text-2xl font-semibold tracking-tight text-foreground">
-          Dashboard
+          {t('title')}
         </Heading>
 
-        <Text className="mt-1 text-muted-foreground">Visão geral da Comunidade Viva.</Text>
+        <Text className="mt-1 text-muted-foreground">{t('subtitle')}</Text>
       </Box>
 
       <Box className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
@@ -141,9 +144,9 @@ export const DashboardView = () => {
       <Box className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <Card className="overflow-hidden border-border surface-card shadow-sm">
           <CardSectionHeader
-            description="Agenda prevista da comunidade"
+            description={t('upcomingEvents.description')}
             icon={CalendarDaysIcon}
-            title="Próximos eventos"
+            title={t('upcomingEvents.title')}
           />
 
           <CardContent className="grid gap-3 pt-4">
@@ -176,7 +179,7 @@ export const DashboardView = () => {
                       uppercase
                     "
                   >
-                    Evento
+                    {t('upcomingEvents.badge')}
                   </Text>
 
                   <Text className="text-sm font-semibold text-primary-foreground">
@@ -209,7 +212,9 @@ export const DashboardView = () => {
                     hidden rounded-full border border-primary/20 bg-primary/5 px-3 py-1 sm:block
                   "
                 >
-                  <Text className="text-xs font-medium text-primary-strong">Próximo</Text>
+                  <Text className="text-xs font-medium text-primary-strong">
+                    {t('upcomingEvents.next')}
+                  </Text>
                 </Box>
               </Box>
             ))}
@@ -218,9 +223,9 @@ export const DashboardView = () => {
 
         <Card className="overflow-hidden border-border surface-card shadow-sm">
           <CardSectionHeader
-            description="Últimas movimentações registradas"
+            description={t('recentActivities.description')}
             icon={HistoryIcon}
-            title="Atividades recentes"
+            title={t('recentActivities.title')}
           />
 
           <CardContent className="grid gap-1 pt-3">

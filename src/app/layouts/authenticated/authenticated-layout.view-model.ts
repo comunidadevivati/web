@@ -1,4 +1,8 @@
-import type { SidebarMode } from '@/app/layouts/authenticated/authenticated-layout.model';
+import {
+  getUserDisplayName,
+  getUserInitials,
+  type SidebarMode,
+} from '@/app/layouts/authenticated/authenticated-layout.model';
 import {
   getStoredAuthUser,
   removeStoredAuthUser,
@@ -15,6 +19,10 @@ export const useAuthenticatedLayoutViewModel = () => {
     useState<Exclude<SidebarMode, 'hidden'>>('expanded');
 
   const userEmail = getStoredAuthUser()?.email ?? '';
+
+  const userInitials = getUserInitials(userEmail);
+
+  const userName = getUserDisplayName(userEmail);
 
   const toggleSidebarVisibility = () => {
     if (sidebarMode === 'hidden') {
@@ -51,5 +59,7 @@ export const useAuthenticatedLayoutViewModel = () => {
     toggleSidebarCollapse,
     toggleSidebarVisibility,
     userEmail,
+    userInitials,
+    userName,
   };
 };

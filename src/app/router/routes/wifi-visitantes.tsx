@@ -1,4 +1,4 @@
-import { getPageTitle } from '@/app/router/page-title';
+import { getLocalizedPageTitle } from '@/app/router/page-title';
 import { guestWifiSearchSchema } from '@/features/guest-wifi/presentation/models/guest-wifi.model';
 import { GuestWifiView } from '@/features/guest-wifi/presentation/views/guest-wifi.view';
 import { createFileRoute } from '@tanstack/react-router';
@@ -8,7 +8,7 @@ import { createFileRoute } from '@tanstack/react-router';
 export const Route = createFileRoute('/wifi-visitantes')({
   validateSearch: guestWifiSearchSchema,
   head: () => ({
-    meta: [{ title: getPageTitle('Wi-Fi Visitantes') }, { name: 'robots', content: 'noindex' }],
+    meta: [{ title: getLocalizedPageTitle('guestWifi') }, { name: 'robots', content: 'noindex' }],
   }),
   component: GuestWifiView,
 });

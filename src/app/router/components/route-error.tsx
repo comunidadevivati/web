@@ -1,8 +1,11 @@
 import { Alert, AlertAction, AlertDescription, AlertTitle, Button } from '@/components/ui';
 import { useNavigate, type ErrorComponentProps } from '@tanstack/react-router';
+import { useTranslation } from 'react-i18next';
 
 export const RouteError = ({ reset }: ErrorComponentProps) => {
   const navigate = useNavigate();
+
+  const { t } = useTranslation();
 
   const handleGoHome = () => {
     void navigate({
@@ -12,17 +15,17 @@ export const RouteError = ({ reset }: ErrorComponentProps) => {
 
   return (
     <Alert className="mx-auto mt-10 max-w-lg" variant="destructive">
-      <AlertTitle>Não foi possível carregar esta página</AlertTitle>
+      <AlertTitle>{t('routeError.title')}</AlertTitle>
 
-      <AlertDescription>Ocorreu um erro inesperado. Tente novamente.</AlertDescription>
+      <AlertDescription>{t('routeError.description')}</AlertDescription>
 
       <AlertAction className="static col-span-full mt-2 flex gap-2">
         <Button variant="outline" onClick={reset}>
-          Tentar novamente
+          {t('routeError.retry')}
         </Button>
 
         <Button variant="outline" onClick={handleGoHome}>
-          Voltar para o início
+          {t('routeError.goHome')}
         </Button>
       </AlertAction>
     </Alert>

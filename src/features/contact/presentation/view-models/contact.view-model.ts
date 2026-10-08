@@ -5,6 +5,7 @@ import type {
   ContactSocialLink,
 } from '@/features/contact/presentation/models/contact.model';
 import { MailIcon, MapPinIcon, NavigationIcon, PhoneIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const { address, email, phone, socialNetworks } = COMMUNITY_CONTACT;
 
@@ -13,68 +14,6 @@ const fullAddress = `${address.street} - ${address.district}, ${address.city} - 
 const mapsUrl = `https://www.google.com/maps/search/?api=1&query=${encodeURIComponent(fullAddress)}`;
 
 const whatsAppUrl = `https://wa.me/${phone.e164.replace(/\D/g, '')}`;
-
-const channels: ContactChannel[] = [
-  {
-    id: 'address',
-    title: 'Endereço',
-    details: [
-      `${address.street} - ${address.district}`,
-      `${address.city} - ${address.state}, ${address.postalCode}`,
-    ],
-    icon: MapPinIcon,
-    actions: [
-      {
-        label: 'Ver no mapa',
-        ariaLabel: 'Ver o endereço no Google Maps (abre em nova aba)',
-        href: mapsUrl,
-        icon: NavigationIcon,
-        isExternal: true,
-        variant: 'primary',
-      },
-    ],
-  },
-  {
-    id: 'phone',
-    title: 'Telefone e WhatsApp',
-    details: [phone.display],
-    icon: PhoneIcon,
-    actions: [
-      {
-        label: 'WhatsApp',
-        ariaLabel: 'Conversar pelo WhatsApp (abre em nova aba)',
-        href: whatsAppUrl,
-        icon: WhatsAppIcon,
-        isExternal: true,
-        variant: 'whatsapp',
-      },
-      {
-        label: 'Ligar',
-        ariaLabel: `Ligar para ${phone.display}`,
-        href: `tel:${phone.e164}`,
-        icon: PhoneIcon,
-        isExternal: false,
-        variant: 'secondary',
-      },
-    ],
-  },
-  {
-    id: 'email',
-    title: 'E-mail',
-    details: [email],
-    icon: MailIcon,
-    actions: [
-      {
-        label: 'Enviar e-mail',
-        ariaLabel: `Enviar e-mail para ${email}`,
-        href: `mailto:${email}`,
-        icon: MailIcon,
-        isExternal: false,
-        variant: 'primary',
-      },
-    ],
-  },
-];
 
 const socialLinks: ContactSocialLink[] = [
   {
@@ -101,6 +40,70 @@ const socialLinks: ContactSocialLink[] = [
 ];
 
 export const useContactViewModel = () => {
+  const { t } = useTranslation('contact');
+
+  const channels: ContactChannel[] = [
+    {
+      id: 'address',
+      title: t('channels.address.title'),
+      details: [
+        `${address.street} - ${address.district}`,
+        `${address.city} - ${address.state}, ${address.postalCode}`,
+      ],
+      icon: MapPinIcon,
+      actions: [
+        {
+          label: t('channels.address.mapAction'),
+          ariaLabel: t('channels.address.mapAriaLabel'),
+          href: mapsUrl,
+          icon: NavigationIcon,
+          isExternal: true,
+          variant: 'primary',
+        },
+      ],
+    },
+    {
+      id: 'phone',
+      title: t('channels.phone.title'),
+      details: [phone.display],
+      icon: PhoneIcon,
+      actions: [
+        {
+          label: t('channels.phone.whatsAppAction'),
+          ariaLabel: t('channels.phone.whatsAppAriaLabel'),
+          href: whatsAppUrl,
+          icon: WhatsAppIcon,
+          isExternal: true,
+          variant: 'whatsapp',
+        },
+        {
+          label: t('channels.phone.callAction'),
+          ariaLabel: t('channels.phone.callAriaLabel', { phone: phone.display }),
+          href: `tel:${phone.e164}`,
+          icon: PhoneIcon,
+          isExternal: false,
+          variant: 'secondary',
+        },
+      ],
+    },
+    {
+      id: 'email',
+      title: t('channels.email.title'),
+      details: [email],
+      icon: MailIcon,
+      actions: [
+        {
+          label: t('channels.email.sendAction'),
+          ariaLabel: t('channels.email.sendAriaLabel', { email }),
+          href: `mailto:${email}`,
+          icon: MailIcon,
+          isExternal: false,
+          variant: 'primary',
+        },
+      ],
+    },
+  ];
+
   return {
     channels,
     socialLinks,

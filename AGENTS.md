@@ -79,6 +79,8 @@ Versões atuais de referência do projeto:
 | Ky              | `2.x`                |
 | React Hook Form | `7.89.x`             |
 | Zod             | `4.6.x`              |
+| i18next         | `26.4.x`             |
+| react-i18next   | `17.0.x`             |
 | Tailwind CSS    | `4.3.x`              |
 | shadcn/ui       | `4.21.x`             |
 | Base UI         | `1.8.x`              |
@@ -750,7 +752,7 @@ Além dela existem apenas `--viva-white`, `--viva-black` e as cores oficiais de 
 
 **Superfície de card:** cards usam o utilitário `surface-card` (definido com `@utility` no `src/index.css`) em vez de `bg-card`. Ele aplica o fundo do card e reescopa os tokens de conteúdo (`foreground`, `muted`, `muted-foreground`, `primary`, `primary-foreground`, `primary-strong`, `border`, `input`, `ring`) para os valores `--card-*`, mantendo o contraste de tudo que está dentro do card nos dois modos. Componentes dentro do card continuam usando os utilitários de sempre (`text-muted-foreground`, `bg-primary`...).
 
-**Header e footer:** o `AppFooter` usa os mesmos tokens `header-*` e a mesma altura do header (`h-16 md:h-18`), fica fixo no rodapé (`sticky bottom-0`) e aparece em todas as telas com header. Páginas com header/footer fixos usam `overflow-x-clip` (não `overflow-x-hidden`, que quebra o `sticky`).
+**Header e footer:** o `AppFooter` usa os tokens `header-*`, tem altura compacta (`h-14`), fica fixo no rodapé (`sticky bottom-0`) e aparece em todas as telas com header. Ele usa **container queries** (`@container`, `@3xl:`, `@5xl:`) para se adaptar à própria largura, que muda com a sidebar: largo = créditos à esquerda, símbolo da igreja no centro, autoria + seletores de idioma e tema compactos à direita; estreito = símbolo + créditos à esquerda e as preferências recolhidas no `PreferencesPopover`. Páginas com header/footer fixos usam `overflow-x-clip` (não `overflow-x-hidden`, que quebra o `sticky`).
 
 Sombras com cor também são tokens (`@theme inline`): `shadow-elevated`, `shadow-elevated-lg`, `shadow-sidebar-active`.
 
@@ -774,9 +776,44 @@ O tema é **global**: vale para todas as páginas (públicas, Wi-Fi de visitante
 - o `ThemeProvider` (`src/app/providers/theme-provider.tsx`, montado no `main.tsx`) usa `useThemeSync`, que aplica a classe `.dark` no `<html>` com `useLayoutEffect` (antes da primeira pintura) e acompanha a troca de tema do sistema enquanto a preferência for `system`;
 - o store hidrata a preferência do `localStorage` de forma síncrona, então o primeiro render já usa o tema certo;
 - não aplicar o tema com scripts inline no `index.html` nem com manipulação de DOM fora do React;
-- o controle de troca é o componente `ThemeToggle` (`src/components/molecules/theme-toggle`), com os tons `header` e `sidebar`. Hoje ele aparece no header público (inclusive no menu mobile) e no rodapé da sidebar.
+- o controle de troca é o componente `ThemeToggle` (`src/components/molecules/theme-toggle`), exibido junto do seletor de idioma no footer (`PreferencesControls` ou `PreferencesPopover`) e no login, que não tem footer.
 
 Toda tela nova deve ser validada nos dois modos.
+
+### Idiomas (i18n)
+
+A aplicação inteira é traduzida (páginas públicas, login, Wi-Fi de visitantes e área logada). Idiomas suportados: **pt-BR** (padrão e fonte da verdade) e **en-US**.
+
+Stack: `i18next` + `react-i18next`, com chaves tipadas.
+
+```text
+src/app/i18n/
+├── i18n.model.ts            Locale, LocalePreference, Translations, resolveLocale
+├── i18n.config.ts           instância do i18next (os dois idiomas vão no bundle; funciona offline)
+├── i18next.d.ts             CustomTypeOptions: tipagem global das chaves a partir do pt-BR
+├── locale.store.ts          preferência salva no aparelho (@comunidade-viva:web:locale)
+├── use-locale-sync.ts       aplica o idioma e o <html lang> (LocaleProvider no main.tsx)
+├── use-route-head-refresh.ts atualiza os títulos das páginas ao trocar o idioma
+├── translation-key.ts       TranslationKey<'namespace'> para chaves fora do t()
+└── locales/
+    ├── pt-BR/               fonte da verdade (as const)
+    └── en-US/               satisfies Translations: chave faltando ou sobrando quebra o typecheck
+```
+
+Regras:
+
+- **nenhum texto de interface fixo no código**: todo texto visível, `aria-label`, `alt`, placeholder, tooltip e título de página vem de `t('chave')`;
+- namespaces: `common` (shell, navegação, preferências, estados globais) e um por feature (`auth`, `home`, `dashboard`, `contact`, `guestWifi`); nova feature ganha seu namespace;
+- adicionar a chave **primeiro no pt-BR** e depois no en-US (o typecheck aponta o que falta);
+- usar `useTranslation('namespace')` na View/ViewModel e desestruturar (`const { t } = useTranslation('auth')`);
+- textos com dados usam interpolação (`t('footer.rights', { year })`) e plural com sufixos `_one`/`_other` (`t('success.redirect', { count })`);
+- validações do Zod usam **chaves** como mensagem (`satisfies Record<string, TranslationKey<'auth'>>`) e a View traduz com o `getFieldError` do ViewModel;
+- datas, horas e números são formatados com `Intl` no idioma atual (`i18n.language`), nunca com texto fixo;
+- títulos de página: `getLocalizedPageTitle('chave')` no `head` da rota;
+- textos longos e estruturados (ex.: termos de uso do Wi-Fi) ficam como conteúdo por idioma no `models/` da feature; a tradução em inglês dos termos é de cortesia e avisa que a versão em português prevalece;
+- preferência: `system` (padrão, segue o navegador), `pt-BR` ou `en-US`, escolhida no `LocaleToggle`.
+
+Preferências globais (idioma + tema) ficam no **footer** de todas as telas (organismos `PreferencesControls` em telas largas e `PreferencesPopover` em telas estreitas) e no login (`PreferencesControls` no canto superior direito). Os seletores usam o `ToggleGroup` do shadcn pela molécula `PreferenceToggleGroup` (tons `header`, `sidebar` e `surface`; tamanhos `default` e `sm`).
 
 ### Direção de design
 
@@ -1007,16 +1044,13 @@ Header
 ├── marca associada à sidebar
 ├── botão hamburger
 ├── logo central
-├── e-mail do usuário
-├── divisor
-└── Sair
+└── avatar com iniciais (UserMenu: e-mail e Sair)
 
 Sidebar
 ├── modo expanded
 ├── modo collapsed
 ├── modo hidden
 ├── Dashboard
-├── Tema (sistema/claro/escuro) no rodapé
 └── Sair no rodapé
 
 SPA
@@ -1268,6 +1302,19 @@ Stack:
 
 ## 23. Testes
 
+### ⚠️ Regra obrigatória: testes somente sob solicitação explícita
+
+**NUNCA criar, alterar, excluir ou executar testes sem a solicitação explícita do responsável pelo projeto.**
+
+Isso vale para todos os tipos de teste (unitários, de componente e E2E) e para qualquer comando de teste (`pnpm test`, `pnpm test:run`, `pnpm test:coverage`, `pnpm test:e2e`, `vitest`, `playwright`).
+
+- não criar arquivos `*.test.ts`, `*.test.tsx` ou `*.spec.ts` por iniciativa própria, nem ao criar componentes, features ou corrigir bugs;
+- não ajustar testes existentes para acompanhar uma mudança de código, salvo pedido explícito; se uma mudança provavelmente quebrar testes, apenas avisar;
+- não executar testes para validar alterações; a validação padrão é `pnpm quality:fix` (e `pnpm build` quando aplicável);
+- "solicitação explícita" é um pedido direto para criar, alterar ou rodar testes naquela tarefa; não vale inferir a partir de "valide", "garanta que funciona" ou de checklists deste documento.
+
+As regras abaixo descrevem **como** os testes devem ser escritos quando forem solicitados.
+
 ### Unit/component tests
 
 Stack:
@@ -1317,7 +1364,7 @@ Preferir comportamento observável do usuário.
 
 Evitar testar detalhes internos de implementação.
 
-Ao corrigir bug relevante, adicionar teste de regressão quando razoável.
+Ao corrigir bug relevante, sugerir um teste de regressão, mas só criá-lo se for solicitado.
 
 ---
 
@@ -1361,7 +1408,7 @@ No mínimo:
 pnpm quality:fix
 ```
 
-Quando o comportamento alterado tiver testes relacionados, executar também os testes apropriados.
+Testes **não** fazem parte da validação padrão: só executar quando solicitado explicitamente (seção 23).
 
 Para mudanças de build/deploy ou antes de um marco importante:
 
@@ -1758,9 +1805,9 @@ Ao criar uma feature nova, seguir aproximadamente esta sequência:
 7. Criar `*.view-model.ts`.
 8. Criar `*.view.tsx`.
 9. Integrar rota file-based.
-10. Criar testes relevantes.
+10. Criar testes somente se solicitado explicitamente (seção 23).
 11. Rodar `pnpm quality:fix`.
-12. Rodar testes/build conforme impacto.
+12. Rodar build conforme impacto (testes só se solicitado).
 13. Versionar em commit semântico pequeno.
 
 Nem toda feature precisa de arquivos vazios em todas as camadas. Crie apenas abstrações que tenham responsabilidade real.
@@ -1822,8 +1869,8 @@ src/components/
 ```
 
 - **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Spinner`, `Text`, `Tooltip`. Única camada que pode usar HTML nativo.
-- **`molecules/`:** `CardSectionHeader` (cabeçalho de seção de card com ícone, título e descrição), `TooltipHint` (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido).
-- **`organisms/`:** `PublicHeader`, `AppFooter`, `AppSidebar`, `StatusPage`.
+- **`molecules/`:** `CardSectionHeader` (cabeçalho de seção de card com ícone, título e descrição), `LocaleToggle` (escolha de idioma), `PreferenceToggleGroup` (base dos seletores de preferência), `TooltipHint`, `UserMenu` (avatar com iniciais e menu da conta) (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido).
+- **`organisms/`:** `PublicHeader`, `AppFooter`, `AppSidebar`, `PreferencesControls` (idioma + tema), `PreferencesPopover` (preferências recolhidas em um botão), `StatusPage`.
 
 Cada componente fica em sua própria pasta (`molecules/theme-toggle/theme-toggle.tsx`), junto do seu teste, e é exportado pelo `index.ts` do grupo (ver 7.12).
 
@@ -1896,6 +1943,7 @@ Preservar essa linguagem ao expandir o dashboard.
 
 Não:
 
+- criar, alterar, excluir ou executar testes sem solicitação explícita;
 - usar Python como requisito para scripts de setup do projeto;
 - criar HTML nativo diretamente em Views/layouts quando a regra de UI se aplica;
 - usar function declarations no app;
@@ -1940,7 +1988,7 @@ Antes de concluir qualquer tarefa:
 - [ ] Loading/error/empty state foram considerados quando aplicável?
 - [ ] Nenhum secret foi introduzido?
 - [ ] `pnpm quality:fix` passou?
-- [ ] Testes relevantes passaram?
+- [ ] Nenhum teste foi criado, alterado ou executado sem solicitação explícita?
 - [ ] Build foi validado quando a mudança afeta bundling/deploy?
 - [ ] Nenhuma rota/arquivo temporário ficou para trás?
 - [ ] Commit proposto segue Conventional Commits?
@@ -2052,6 +2100,8 @@ Zustand somente para client state global necessário
 Ky para HTTP
 RHF + Zod para forms
 Tailwind v4 + shadcn/Base UI
+i18next + react-i18next com chaves tipadas (pt-BR fonte da verdade, en-US)
+Nenhum texto de interface fixo no código
 Vitest + Testing Library + Playwright
 Oxlint + Oxfmt
 Arrow functions
@@ -2066,6 +2116,7 @@ Conteúdo com largura máxima de 1440px (max-w-360)
 VIEW       = nome.view.tsx
 VIEW-MODEL = nome.view-model.ts
 MODEL      = nome.model.ts
+Testes só sob solicitação explícita (criar, alterar ou executar)
 1 describe por arquivo de teste
 1 expect por it
 pnpm quality:fix como validação canônica

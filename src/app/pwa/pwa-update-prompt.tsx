@@ -1,5 +1,6 @@
 import { Alert, AlertAction, AlertDescription, AlertTitle, Button } from '@/components/ui';
 import { RefreshCw } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 import { useRegisterSW } from 'virtual:pwa-register/react';
 
 export const PwaUpdatePrompt = () => {
@@ -7,6 +8,8 @@ export const PwaUpdatePrompt = () => {
     needRefresh: [needRefresh],
     updateServiceWorker,
   } = useRegisterSW();
+
+  const { t } = useTranslation();
 
   if (!needRefresh) {
     return null;
@@ -16,12 +19,12 @@ export const PwaUpdatePrompt = () => {
     <Alert className="fixed right-4 bottom-4 z-50 max-w-md shadow-lg">
       <RefreshCw />
 
-      <AlertTitle>Nova versão disponível</AlertTitle>
+      <AlertTitle>{t('pwa.title')}</AlertTitle>
 
-      <AlertDescription>Uma nova versão da Comunidade Viva está disponível.</AlertDescription>
+      <AlertDescription>{t('pwa.description')}</AlertDescription>
 
       <AlertAction>
-        <Button onClick={() => void updateServiceWorker(true)}>Atualizar</Button>
+        <Button onClick={() => void updateServiceWorker(true)}>{t('pwa.update')}</Button>
       </AlertAction>
     </Alert>
   );

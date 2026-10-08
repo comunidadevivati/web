@@ -4,6 +4,7 @@ import { Box, Button, Heading, Image, Text } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
 import { ArrowLeftIcon, HouseIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const actionClassName = cn(`
   inline-flex h-11 w-full items-center justify-center gap-2 rounded-lg border px-5 text-base
@@ -46,6 +47,8 @@ export const StatusPage = ({
   onGoBack,
   title,
 }: StatusPageProps) => {
+  const { t } = useTranslation();
+
   return (
     <Box className="flex min-h-dvh flex-col overflow-x-clip bg-background">
       <PublicHeader />
@@ -94,13 +97,13 @@ export const StatusPage = ({
                 onClick={onGoBack}
               >
                 <ArrowLeftIcon className="size-4" />
-                Voltar
+                {t('statusPage.goBack')}
               </Button>
             )}
 
             <Link className={cn(actionClassName, primaryActionClassName)} to="/">
               <HouseIcon className="size-4" />
-              Ir para o início
+              {t('statusPage.goHome')}
             </Link>
           </Box>
         </Box>

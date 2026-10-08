@@ -6,3 +6,7 @@ export * from '@/components/organisms/public-header/public-header';
 export * from '@/components/organisms/status-page/status-page';
 
 export * from '@/components/organisms/app-footer/app-footer';
+
+export * from '@/components/organisms/preferences-controls/preferences-controls';
+
+export * from '@/components/organisms/preferences-popover/preferences-popover';

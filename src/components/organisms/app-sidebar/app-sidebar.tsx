@@ -1,8 +1,9 @@
-import { SidebarNavItem, ThemeToggle, TooltipHint } from '@/components/molecules';
+import { SidebarNavItem, TooltipHint } from '@/components/molecules';
 import { Box, Button, Text } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import type { LinkProps } from '@tanstack/react-router';
 import { LogOutIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, type LucideIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export type AppSidebarItem = {
   label: string;
@@ -19,7 +20,11 @@ type AppSidebarProps = {
 
 // Menu lateral do app autenticado: navegação, recolher/expandir, tema e saída.
 export const AppSidebar = ({ isCollapsed, items, onLogout, onToggleCollapse }: AppSidebarProps) => {
-  const collapseLabel = isCollapsed ? 'Expandir menu lateral' : 'Recolher menu lateral';
+  const { t } = useTranslation();
+
+  const collapseLabel = isCollapsed
+    ? t('navigation.expandSidebar')
+    : t('navigation.collapseSidebar');
 
   return (
     <Box className="hidden min-h-0 flex-col border-r border-sidebar-border bg-sidebar md:flex">
@@ -37,7 +42,7 @@ export const AppSidebar = ({ isCollapsed, items, onLogout, onToggleCollapse }: A
                 uppercase
               "
             >
-              Navegação
+              {t('navigation.sidebarHeading')}
             </Text>
           )}
 
@@ -58,7 +63,7 @@ export const AppSidebar = ({ isCollapsed, items, onLogout, onToggleCollapse }: A
           </TooltipHint>
         </Box>
 
-        <Box aria-label="Menu lateral" className="grid gap-1" role="navigation">
+        <Box aria-label={t('navigation.sidebar')} className="grid gap-1" role="navigation">
           {items.map((item) => (
             <SidebarNavItem
               key={item.label}
@@ -72,16 +77,10 @@ export const AppSidebar = ({ isCollapsed, items, onLogout, onToggleCollapse }: A
       </Box>
 
       <Box className="grid gap-3 border-t border-sidebar-border p-3">
-        <ThemeToggle
-          className={isCollapsed ? 'justify-self-center' : 'justify-between'}
-          orientation={isCollapsed ? 'vertical' : 'horizontal'}
-          tone="sidebar"
-        />
-
         <SidebarNavItem
           icon={LogOutIcon}
           isCollapsed={isCollapsed}
-          label="Sair"
+          label={t('navigation.logout')}
           onClick={onLogout}
         />
       </Box>

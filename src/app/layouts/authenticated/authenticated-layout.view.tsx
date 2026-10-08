@@ -1,16 +1,13 @@
 import { useAuthenticatedLayoutViewModel } from '@/app/layouts/authenticated/authenticated-layout.view-model';
 import livingStoneGreen from '@/assets/brand/living-stone-green.png';
 import logoVivaWhite from '@/assets/brand/logo-viva-white.png';
-import { TooltipHint } from '@/components/molecules';
+import { TooltipHint, UserMenu } from '@/components/molecules';
 import { AppFooter, AppSidebar, type AppSidebarItem } from '@/components/organisms';
-import { Box, Button, Image, Text } from '@/components/ui';
+import { Box, Button, Image } from '@/components/ui';
 import { Link, Outlet } from '@tanstack/react-router';
 import { cn } from 'cn';
-import { LayoutDashboardIcon, LogOutIcon, MenuIcon } from 'lucide-react';
-
-const sidebarItems: AppSidebarItem[] = [
-  { label: 'Dashboard', icon: LayoutDashboardIcon, to: '/dashboard' },
-];
+import { LayoutDashboardIcon, MenuIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const layoutColumns = {
   collapsed: cn('md:grid-cols-[4.5rem_minmax(0,1fr)]'),
@@ -19,14 +16,29 @@ const layoutColumns = {
 };
 
 export const AuthenticatedLayoutView = () => {
-  const { logout, sidebarMode, toggleSidebarCollapse, toggleSidebarVisibility, userEmail } =
-    useAuthenticatedLayoutViewModel();
+  const {
+    logout,
+    sidebarMode,
+    toggleSidebarCollapse,
+    toggleSidebarVisibility,
+    userEmail,
+    userInitials,
+    userName,
+  } = useAuthenticatedLayoutViewModel();
 
   const isCollapsed = sidebarMode === 'collapsed';
 
   const isHidden = sidebarMode === 'hidden';
 
-  const sidebarVisibilityLabel = isHidden ? 'Mostrar menu lateral' : 'Ocultar menu lateral';
+  const { t } = useTranslation();
+
+  const sidebarVisibilityLabel = isHidden
+    ? t('navigation.showSidebar')
+    : t('navigation.hideSidebar');
+
+  const sidebarItems: AppSidebarItem[] = [
+    { label: t('navigation.dashboard'), icon: LayoutDashboardIcon, to: '/dashboard' },
+  ];
 
   return (
     <Box className="grid h-dvh grid-rows-[4.5rem_minmax(0,1fr)] bg-background">
@@ -39,7 +51,7 @@ export const AuthenticatedLayoutView = () => {
         {!isHidden && (
           <Box className="flex items-center justify-center border-r border-header-border">
             <Link
-              aria-label="Ir para o dashboard"
+              aria-label={t('navigation.goToDashboard')}
               className="
                 flex items-center justify-center rounded-lg transition-all duration-200
                 hover:scale-105 focus-visible:outline-none focus-visible:ring-2
@@ -48,7 +60,7 @@ export const AuthenticatedLayoutView = () => {
               to="/dashboard"
             >
               <Image
-                alt="Comunidade Viva"
+                alt={t('app.name')}
                 className={cn(
                   'object-contain transition-all duration-300',
                   isCollapsed ? 'size-9' : 'size-11',
@@ -77,43 +89,25 @@ export const AuthenticatedLayoutView = () => {
           </TooltipHint>
 
           <Link
-            aria-label="Ir para o dashboard"
+            aria-label={t('navigation.goToDashboard')}
             className="absolute left-1/2 -translate-x-1/2"
             to="/dashboard"
           >
             <Image
-              alt="Comunidade Viva e Eficaz"
+              alt={t('app.fullName')}
               className="h-10 w-auto max-w-52 object-contain"
               src={logoVivaWhite}
             />
           </Link>
 
-          <Box className="ml-auto flex min-w-0 items-center gap-3">
-            <Text
-              className="
-                hidden max-w-56 truncate text-sm font-medium text-header-foreground/75 lg:block
-              "
-            >
-              {userEmail}
-            </Text>
-
-            <Text aria-hidden="true" className="hidden text-sm text-header-foreground/30 lg:block">
-              |
-            </Text>
-
-            <Button
-              className="
-                text-header-foreground/80 hover:bg-header-accent/10
-                hover:text-header-accent-foreground
-              "
-              type="button"
-              variant="ghost"
-              onClick={logout}
-            >
-              <LogOutIcon data-icon="inline-start" />
-
-              <Text className="hidden text-inherit sm:block">Sair</Text>
-            </Button>
+          <Box className="ml-auto flex items-center">
+            <UserMenu
+              email={userEmail}
+              greetingName={userEmail}
+              initials={userInitials}
+              name={userName}
+              onLogout={logout}
+            />
           </Box>
         </Box>
       </Box>

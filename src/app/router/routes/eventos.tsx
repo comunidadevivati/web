@@ -1,10 +1,10 @@
-import { getPageTitle } from '@/app/router/page-title';
+import { getLocalizedPageTitle } from '@/app/router/page-title';
 import { UnderConstructionView } from '@/features/under-construction/presentation/views/under-construction.view';
 import { createFileRoute } from '@tanstack/react-router';
 
 export const Route = createFileRoute('/eventos')({
   head: () => ({
-    meta: [{ title: getPageTitle('Eventos') }],
+    meta: [{ title: getLocalizedPageTitle('events') }],
   }),
-  component: () => <UnderConstructionView pageName="Eventos" />,
+  component: () => <UnderConstructionView page="events" />,
 });

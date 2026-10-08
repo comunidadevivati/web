@@ -3,9 +3,12 @@ import { Box, Heading, Text } from '@/components/ui';
 import { ContactChannelCard } from '@/features/contact/presentation/components/contact-channel-card';
 import { ContactSocialLink } from '@/features/contact/presentation/components/contact-social-link';
 import { useContactViewModel } from '@/features/contact/presentation/view-models/contact.view-model';
+import { useTranslation } from 'react-i18next';
 
 export const ContactView = () => {
   const { channels, socialLinks } = useContactViewModel();
+
+  const { t } = useTranslation('contact');
 
   return (
     <Box className="flex min-h-dvh flex-col overflow-x-clip bg-background">
@@ -24,15 +27,14 @@ export const ContactView = () => {
                 text-xs font-semibold tracking-widest text-primary-strong uppercase sm:text-sm
               "
             >
-              Fale conosco
+              {t('eyebrow')}
             </Text>
 
-            <Heading className="text-3xl text-foreground sm:text-4xl lg:text-5xl">Contato</Heading>
+            <Heading className="text-3xl text-foreground sm:text-4xl lg:text-5xl">
+              {t('title')}
+            </Heading>
 
-            <Text className="text-base text-muted-foreground sm:text-lg">
-              Quer conhecer a Comunidade Viva ou tirar uma dúvida? Fale com a gente por um dos
-              canais abaixo.
-            </Text>
+            <Text className="text-base text-muted-foreground sm:text-lg">{t('description')}</Text>
           </Box>
 
           <Box className="grid gap-4 md:grid-cols-2 lg:grid-cols-3 lg:gap-6">
@@ -48,12 +50,10 @@ export const ContactView = () => {
                 id="contact-social-title"
                 level={2}
               >
-                Redes sociais
+                {t('social.title')}
               </Heading>
 
-              <Text className="text-base text-muted-foreground">
-                Acompanhe a Comunidade Viva e fique por dentro das novidades.
-              </Text>
+              <Text className="text-base text-muted-foreground">{t('social.description')}</Text>
             </Box>
 
             <Box className="grid gap-3 sm:grid-cols-3 lg:gap-6">

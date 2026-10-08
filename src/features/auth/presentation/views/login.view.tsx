@@ -1,5 +1,6 @@
 import livingStoneGreen from '@/assets/brand/living-stone-green.png';
 import logoVivaWhite from '@/assets/brand/logo-viva-white.png';
+import { PreferencesControls } from '@/components/organisms';
 import {
   Box,
   Button,
@@ -13,10 +14,19 @@ import {
 } from '@/components/ui';
 import { useLoginViewModel } from '@/features/auth/presentation/view-models/login.view-model';
 import { EyeIcon, EyeOffIcon, LogInIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 export const LoginView = () => {
-  const { form, isPasswordVisible, isSubmitDisabled, submit, togglePasswordVisibility } =
-    useLoginViewModel();
+  const {
+    form,
+    getFieldError,
+    isPasswordVisible,
+    isSubmitDisabled,
+    submit,
+    togglePasswordVisibility,
+  } = useLoginViewModel();
+
+  const { t } = useTranslation(['auth', 'common']);
 
   const {
     formState: { errors, isSubmitting },
@@ -43,7 +53,7 @@ export const LoginView = () => {
 
           <Box className="relative z-10 flex max-w-xl flex-col items-center gap-8 px-12 text-center">
             <Image
-              alt="Comunidade Viva e Eficaz"
+              alt={t('common:app.fullName')}
               className="w-full max-w-md object-contain"
               src={logoVivaWhite}
             />
@@ -51,16 +61,19 @@ export const LoginView = () => {
             <Box className="h-px w-24 bg-brand-foreground/40" />
 
             <Text className="max-w-md text-base leading-7 text-brand-foreground/85">
-              Um ambiente criado para conectar pessoas, ministérios e propósitos.
+              {t('login.tagline')}
             </Text>
           </Box>
         </Box>
 
         <Box
           className="
-            flex min-h-dvh items-center justify-center bg-background px-4 py-10 sm:px-10 lg:px-16
+            relative flex min-h-dvh items-center justify-center bg-background px-4 pt-20 pb-10
+            sm:px-10 lg:px-16
           "
         >
+          <PreferencesControls className="absolute top-4 right-4 sm:right-6" tone="surface" />
+
           <Box className="w-full max-w-md rounded-2xl surface-card p-6 shadow-elevated-lg sm:p-8">
             <Box className="mb-10 flex flex-col items-center text-center">
               <Image
@@ -70,16 +83,16 @@ export const LoginView = () => {
                 src={livingStoneGreen}
               />
 
-              <Heading className="text-3xl font-semibold tracking-tight">Bem-vindo</Heading>
+              <Heading className="text-3xl font-semibold tracking-tight">
+                {t('login.title')}
+              </Heading>
 
-              <Text className="mt-2 text-base">
-                Entre com suas credenciais para acessar sua conta.
-              </Text>
+              <Text className="mt-2 text-base">{t('login.subtitle')}</Text>
             </Box>
 
             <Form className="grid gap-5" noValidate onSubmit={submit}>
               <Box className="grid gap-2">
-                <Label htmlFor="email">E-mail</Label>
+                <Label htmlFor="email">{t('login.email')}</Label>
 
                 <Input
                   id="email"
@@ -87,18 +100,18 @@ export const LoginView = () => {
                   autoComplete="email"
                   autoFocus
                   className="h-11"
-                  placeholder="seuemail@exemplo.com"
+                  placeholder={t('login.emailPlaceholder')}
                   type="email"
                   {...register('email')}
                 />
 
                 {errors.email?.message && (
-                  <Text className="text-destructive">{errors.email.message}</Text>
+                  <Text className="text-destructive">{getFieldError(errors.email.message)}</Text>
                 )}
               </Box>
 
               <Box className="grid gap-2">
-                <Label htmlFor="password">Senha</Label>
+                <Label htmlFor="password">{t('login.password')}</Label>
 
                 <Box className="relative">
                   <Input
@@ -106,13 +119,15 @@ export const LoginView = () => {
                     aria-invalid={Boolean(errors.password)}
                     autoComplete="current-password"
                     className="h-11 pr-11"
-                    placeholder="Digite sua senha"
+                    placeholder={t('login.passwordPlaceholder')}
                     type={isPasswordVisible ? 'text' : 'password'}
                     {...register('password')}
                   />
 
                   <Button
-                    aria-label={isPasswordVisible ? 'Ocultar senha' : 'Mostrar senha'}
+                    aria-label={
+                      isPasswordVisible ? t('login.hidePassword') : t('login.showPassword')
+                    }
                     className="absolute top-1/2 right-1 -translate-y-1/2"
                     size="icon-sm"
                     type="button"
@@ -124,13 +139,13 @@ export const LoginView = () => {
                 </Box>
 
                 {errors.password?.message && (
-                  <Text className="text-destructive">{errors.password.message}</Text>
+                  <Text className="text-destructive">{getFieldError(errors.password.message)}</Text>
                 )}
               </Box>
 
               <Button className="mt-2 h-11 w-full" disabled={isSubmitDisabled} type="submit">
                 <LogInIcon data-icon="inline-start" />
-                Entrar
+                {t('login.submit')}
               </Button>
             </Form>
           </Box>

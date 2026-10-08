@@ -2,6 +2,7 @@ import { Button } from '@/components/ui/button';
 import { cn } from '@/lib/utils';
 import { ChevronLeftIcon, ChevronRightIcon } from 'lucide-react';
 import { useEffect, useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 export type CarouselSlide = {
   id: string;
@@ -24,6 +25,8 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
   const [currentIndex, setCurrentIndex] = useState(0);
 
   const [isPaused, setIsPaused] = useState(false);
+
+  const { t } = useTranslation();
 
   const slidesCount = slides.length;
 
@@ -52,7 +55,7 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
   return (
     <section
       aria-label={label}
-      aria-roledescription="carrossel"
+      aria-roledescription={t('carousel.roleDescription')}
       className={cn('relative overflow-hidden bg-overlay', className)}
       onBlur={() => setIsPaused(false)}
       onFocus={() => setIsPaused(true)}
@@ -66,8 +69,8 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
           <div
             key={slide.id}
             aria-hidden={!isCurrent}
-            aria-label={`${index + 1} de ${slidesCount}`}
-            aria-roledescription="slide"
+            aria-label={t('carousel.slidePosition', { current: index + 1, total: slidesCount })}
+            aria-roledescription={t('carousel.slideRoleDescription')}
             className={cn(
               `
                 absolute inset-0 transition-opacity duration-1000 ease-out
@@ -100,7 +103,7 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
       {slidesCount > 1 && (
         <>
           <Button
-            aria-label="Imagem anterior"
+            aria-label={t('carousel.previous')}
             className="
               absolute top-1/2 left-2 size-10 -translate-y-1/2 rounded-full bg-overlay/35
               text-overlay-foreground backdrop-blur-sm hover:bg-primary/80
@@ -115,7 +118,7 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
           </Button>
 
           <Button
-            aria-label="Próxima imagem"
+            aria-label={t('carousel.next')}
             className="
               absolute top-1/2 right-2 size-10 -translate-y-1/2 rounded-full bg-overlay/35
               text-overlay-foreground backdrop-blur-sm hover:bg-primary/80
@@ -142,7 +145,7 @@ export const Carousel = ({ slides, label, autoplayInterval = 6000, className }: 
                 <button
                   key={slide.id}
                   aria-current={isCurrent}
-                  aria-label={`Ir para a imagem ${index + 1}`}
+                  aria-label={t('carousel.goTo', { number: index + 1 })}
                   className="
                     group flex h-8 cursor-pointer items-center justify-center rounded-full px-1
                     focus-visible:ring-2 focus-visible:ring-overlay-foreground

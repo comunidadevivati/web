@@ -27,6 +27,7 @@ import {
   TriangleAlertIcon,
   WifiIcon,
 } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const cardClassName = cn(`
   grid gap-5 rounded-2xl surface-card p-5 shadow-elevated-lg sm:gap-6 sm:p-8
@@ -55,6 +56,7 @@ export const GuestWifiView = () => {
     continueToForm,
     errorCode,
     form,
+    getFieldError,
     hasAcceptedTerms,
     hasAccess,
     hasError,
@@ -72,12 +74,14 @@ export const GuestWifiView = () => {
     register,
   } = form;
 
+  const { t } = useTranslation(['guestWifi', 'common']);
+
   return (
     <Box className="flex min-h-dvh flex-col overflow-x-clip bg-background">
       <Box className="border-b border-header-border bg-header shadow-elevated" role="banner">
         <Box className="mx-auto flex h-16 w-full max-w-360 items-center justify-center px-4 md:h-18">
           <Image
-            alt="Comunidade Viva e Eficaz"
+            alt={t('common:app.fullName')}
             className="h-8 w-auto object-contain sm:h-9 md:h-10"
             src={logoVivaWhite}
           />
@@ -101,17 +105,12 @@ export const GuestWifiView = () => {
                 text-xs font-semibold tracking-widest text-primary-strong uppercase sm:text-sm
               "
             >
-              Wi-Fi VIVA - Visitantes
+              {t('eyebrow')}
             </Text>
 
-            <Heading className="text-2xl text-foreground sm:text-3xl">
-              Bem-vindo à Comunidade Viva!
-            </Heading>
+            <Heading className="text-2xl text-foreground sm:text-3xl">{t('title')}</Heading>
 
-            <Text className="text-base leading-relaxed text-muted-foreground">
-              Que alegria ter você aqui. Para usar a internet, aceite os termos de uso e informe seu
-              nome e telefone.
-            </Text>
+            <Text className="text-base leading-relaxed text-muted-foreground">{t('intro')}</Text>
           </Box>
 
           {!hasAccess && (
@@ -119,30 +118,31 @@ export const GuestWifiView = () => {
               <Alert>
                 <TriangleAlertIcon />
 
-                <AlertTitle>Acesso indisponível</AlertTitle>
+                <AlertTitle>{t('unavailable.title')}</AlertTitle>
 
-                <AlertDescription>
-                  Esta página é aberta automaticamente quando você se conecta à rede Wi-Fi
-                  &quot;VIVA - Visitantes&quot;. Conecte-se à rede e aguarde a página abrir.
-                </AlertDescription>
+                <AlertDescription>{t('unavailable.description')}</AlertDescription>
               </Alert>
 
               <Link className={homeLinkClassName} to="/">
                 <HouseIcon className="size-4" />
-                Ir para o site da Comunidade Viva
+                {t('unavailable.goToSite')}
               </Link>
             </Box>
           )}
 
           {hasAccess && step !== 'success' && (
-            <Box aria-label="Etapas" className="flex items-center justify-center gap-3" role="list">
+            <Box
+              aria-label={t('steps.label')}
+              className="flex items-center justify-center gap-3"
+              role="list"
+            >
               <Box
                 aria-current={step === 'terms' ? 'step' : undefined}
                 className={stepClassName}
                 role="listitem"
               >
                 <Box className={stepNumberClassName}>1</Box>
-                Termos
+                {t('steps.terms')}
               </Box>
 
               <Box aria-hidden="true" className="h-px w-8 bg-border" />
@@ -153,7 +153,7 @@ export const GuestWifiView = () => {
                 role="listitem"
               >
                 <Box className={stepNumberClassName}>2</Box>
-                Seus dados
+                {t('steps.data')}
               </Box>
             </Box>
           )}
@@ -161,7 +161,7 @@ export const GuestWifiView = () => {
           {hasAccess && step === 'terms' && (
             <Box aria-labelledby="guest-wifi-terms-title" className={cardClassName} role="region">
               <Heading className="text-lg sm:text-xl" id="guest-wifi-terms-title" level={2}>
-                Termos de uso e política de privacidade
+                {t('terms.title')}
               </Heading>
 
               <GuestWifiTerms />
@@ -173,8 +173,7 @@ export const GuestWifiView = () => {
                   id="guest-wifi-terms"
                   onChange={(event) => toggleTermsAcceptance(event.target.checked)}
                 />
-                Li e aceito os termos de uso, a política de privacidade e a autorização de uso de
-                imagem e voz.
+                {t('terms.accept')}
               </Label>
 
               <Button
@@ -183,7 +182,7 @@ export const GuestWifiView = () => {
                 type="button"
                 onClick={continueToForm}
               >
-                Continuar
+                {t('terms.continue')}
                 <ArrowRightIcon data-icon="inline-end" />
               </Button>
             </Box>
@@ -193,15 +192,15 @@ export const GuestWifiView = () => {
             <Box aria-labelledby="guest-wifi-form-title" className={cardClassName} role="region">
               <Box className="grid gap-1">
                 <Heading className="text-lg sm:text-xl" id="guest-wifi-form-title" level={2}>
-                  Seus dados
+                  {t('form.title')}
                 </Heading>
 
-                <Text>Preencha para liberar o acesso à internet.</Text>
+                <Text>{t('form.description')}</Text>
               </Box>
 
               <Form className="grid gap-5" noValidate onSubmit={submit}>
                 <Box className="grid gap-2">
-                  <Label htmlFor="guest-wifi-full-name">Nome completo</Label>
+                  <Label htmlFor="guest-wifi-full-name">{t('form.fullName')}</Label>
 
                   <Input
                     id="guest-wifi-full-name"
@@ -209,20 +208,20 @@ export const GuestWifiView = () => {
                     autoComplete="name"
                     autoFocus
                     className="h-11"
-                    placeholder="Seu nome e sobrenome"
+                    placeholder={t('form.fullNamePlaceholder')}
                     type="text"
                     {...register('fullName')}
                   />
 
                   {errors.fullName?.message && (
                     <Text className="text-destructive" role="alert">
-                      {errors.fullName.message}
+                      {getFieldError(errors.fullName.message)}
                     </Text>
                   )}
                 </Box>
 
                 <Box className="grid gap-2">
-                  <Label htmlFor="guest-wifi-phone">Telefone (WhatsApp)</Label>
+                  <Label htmlFor="guest-wifi-phone">{t('form.phone')}</Label>
 
                   <Input
                     id="guest-wifi-phone"
@@ -230,14 +229,14 @@ export const GuestWifiView = () => {
                     autoComplete="tel-national"
                     className="h-11"
                     inputMode="tel"
-                    placeholder="(67) 99999-9999"
+                    placeholder={t('form.phonePlaceholder')}
                     type="tel"
                     {...phoneRegistration}
                   />
 
                   {errors.phone?.message && (
                     <Text className="text-destructive" role="alert">
-                      {errors.phone.message}
+                      {getFieldError(errors.phone.message)}
                     </Text>
                   )}
                 </Box>
@@ -246,14 +245,13 @@ export const GuestWifiView = () => {
                   <Alert variant="destructive">
                     <TriangleAlertIcon />
 
-                    <AlertTitle>Não foi possível liberar o acesso</AlertTitle>
+                    <AlertTitle>{t('error.title')}</AlertTitle>
 
                     <AlertDescription>
-                      Verifique se você ainda está conectado à rede &quot;VIVA - Visitantes&quot; e
-                      tente novamente. Se o problema continuar, procure a recepção.
+                      {t('error.description')}
                       {errorCode && (
                         <Text className="mt-1 font-mono text-xs text-destructive/80">
-                          Código do erro: {errorCode}
+                          {t('error.code', { code: errorCode })}
                         </Text>
                       )}
                     </AlertDescription>
@@ -269,7 +267,7 @@ export const GuestWifiView = () => {
                     onClick={backToTerms}
                   >
                     <ArrowLeftIcon data-icon="inline-start" />
-                    Voltar aos termos
+                    {t('form.backToTerms')}
                   </Button>
 
                   <Button
@@ -278,7 +276,7 @@ export const GuestWifiView = () => {
                     type="submit"
                   >
                     <WifiIcon data-icon="inline-start" />
-                    Conectar
+                    {t('form.connect')}
                   </Button>
                 </Box>
               </Form>
@@ -295,16 +293,14 @@ export const GuestWifiView = () => {
 
               <Box className="grid gap-2">
                 <Heading className="text-xl sm:text-2xl" level={2}>
-                  Você está conectado!
+                  {t('success.title')}
                 </Heading>
 
-                <Text className="text-base">
-                  A internet foi liberada. Aproveite e seja muito bem-vindo à Comunidade Viva.
-                </Text>
+                <Text className="text-base">{t('success.description')}</Text>
               </Box>
 
               <Link className={homeLinkClassName} to="/">
-                Continuar navegando
+                {t('success.continue')}
                 <ArrowRightIcon className="size-4" />
               </Link>
 

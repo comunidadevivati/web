@@ -1,25 +1,28 @@
+import type { PageTitleKey } from '@/app/router/page-title';
 import logoVivaWhite from '@/assets/brand/logo-viva-white.png';
-import { ThemeToggle } from '@/components/molecules';
-import { Box, Button, buttonVariants, Image, Text } from '@/components/ui';
+import { Box, Button, buttonVariants, Image } from '@/components/ui';
 import { Link, type LinkProps } from '@tanstack/react-router';
 import { cn } from 'cn';
 import { LogInIcon, MenuIcon, XIcon } from 'lucide-react';
 import { useState } from 'react';
+import { useTranslation } from 'react-i18next';
 
 type MenuItem = {
-  label: string;
+  key: Extract<PageTitleKey, 'home' | 'history' | 'events' | 'contact'>;
   to: LinkProps['to'];
 };
 
 const menuItems: MenuItem[] = [
-  { label: 'Home', to: '/' },
-  { label: 'História', to: '/historia' },
-  { label: 'Eventos', to: '/eventos' },
-  { label: 'Contato', to: '/contato' },
+  { key: 'home', to: '/' },
+  { key: 'history', to: '/historia' },
+  { key: 'events', to: '/eventos' },
+  { key: 'contact', to: '/contato' },
 ];
 
 export const PublicHeader = () => {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
+
+  const { t } = useTranslation();
 
   return (
     <Box
@@ -35,7 +38,7 @@ export const PublicHeader = () => {
         "
       >
         <Link
-          aria-label="Ir para a página inicial"
+          aria-label={t('navigation.goToHome')}
           className="
             flex shrink-0 items-center rounded-lg transition-opacity duration-200 hover:opacity-85
             focus-visible:ring-2 focus-visible:ring-header-accent focus-visible:outline-none
@@ -43,7 +46,7 @@ export const PublicHeader = () => {
           to="/"
         >
           <Image
-            alt="Comunidade Viva e Eficaz"
+            alt={t('app.fullName')}
             className="h-8 w-auto max-w-40 object-contain sm:h-9 sm:max-w-48 md:h-10 md:max-w-52"
             src={logoVivaWhite}
           />
@@ -52,7 +55,7 @@ export const PublicHeader = () => {
         <Button
           aria-controls="public-header-menu"
           aria-expanded={isMenuOpen}
-          aria-label={isMenuOpen ? 'Fechar menu' : 'Abrir menu'}
+          aria-label={isMenuOpen ? t('navigation.closeMenu') : t('navigation.openMenu')}
           className="
             size-11 text-header-foreground/75 hover:bg-header-accent/10
             hover:text-header-accent-foreground aria-expanded:bg-header-accent/10
@@ -68,7 +71,7 @@ export const PublicHeader = () => {
         </Button>
 
         <Box
-          aria-label="Menu principal"
+          aria-label={t('navigation.mainMenu')}
           className={cn(
             `
               absolute inset-x-0 top-full flex-col gap-1 border-b border-header-border bg-header
@@ -83,9 +86,9 @@ export const PublicHeader = () => {
           id="public-header-menu"
           role="navigation"
         >
-          {menuItems.map(({ label, to }) => (
+          {menuItems.map(({ key, to }) => (
             <Link
-              key={label}
+              key={key}
               activeOptions={{ exact: true }}
               className={cn(
                 buttonVariants({ variant: 'ghost' }),
@@ -100,7 +103,7 @@ export const PublicHeader = () => {
               to={to}
               onClick={() => setIsMenuOpen(false)}
             >
-              {label}
+              {t(`navigation.${key}`)}
             </Link>
           ))}
 
@@ -116,19 +119,8 @@ export const PublicHeader = () => {
             to="/login"
           >
             <LogInIcon className="size-4" />
-            Login
+            {t('navigation.login')}
           </Link>
-
-          <Box
-            className="
-              mt-2 flex items-center justify-between gap-3 border-t border-header-border pt-3
-              md:mt-0 md:ml-2 md:border-0 md:pt-0 lg:ml-3
-            "
-          >
-            <Text className="text-sm font-medium text-header-foreground/75 md:hidden">Tema</Text>
-
-            <ThemeToggle tone="header" />
-          </Box>
         </Box>
       </Box>
     </Box>

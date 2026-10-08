@@ -1,21 +1,25 @@
+import type { PageTitleKey } from '@/app/router/page-title';
 import maintenancePage from '@/assets/images/maintenance-page.webp';
 import { StatusPage } from '@/components/organisms';
 import { useUnderConstructionViewModel } from '@/features/under-construction/presentation/view-models/under-construction.view-model';
+import { useTranslation } from 'react-i18next';
 
 type UnderConstructionViewProps = {
-  pageName: string;
+  page: PageTitleKey;
 };
 
-export const UnderConstructionView = ({ pageName }: UnderConstructionViewProps) => {
+export const UnderConstructionView = ({ page }: UnderConstructionViewProps) => {
   const { canGoBack, handleGoBack } = useUnderConstructionViewModel();
+
+  const { t } = useTranslation();
 
   return (
     <StatusPage
       canGoBack={canGoBack}
-      description="Esta página ainda está sendo preparada e estará disponível em breve. Enquanto isso, você pode voltar para onde estava ou ir para a página inicial."
-      eyebrow={pageName}
+      description={t('statusPage.underConstruction.description')}
+      eyebrow={t(`pageTitles.${page}`)}
       image={{ src: maintenancePage, width: 1200, height: 771 }}
-      title="Página em construção"
+      title={t('statusPage.underConstruction.title')}
       onGoBack={handleGoBack}
     />
   );

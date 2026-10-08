@@ -1,3 +1,4 @@
+import type { TranslationKey } from '@/app/i18n/translation-key';
 import { z } from 'zod';
 
 export type GuestWifiStep = 'terms' | 'form' | 'success';
@@ -52,17 +53,26 @@ export const formatPhone = (value: string) => {
   return `(${areaCode}) ${number.slice(0, splitIndex)}-${number.slice(splitIndex)}`;
 };
 
+// As mensagens de validação são chaves de tradução (namespace "guestWifi"), traduzidas na exibição.
+const validationMessages = {
+  fullNameRequired: 'form.validation.fullNameRequired',
+  fullNameTooLong: 'form.validation.fullNameTooLong',
+  fullNameIncomplete: 'form.validation.fullNameIncomplete',
+  phoneRequired: 'form.validation.phoneRequired',
+  phoneInvalid: 'form.validation.phoneInvalid',
+} as const satisfies Record<string, TranslationKey<'guestWifi'>>;
+
 export const guestWifiFormSchema = z.object({
   fullName: z
     .string()
     .trim()
-    .min(1, 'Informe seu nome completo.')
-    .max(120, 'O nome deve ter no máximo 120 caracteres.')
-    .refine((value) => value.split(/\s+/).length >= 2, 'Informe seu nome e sobrenome.'),
+    .min(1, validationMessages.fullNameRequired)
+    .max(120, validationMessages.fullNameTooLong)
+    .refine((value) => value.split(/\s+/).length >= 2, validationMessages.fullNameIncomplete),
   phone: z
     .string()
-    .min(1, 'Informe seu telefone.')
-    .refine((value) => getPhoneDigits(value).length >= 10, 'Informe um telefone válido com DDD.'),
+    .min(1, validationMessages.phoneRequired)
+    .refine((value) => getPhoneDigits(value).length >= 10, validationMessages.phoneInvalid),
 });
 
 export type GuestWifiFormData = z.infer<typeof guestWifiFormSchema>;

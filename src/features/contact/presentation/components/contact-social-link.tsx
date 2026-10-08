@@ -2,6 +2,7 @@ import { Anchor, Box } from '@/components/ui';
 import type { ContactSocialLink as ContactSocialLinkData } from '@/features/contact/presentation/models/contact.model';
 import { cva } from 'class-variance-authority';
 import { ExternalLinkIcon } from 'lucide-react';
+import { useTranslation } from 'react-i18next';
 
 const socialIconVariants = cva(
   `
@@ -29,9 +30,11 @@ type ContactSocialLinkProps = {
 export const ContactSocialLink = ({ link }: ContactSocialLinkProps) => {
   const { handle, href, icon: Icon, id, name } = link;
 
+  const { t } = useTranslation('contact');
+
   return (
     <Anchor
-      aria-label={`${name} da Comunidade Viva (abre em nova aba)`}
+      aria-label={t('social.linkAriaLabel', { name })}
       className="
         group flex min-h-16 items-center gap-4 rounded-xl border border-border surface-card px-4
         py-3 shadow-elevated transition-all duration-200 hover:-translate-y-0.5 hover:border-primary

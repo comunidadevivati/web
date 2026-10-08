@@ -1,3 +1,4 @@
+import type { TranslationKey } from '@/app/i18n/translation-key';
 import { authorizeGuestWifiUseCase } from '@/features/guest-wifi/application/use-cases/authorize-guest-wifi.use-case';
 import { resolveGuestWifiAccessUseCase } from '@/features/guest-wifi/application/use-cases/resolve-guest-wifi-access.use-case';
 import {
@@ -18,6 +19,7 @@ import { useMutation } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEffect, useState, type ChangeEvent } from 'react';
 import { useForm } from 'react-hook-form';
+import { useTranslation } from 'react-i18next';
 
 export const useGuestWifiViewModel = () => {
   const search = useSearch({ from: '/wifi-visitantes' });
@@ -25,6 +27,8 @@ export const useGuestWifiViewModel = () => {
   const access = resolveGuestWifiAccessUseCase(search);
 
   const navigate = useNavigate();
+
+  const { t } = useTranslation('guestWifi');
 
   const [step, setStep] = useState<GuestWifiStep>('terms');
 
@@ -53,9 +57,7 @@ export const useGuestWifiViewModel = () => {
     };
   }, [navigate, redirectCountdown, step]);
 
-  const redirectMessage = `Você será levado ao site em ${redirectCountdown} ${
-    redirectCountdown === 1 ? 'segundo' : 'segundos'
-  }.`;
+  const redirectMessage = t('success.redirect', { count: redirectCountdown });
 
   const [hasAcceptedTerms, setHasAcceptedTerms] = useState(false);
 
@@ -91,6 +93,11 @@ export const useGuestWifiViewModel = () => {
     event.target.value = formatPhone(event.target.value);
 
     void phoneRegistration.onChange(event);
+  };
+
+  // Mensagens do Zod são chaves de tradução do namespace "guestWifi".
+  const getFieldError = (message?: string) => {
+    return message ? t(message as TranslationKey<'guestWifi'>) : undefined;
   };
 
   const toggleTermsAcceptance = (isAccepted: boolean) => {
@@ -131,6 +138,7 @@ export const useGuestWifiViewModel = () => {
     backToTerms,
     continueToForm,
     form,
+    getFieldError,
     hasAcceptedTerms,
     hasAccess: access !== null,
     errorCode: error instanceof GuestWifiAuthorizationError ? error.code : null,
