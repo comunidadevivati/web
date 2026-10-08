@@ -80,14 +80,23 @@ test.describe('Guest Wi-Fi', () => {
     });
   });
 
-  test('shows an error when the internet cannot be released', async ({ page }) => {
-    await page.route('**/api/guest-wifi/authorize', (route) => route.fulfill({ status: 502 }));
+  test('shows the error code when the internet cannot be released', async ({ page }) => {
+    await page.route('**/api/guest-wifi/authorize', (route) =>
+      route.fulfill({
+        status: 502,
+        json: {
+          error: 'authorization_failed',
+          reason: 'omada_authorization_failed',
+          omadaErrorCode: -41501,
+        },
+      }),
+    );
 
     await acceptTermsAndFillForm(page);
 
     await page.getByRole('button', { name: 'Conectar' }).click();
 
-    await expect(page.getByText('Não foi possível liberar o acesso')).toBeVisible();
+    await expect(page.getByText('Código do erro: omada_authorization_failed -41501')).toBeVisible();
   });
 
   test('has no horizontal scroll on small phones', async ({ page }) => {

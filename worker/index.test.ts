@@ -45,7 +45,7 @@ const callWorker = (request: Request) => {
   return worker.fetch(request as never, env);
 };
 
-const mockOmada = (loginErrorCode = 0) => {
+const mockOmada = (loginErrorCode = 0, authorizationErrorCode = 0) => {
   const fetchMock = vi
     .fn()
     .mockResolvedValueOnce(
@@ -54,7 +54,9 @@ const mockOmada = (loginErrorCode = 0) => {
         { headers: { 'Set-Cookie': 'TPOMADA_SESSIONID=session-id; Path=/; HttpOnly' } },
       ),
     )
-    .mockResolvedValueOnce(Response.json({ errorCode: 0 }));
+    .mockResolvedValueOnce(
+      Response.json({ errorCode: authorizationErrorCode, msg: 'Failed to authenticate.' }),
+    );
 
   vi.stubGlobal('fetch', fetchMock);
 
@@ -136,6 +138,33 @@ describe('worker', () => {
     const response = await callWorker(authorizeRequest(validBody));
 
     expect(response.status).toBe(502);
+  });
+
+  it('reports the Omada error code when the client cannot be authorized', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    mockOmada(0, -41501);
+
+    const response = await callWorker(authorizeRequest(validBody));
+
+    expect(await response.json()).toEqual({
+      error: 'authorization_failed',
+      reason: 'omada_authorization_failed',
+      omadaErrorCode: -41501,
+    });
+  });
+
+  it('reports missing configuration without calling the controller', async () => {
+    vi.spyOn(console, 'error').mockImplementation(() => undefined);
+
+    const fetchMock = mockOmada();
+
+    await worker.fetch(authorizeRequest(validBody) as never, {
+      ...env,
+      OMADA_OPERATOR_PASSWORD: '',
+    });
+
+    expect(fetchMock).not.toHaveBeenCalled();
   });
 
   it('only accepts POST requests', async () => {

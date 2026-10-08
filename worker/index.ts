@@ -70,6 +70,50 @@ type OmadaSession = {
   cookie: string;
 };
 
+type GuestWifiFailureReason =
+  | 'not_configured'
+  | 'omada_unreachable'
+  | 'omada_login_failed'
+  | 'omada_authorization_failed';
+
+// Falha com motivo técnico, devolvido ao front para diagnóstico (nunca contém dados pessoais).
+class GuestWifiError extends Error {
+  readonly reason: GuestWifiFailureReason;
+
+  readonly omadaErrorCode?: number;
+
+  constructor(reason: GuestWifiFailureReason, message: string, omadaErrorCode?: number) {
+    super(message);
+
+    this.reason = reason;
+
+    this.omadaErrorCode = omadaErrorCode;
+  }
+}
+
+const REQUIRED_SECRETS = [
+  'OMADA_CONTROLLER_URL',
+  'OMADA_CONTROLLER_ID',
+  'OMADA_SITE_ID',
+  'OMADA_OPERATOR_USERNAME',
+  'OMADA_OPERATOR_PASSWORD',
+] as const;
+
+const getMissingSecrets = (env: Env) => {
+  return REQUIRED_SECRETS.filter((name) => !env[name]);
+};
+
+const postToOmada = async (url: string, init: RequestInit) => {
+  try {
+    return await fetch(url, init);
+  } catch (error) {
+    throw new GuestWifiError(
+      'omada_unreachable',
+      `Omada request failed: ${error instanceof Error ? error.message : 'unknown error'}`,
+    );
+  }
+};
+
 const jsonResponse = (body: unknown, status: number) => {
   return Response.json(body, {
     status,
@@ -92,7 +136,7 @@ const getSessionCookie = (response: Response) => {
 };
 
 const loginOperator = async (env: Env): Promise<OmadaSession> => {
-  const response = await fetch(`${getControllerBaseUrl(env)}/api/v2/hotspot/login`, {
+  const response = await postToOmada(`${getControllerBaseUrl(env)}/api/v2/hotspot/login`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -105,13 +149,20 @@ const loginOperator = async (env: Env): Promise<OmadaSession> => {
   });
 
   if (!response.ok) {
-    throw new Error(`Omada operator login failed with HTTP ${response.status}`);
+    throw new GuestWifiError(
+      'omada_login_failed',
+      `Omada operator login failed with HTTP ${response.status}`,
+    );
   }
 
   const data = await response.json<OmadaResponse<{ token?: string }>>();
 
   if (data.errorCode !== 0 || !data.result?.token) {
-    throw new Error(`Omada operator login failed with errorCode ${data.errorCode}`);
+    throw new GuestWifiError(
+      'omada_login_failed',
+      `Omada operator login failed: ${data.errorCode} ${data.msg ?? ''}`,
+      data.errorCode,
+    );
   }
 
   return {
@@ -123,7 +174,7 @@ const loginOperator = async (env: Env): Promise<OmadaSession> => {
 const authorizeClient = async (env: Env, session: OmadaSession, client: GuestWifiClient) => {
   const { type: _type, ...clientFields } = client;
 
-  const response = await fetch(`${getControllerBaseUrl(env)}/api/v2/hotspot/extPortal/auth`, {
+  const response = await postToOmada(`${getControllerBaseUrl(env)}/api/v2/hotspot/extPortal/auth`, {
     method: 'POST',
     headers: {
       Accept: 'application/json',
@@ -143,13 +194,20 @@ const authorizeClient = async (env: Env, session: OmadaSession, client: GuestWif
   });
 
   if (!response.ok) {
-    throw new Error(`Omada client authorization failed with HTTP ${response.status}`);
+    throw new GuestWifiError(
+      'omada_authorization_failed',
+      `Omada client authorization failed with HTTP ${response.status}`,
+    );
   }
 
   const data = await response.json<OmadaResponse>();
 
   if (data.errorCode !== 0) {
-    throw new Error(`Omada client authorization failed with errorCode ${data.errorCode}`);
+    throw new GuestWifiError(
+      'omada_authorization_failed',
+      `Omada client authorization failed: ${data.errorCode} ${data.msg ?? ''}`,
+      data.errorCode,
+    );
   }
 };
 
@@ -163,7 +221,20 @@ const handleGuestWifiAuthorize = async (request: Request, env: Env) => {
   const parsed = authorizeRequestSchema.safeParse(body);
 
   if (!parsed.success) {
-    return jsonResponse({ error: 'invalid_request' }, 400);
+    // Somente os nomes dos campos inválidos, sem os valores enviados.
+    const fields = parsed.error.issues.map((issue) => issue.path.join('.'));
+
+    console.error('guest-wifi: invalid request', fields.join(', '));
+
+    return jsonResponse({ error: 'invalid_request', fields }, 400);
+  }
+
+  const missingSecrets = getMissingSecrets(env);
+
+  if (missingSecrets.length > 0) {
+    console.error('guest-wifi: missing secrets', missingSecrets.join(', '));
+
+    return jsonResponse({ error: 'authorization_failed', reason: 'not_configured' }, 503);
   }
 
   try {
@@ -176,9 +247,24 @@ const handleGuestWifiAuthorize = async (request: Request, env: Env) => {
     });
   } catch (error) {
     // Sem dados pessoais no log: apenas o motivo técnico da falha.
-    console.error('guest-wifi: authorization failed', error instanceof Error ? error.message : '');
+    console.error(
+      'guest-wifi: authorization failed',
+      parsed.data.client.type,
+      error instanceof Error ? error.message : '',
+    );
 
-    return jsonResponse({ error: 'authorization_failed' }, 502);
+    if (error instanceof GuestWifiError) {
+      return jsonResponse(
+        {
+          error: 'authorization_failed',
+          reason: error.reason,
+          omadaErrorCode: error.omadaErrorCode,
+        },
+        502,
+      );
+    }
+
+    return jsonResponse({ error: 'authorization_failed', reason: 'unexpected_error' }, 502);
   }
 };
 

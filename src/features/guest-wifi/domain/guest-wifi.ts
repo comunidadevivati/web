@@ -41,6 +41,19 @@ export type GuestWifiAuthorization = {
   };
 };
 
+// Falha na liberação, com um código técnico curto para o visitante informar à recepção.
+export class GuestWifiAuthorizationError extends Error {
+  readonly code: string;
+
+  constructor(code: string) {
+    super(`Guest Wi-Fi authorization failed: ${code}`);
+
+    this.name = 'GuestWifiAuthorizationError';
+
+    this.code = code;
+  }
+}
+
 export interface GuestWifiGateway {
   authorize: (authorization: GuestWifiAuthorization) => Promise<void>;
 }

@@ -42,6 +42,7 @@ export const GuestWifiView = () => {
     backToTerms,
     continueToForm,
     continueUrl,
+    errorCode,
     form,
     hasAcceptedTerms,
     hasAccess,
@@ -232,6 +233,11 @@ export const GuestWifiView = () => {
                     <AlertDescription>
                       Verifique se você ainda está conectado à rede &quot;VIVA - Visitantes&quot; e
                       tente novamente. Se o problema continuar, procure a recepção.
+                      {errorCode && (
+                        <Text className="mt-1 font-mono text-xs text-destructive/80">
+                          Código do erro: {errorCode}
+                        </Text>
+                      )}
                     </AlertDescription>
                   </Alert>
                 )}

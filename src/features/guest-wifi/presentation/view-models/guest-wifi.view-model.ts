@@ -1,6 +1,9 @@
 import { authorizeGuestWifiUseCase } from '@/features/guest-wifi/application/use-cases/authorize-guest-wifi.use-case';
 import { resolveGuestWifiAccessUseCase } from '@/features/guest-wifi/application/use-cases/resolve-guest-wifi-access.use-case';
-import type { GuestWifiAuthorization } from '@/features/guest-wifi/domain/guest-wifi';
+import {
+  GuestWifiAuthorizationError,
+  type GuestWifiAuthorization,
+} from '@/features/guest-wifi/domain/guest-wifi';
 import { GUEST_WIFI_TERMS_VERSION } from '@/features/guest-wifi/presentation/models/guest-wifi-terms.model';
 import {
   formatPhone,
@@ -97,6 +100,8 @@ export const useGuestWifiViewModel = () => {
     form,
     hasAcceptedTerms,
     hasAccess: access !== null,
+    errorCode:
+      authorization.error instanceof GuestWifiAuthorizationError ? authorization.error.code : null,
     hasError: authorization.isError,
     isSubmitDisabled,
     isSubmitting,
