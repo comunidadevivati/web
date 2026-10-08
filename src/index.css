@@ -208,9 +208,9 @@
   color-scheme: dark;
 
   /* Página e superfícies */
-  --background: var(--viva-teal-800);
+  --background: var(--viva-teal-900);
   --foreground: var(--viva-teal-50);
-  --card: var(--viva-teal-900);
+  --card: color-mix(in oklab, var(--viva-teal-950) 80%, transparent);
   --card-foreground: var(--viva-teal-50);
   --muted: var(--viva-teal-950);
   --muted-foreground: var(--viva-teal-200);
@@ -222,7 +222,7 @@
   --destructive: oklch(0.704 0.191 22.216);
 
   /* Conteúdo dentro de cards */
-  --card-muted: var(--viva-teal-950);
+  --card-muted: var(--viva-teal-900);
   --card-muted-foreground: var(--viva-teal-200);
   --card-primary: var(--viva-teal-500);
   --card-primary-foreground: var(--viva-teal-950);
@@ -234,12 +234,12 @@
   --primary-strong: var(--viva-teal-200);
 
   /* Menu lateral */
-  --sidebar: var(--viva-teal-600);
+  --sidebar: color-mix(in oklab, var(--viva-teal-950) 80%, transparent);
   --sidebar-foreground: var(--viva-white);
-  --sidebar-muted-foreground: var(--viva-teal-100);
-  --sidebar-primary: var(--viva-teal-50);
+  --sidebar-muted-foreground: var(--viva-teal-200);
+  --sidebar-primary: var(--viva-teal-300);
   --sidebar-primary-foreground: var(--viva-white);
-  --sidebar-accent: var(--viva-teal-700);
+  --sidebar-accent: var(--viva-teal-800);
   --sidebar-accent-foreground: var(--viva-white);
   --sidebar-border: var(--viva-teal-700);
 

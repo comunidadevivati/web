@@ -1,3 +1,4 @@
+import { CardSectionHeader } from '@/components/molecules';
 import {
   Box,
   Card,
@@ -14,6 +15,7 @@ import {
   CalendarDaysIcon,
   ChurchIcon,
   Clock3Icon,
+  HistoryIcon,
   UserRoundPlusIcon,
   UsersIcon,
 } from 'lucide-react';
@@ -138,26 +140,11 @@ export const DashboardView = () => {
 
       <Box className="grid gap-5 xl:grid-cols-[1.2fr_0.8fr]">
         <Card className="overflow-hidden border-border surface-card shadow-sm">
-          <CardHeader className="border-b border-border/60 bg-linear-to-r from-muted/60 to-card">
-            <Box className="flex items-center gap-3">
-              <Box
-                className="
-                  flex size-10 items-center justify-center rounded-xl bg-primary/10
-                  text-primary-strong
-                "
-              >
-                <CalendarDaysIcon className="size-5" />
-              </Box>
-
-              <Box>
-                <CardTitle className="text-base font-semibold text-foreground">
-                  Próximos eventos
-                </CardTitle>
-
-                <CardDescription>Agenda prevista da comunidade</CardDescription>
-              </Box>
-            </Box>
-          </CardHeader>
+          <CardSectionHeader
+            description="Agenda prevista da comunidade"
+            icon={CalendarDaysIcon}
+            title="Próximos eventos"
+          />
 
           <CardContent className="grid gap-3 pt-4">
             {events.map((event, index) => (
@@ -230,13 +217,11 @@ export const DashboardView = () => {
         </Card>
 
         <Card className="overflow-hidden border-border surface-card shadow-sm">
-          <CardHeader className="border-b border-border/60 bg-linear-to-r from-muted/60 to-card">
-            <CardTitle className="text-base font-semibold text-foreground">
-              Atividades recentes
-            </CardTitle>
-
-            <CardDescription>Últimas movimentações registradas</CardDescription>
-          </CardHeader>
+          <CardSectionHeader
+            description="Últimas movimentações registradas"
+            icon={HistoryIcon}
+            title="Atividades recentes"
+          />
 
           <CardContent className="grid gap-1 pt-3">
             {activities.map((activity) => (

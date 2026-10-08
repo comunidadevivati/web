@@ -29,7 +29,7 @@ export const AuthenticatedLayoutView = () => {
   const sidebarVisibilityLabel = isHidden ? 'Mostrar menu lateral' : 'Ocultar menu lateral';
 
   return (
-    <Box className="grid h-dvh grid-rows-[4.5rem_minmax(0,1fr)_auto] bg-background">
+    <Box className="grid h-dvh grid-rows-[4.5rem_minmax(0,1fr)] bg-background">
       <Box
         className={cn(
           'grid border-b border-header-border bg-header shadow-elevated',
@@ -133,14 +133,17 @@ export const AuthenticatedLayoutView = () => {
           />
         )}
 
-        <Box className="relative min-w-0 overflow-auto">
-          <Box className="relative min-h-full p-4 md:p-6 lg:p-8">
-            <Outlet />
+        {/* O rodapé ocupa só a coluna do conteúdo: acompanha a sidebar expandida, recolhida ou oculta. */}
+        <Box className="flex min-h-0 min-w-0 flex-col">
+          <Box className="relative min-h-0 flex-1 overflow-auto">
+            <Box className="relative min-h-full p-4 md:p-6 lg:p-8">
+              <Outlet />
+            </Box>
           </Box>
+
+          <AppFooter />
         </Box>
       </Box>
-
-      <AppFooter />
     </Box>
   );
 };
