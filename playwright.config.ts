@@ -10,6 +10,8 @@ export default defineConfig({
 
   use: {
     baseURL: 'http://127.0.0.1:4173',
+    // A preferência de idioma padrão segue o navegador: fixa o pt-BR, fonte da verdade dos textos.
+    locale: 'pt-BR',
     trace: 'on-first-retry',
   },
 

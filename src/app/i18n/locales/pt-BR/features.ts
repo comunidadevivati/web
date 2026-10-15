@@ -3,18 +3,20 @@ export const auth = {
   login: {
     tagline: 'Um ambiente criado para conectar pessoas, ministérios e propósitos.',
     title: 'Bem-vindo',
-    subtitle: 'Entre com suas credenciais para acessar sua conta.',
-    email: 'E-mail',
-    emailPlaceholder: 'seuemail@exemplo.com',
-    password: 'Senha',
-    passwordPlaceholder: 'Digite sua senha',
-    showPassword: 'Mostrar senha',
-    hidePassword: 'Ocultar senha',
+    subtitle: 'Acesse sua conta com segurança pelo login da Comunidade Viva.',
     submit: 'Entrar',
-    validation: {
-      emailRequired: 'Informe o e-mail.',
-      emailInvalid: 'Informe um e-mail válido.',
-      passwordRequired: 'Informe a senha.',
+    redirecting: 'Redirecionando para o login…',
+    retry: 'Tentar novamente',
+    notices: {
+      expired: {
+        title: 'Sua sessão expirou',
+        description: 'Por segurança, entre novamente para continuar.',
+      },
+      unavailable: {
+        title: 'Login indisponível no momento',
+        description:
+          'Não foi possível conectar ao serviço de autenticação. Tente novamente em instantes.',
+      },
     },
   },
 } as const;
@@ -36,6 +38,13 @@ export const home = {
 export const dashboard = {
   title: 'Dashboard',
   subtitle: 'Visão geral da Comunidade Viva.',
+  states: {
+    error: {
+      title: 'Não foi possível carregar o dashboard',
+      description: 'Verifique a conexão e tente novamente.',
+      retry: 'Tentar novamente',
+    },
+  },
   summaries: {
     members: {
       label: 'Membros',
@@ -59,15 +68,12 @@ export const dashboard = {
     description: 'Agenda prevista da comunidade',
     badge: 'Evento',
     next: 'Próximo',
-    items: {
-      celebration: 'Culto de Celebração',
-      leaders: 'Encontro de Líderes',
-      families: 'Conferência de Famílias',
-    },
+    empty: 'Nenhum evento previsto.',
   },
   recentActivities: {
     title: 'Atividades recentes',
     description: 'Últimas movimentações registradas',
+    empty: 'Nenhuma atividade recente.',
     items: {
       newMember: 'Novo membro cadastrado',
       newVisitor: 'Novo visitante registrado',

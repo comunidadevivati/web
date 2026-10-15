@@ -3,10 +3,10 @@ import tailwindcss from '@tailwindcss/vite';
 import { tanstackRouter } from '@tanstack/router-plugin/vite';
 import react, { reactCompilerPreset } from '@vitejs/plugin-react';
 import { fileURLToPath, URL } from 'node:url';
-import { defineConfig } from 'vite';
+import { defineConfig, loadEnv } from 'vite';
 import { VitePWA } from 'vite-plugin-pwa';
 
-export default defineConfig({
+export default defineConfig(({ mode }) => ({
   resolve: {
     alias: {
       '@': fileURLToPath(new URL('./src', import.meta.url)),
@@ -17,6 +17,12 @@ export default defineConfig({
     watch: {
       usePolling: true,
       interval: 100,
+    },
+    // Em produção o Worker repassa /auth/* ao BFF; no dev, o próprio Vite faz esse papel.
+    proxy: {
+      '^/auth/': {
+        target: loadEnv(mode, process.cwd(), '').BFF_PROXY_TARGET || 'http://localhost:3000',
+      },
     },
   },
 
@@ -80,6 +86,8 @@ export default defineConfig({
       },
       workbox: {
         cleanupOutdatedCaches: true,
+        // Rotas do Worker (/api) e da sessão no BFF (/auth) nunca recebem o index.html da SPA.
+        navigateFallbackDenylist: [/^\/api\//, /^\/auth\//],
         clientsClaim: true,
         // Fontes (Roboto) são baixadas sob demanda por unicode-range e mantidas offline.
         runtimeCaching: [
@@ -101,4 +109,4 @@ export default defineConfig({
       },
     }),
   ],
-});
+}));

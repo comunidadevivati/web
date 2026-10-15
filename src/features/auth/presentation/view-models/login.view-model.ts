@@ -1,60 +1,60 @@
-import type { TranslationKey } from '@/app/i18n/translation-key';
-import { loginUseCase } from '@/features/auth/application/use-cases/login.use-case';
-import { loginSchema, type LoginFormData } from '@/features/auth/presentation/models/login.model';
-import { zodResolver } from '@hookform/resolvers/zod';
-import { useNavigate } from '@tanstack/react-router';
-import { useState } from 'react';
-import { useForm } from 'react-hook-form';
-import { useTranslation } from 'react-i18next';
+import { authSessionQueryOptions } from '@/features/auth/application/queries/auth-session.query';
+import { startLoginUseCase } from '@/features/auth/application/use-cases/start-login.use-case';
+import type { LoginNotice } from '@/features/auth/presentation/models/login.model';
+import { useQuery } from '@tanstack/react-query';
+import { useSearch } from '@tanstack/react-router';
+import { useEffect, useState } from 'react';
 
 export const useLoginViewModel = () => {
-  const navigate = useNavigate();
+  const { reason } = useSearch({ from: '/login' });
 
-  const { t } = useTranslation('auth');
+  // Mesma consulta do guard da rota: em erro, o BFF não respondeu ao verificar a sessão.
+  const { isError, isFetching, refetch } = useQuery(authSessionQueryOptions);
 
-  const [isPasswordVisible, setIsPasswordVisible] = useState(false);
+  const [isRedirecting, setIsRedirecting] = useState(false);
 
-  const form = useForm<LoginFormData>({
-    resolver: zodResolver(loginSchema),
-    defaultValues: {
-      email: '',
-      password: '',
-    },
-    mode: 'onTouched',
-  });
+  // Ao voltar do Keycloak pelo botão "voltar", o navegador pode restaurar a página do cache
+  // (bfcache) ainda com o overlay de carregamento: libera o botão novamente.
+  useEffect(() => {
+    const handlePageShow = (event: PageTransitionEvent) => {
+      if (event.persisted) {
+        setIsRedirecting(false);
+      }
+    };
 
-  const {
-    formState: { isDirty, isSubmitting, isValid },
-    handleSubmit,
-  } = form;
+    window.addEventListener('pageshow', handlePageShow);
 
-  const isSubmitDisabled = !isDirty || !isValid || isSubmitting;
+    return () => {
+      window.removeEventListener('pageshow', handlePageShow);
+    };
+  }, []);
 
-  // Mensagens do Zod são chaves de tradução do namespace "auth".
-  const getFieldError = (message?: string) => {
-    return message ? t(message as TranslationKey<'auth'>) : undefined;
+  const notice: LoginNotice | null = isError ? 'unavailable' : (reason ?? null);
+
+  // Sem resposta do BFF o login também falharia: o botão volta quando a nova tentativa funcionar.
+  const isLoginDisabled = isRedirecting || isFetching || isError;
+
+  // Sai da SPA para o fluxo OIDC do BFF (Keycloak). Credenciais nunca passam pelo front.
+  const login = () => {
+    if (isLoginDisabled) {
+      return;
+    }
+
+    setIsRedirecting(true);
+
+    startLoginUseCase();
   };
 
-  const togglePasswordVisibility = () => {
-    setIsPasswordVisible((currentValue) => !currentValue);
+  const retry = () => {
+    void refetch();
   };
-
-  const submit = handleSubmit(async ({ email }) => {
-    loginUseCase({
-      email,
-    });
-
-    await navigate({
-      to: '/dashboard',
-    });
-  });
 
   return {
-    form,
-    getFieldError,
-    isPasswordVisible,
-    isSubmitDisabled,
-    submit,
-    togglePasswordVisibility,
+    isLoginDisabled,
+    isRedirecting,
+    isRetrying: isFetching,
+    login,
+    notice,
+    retry,
   };
 };

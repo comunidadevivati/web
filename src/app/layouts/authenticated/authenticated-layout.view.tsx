@@ -2,11 +2,24 @@ import { useAuthenticatedLayoutViewModel } from '@/app/layouts/authenticated/aut
 import livingStoneGreen from '@/assets/brand/living-stone-green.png';
 import logoVivaWhite from '@/assets/brand/logo-viva-white.png';
 import { TooltipHint, UserMenu } from '@/components/molecules';
-import { AppFooter, AppSidebar, type AppSidebarItem } from '@/components/organisms';
-import { Box, Button, Image } from '@/components/ui';
+import {
+  AppFooter,
+  AppSidebar,
+  AppSidebarDrawer,
+  type AppSidebarItem,
+} from '@/components/organisms';
+import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
+  Box,
+  Button,
+  Image,
+  LoadingOverlay,
+} from '@/components/ui';
 import { Link, Outlet } from '@tanstack/react-router';
 import { cn } from 'cn';
-import { LayoutDashboardIcon, MenuIcon } from 'lucide-react';
+import { CircleAlertIcon, LayoutDashboardIcon, MenuIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const layoutColumns = {
@@ -17,7 +30,12 @@ const layoutColumns = {
 
 export const AuthenticatedLayoutView = () => {
   const {
+    hasLogoutError,
+    isLoggingOut,
+    isMobileNavOpen,
     logout,
+    openMobileNav,
+    setIsMobileNavOpen,
     sidebarMode,
     toggleSidebarCollapse,
     toggleSidebarVisibility,
@@ -42,6 +60,8 @@ export const AuthenticatedLayoutView = () => {
 
   return (
     <Box className="grid h-dvh grid-rows-[4.5rem_minmax(0,1fr)] bg-background">
+      {isLoggingOut && <LoadingOverlay />}
+
       <Box
         className={cn(
           'grid border-b border-header-border bg-header shadow-elevated',
@@ -49,7 +69,7 @@ export const AuthenticatedLayoutView = () => {
         )}
       >
         {!isHidden && (
-          <Box className="flex items-center justify-center border-r border-header-border">
+          <Box className="hidden items-center justify-center border-r border-header-border md:flex">
             <Link
               aria-label={t('navigation.goToDashboard')}
               className="
@@ -72,12 +92,29 @@ export const AuthenticatedLayoutView = () => {
         )}
 
         <Box className="relative flex min-w-0 items-center px-4 md:px-6">
+          {/* Abaixo de md o menu lateral abre como drawer; a partir de md, mostra/oculta a sidebar. */}
+          <Button
+            aria-expanded={isMobileNavOpen}
+            aria-haspopup="dialog"
+            aria-label={t('navigation.openMenu')}
+            className="
+              size-11 shrink-0 text-header-foreground/70 hover:bg-header-accent/10
+              hover:text-header-accent-foreground md:hidden
+            "
+            size="icon"
+            type="button"
+            variant="ghost"
+            onClick={openMobileNav}
+          >
+            <MenuIcon />
+          </Button>
+
           <TooltipHint label={sidebarVisibilityLabel} side="bottom">
             <Button
               aria-label={sidebarVisibilityLabel}
               className="
-                shrink-0 text-header-foreground/70 hover:bg-header-accent/10
-                hover:text-header-accent-foreground
+                hidden shrink-0 text-header-foreground/70 hover:bg-header-accent/10
+                hover:text-header-accent-foreground md:inline-flex
               "
               size="icon"
               type="button"
@@ -103,7 +140,7 @@ export const AuthenticatedLayoutView = () => {
           <Box className="ml-auto flex items-center">
             <UserMenu
               email={userEmail}
-              greetingName={userEmail}
+              greetingName={userName || userEmail}
               initials={userInitials}
               name={userName}
               onLogout={logout}
@@ -111,6 +148,13 @@ export const AuthenticatedLayoutView = () => {
           </Box>
         </Box>
       </Box>
+
+      <AppSidebarDrawer
+        isOpen={isMobileNavOpen}
+        items={sidebarItems}
+        onLogout={logout}
+        onOpenChange={setIsMobileNavOpen}
+      />
 
       <Box
         className={cn(
@@ -131,6 +175,16 @@ export const AuthenticatedLayoutView = () => {
         <Box className="flex min-h-0 min-w-0 flex-col">
           <Box className="relative min-h-0 flex-1 overflow-auto">
             <Box className="relative min-h-full p-4 md:p-6 lg:p-8">
+              {hasLogoutError && (
+                <Alert className="mb-4 md:mb-6" variant="destructive">
+                  <CircleAlertIcon />
+
+                  <AlertTitle>{t('session.logoutFailed.title')}</AlertTitle>
+
+                  <AlertDescription>{t('session.logoutFailed.description')}</AlertDescription>
+                </Alert>
+              )}
+
               <Outlet />
             </Box>
           </Box>

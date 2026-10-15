@@ -1,41 +1,32 @@
-import type { Translations } from '@/app/i18n/i18n.model';
-import type {
-  DashboardActivity,
-  DashboardEvent,
-  DashboardSummary,
+import { dashboardOverviewQueryOptions } from '@/features/dashboard/application/queries/dashboard-overview.query';
+import {
+  DASHBOARD_INDICATORS,
+  type DashboardActivity,
+  type DashboardEvent,
+  type DashboardSummary,
 } from '@/features/dashboard/presentation/models/dashboard.model';
+import { useQuery } from '@tanstack/react-query';
 import { useTranslation } from 'react-i18next';
 
-type EventKey = keyof Translations['dashboard']['upcomingEvents']['items'];
-
-type ActivityKey = keyof Translations['dashboard']['recentActivities']['items'];
-
-// Mocks temporários: textos por chave de tradução e datas em ISO, formatadas no idioma atual.
-const summaryMocks: Pick<DashboardSummary, 'icon' | 'value'>[] = [
-  { icon: 'members', value: 248 },
-  { icon: 'visitors', value: 34 },
-  { icon: 'events', value: 6 },
-  { icon: 'ministries', value: 12 },
-];
-
-const eventMocks: { id: string; key: EventKey; startsAt: string }[] = [
-  { id: '1', key: 'celebration', startsAt: '2026-10-11T19:00:00' },
-  { id: '2', key: 'leaders', startsAt: '2026-10-14T19:30:00' },
-  { id: '3', key: 'families', startsAt: '2026-10-17T18:00:00' },
-];
-
-const activityMocks: { id: string; key: ActivityKey; daysAgo: number }[] = [
-  { id: '1', key: 'newMember', daysAgo: 0 },
-  { id: '2', key: 'newVisitor', daysAgo: 0 },
-  { id: '3', key: 'eventUpdated', daysAgo: 1 },
-];
+const DAY_IN_MS = 86_400_000;
 
 const capitalize = (value: string) => {
   return value.charAt(0).toLocaleUpperCase() + value.slice(1);
 };
 
+// Diferença em dias de calendário entre a data informada e hoje (0 = hoje, -1 = ontem).
+const getDayOffset = (date: Date) => {
+  const startOfDay = (value: Date) => {
+    return new Date(value.getFullYear(), value.getMonth(), value.getDate()).getTime();
+  };
+
+  return Math.round((startOfDay(date) - startOfDay(new Date())) / DAY_IN_MS);
+};
+
 export const useDashboardViewModel = () => {
   const { i18n, t } = useTranslation('dashboard');
+
+  const { data, isError, isFetching, isPending, refetch } = useQuery(dashboardOverviewQueryOptions);
 
   const { language } = i18n;
 
@@ -52,33 +43,46 @@ export const useDashboardViewModel = () => {
 
   const relativeFormatter = new Intl.RelativeTimeFormat(language, { numeric: 'auto' });
 
-  const summaries: DashboardSummary[] = summaryMocks.map(({ icon, value }) => ({
+  // Sem dados (carregando ou com erro), não há indicadores para exibir.
+  const indicators = data ? DASHBOARD_INDICATORS : [];
+
+  const summaries: DashboardSummary[] = indicators.map((icon) => ({
     icon,
-    value,
+    value: data?.indicators[icon] ?? 0,
     label: t(`summaries.${icon}.label`),
     description: t(`summaries.${icon}.description`),
   }));
 
-  const events: DashboardEvent[] = eventMocks.map(({ id, key, startsAt }) => {
+  const events: DashboardEvent[] = (data?.upcomingEvents ?? []).map(({ id, startsAt, title }) => {
     const date = new Date(startsAt);
 
     return {
       id,
-      title: t(`upcomingEvents.items.${key}`),
+      title,
       date: dateFormatter.format(date),
       time: timeFormatter.format(date),
     };
   });
 
-  const activities: DashboardActivity[] = activityMocks.map(({ daysAgo, id, key }) => ({
-    id,
-    description: t(`recentActivities.items.${key}`),
-    date: capitalize(relativeFormatter.format(-daysAgo, 'day')),
-  }));
+  const activities: DashboardActivity[] = (data?.recentActivities ?? []).map(
+    ({ id, occurredAt, type }) => ({
+      id,
+      description: t(`recentActivities.items.${type}`),
+      date: capitalize(relativeFormatter.format(getDayOffset(new Date(occurredAt)), 'day')),
+    }),
+  );
+
+  const retry = () => {
+    void refetch();
+  };
 
   return {
     activities,
     events,
+    hasError: isError,
+    isLoading: isPending,
+    isRetrying: isFetching,
+    retry,
     summaries,
   };
 };

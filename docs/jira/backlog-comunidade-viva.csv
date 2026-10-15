@@ -16,11 +16,11 @@
 * Itens Home, História, Eventos, Contato e Login à direita
 * No celular, os itens ficam em um menu recolhível (botão de menu)
 * Alvos de toque com no mínimo 40px no celular
-* Item Home leva para a página inicial","In Progress","site-publico"
+* Item Home leva para a página inicial","Done","site-publico"
 "6","5","Subtask","Criar componente PublicHeader com logo e itens de menu","","Done",""
 "7","5","Subtask","Implementar menu recolhível no celular","","Done",""
 "8","5","Subtask","Fazer o logo levar para a página inicial","","Done",""
-"9","5","Subtask","Ligar o item ""Home"" à página inicial","","To Do",""
+"9","5","Subtask","Ligar o item ""Home"" à página inicial","","Done",""
 "10","1","Story","Como visitante, quero acessar a tela de login pelo menu","*Critérios de aceite:*
 * Clicar em ""Login"" no menu leva para /login
 * Funciona no menu desktop e no menu recolhível do celular","Done","site-publico"
@@ -50,21 +50,21 @@
 "21","1","Story","Como visitante, quero entrar em contato com a comunidade","*Critérios de aceite:*
 * Seção ou página Contato acessível pelo item ""Contato"" do menu
 * Canais de contato definidos pela liderança
-* Layout mobile-first","To Do","site-publico"
-"22","21","Subtask","Definir os canais de contato (formulário, WhatsApp, e-mail, endereço)","","To Do",""
-"23","21","Subtask","Implementar a seção Contato e ligar ao item do menu","","To Do",""
+* Layout mobile-first","Done","site-publico"
+"22","21","Subtask","Definir os canais de contato (formulário, WhatsApp, e-mail, endereço)","","Done",""
+"23","21","Subtask","Implementar a seção Contato e ligar ao item do menu","","Done",""
 "24","1","Task","Ajustar título da aba e idioma do documento","O index.html ainda usa o título ""web"" e o idioma ""en"".
 
 * Trocar o título para o nome da Comunidade Viva
 * Trocar o idioma para pt-BR
-* Adicionar meta description","To Do","site-publico seo"
+* Adicionar meta description","Done","site-publico seo"
 "25","1","Bug","Teste e2e da home desatualizado e executado pelo Vitest","*Problema:*
 * O vitest.config.ts não exclui a pasta e2e/, então o Vitest tenta rodar o e2e/home.spec.ts (Playwright) e o pnpm validate falha.
 * O spec abre / e espera um título ""Comunidade Viva"" que não existe na página.
 
 *Correção:*
 * Excluir e2e/** no vitest.config.ts
-* Reescrever o spec para a home pública (header, carrossel, navegação para /login)","To Do","site-publico testes"
+* Reescrever o spec para a home pública (header, carrossel, navegação para /login)","Done","site-publico testes"
 "26","","Epic","Login e autenticação","Tela de login (/login) e controle de acesso à área de membros.
 
 Situação atual: a autenticação é temporária e só existe no frontend. Qualquer e-mail válido com senha não vazia entra, e o usuário fica salvo no localStorage. Não é autenticação segura e deve ser substituída quando o BFF estiver pronto.","In Progress","autenticacao"
@@ -95,10 +95,10 @@ Situação atual: a autenticação é temporária e só existe no frontend. Qual
 * O login consulta o BFF de autenticação
 * Credenciais inválidas mostram mensagem de erro clara
 * A sessão é guardada de forma segura (não um objeto simples no localStorage)
-* O logout encerra a sessão também no servidor","To Do","autenticacao backend"
-"39","38","Subtask","Integrar o login com o endpoint de autenticação do BFF (TanStack Query + Ky)","","To Do",""
-"40","38","Subtask","Substituir o armazenamento temporário no localStorage por sessão segura","","To Do",""
-"41","38","Subtask","Tratar erros de autenticação (credenciais inválidas, servidor indisponível)","","To Do",""
+* O logout encerra a sessão também no servidor","In Progress","autenticacao backend"
+"39","38","Subtask","Integrar o login com o endpoint de autenticação do BFF (TanStack Query + Ky)","","In Progress",""
+"40","38","Subtask","Substituir o armazenamento temporário no localStorage por sessão segura","","Done",""
+"41","38","Subtask","Tratar erros de autenticação (credenciais inválidas, servidor indisponível)","","Done",""
 "42","","Epic","Área de membros e dashboard","Área logada da aplicação: layout com header e menu lateral, e o dashboard com a visão geral da comunidade (/dashboard).
 
 Situação atual: o dashboard usa dados mockados.","In Progress","area-membros"
@@ -114,8 +114,8 @@ Situação atual: o dashboard usa dados mockados.","In Progress","area-membros"
 *Critérios de aceite:*
 * No celular, o botão de menu abre o menu lateral sobre o conteúdo (drawer)
 * O menu fecha ao escolher um item, ao tocar fora ou com Esc
-* Validado de 320px a 768px","To Do","area-membros mobile"
-"47","46","Subtask","Implementar o menu lateral em drawer no celular","","To Do",""
+* Validado de 320px a 768px","Done","area-membros mobile"
+"47","46","Subtask","Implementar o menu lateral em drawer no celular","","Done",""
 "48","42","Story","Como membro, quero ver no dashboard um resumo da comunidade","*Critérios de aceite:*
 * Rota /dashboard
 * Cards de Membros, Visitantes, Eventos e Ministérios, cada um com sua cor
@@ -128,10 +128,10 @@ Situação atual: o dashboard usa dados mockados.","In Progress","area-membros"
 "52","42","Story","Como membro, quero ver dados reais no dashboard","*Critérios de aceite:*
 * Indicadores, eventos e atividades vêm do BFF
 * Estados de carregamento, erro e lista vazia
-* O layout visual atual é mantido","To Do","area-membros backend"
+* O layout visual atual é mantido","In Progress","area-membros backend"
 "53","52","Subtask","Definir os contratos do BFF para indicadores, eventos e atividades","","To Do",""
-"54","52","Subtask","Integrar o dashboard com TanStack Query, substituindo os mocks","","To Do",""
-"55","52","Subtask","Tratar estados de carregamento, erro e vazio","","To Do",""
+"54","52","Subtask","Integrar o dashboard com TanStack Query, substituindo os mocks","","In Progress",""
+"55","52","Subtask","Tratar estados de carregamento, erro e vazio","","Done",""
 "56","","Task","Substituir cores fixas por tokens semânticos de cor","Tokens estruturados em src/index.css: paleta da marca (--viva-*), tokens semânticos (:root e .dark) e @theme inline.
 Login, dashboard, layout autenticado e home convertidos.","Done","design-system"
 "57","","Task","Criar regra de lint que bloqueia cores fixas","Regra project/no-hardcoded-colors no Oxlint: bloqueia hex, rgb/oklch e a paleta padrão do Tailwind em src/.","Done","design-system"
@@ -139,4 +139,14 @@ Login, dashboard, layout autenticado e home convertidos.","Done","design-system"
 
 * Seguir a preferência do sistema por padrão
 * Permitir troca manual e lembrar a escolha
-* Validar contraste nas telas existentes","To Do","design-system"
+* Validar contraste nas telas existentes","Done","design-system"
+"59","26","Task","Registrar o callback na mesma origem no Keycloak e ligar o Worker ao BFF","O front repassa /auth/* ao BFF pelo Worker (mesma origem), para o cookie de sessão SameSite=Lax funcionar.
+
+* Cadastrar <origem do front>/auth/callback nas redirect URIs do client comvivati-bff no Keycloak (dev: http://localhost:5173/auth/callback)
+* Configurar no BFF: BFF_BASE_URL, WEB_BASE_URL = origem do front e BFF_OIDC_CALLBACK_URL = <origem do front>/auth/callback
+* Cadastrar o secret BFF_ORIGIN no Worker do front quando o BFF estiver publicado
+* Validar a jornada completa: login, /auth/me, rota protegida e logout","To Do","autenticacao backend"
+"60","26","Task","Encerrar a sessão do Keycloak no logout","O POST /auth/logout do BFF remove a sessão do Redis e o cookie, mas não encerra a sessão SSO no Keycloak: ao clicar em Entrar de novo, o usuário volta sem digitar a senha.
+
+* Implementar o RP-initiated logout (end_session_endpoint) no BFF
+* Ajustar o front para seguir o redirecionamento de logout, se o contrato mudar","To Do","autenticacao backend"

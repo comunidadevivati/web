@@ -2,40 +2,29 @@ import livingStoneGreen from '@/assets/brand/living-stone-green.png';
 import logoVivaWhite from '@/assets/brand/logo-viva-white.png';
 import { PreferencesControls } from '@/components/organisms';
 import {
+  Alert,
+  AlertDescription,
+  AlertTitle,
   Box,
   Button,
-  Form,
   Heading,
   Image,
-  Input,
-  Label,
   LoadingOverlay,
   Text,
 } from '@/components/ui';
 import { useLoginViewModel } from '@/features/auth/presentation/view-models/login.view-model';
-import { EyeIcon, EyeOffIcon, LogInIcon } from 'lucide-react';
+import { cn } from '@/lib/utils';
+import { CircleAlertIcon, LogInIcon, RefreshCwIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const LoginView = () => {
-  const {
-    form,
-    getFieldError,
-    isPasswordVisible,
-    isSubmitDisabled,
-    submit,
-    togglePasswordVisibility,
-  } = useLoginViewModel();
+  const { isLoginDisabled, isRedirecting, isRetrying, login, notice, retry } = useLoginViewModel();
 
   const { t } = useTranslation(['auth', 'common']);
 
-  const {
-    formState: { errors, isSubmitting },
-    register,
-  } = form;
-
   return (
     <>
-      {isSubmitting && <LoadingOverlay />}
+      {isRedirecting && <LoadingOverlay />}
 
       <Box className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <Box
@@ -90,64 +79,45 @@ export const LoginView = () => {
               <Text className="mt-2 text-base">{t('login.subtitle')}</Text>
             </Box>
 
-            <Form className="grid gap-5" noValidate onSubmit={submit}>
-              <Box className="grid gap-2">
-                <Label htmlFor="email">{t('login.email')}</Label>
+            <Box className="grid gap-5">
+              {notice && (
+                <Alert variant={notice === 'unavailable' ? 'destructive' : 'default'}>
+                  <CircleAlertIcon />
 
-                <Input
-                  id="email"
-                  aria-invalid={Boolean(errors.email)}
-                  autoComplete="email"
-                  autoFocus
-                  className="h-11"
-                  placeholder={t('login.emailPlaceholder')}
-                  type="email"
-                  {...register('email')}
-                />
+                  <AlertTitle>{t(`login.notices.${notice}.title`)}</AlertTitle>
 
-                {errors.email?.message && (
-                  <Text className="text-destructive">{getFieldError(errors.email.message)}</Text>
-                )}
-              </Box>
+                  <AlertDescription>{t(`login.notices.${notice}.description`)}</AlertDescription>
+                </Alert>
+              )}
 
-              <Box className="grid gap-2">
-                <Label htmlFor="password">{t('login.password')}</Label>
-
-                <Box className="relative">
-                  <Input
-                    id="password"
-                    aria-invalid={Boolean(errors.password)}
-                    autoComplete="current-password"
-                    className="h-11 pr-11"
-                    placeholder={t('login.passwordPlaceholder')}
-                    type={isPasswordVisible ? 'text' : 'password'}
-                    {...register('password')}
+              {notice === 'unavailable' && (
+                <Button
+                  className="h-11 w-full"
+                  disabled={isRetrying}
+                  type="button"
+                  variant="outline"
+                  onClick={retry}
+                >
+                  <RefreshCwIcon
+                    className={cn(isRetrying && 'animate-spin')}
+                    data-icon="inline-start"
                   />
+                  {t('login.retry')}
+                </Button>
+              )}
 
-                  <Button
-                    aria-label={
-                      isPasswordVisible ? t('login.hidePassword') : t('login.showPassword')
-                    }
-                    className="absolute top-1/2 right-1 -translate-y-1/2"
-                    size="icon-sm"
-                    type="button"
-                    variant="ghost"
-                    onClick={togglePasswordVisibility}
-                  >
-                    {isPasswordVisible ? <EyeOffIcon /> : <EyeIcon />}
-                  </Button>
-                </Box>
-
-                {errors.password?.message && (
-                  <Text className="text-destructive">{getFieldError(errors.password.message)}</Text>
-                )}
-              </Box>
-
-              <Button className="mt-2 h-11 w-full" disabled={isSubmitDisabled} type="submit">
+              <Button
+                aria-busy={isRedirecting}
+                autoFocus
+                className="h-11 w-full"
+                disabled={isLoginDisabled}
+                type="button"
+                onClick={login}
+              >
                 <LogInIcon data-icon="inline-start" />
-                {t('login.submit')}
+                {isRedirecting ? t('login.redirecting') : t('login.submit')}
               </Button>
-            </Form>
+            </Box>
           </Box>
         </Box>
       </Box>

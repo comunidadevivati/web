@@ -4,7 +4,12 @@ import { z } from 'zod';
  * Worker da Comunidade Viva Web.
  *
  * Os assets estáticos (SPA) são servidos diretamente pela Cloudflare; este Worker só executa
- * para /api/* (ver `run_worker_first` em wrangler.jsonc).
+ * para /api/* e /auth/* (ver `run_worker_first` em wrangler.jsonc).
+ *
+ * /auth/*
+ * Repassa as rotas de sessão ao BFF (BFF_ORIGIN) na mesma origem do front: o cookie de sessão
+ * (HttpOnly, SameSite=Lax) fica no domínio do front e não há CORS. Redirects e Set-Cookie do BFF
+ * voltam ao navegador sem alteração.
  *
  * POST /api/guest-wifi/authorize
  * Libera a internet da rede "VIVA - Visitantes" no Omada Controller (External Portal Server).
@@ -13,6 +18,13 @@ import { z } from 'zod';
  */
 
 const GUEST_WIFI_AUTHORIZE_PATH = '/api/guest-wifi/authorize';
+
+const BFF_PROXY_PATH_PREFIX = '/auth/';
+
+// BFF_ORIGIN é opcional enquanto o BFF não está publicado: sem ele, /auth/* responde 503.
+type WorkerEnv = Env & {
+  BFF_ORIGIN?: string;
+};
 
 // Omada usa o formato AA-BB-CC-DD-EE-FF.
 const macAddressSchema = z.string().regex(/^(?:[\dA-Fa-f]{2}[:-]){5}[\dA-Fa-f]{2}$/);
@@ -268,6 +280,38 @@ const handleGuestWifiAuthorize = async (request: Request, env: Env) => {
   }
 };
 
+const proxyToBff = async (request: Request, env: WorkerEnv) => {
+  if (!env.BFF_ORIGIN) {
+    console.error('bff-proxy: BFF_ORIGIN not configured');
+
+    return jsonResponse({ error: 'bff_not_configured' }, 503);
+  }
+
+  const { host, pathname, protocol, search } = new URL(request.url);
+
+  const headers = new Headers(request.headers);
+
+  headers.delete('Host');
+
+  headers.set('X-Forwarded-Host', host);
+
+  headers.set('X-Forwarded-Proto', protocol.replace(':', ''));
+
+  try {
+    // redirect: 'manual' devolve ao navegador os redirects do BFF (Keycloak e retorno ao front).
+    return await fetch(new URL(`${pathname}${search}`, env.BFF_ORIGIN), {
+      method: request.method,
+      headers,
+      body: request.body,
+      redirect: 'manual',
+    });
+  } catch (error) {
+    console.error('bff-proxy: request failed', error instanceof Error ? error.message : '');
+
+    return jsonResponse({ error: 'bff_unreachable' }, 502);
+  }
+};
+
 export default {
   fetch: async (request, env) => {
     const { pathname } = new URL(request.url);
@@ -276,6 +320,10 @@ export default {
       return handleGuestWifiAuthorize(request, env);
     }
 
+    if (pathname.startsWith(BFF_PROXY_PATH_PREFIX)) {
+      return proxyToBff(request, env);
+    }
+
     return jsonResponse({ error: 'not_found' }, 404);
   },
-} satisfies ExportedHandler<Env>;
+} satisfies ExportedHandler<WorkerEnv>;
