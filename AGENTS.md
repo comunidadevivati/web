@@ -2,7 +2,7 @@
 
 > Guia operacional e arquitetural obrigatório para agentes de IA e desenvolvedores que alterarem este repositório.
 >
-> Última consolidação: 2026-10-07.
+> Última consolidação: 2026-10-14.
 >
 > Este documento descreve as decisões já adotadas no projeto, as regras que devem ser preservadas e o modo esperado de implementar novas funcionalidades.
 
@@ -131,7 +131,7 @@ src/
 │   ├── providers/
 │   ├── pwa/
 │   ├── router/
-│   └── store/
+│   └── theme/
 ├── assets/
 ├── components/
 │   ├── ui/
@@ -204,7 +204,7 @@ Exemplos:
 Exemplo atual:
 
 ```text
-infrastructure/storage/auth-user.storage.ts
+infrastructure/http/auth-session-http.gateway.ts
 ```
 
 #### `presentation/`
@@ -319,13 +319,17 @@ quando `login.view.tsx` já representa a View principal do fluxo.
 ```text
 src/features/auth/
 ├── domain/
-│   └── auth-user.ts
+│   └── auth-session.ts
 ├── application/
+│   ├── queries/
+│   │   └── auth-session.query.ts
 │   └── use-cases/
-│       └── login.use-case.ts
+│       ├── get-auth-session.use-case.ts
+│       ├── logout.use-case.ts
+│       └── start-login.use-case.ts
 ├── infrastructure/
-│   └── storage/
-│       └── auth-user.storage.ts
+│   └── http/
+│       └── auth-session-http.gateway.ts
 └── presentation/
     ├── models/
     │   └── login.model.ts
@@ -361,27 +365,21 @@ Regras:
 - Domain não importa React.
 - Dados de servidor pertencem ao TanStack Query, não ao Zustand.
 
-### Exceção temporária conhecida
-
-O fluxo atual de autenticação é propositalmente simplificado para permitir navegação funcional antes da API real.
-
-Atualmente:
+### Fluxo de autenticação
 
 ```text
-LoginView
+LoginView / AuthenticatedLayoutView / guards das rotas
    ↓
-LoginViewModel
+ViewModels + authSessionQueryOptions (TanStack Query)
    ↓
-loginUseCase
+use cases (get-auth-session, start-login, logout)
    ↓
-auth-user.storage
+authSessionHttpGateway (implementa AuthSessionGateway)
    ↓
-localStorage
+bffClient (Ky) → /auth/* na mesma origem → BFF
 ```
 
-No futuro, a persistência local temporária deverá ser substituída pela autenticação real via backend/BFF e por abstrações adequadas de repositório/sessão.
-
-Não interprete o `localStorage` atual como mecanismo de segurança.
+O `localStorage` não participa da autenticação.
 
 ---
 
@@ -926,112 +924,104 @@ Não deixar rotas temporárias como `/test-error` ou `/test-loading` no código 
 
 ---
 
-## 12. Autenticação atual e Route Guard
+## 12. Autenticação e Route Guard
 
-### Estado atual
+### Arquitetura
 
-Autenticação temporária apenas para fechar o fluxo funcional do frontend.
-
-Não existe validação real de credenciais ainda.
-
-O login aceita:
-
-- e-mail válido;
-- senha não vazia.
-
-Após submit válido:
-
-1. cria objeto com `email`;
-2. persiste no localStorage;
-3. navega para `/`.
-
-### Chave de localStorage
-
-Usar exatamente:
+A autenticação é do BFF (`comunidadevivati/backend`, NestJS) com OIDC Authorization Code + PKCE no Keycloak:
 
 ```text
-@comunidade-viva:web:auth:user
+React → BFF → Keycloak
 ```
 
-Formato atual:
+- o front **nunca** coleta credenciais nem recebe access/refresh tokens;
+- a sessão é um cookie HttpOnly, assinado e `SameSite=Lax`, emitido pelo BFF (sessão no Redis);
+- nada de autenticação fica em `localStorage` ou `sessionStorage`;
+- não implementar autenticação paralela no React.
 
-```json
-{
-  "email": "usuario@exemplo.com"
-}
-```
+### Mesma origem (proxy)
 
-### Guard autenticado
+As rotas `/auth/*` são servidas **na origem do front**:
 
-Rota pathless:
+- produção: o Worker (`worker/index.ts`) repassa `/auth/*` para `BFF_ORIGIN` (secret do Worker), com `redirect: 'manual'`, devolvendo redirects e `Set-Cookie` sem alteração;
+- dev: o proxy do Vite (`server.proxy` em `vite.config.ts`) repassa `/auth/*` para `BFF_PROXY_TARGET` (padrão `http://localhost:3000`).
+
+Motivo: o cookie `SameSite=Lax` não é enviado em `fetch` entre sites diferentes (e `*.workers.dev` é sufixo público). Na mesma origem não há CORS nem `credentials: 'include'`.
+
+Consequências de configuração (fora deste repositório):
+
+- no BFF: `BFF_BASE_URL` e `WEB_BASE_URL` = origem do front; `BFF_OIDC_CALLBACK_URL` = `<origem do front>/auth/callback`;
+- no Keycloak: `<origem do front>/auth/callback` nas redirect URIs do client do BFF.
+
+Não criar rotas da SPA começando com `/auth` ou `/api`. O service worker não faz fallback de navegação nesses prefixos (`navigateFallbackDenylist`).
+
+### Contrato consumido
+
+| Endpoint            | Uso no front                                                                                     |
+| ------------------- | ------------------------------------------------------------------------------------------------ |
+| `GET /auth/me`      | sessão atual: `{ authenticated, csrfToken, user: { subject, email?, name? } }`; 401 = sem sessão |
+| `GET /auth/login`   | navegação (`window.location.assign`) para iniciar o login                                        |
+| `POST /auth/logout` | encerra a sessão; exige o header `X-CSRF-Token`; 204                                             |
+
+Contratos confirmados em `apps/bff/src/auth/presentation/*.controller.ts` do backend. Não inventar endpoints: conferir o backend antes de consumir algo novo.
+
+### Código
 
 ```text
-/_authenticated
+src/features/auth/
+├── domain/auth-session.ts                         AuthUser, AuthSession, AuthSessionGateway, AuthServiceUnavailableError
+├── application/
+│   ├── queries/auth-session.query.ts              authSessionQueryOptions (['auth', 'session'])
+│   └── use-cases/                                 get-auth-session, start-login, logout
+├── infrastructure/http/auth-session-http.gateway.ts
+└── presentation/                                  login (model, view-model, view)
+src/shared/http/bff-client.ts                      cliente Ky do BFF (mesma origem) + listener de 401
+src/app/router/router.ts                           contexto { queryClient } e tratamento de sessão expirada
 ```
 
-Ela verifica `getStoredAuthUser()` em `beforeLoad`.
+- a sessão (`GET /auth/me`) é server state no TanStack Query; o token CSRF fica só nesse cache, em memória;
+- a resposta do `/auth/me` é validada com Zod no gateway; resposta fora do contrato ou falha de rede viram `AuthServiceUnavailableError`;
+- query options compartilhadas entre guards e ViewModels ficam em `application/queries/*.query.ts`.
 
-Fluxo:
+### Guards
+
+O Router recebe `{ queryClient }` como contexto (`createRootRouteWithContext<RouterContext>()`).
 
 ```text
-SEM USUÁRIO
-/ → /login
-
-COM USUÁRIO
-/ → layout autenticado → Home
-
-COM USUÁRIO
-/login → /
+/_authenticated  beforeLoad: queryClient.fetchQuery(authSessionQueryOptions)
+                 sem sessão ou BFF indisponível → /login
+/login           beforeLoad: com sessão → /dashboard; BFF indisponível → fica no login com aviso
 ```
+
+Após o callback, o BFF redireciona para `/dashboard`.
+
+### Sessão expirada (401)
+
+- um 401 em qualquer chamada ao BFF **fora de `/auth/*`** dispara o listener registrado em `router.ts`: zera a sessão no cache e navega para `/login?reason=expired` (`replace`);
+- o 401 de `/auth/me` é o estado normal sem sessão (vira `null`), não um erro.
 
 ### Logout
 
-Logout deve:
+1. `POST /auth/logout` com `X-CSRF-Token` (401 = sessão já encerrada, tratado como sucesso);
+2. só após a confirmação do BFF: sessão `null` no cache, navegar para `/login` com `replace: true` e remover do cache os demais dados do usuário;
+3. se a chamada falhar, o usuário **continua logado** e vê um aviso (`session.logoutFailed`), para não parecer deslogado com a sessão ativa no servidor.
 
-1. remover `@comunidade-viva:web:auth:user`;
-2. navegar para `/login`;
-3. usar `replace: true` quando apropriado para não deixar fluxo de retorno inválido.
-
-### Aviso obrigatório
-
-O objeto em localStorage é apenas um mecanismo temporário de controle de fluxo.
-
-**Não é autenticação segura.**
-
-Quando backend/BFF estiver pronto, trocar por fluxo real de autenticação/sessão.
+Pendência no backend: o logout não encerra a sessão SSO do Keycloak (falta RP-initiated logout).
 
 ---
 
 ## 13. Login — comportamento aprovado
 
-A View de login segue as seguintes regras:
+- a tela não tem campos de credenciais: o botão `Entrar` leva ao `/auth/login` do BFF, que redireciona ao Keycloak;
+- o botão recebe foco ao entrar na tela;
+- durante o redirecionamento: `LoadingOverlay`, botão desabilitado e texto `login.redirecting`;
+- ao voltar do Keycloak pelo botão "voltar" (bfcache, `pageshow` com `persisted`), o botão é liberado de novo;
+- avisos (`Alert`):
+  - `?reason=expired` → sessão expirada;
+  - falha ao consultar `/auth/me` → login indisponível, com `Tentar novamente` (`refetch`) e `Entrar` desabilitado até o BFF responder;
+- o painel de marca e as preferências (idioma e tema) permanecem como antes.
 
-- campos: E-mail e Senha;
-- E-mail recebe foco automaticamente ao entrar na tela;
-- senha pode ser exibida/ocultada;
-- validação com Zod + React Hook Form;
-- `mode: 'onTouched'`;
-- erro aparece após o campo ser tocado e perder foco;
-- botão `Entrar` começa desabilitado;
-- botão só habilita quando o formulário estiver válido;
-- botão permanece desabilitado durante submit;
-- loading global bloqueia a interação durante operações assíncronas;
-- após login válido, navega para `/`.
-
-Regra atual do disabled:
-
-```ts
-const isSubmitDisabled = !isDirty || !isValid || isSubmitting;
-```
-
-### Schema atual
-
-```ts
-export const loginSchema = z.object({
-  email: z.string().trim().min(1, 'Informe o e-mail.').email('Informe um e-mail válido.'),
-  password: z.string().min(1, 'Informe a senha.'),
-});
-```
+Search params da rota validados por `loginSearchSchema` (`login.model.ts`).
 
 ---
 
@@ -1044,7 +1034,7 @@ Header
 ├── marca associada à sidebar
 ├── botão hamburger
 ├── logo central
-└── avatar com iniciais (UserMenu: e-mail e Sair)
+└── avatar com iniciais (UserMenu: nome, e-mail e Sair)
 
 Sidebar
 ├── modo expanded
@@ -1081,22 +1071,35 @@ export type SidebarMode = 'expanded' | 'collapsed' | 'hidden';
 
 O último modo visível deve ser lembrado em memória da View enquanto ela estiver montada, para que restaurar uma sidebar oculta retorne ao estado `expanded` ou `collapsed` anterior.
 
+### Celular (abaixo de `md`)
+
+- a sidebar não aparece; o botão hamburger abre o `AppSidebarDrawer` (`Sheet` do shadcn, à esquerda);
+- o drawer fecha ao navegar, ao sair, com `Esc` ou tocando fora;
+- a partir de `md`, o hamburger volta a mostrar/ocultar a sidebar (modos acima);
+- a marca acima da sidebar fica oculta no celular.
+
+### Usuário
+
+Nome, e-mail e iniciais vêm da sessão do BFF (`user.name`, `user.email`). Sem nome, o nome é derivado do e-mail (`authenticated-layout.model.ts`).
+
 ---
 
-## 15. Home / Dashboard
+## 15. Dashboard
 
-A Home atual é um dashboard inicial com dados mockados.
+O dashboard é a página inicial autenticada, com dados mockados, servida na rota `/dashboard` (`_authenticated.dashboard.tsx`).
+
+Nenhuma página está vinculada à rota `/` no momento. Links do layout, redirects do login e o fallback de erro apontam para `/dashboard`. As páginas públicas de status (não encontrada e em construção, via `StatusPage`) levam para a home pública `/`.
 
 Estrutura MVVM:
 
 ```text
-features/home/presentation/
+features/dashboard/presentation/
 ├── models/
-│   └── home.model.ts
+│   └── dashboard.model.ts
 ├── view-models/
-│   └── home.view-model.ts
+│   └── dashboard.view-model.ts
 └── views/
-    └── home.view.tsx
+    └── dashboard.view.tsx
 ```
 
 ### Conteúdo atual
@@ -1113,15 +1116,18 @@ Seções:
 - Próximos eventos;
 - Atividades recentes.
 
-### Regra importante
+### Dados
 
-Os números e eventos atuais são **mocks temporários**.
+```text
+DashboardViewModel → dashboardOverviewQueryOptions (TanStack Query) → getDashboardOverviewUseCase
+  → DashboardGateway (domain/dashboard-overview.ts) → dashboardMockGateway (infrastructure/mock)
+```
 
-Quando a API existir:
-
-- preservar o máximo possível da View;
-- mover obtenção/transformação para o fluxo application/infrastructure/ViewModel;
-- usar TanStack Query para dados remotos.
+- os dados ainda são **mocks temporários**, agora atrás da porta `DashboardGateway`;
+- quando o BFF expuser o endpoint, criar um gateway HTTP (`bffClient`) com o mesmo contrato e trocar o padrão do use case; a ViewModel e a View não mudam;
+- o contrato `DashboardOverview` é provisório até o endpoint existir no BFF;
+- nomes de eventos são conteúdo (não são traduzidos); tipos de atividade são traduzidos pela UI;
+- a View trata carregamento (`Spinner`), erro (`Alert` com `Tentar novamente`) e listas vazias.
 
 ---
 
@@ -1179,15 +1185,19 @@ Exemplos adequados:
 
 Ky é o cliente HTTP adotado para o novo projeto.
 
-Regras para a futura camada HTTP:
+Clientes existentes (`src/shared/http`):
 
-- cliente centralizado em `shared` ou infraestrutura adequada;
-- URL base obtida de `env.VITE_API_URL`;
-- nunca hardcodar endpoint de ambiente em uma View;
+- `bffClient`: BFF, na mesma origem (`/auth/*` e futuras rotas do BFF repassadas pelo Worker/proxy do Vite); trata 401 fora de `/auth/*` como sessão expirada;
+- `workerApiClient`: endpoints do próprio Worker (`/api/*`).
+
+Regras:
+
 - não usar `fetch` diretamente em Views;
+- nunca hardcodar origem de BFF/serviço: o front chama caminhos relativos da própria origem;
+- novas rotas do BFF consumidas pelo front precisam ser incluídas no proxy (Worker, `run_worker_first` e Vite);
 - não introduzir Axios;
-- erros devem ser normalizados antes de chegar à View quando possível;
-- autenticação futura deve ser integrada no cliente/adapters, não espalhada pelo código.
+- erros devem ser normalizados no gateway antes de chegar à View;
+- autenticação fica no cliente/adapters, não espalhada pelo código.
 
 ---
 
@@ -1200,7 +1210,6 @@ Schema atual:
 ```ts
 const envSchema = z.object({
   VITE_ENV: z.enum(['development', 'homologation', 'staging', 'production']),
-  VITE_API_URL: z.url(),
 });
 ```
 
@@ -1235,6 +1244,7 @@ Configuração atual:
 - update prompt próprio;
 - service worker desabilitado no dev;
 - `cleanupOutdatedCaches: true`;
+- `navigateFallbackDenylist` para `/api/*` e `/auth/*` (rotas do Worker e do BFF nunca recebem o `index.html`);
 - `clientsClaim: true`.
 
 ### Atualização de versão
@@ -1324,6 +1334,13 @@ Stack:
 - `@testing-library/jest-dom`;
 - jsdom.
 
+O setup (`src/test/setup.ts`) inicializa o i18next em pt-BR: os testes procuram os textos em português.
+
+### Cobertura
+
+- `pnpm test:coverage` mede todo o código de `src/` e `worker/` (não só o que os testes importam);
+- os limites mínimos (`thresholds` em `vitest.config.ts`) são um piso contra regressão, a partir da medição real; subir conforme novos testes.
+
 ### Regra de estrutura
 
 Para cada arquivo de teste:
@@ -1356,6 +1373,7 @@ Playwright:
 - Chromium como projeto inicial;
 - base URL local `http://127.0.0.1:4173`;
 - servidor iniciado por `pnpm dev --host 127.0.0.1 --port 4173`;
+- navegador em `locale: 'pt-BR'` (a preferência de idioma padrão segue o navegador);
 - trace no primeiro retry.
 
 ### Filosofia de teste
@@ -1521,18 +1539,27 @@ Não mudar esse fluxo por conta própria enquanto o responsável não solicitar 
 
 Usar Conventional Commits e commits pequenos/coerentes.
 
+Mensagens de commit são **sempre em PT-BR**:
+
+- o tipo (e o escopo, se houver) segue o padrão Conventional Commits em inglês: `feat`, `fix`, `refactor`, `build`, `test`, `chore`, `docs` etc.;
+- a descrição, o corpo e os itens do corpo são escritos em português do Brasil;
+- descrição no imperativo, iniciando em minúscula e sem ponto final;
+- linhas de trailer (por exemplo, `Co-Authored-By:`) permanecem no formato original.
+
 Exemplos:
 
 ```text
-feat: add login flow with MVVM architecture
-feat: add local authentication flow and route guards
-feat: add authenticated dashboard layout
-feat: refine dashboard visual design
-fix: improve button cursor states
-build: configure Cloudflare Workers deployment
-test: configure Playwright end-to-end testing
-chore: standardize repository line endings
+feat: adiciona fluxo de login com arquitetura MVVM
+feat: adiciona autenticação local e guards de rota
+feat: adiciona layout autenticado do dashboard
+feat: refina o design visual do dashboard
+fix: melhora os estados de cursor dos botões
+build: configura o deploy no Cloudflare Workers
+test: configura testes end-to-end com Playwright
+chore: padroniza os finais de linha do repositório
 ```
+
+Commits anteriores a esta regra estão em inglês e não devem ser reescritos.
 
 ### Comando preferido
 
@@ -1616,14 +1643,17 @@ Build de produção usa o build Vite do projeto e deploy via Wrangler.
 
 ### Worker (/api)
 
-O Worker em `worker/index.ts` executa **somente** para `/api/*` (`run_worker_first`); o restante continua servido como asset estático.
+O Worker em `worker/index.ts` executa **somente** para `/api/*` e `/auth/*` (`run_worker_first`); o restante continua servido como asset estático.
+
+- `/auth/*`: proxy para o BFF em `BFF_ORIGIN` (secret opcional; sem ele, responde 503 `bff_not_configured`). Ver seção 12.
 
 Uso atual: `POST /api/guest-wifi/authorize`, que libera a rede "VIVA - Visitantes" no Omada Controller (External Portal Server). A rota pública `/wifi-visitantes` (fora de qualquer menu) é o portal cativo configurado no Omada.
 
 - credenciais do Omada ficam apenas em secrets do Worker (`pnpm exec wrangler secret put <NOME>`): `OMADA_CONTROLLER_URL`, `OMADA_CONTROLLER_ID`, `OMADA_SITE_ID`, `OMADA_OPERATOR_USERNAME`, `OMADA_OPERATOR_PASSWORD`;
 - localmente, usar `.dev.vars` (não versionado; modelo em `.dev.vars.example`);
 - após alterar `wrangler.jsonc`, regenerar os tipos com `pnpm exec wrangler types worker/worker-configuration.d.ts`;
-- o front chama o Worker via `workerApiClient` (`src/shared/http/worker-api-client.ts`), não via `VITE_API_URL`;
+- o front chama o Worker via `workerApiClient` (`src/shared/http/worker-api-client.ts`);
+- se o BFF for publicado como Worker na mesma conta Cloudflare, preferir um Service Binding no lugar de `fetch` para `BFF_ORIGIN`;
 - nunca registrar dados pessoais (nome, telefone) em logs do Worker.
 
 ### SPA fallback
@@ -1767,11 +1797,9 @@ Variáveis `VITE_*` são públicas no bundle.
 
 Nunca tratá-las como secret.
 
-### Auth atual
+### Auth
 
-O objeto de usuário no localStorage é temporário e **não concede segurança real**.
-
-O guard atual é apenas UX/controle de navegação até a autenticação real existir.
+A segurança da sessão é do BFF (cookie HttpOnly + CSRF). Os guards das rotas são UX/controle de navegação: toda autorização real acontece no servidor.
 
 ---
 
@@ -1868,9 +1896,9 @@ src/components/
 └── organisms/   organismos: blocos maiores de interface, compostos por moléculas e átomos
 ```
 
-- **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Spinner`, `Text`, `Tooltip`. Única camada que pode usar HTML nativo.
+- **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Sheet`, `Spinner`, `Text`, `Tooltip`. Única camada que pode usar HTML nativo.
 - **`molecules/`:** `CardSectionHeader` (cabeçalho de seção de card com ícone, título e descrição), `LocaleToggle` (escolha de idioma), `PreferenceToggleGroup` (base dos seletores de preferência), `TooltipHint`, `UserMenu` (avatar com iniciais e menu da conta) (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido).
-- **`organisms/`:** `PublicHeader`, `AppFooter`, `AppSidebar`, `PreferencesControls` (idioma + tema), `PreferencesPopover` (preferências recolhidas em um botão), `StatusPage`.
+- **`organisms/`:** `PublicHeader`, `AppFooter`, `AppSidebar`, `AppSidebarDrawer` (menu lateral em drawer no celular), `PreferencesControls` (idioma + tema), `PreferencesPopover` (preferências recolhidas em um botão), `StatusPage`.
 
 Cada componente fica em sua própria pasta (`molecules/theme-toggle/theme-toggle.tsx`), junto do seu teste, e é exportado pelo `index.ts` do grupo (ver 7.12).
 
@@ -1955,7 +1983,8 @@ Não:
 - duplicar server state no Zustand;
 - editar `routeTree.gen.ts`;
 - criar lazy loading manual das file routes sem necessidade;
-- tratar localStorage atual como autenticação segura;
+- guardar sessão, tokens ou dados de autenticação em localStorage/sessionStorage;
+- coletar credenciais no front ou chamar o Keycloak diretamente;
 - deixar rota de teste temporária commitada;
 - adicionar ferramentas de infraestrutura adiadas sem solicitação;
 - criar abstrações vazias apenas para “cumprir DDD”;
@@ -2056,12 +2085,12 @@ Exemplo esperado para o dashboard:
 
 ```text
 Hoje:
-HomeViewModel → mocks locais
+DashboardViewModel → mocks locais
 
 Futuro:
-HomeViewModel → TanStack Query / use case → repository → BFF
+DashboardViewModel → TanStack Query / use case → repository → BFF
 
-HomeView → permanece majoritariamente estável
+DashboardView → permanece majoritariamente estável
 ```
 
 ---
@@ -2123,7 +2152,7 @@ pnpm quality:fix como validação canônica
 Git add . + Conventional Commit + push
 Cloudflare Workers + Static Assets
 Sem secrets em VITE_*
-Auth localStorage atual é temporária
+Auth via BFF (OIDC + cookie HttpOnly), /auth/* na mesma origem
 UI moderna, corporativa, tecnológica e futurista
 ```
 

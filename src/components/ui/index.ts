@@ -33,6 +33,8 @@ export * from '@/components/ui/loading-overlay';
 
 export * from '@/components/ui/popover';
 
+export * from '@/components/ui/sheet';
+
 export * from '@/components/ui/spinner';
 
 export * from '@/components/ui/text';

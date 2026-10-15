@@ -35,6 +35,12 @@ export const common = {
     expandSidebar: 'Expandir menu lateral',
     collapseSidebar: 'Recolher menu lateral',
   },
+  session: {
+    logoutFailed: {
+      title: 'Não foi possível sair',
+      description: 'Sua sessão continua ativa. Verifique a conexão e tente sair novamente.',
+    },
+  },
   preferences: {
     label: 'Preferências',
     open: 'Abrir preferências de idioma e tema',

@@ -9,8 +9,8 @@
     "directory": "./dist",
     "binding": "ASSETS",
     "not_found_handling": "single-page-application",
-    // Somente /api/* executa o Worker; o restante é servido direto como asset estático.
-    "run_worker_first": ["/api/*"],
+    // Somente /api/* e /auth/* executam o Worker; o restante é servido direto como asset estático.
+    "run_worker_first": ["/api/*", "/auth/*"],
   },
   "vars": {
     // Duração da liberação do Wi-Fi de visitantes, em minutos.
@@ -19,5 +19,7 @@
   // Secrets (não versionados): pnpm exec wrangler secret put <NOME>
   // OMADA_CONTROLLER_URL, OMADA_CONTROLLER_ID, OMADA_SITE_ID, OMADA_OPERATOR_USERNAME,
   // OMADA_OPERATOR_PASSWORD
+  // Origem do BFF para o proxy de /auth/* (ex.: https://bff.exemplo.com), cadastrada como secret
+  // quando o BFF estiver publicado: BFF_ORIGIN
   "previews": {},
 }

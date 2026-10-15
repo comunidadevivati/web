@@ -1,18 +1,21 @@
 import { AppFooter, PublicHeader } from '@/components/organisms';
-import { Box, Carousel } from '@/components/ui';
+import { Box, Carousel, Heading } from '@/components/ui';
 import { useHomeViewModel } from '@/features/home/presentation/view-models/home.view-model';
 import { useTranslation } from 'react-i18next';
 
 export const HomeView = () => {
   const { carouselSlides } = useHomeViewModel();
 
-  const { t } = useTranslation('home');
+  const { t } = useTranslation(['home', 'common']);
 
   return (
     <Box className="flex min-h-dvh flex-col overflow-x-clip bg-background">
       <PublicHeader />
 
       <Box className="flex-1" role="main">
+        {/* Título principal da página para leitores de tela e buscadores; o carrossel é o destaque visual. */}
+        <Heading className="sr-only">{t('common:app.name')}</Heading>
+
         <Box className="mx-auto w-full max-w-360">
           <Carousel
             className="

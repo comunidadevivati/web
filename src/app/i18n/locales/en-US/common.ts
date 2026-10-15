@@ -36,6 +36,12 @@ export const common = {
     expandSidebar: 'Expand side menu',
     collapseSidebar: 'Collapse side menu',
   },
+  session: {
+    logoutFailed: {
+      title: 'Could not sign out',
+      description: 'Your session is still active. Check your connection and try signing out again.',
+    },
+  },
   preferences: {
     label: 'Preferences',
     open: 'Open language and theme preferences',

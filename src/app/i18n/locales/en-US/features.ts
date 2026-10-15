@@ -4,18 +4,19 @@ export const auth = {
   login: {
     tagline: 'A place built to connect people, ministries and purposes.',
     title: 'Welcome',
-    subtitle: 'Sign in with your credentials to access your account.',
-    email: 'Email',
-    emailPlaceholder: 'youremail@example.com',
-    password: 'Password',
-    passwordPlaceholder: 'Enter your password',
-    showPassword: 'Show password',
-    hidePassword: 'Hide password',
+    subtitle: 'Securely access your account through the Comunidade Viva sign-in.',
     submit: 'Sign in',
-    validation: {
-      emailRequired: 'Enter your email.',
-      emailInvalid: 'Enter a valid email.',
-      passwordRequired: 'Enter your password.',
+    redirecting: 'Redirecting to sign-in…',
+    retry: 'Try again',
+    notices: {
+      expired: {
+        title: 'Your session has expired',
+        description: 'For your security, please sign in again to continue.',
+      },
+      unavailable: {
+        title: 'Sign-in is currently unavailable',
+        description: 'We could not reach the authentication service. Please try again shortly.',
+      },
     },
   },
 } as const satisfies Translations['auth'];
@@ -37,6 +38,13 @@ export const home = {
 export const dashboard = {
   title: 'Dashboard',
   subtitle: 'Overview of Comunidade Viva.',
+  states: {
+    error: {
+      title: 'Could not load the dashboard',
+      description: 'Check your connection and try again.',
+      retry: 'Try again',
+    },
+  },
   summaries: {
     members: {
       label: 'Members',
@@ -60,15 +68,12 @@ export const dashboard = {
     description: "The community's planned schedule",
     badge: 'Event',
     next: 'Upcoming',
-    items: {
-      celebration: 'Celebration Service',
-      leaders: 'Leaders Meeting',
-      families: 'Family Conference',
-    },
+    empty: 'No upcoming events.',
   },
   recentActivities: {
     title: 'Recent activity',
     description: 'Latest recorded changes',
+    empty: 'No recent activity.',
     items: {
       newMember: 'New member registered',
       newVisitor: 'New visitor registered',

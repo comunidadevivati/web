@@ -1,24 +1,33 @@
+import type { AuthUser } from '@/features/auth/domain/auth-session';
+
 export type SidebarMode = 'expanded' | 'collapsed' | 'hidden';
 
-// Nome temporário a partir do e-mail, até a API fornecer o nome (ex.: thiago.figueiredo@... → Thiago Figueiredo).
-export const getUserDisplayName = (email: string) => {
-  const [localPart = ''] = email.split('@');
+const getWords = (value: string) => {
+  return value.split(/[\s._-]+/).filter(Boolean);
+};
 
-  return localPart
-    .split(/[._-]+/)
-    .filter(Boolean)
+// Nome exibido: o nome do Keycloak ou, sem ele, um nome a partir do e-mail
+// (ex.: thiago.figueiredo@... → Thiago Figueiredo).
+export const getUserDisplayName = ({ email, name }: AuthUser) => {
+  if (name?.trim()) {
+    return name.trim();
+  }
+
+  const [localPart = ''] = (email ?? '').split('@');
+
+  return getWords(localPart)
     .map((word) => word.charAt(0).toLocaleUpperCase() + word.slice(1))
     .join(' ');
 };
 
-// Iniciais exibidas no avatar a partir do e-mail (ex.: thiago.figueiredo@... → TF, thiago@... → TH).
-export const getUserInitials = (email: string) => {
-  const [localPart = ''] = email.split('@');
+// Iniciais do avatar a partir do nome (ex.: Thiago Figueiredo → TF) ou do e-mail (thiago@... → TH).
+export const getUserInitials = ({ email, name }: AuthUser) => {
+  const source = name?.trim() || (email ?? '').split('@')[0] || '';
 
-  const words = localPart.split(/[._-]+/).filter(Boolean);
+  const words = getWords(source);
 
   const initials =
-    words.length >= 2 ? `${words[0].charAt(0)}${words[1].charAt(0)}` : localPart.slice(0, 2);
+    words.length >= 2 ? `${words[0].charAt(0)}${words[1].charAt(0)}` : source.slice(0, 2);
 
   return initials.toLocaleUpperCase() || '?';
 };

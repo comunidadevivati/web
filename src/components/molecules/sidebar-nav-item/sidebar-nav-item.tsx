@@ -26,10 +26,10 @@ type SidebarNavItemBaseProps = {
 };
 
 type SidebarNavItemProps = SidebarNavItemBaseProps &
-  ({ to: LinkProps['to']; onClick?: never } | { onClick: () => void; to?: never });
+  ({ to: LinkProps['to']; onClick?: () => void } | { onClick: () => void; to?: never });
 
-// Item do menu lateral: navega (to) ou executa uma ação (onClick). Recolhido, mostra só o ícone
-// e exibe o nome em tooltip.
+// Item do menu lateral: navega (to) ou executa uma ação (onClick). Com "to", o onClick opcional roda
+// junto da navegação (ex.: fechar o drawer). Recolhido, mostra só o ícone e exibe o nome em tooltip.
 export const SidebarNavItem = ({
   icon: Icon,
   isCollapsed,
@@ -56,6 +56,7 @@ export const SidebarNavItem = ({
           aria-label={label}
           className={className}
           to={to}
+          onClick={onClick}
         >
           {content}
         </Link>
