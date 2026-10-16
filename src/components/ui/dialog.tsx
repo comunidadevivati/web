@@ -1,4 +1,5 @@
 import { Button } from '@/components/ui/button';
+import { Subtitle } from '@/components/ui/subtitle';
 import { Dialog as DialogPrimitive } from '@base-ui/react/dialog';
 import { cn } from 'cn';
 import { XIcon } from 'lucide-react';
@@ -111,17 +112,14 @@ export const DialogTitle = ({ className, ...props }: DialogPrimitive.Title.Props
   );
 };
 
+// A descrição do modal segue o padrão de subtítulo (componente Subtitle), mantendo o vínculo
+// acessível com o modal (aria-describedby) feito pelo Base UI.
 export const DialogDescription = ({ className, ...props }: DialogPrimitive.Description.Props) => {
   return (
     <DialogPrimitive.Description
-      className={cn(
-        `
-          text-sm text-muted-foreground *:[a]:underline *:[a]:underline-offset-3
-          *:[a]:hover:text-foreground
-        `,
-        className,
-      )}
+      className={cn('*:[a]:underline *:[a]:underline-offset-3', className)}
       data-slot="dialog-description"
+      render={<Subtitle />}
       {...props}
     />
   );

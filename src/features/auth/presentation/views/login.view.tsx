@@ -13,6 +13,7 @@ import {
   Image,
   Input,
   LoadingOverlay,
+  Subtitle,
   Text,
 } from '@/components/ui';
 import { useLoginViewModel } from '@/features/auth/presentation/view-models/login.view-model';
@@ -92,7 +93,7 @@ export const LoginView = () => {
                 {t('login.title')}
               </Heading>
 
-              <Text className="mt-2 text-base">{t('login.subtitle')}</Text>
+              <Subtitle className="mt-2">{t('login.subtitle')}</Subtitle>
             </Box>
 
             <Form className="grid gap-5" noValidate onSubmit={submit}>
@@ -115,7 +116,6 @@ export const LoginView = () => {
                   autoCapitalize="none"
                   autoComplete="email"
                   autoFocus
-                  className="h-11"
                   inputMode="email"
                   placeholder={t('login.emailPlaceholder')}
                   spellCheck={false}
