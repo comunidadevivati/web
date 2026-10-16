@@ -326,7 +326,7 @@ src/features/auth/
 │   └── use-cases/
 │       ├── get-auth-session.use-case.ts
 │       ├── logout.use-case.ts
-│       └── start-login.use-case.ts
+│       └── login.use-case.ts
 ├── infrastructure/
 │   └── http/
 │       └── auth-session-http.gateway.ts
@@ -372,7 +372,7 @@ LoginView / AuthenticatedLayoutView / guards das rotas
    ↓
 ViewModels + authSessionQueryOptions (TanStack Query)
    ↓
-use cases (get-auth-session, start-login, logout)
+use cases (get-auth-session, login, logout)
    ↓
 authSessionHttpGateway (implementa AuthSessionGateway)
    ↓
@@ -928,14 +928,14 @@ Não deixar rotas temporárias como `/test-error` ou `/test-loading` no código 
 
 ### Arquitetura
 
-A autenticação é do BFF (`comunidadevivati/backend`, NestJS) com OIDC Authorization Code + PKCE no Keycloak:
+A autenticação é do BFF (`comunidadevivati/backend`, NestJS) com login simples por **e-mail e senha** (sem Keycloak e sem Redis):
 
 ```text
-React → BFF → Keycloak
+React (formulário) → POST /auth/login → BFF
 ```
 
-- o front **nunca** coleta credenciais nem recebe access/refresh tokens;
-- a sessão é um cookie HttpOnly, assinado e `SameSite=Lax`, emitido pelo BFF (sessão no Redis);
+- o front coleta e-mail e senha só para enviá-los ao BFF; nunca os guarda e nunca recebe tokens;
+- a sessão é um cookie HttpOnly, assinado e `SameSite=Lax`, emitido pelo BFF;
 - nada de autenticação fica em `localStorage` ou `sessionStorage`;
 - não implementar autenticação paralela no React.
 
@@ -943,36 +943,35 @@ React → BFF → Keycloak
 
 As rotas `/auth/*` são servidas **na origem do front**:
 
-- produção: o Worker (`worker/index.ts`) repassa `/auth/*` para `BFF_ORIGIN` (secret do Worker), com `redirect: 'manual'`, devolvendo redirects e `Set-Cookie` sem alteração;
+- produção: o Worker (`worker/index.ts`) repassa `/auth/*` para `BFF_ORIGIN` (secret do Worker), com `redirect: 'manual'`, devolvendo respostas e `Set-Cookie` sem alteração;
 - dev: o proxy do Vite (`server.proxy` em `vite.config.ts`) repassa `/auth/*` para `BFF_PROXY_TARGET` (padrão `http://localhost:3000`).
 
 Motivo: o cookie `SameSite=Lax` não é enviado em `fetch` entre sites diferentes (e `*.workers.dev` é sufixo público). Na mesma origem não há CORS nem `credentials: 'include'`.
 
 Consequências de configuração (fora deste repositório):
 
-- no BFF: `BFF_BASE_URL` e `WEB_BASE_URL` = origem do front; `BFF_OIDC_CALLBACK_URL` = `<origem do front>/auth/callback`;
-- no Keycloak: `<origem do front>/auth/callback` nas redirect URIs do client do BFF.
+- no BFF: `BFF_BASE_URL` e `WEB_BASE_URL` = origem do front.
 
 Não criar rotas da SPA começando com `/auth` ou `/api`. O service worker não faz fallback de navegação nesses prefixos (`navigateFallbackDenylist`).
 
 ### Contrato consumido
 
-| Endpoint            | Uso no front                                                                                     |
-| ------------------- | ------------------------------------------------------------------------------------------------ |
-| `GET /auth/me`      | sessão atual: `{ authenticated, csrfToken, user: { subject, email?, name? } }`; 401 = sem sessão |
-| `GET /auth/login`   | navegação (`window.location.assign`) para iniciar o login                                        |
-| `POST /auth/logout` | encerra a sessão; exige o header `X-CSRF-Token`; 204                                             |
+| Endpoint            | Uso no front                                                                                                         |
+| ------------------- | -------------------------------------------------------------------------------------------------------------------- |
+| `GET /auth/me`      | sessão atual: `{ authenticated, csrfToken, user: { subject, email?, name? } }`; 401 = sem sessão                     |
+| `POST /auth/login`  | `{ email, password }`; sucesso grava o cookie de sessão; 400/401 = credenciais recusadas; 429 = limite de tentativas |
+| `POST /auth/logout` | encerra a sessão; exige o header `X-CSRF-Token`; 204                                                                 |
 
-Contratos confirmados em `apps/bff/src/auth/presentation/*.controller.ts` do backend. Não inventar endpoints: conferir o backend antes de consumir algo novo.
+Contratos em `apps/bff/src/auth/presentation/*.controller.ts` do backend (o `POST /auth/login` com e-mail e senha foi definido no front junto da remoção do Keycloak; conferir o backend quando for implementado). Não inventar endpoints: conferir o backend antes de consumir algo novo.
 
 ### Código
 
 ```text
 src/features/auth/
-├── domain/auth-session.ts                         AuthUser, AuthSession, AuthSessionGateway, AuthServiceUnavailableError
+├── domain/auth-session.ts                         AuthUser, AuthSession, LoginCredentials, AuthSessionGateway e erros
 ├── application/
 │   ├── queries/auth-session.query.ts              authSessionQueryOptions (['auth', 'session'])
-│   └── use-cases/                                 get-auth-session, start-login, logout
+│   └── use-cases/                                 get-auth-session, login, logout
 ├── infrastructure/http/auth-session-http.gateway.ts
 └── presentation/                                  login (model, view-model, view)
 src/shared/http/bff-client.ts                      cliente Ky do BFF (mesma origem) + listener de 401
@@ -990,10 +989,10 @@ O Router recebe `{ queryClient }` como contexto (`createRootRouteWithContext<Rou
 ```text
 /_authenticated  beforeLoad: queryClient.fetchQuery(authSessionQueryOptions)
                  sem sessão ou BFF indisponível → /login
-/login           beforeLoad: com sessão → /dashboard; BFF indisponível → fica no login com aviso
+/login           beforeLoad: com sessão → /dashboard; sem sessão ou BFF indisponível → fica no login
 ```
 
-Após o callback, o BFF redireciona para `/dashboard`.
+Após o `POST /auth/login`, o front invalida a sessão em cache e navega para `/dashboard`.
 
 ### Sessão expirada (401)
 
@@ -1006,19 +1005,20 @@ Após o callback, o BFF redireciona para `/dashboard`.
 2. só após a confirmação do BFF: sessão `null` no cache, navegar para `/login` com `replace: true` e remover do cache os demais dados do usuário;
 3. se a chamada falhar, o usuário **continua logado** e vê um aviso (`session.logoutFailed`), para não parecer deslogado com a sessão ativa no servidor.
 
-Pendência no backend: o logout não encerra a sessão SSO do Keycloak (falta RP-initiated logout).
-
 ---
 
 ## 13. Login — comportamento aprovado
 
-- a tela não tem campos de credenciais: o botão `Entrar` leva ao `/auth/login` do BFF, que redireciona ao Keycloak;
-- o botão recebe foco ao entrar na tela;
-- durante o redirecionamento: `LoadingOverlay`, botão desabilitado e texto `login.redirecting`;
-- ao voltar do Keycloak pelo botão "voltar" (bfcache, `pageshow` com `persisted`), o botão é liberado de novo;
+- formulário com e-mail e senha (RHF + Zod em `login.model.ts`), validado no submit e ao sair do campo;
+- o campo de e-mail recebe foco ao entrar na tela; `autoComplete` `email` e `current-password`;
+- o botão `Entrar` só fica desabilitado durante o envio (o preenchimento automático de senhas nem sempre marca o formulário como alterado);
+- durante o envio: `LoadingOverlay`, botão desabilitado e texto `login.submitting`;
+- sucesso: invalida a sessão em cache e navega para `/dashboard` (`replace`);
 - avisos (`Alert`):
   - `?reason=expired` → sessão expirada;
-  - falha ao consultar `/auth/me` → login indisponível, com `Tentar novamente` (`refetch`) e `Entrar` desabilitado até o BFF responder;
+  - 400/401 → e-mail ou senha incorretos (a senha é limpa);
+  - 429 → muitas tentativas;
+  - falha de rede ou resposta inesperada → login indisponível;
 - o painel de marca e as preferências (idioma e tema) permanecem como antes.
 
 Search params da rota validados por `loginSearchSchema` (`login.model.ts`).
@@ -1984,7 +1984,7 @@ Não:
 - editar `routeTree.gen.ts`;
 - criar lazy loading manual das file routes sem necessidade;
 - guardar sessão, tokens ou dados de autenticação em localStorage/sessionStorage;
-- coletar credenciais no front ou chamar o Keycloak diretamente;
+- guardar credenciais no front ou enviá-las a outro destino que não o `POST /auth/login` do BFF;
 - deixar rota de teste temporária commitada;
 - adicionar ferramentas de infraestrutura adiadas sem solicitação;
 - criar abstrações vazias apenas para “cumprir DDD”;
@@ -2152,7 +2152,7 @@ pnpm quality:fix como validação canônica
 Git add . + Conventional Commit + push
 Cloudflare Workers + Static Assets
 Sem secrets em VITE_*
-Auth via BFF (OIDC + cookie HttpOnly), /auth/* na mesma origem
+Auth via BFF (e-mail e senha + cookie HttpOnly), /auth/* na mesma origem
 UI moderna, corporativa, tecnológica e futurista
 ```
 

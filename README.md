@@ -44,27 +44,26 @@ Secrets do Worker (`pnpm exec wrangler secret put <NOME>`; localmente em `.dev.v
 
 ## Autenticação
 
-O login usa o BFF (`comunidadevivati/backend`) com OIDC Authorization Code + PKCE no Keycloak. O
-front não recebe credenciais nem tokens: a sessão é um cookie HttpOnly emitido pelo BFF.
+O login é por e-mail e senha no BFF (`comunidadevivati/backend`). O front envia as credenciais ao
+BFF e não guarda nada: a sessão é um cookie HttpOnly emitido pelo BFF.
 
 ```text
-Navegador ──/auth/*──▶ Worker (produção) ou proxy do Vite (dev) ──▶ BFF ──▶ Keycloak
+Navegador ──/auth/*──▶ Worker (produção) ou proxy do Vite (dev) ──▶ BFF
 ```
 
 As rotas `/auth/*` passam pela mesma origem do front, então o cookie `SameSite=Lax` funciona sem
 CORS. O front usa:
 
+- `POST /auth/login`: `{ email, password }`; sucesso grava o cookie (401 = credenciais inválidas,
+  429 = limite de tentativas);
 - `GET /auth/me`: sessão atual (401 = sem sessão), com o token CSRF mantido só em memória;
-- `GET /auth/login`: navegação para iniciar o login;
 - `POST /auth/logout`: encerra a sessão, com o header `X-CSRF-Token`.
 
 ### Rodar com o BFF local
 
-1. Suba Keycloak, Redis e o BFF no repositório do backend.
-2. No BFF, use a origem do front nas URLs: `BFF_BASE_URL=http://localhost:5173`,
-   `WEB_BASE_URL=http://localhost:5173` e `BFF_OIDC_CALLBACK_URL=http://localhost:5173/auth/callback`.
-3. No Keycloak, cadastre `http://localhost:5173/auth/callback` nas redirect URIs do client do BFF.
-4. Rode `pnpm dev` (o proxy aponta para `http://localhost:3000`, ou para `BFF_PROXY_TARGET`).
+1. Suba o BFF no repositório do backend, com `BFF_BASE_URL` e `WEB_BASE_URL` apontando para
+   `http://localhost:5173`.
+2. Rode `pnpm dev` (o proxy aponta para `http://localhost:3000`, ou para `BFF_PROXY_TARGET`).
 
 ## Scripts
 
