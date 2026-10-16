@@ -74,6 +74,30 @@ export const common = {
     goTo: 'Go to image {{number}}',
   },
   loading: 'Loading',
+  password: {
+    show: 'Show password',
+    hide: 'Hide password',
+  },
+  passwordStrength: {
+    label: 'Password strength',
+    summary: 'Password strength: {{level}}',
+    levels: {
+      empty: 'not entered',
+      weak: 'weak',
+      medium: 'medium',
+      strong: 'strong',
+    },
+    requirementsLabel: 'Password requirements',
+    requirements: {
+      minLength: 'At least 8 characters',
+      lowercase: 'One lowercase letter',
+      uppercase: 'One uppercase letter',
+      number: 'One number',
+      symbol: 'One symbol (e.g. ! @ # $)',
+    },
+    met: 'met',
+    notMet: 'pending',
+  },
   pwa: {
     title: 'New version available',
     description: 'A new version of Comunidade Viva is available.',

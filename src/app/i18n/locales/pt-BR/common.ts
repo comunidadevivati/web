@@ -73,6 +73,30 @@ export const common = {
     goTo: 'Ir para a imagem {{number}}',
   },
   loading: 'Carregando',
+  password: {
+    show: 'Mostrar senha',
+    hide: 'Ocultar senha',
+  },
+  passwordStrength: {
+    label: 'Força da senha',
+    summary: 'Força da senha: {{level}}',
+    levels: {
+      empty: 'não informada',
+      weak: 'fraca',
+      medium: 'média',
+      strong: 'forte',
+    },
+    requirementsLabel: 'Requisitos da senha',
+    requirements: {
+      minLength: 'Pelo menos 8 caracteres',
+      lowercase: 'Uma letra minúscula',
+      uppercase: 'Uma letra maiúscula',
+      number: 'Um número',
+      symbol: 'Um símbolo (ex.: ! @ # $)',
+    },
+    met: 'atendido',
+    notMet: 'pendente',
+  },
   pwa: {
     title: 'Nova versão disponível',
     description: 'Uma nova versão da Comunidade Viva está disponível.',
