@@ -14,8 +14,8 @@ const alertVariants = cva(
       variant: {
         default: 'surface-card',
         destructive: `
-          surface-card text-destructive *:data-[slot=alert-description]:text-destructive/90
-          *:[svg]:text-current
+          surface-card text-destructive-strong
+          *:data-[slot=alert-description]:text-destructive-strong *:[svg]:text-current
         `,
       },
     },

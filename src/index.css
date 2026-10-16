@@ -45,8 +45,12 @@
   --color-secondary-foreground: var(--secondary-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
+  --color-input-border: var(--input-border);
   --color-ring: var(--ring);
+  --color-focus-ring: var(--focus-ring);
+  --color-focus-ring-halo: var(--focus-ring-halo);
   --color-destructive: var(--destructive);
+  --color-destructive-strong: var(--destructive-strong);
 
   /* Marca */
   --color-primary: var(--primary);
@@ -150,8 +154,15 @@
   --secondary-foreground: var(--viva-teal-950);
   --border: var(--viva-teal-400);
   --input: var(--viva-teal-400);
+  /* Borda de campos: contraste mínimo de 3:1 com o fundo (WCAG 1.4.11) */
+  --input-border: var(--viva-teal-700);
   --ring: var(--viva-teal-600);
+  /* Indicador de foco (WCAG 2.4.13 AAA): contorno escuro com halo claro, visível em qualquer fundo */
+  --focus-ring: var(--viva-teal-950);
+  --focus-ring-halo: var(--viva-white);
   --destructive: oklch(0.577 0.245 27.325);
+  /* Texto de erro (Tailwind red-800): contraste AAA (7:1+) sobre fundo, cards e modais */
+  --destructive-strong: oklch(0.444 0.177 26.899);
 
   /* Conteúdo dentro de cards (aplicado pelo utilitário surface-card) */
   --card-muted: var(--viva-teal-200);
@@ -160,6 +171,7 @@
   --card-primary-foreground: var(--viva-white);
   --card-primary-strong: var(--viva-teal-800);
   --card-border: var(--viva-teal-500);
+  --card-input-border: var(--viva-teal-700);
   --card-ring: var(--viva-teal-700);
 
   /* Marca */
@@ -230,8 +242,13 @@
   --secondary-foreground: var(--viva-teal-50);
   --border: var(--viva-teal-700);
   --input: var(--viva-teal-700);
+  --input-border: var(--viva-teal-500);
   --ring: var(--viva-teal-300);
+  --focus-ring: var(--viva-white);
+  --focus-ring-halo: var(--viva-teal-950);
   --destructive: oklch(0.704 0.191 22.216);
+  /* Vermelho claro com 7:1+ sobre o modal (teal-900) e os cards */
+  --destructive-strong: oklch(0.925 0.065 18);
 
   /* Conteúdo dentro de cards */
   --card-muted: var(--viva-teal-900);
@@ -240,6 +257,7 @@
   --card-primary-foreground: var(--viva-teal-950);
   --card-primary-strong: var(--viva-teal-200);
   --card-border: var(--viva-teal-700);
+  --card-input-border: var(--viva-teal-500);
   --card-ring: var(--viva-teal-300);
 
   /* Marca */
@@ -282,6 +300,7 @@
   --primary-strong: var(--card-primary-strong);
   --border: var(--card-border);
   --input: var(--card-border);
+  --input-border: var(--card-input-border);
   --ring: var(--card-ring);
 }
 
@@ -303,4 +322,31 @@
     font-size: 1rem;
     line-height: 1;
   }
+}
+
+/*
+ * Indicador de foco do teclado (WCAG 2.2, 2.4.7 AA e 2.4.13 AAA): contorno sólido de 3px afastado
+ * 2px do elemento, com um halo de 2px na cor oposta preenchendo o espaço. As duas cores têm
+ * contraste alto entre si, então o foco fica visível sobre qualquer fundo (página, card, header,
+ * menu lateral, botão primário), nos modos claro e escuro.
+ *
+ * Fica fora de @layer de propósito: estilos sem camada prevalecem sobre os utilitários dos
+ * componentes shadcn (outline-none, ring-*), garantindo o mesmo indicador em toda a aplicação.
+ */
+:focus-visible {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--focus-ring-halo);
+}
+
+/* Campo dentro de InputGroup (ex.: senha com mostrar/ocultar): o foco contorna o grupo inteiro. */
+[data-slot='input-group-control']:focus-visible {
+  outline: none;
+  box-shadow: none;
+}
+
+[data-slot='input-group']:has(> [data-slot='input-group-control']:focus-visible) {
+  outline: 3px solid var(--focus-ring);
+  outline-offset: 2px;
+  box-shadow: 0 0 0 2px var(--focus-ring-halo);
 }
