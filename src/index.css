@@ -46,6 +46,10 @@
   --color-border: var(--border);
   --color-input: var(--input);
   --color-input-border: var(--input-border);
+  --color-subtitle: var(--subtitle);
+  /* Placeholder dos campos: --placeholder quando definido (modo escuro), senão o texto secundário */
+  --color-placeholder: var(--placeholder, var(--muted-foreground));
+  --color-input-background: var(--input-background);
   --color-ring: var(--ring);
   --color-focus-ring: var(--focus-ring);
   --color-focus-ring-halo: var(--focus-ring-halo);
@@ -127,6 +131,31 @@
   --viva-white: #ffffff;
   --viva-black: #000000;
 
+  /*
+   * Nova identidade visual (em adoção): valores brutos, ainda não ligados aos tokens semânticos.
+   * Neutros, azuis e verdes-azulados, e cores funcionais (sucesso, alerta, erro).
+   */
+  --viva-charcoal: #50514f;
+  --viva-charcoal-brown: #403d39;
+  --viva-blue-slate: #5c6b73;
+  --viva-blue-slate-deep: #4c5c68;
+  --viva-pale-sky: #cad8de;
+  --viva-alabaster-grey: #e5e6e4;
+  --viva-platinum: #eaebed;
+  --viva-deep-space-blue: #0b3954;
+  --viva-dark-teal: #084c61;
+  --viva-dark-cyan: #0e9594;
+  --viva-light-sea-green: #07beb8;
+  --viva-strong-cyan: #3dccc7;
+  --viva-neon-ice: #30f2f2;
+  --viva-neon-ice-vivid: #00f6ed;
+  --viva-jungle-green: #0ead69;
+  --viva-golden-pollen: #ffd23f;
+  --viva-mustard: #ffe347;
+  --viva-punch-red: #e71d36;
+  --viva-rosy-copper: #db504a;
+  --viva-grapefruit-pink: #ff6b6b;
+
   /* Cores oficiais de marcas de terceiros (redes sociais) */
   --brand-whatsapp-green: #25d366;
   --brand-facebook-blue: #0866ff;
@@ -154,8 +183,9 @@
   --secondary-foreground: var(--viva-teal-950);
   --border: var(--viva-teal-400);
   --input: var(--viva-teal-400);
-  /* Borda de campos: contraste mínimo de 3:1 com o fundo (WCAG 1.4.11) */
-  --input-border: var(--viva-teal-700);
+  /* Borda de campos: light-sea-green nos dois modos (decisão de identidade; no claro fica 2:1) */
+  --input-border: var(--viva-light-sea-green);
+  --input-background: transparent;
   --ring: var(--viva-teal-600);
   /* Indicador de foco (WCAG 2.4.13 AAA): contorno escuro com halo claro, visível em qualquer fundo */
   --focus-ring: var(--viva-teal-950);
@@ -171,13 +201,15 @@
   --card-primary-foreground: var(--viva-white);
   --card-primary-strong: var(--viva-teal-800);
   --card-border: var(--viva-teal-500);
-  --card-input-border: var(--viva-teal-700);
+  --card-input-border: var(--viva-light-sea-green);
   --card-ring: var(--viva-teal-700);
 
   /* Marca */
   --primary: var(--viva-teal-500);
   --primary-foreground: var(--viva-teal-950);
   --primary-strong: var(--viva-teal-800);
+  /* Subtítulos (componente Subtitle): light-sea-green nos dois modos */
+  --subtitle: var(--viva-light-sea-green);
   --brand-gradient-start: var(--viva-teal-600);
   --brand-gradient-middle: var(--viva-teal-800);
   --brand-gradient-end: var(--viva-teal-950);
@@ -227,13 +259,13 @@
 .dark {
   color-scheme: dark;
 
-  /* Página e superfícies */
-  --background: var(--viva-teal-900);
-  --foreground: var(--viva-teal-50);
-  --card: color-mix(in oklab, var(--viva-teal-950) 80%, transparent);
-  --card-foreground: var(--viva-teal-50);
-  --popover: var(--viva-teal-900);
-  --popover-foreground: var(--viva-teal-50);
+  /* Página e superfícies (nova identidade) */
+  --background: var(--viva-charcoal-brown);
+  --foreground: var(--viva-white);
+  --card: var(--viva-charcoal);
+  --card-foreground: var(--viva-white);
+  --popover: var(--viva-charcoal);
+  --popover-foreground: var(--viva-white);
   --accent: var(--viva-teal-800);
   --accent-foreground: var(--viva-teal-50);
   --muted: var(--viva-teal-950);
@@ -242,25 +274,30 @@
   --secondary-foreground: var(--viva-teal-50);
   --border: var(--viva-teal-700);
   --input: var(--viva-teal-700);
-  --input-border: var(--viva-teal-500);
+  --input-background: var(--viva-charcoal);
+  /* Placeholder dos campos: pale-sky (5,5:1 sobre o fundo dos campos) */
+  --placeholder: var(--viva-pale-sky);
+  --input-border: var(--viva-light-sea-green);
   --ring: var(--viva-teal-300);
   --focus-ring: var(--viva-white);
-  --focus-ring-halo: var(--viva-teal-950);
+  --focus-ring-halo: var(--viva-charcoal);
   --destructive: oklch(0.704 0.191 22.216);
-  /* Vermelho claro com 7:1+ sobre o modal (teal-900) e os cards */
-  --destructive-strong: oklch(0.925 0.065 18);
+  /* Rosa bem claro: 7,1:1 sobre cards e modais (charcoal) e 9,6:1 sobre o fundo (charcoal-brown) */
+  --destructive-strong: #ffeded;
 
   /* Conteúdo dentro de cards */
   --card-muted: var(--viva-teal-900);
   --card-muted-foreground: var(--viva-teal-200);
-  --card-primary: var(--viva-teal-500);
-  --card-primary-foreground: var(--viva-teal-950);
+  --card-primary: var(--viva-light-sea-green);
+  --card-primary-foreground: var(--viva-black);
   --card-primary-strong: var(--viva-teal-200);
   --card-border: var(--viva-teal-700);
-  --card-input-border: var(--viva-teal-500);
+  --card-input-border: var(--viva-light-sea-green);
   --card-ring: var(--viva-teal-300);
 
-  /* Marca */
+  /* Marca: botão principal em light-sea-green com texto preto (9,1:1, AAA) */
+  --primary: var(--viva-light-sea-green);
+  --primary-foreground: var(--viva-black);
   --primary-strong: var(--viva-teal-200);
 
   /* Menu lateral */
@@ -306,7 +343,7 @@
 
 @layer base {
   * {
-    @apply border-border outline-ring/50;
+    @apply border-border outline-focus-ring;
   }
 
   html {
@@ -349,4 +386,20 @@
   outline: 3px solid var(--focus-ring);
   outline-offset: 2px;
   box-shadow: 0 0 0 2px var(--focus-ring-halo);
+}
+
+/*
+ * Preenchimento automático do navegador (e-mail, senha salvos): o Chrome pinta o campo de azul e
+ * troca a cor do texto. Mantém o fundo e o texto do padrão de campos (field-control) em todos os
+ * campos: a transição longa adia indefinidamente a troca de fundo, e o texto usa a cor do tema.
+ */
+input:-webkit-autofill,
+input:autofill,
+textarea:-webkit-autofill,
+select:-webkit-autofill {
+  -webkit-text-fill-color: var(--foreground);
+  caret-color: var(--foreground);
+  transition:
+    background-color 600000s 0s,
+    color 600000s 0s;
 }
