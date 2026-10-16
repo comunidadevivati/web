@@ -90,7 +90,6 @@ export const RegisterView = ({ onOpenChange, onRegistered, open }: RegisterViewP
                 aria-required
                 autoCapitalize="words"
                 autoComplete="name"
-                className="h-11"
                 maxLength={FULL_NAME_MAX_LENGTH}
                 placeholder={t('register.fullNamePlaceholder')}
                 type="text"
@@ -104,7 +103,6 @@ export const RegisterView = ({ onOpenChange, onRegistered, open }: RegisterViewP
                 aria-describedby={fieldErrors.phone ? 'register-phone-error' : undefined}
                 aria-invalid={Boolean(fieldErrors.phone)}
                 aria-required
-                className="h-11"
                 placeholder={t('register.phonePlaceholder')}
                 {...register('phone')}
               />
@@ -118,7 +116,6 @@ export const RegisterView = ({ onOpenChange, onRegistered, open }: RegisterViewP
                 aria-required
                 autoCapitalize="none"
                 autoComplete="email"
-                className="h-11"
                 inputMode="email"
                 maxLength={EMAIL_MAX_LENGTH}
                 placeholder={t('register.emailPlaceholder')}

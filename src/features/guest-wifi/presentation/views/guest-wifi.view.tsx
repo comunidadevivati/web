@@ -207,7 +207,6 @@ export const GuestWifiView = () => {
                     aria-invalid={Boolean(errors.fullName)}
                     autoComplete="name"
                     autoFocus
-                    className="h-11"
                     placeholder={t('form.fullNamePlaceholder')}
                     type="text"
                     {...register('fullName')}
@@ -227,7 +226,6 @@ export const GuestWifiView = () => {
                     id="guest-wifi-phone"
                     aria-invalid={Boolean(errors.phone)}
                     autoComplete="tel-national"
-                    className="h-11"
                     inputMode="tel"
                     placeholder={t('form.phonePlaceholder')}
                     type="tel"

@@ -1,6 +1,5 @@
 import { TooltipHint } from '@/components/molecules/tooltip-hint/tooltip-hint';
 import { InputGroup, InputGroupAddon, InputGroupButton, InputGroupInput } from '@/components/ui';
-import { cn } from '@/lib/utils';
 import { EyeIcon, EyeOffIcon } from 'lucide-react';
 import { useState, type ComponentProps } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -22,7 +21,7 @@ export const PasswordInput = ({ disabled, groupClassName, ...props }: PasswordIn
   };
 
   return (
-    <InputGroup className={cn('h-11', groupClassName)}>
+    <InputGroup className={groupClassName}>
       <InputGroupInput
         autoCapitalize="none"
         autoCorrect="off"
