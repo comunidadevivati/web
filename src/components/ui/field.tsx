@@ -113,9 +113,9 @@ export const FieldLabel = ({ className, ...props }: ComponentProps<typeof Label>
           has-data-checked:bg-primary/5 has-[>[data-slot=field]]:rounded-lg
           has-[>[data-slot=field]]:border
           has-[>[data-slot=field]]:not-has-[:disabled,[data-disabled]]:hover:bg-muted/50
-          has-[>[data-slot=field]]:has-[:focus-visible]:border-ring
-          has-[>[data-slot=field]]:has-[:focus-visible]:ring-3
-          has-[>[data-slot=field]]:has-[:focus-visible]:ring-ring/50 *:data-[slot=field]:p-2.5
+          has-[>[data-slot=field]]:has-focus-visible:border-ring
+          has-[>[data-slot=field]]:has-focus-visible:ring-3
+          has-[>[data-slot=field]]:has-focus-visible:ring-ring/50 *:data-[slot=field]:p-2.5
           dark:has-data-checked:border-primary/20 dark:has-data-checked:bg-primary/10
         `,
         'has-[>[data-slot=field]]:w-full has-[>[data-slot=field]]:flex-col',

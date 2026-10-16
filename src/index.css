@@ -13,7 +13,9 @@
  * Camadas:
  * 1. Paleta da marca (--viva-*): valores brutos, nunca usados diretamente em componentes.
  * 2. Tokens semânticos (:root = modo claro / .dark = modo escuro): referenciam a paleta.
- * 3. @theme inline: expõe os tokens semânticos como utilitários do Tailwind (bg-*, text-*, ...).
+ * 3. Bloco theme inline do Tailwind: expõe os tokens semânticos como utilitários (bg-*, text-*).
+ *    Não escrever a diretiva com arroba em comentários: o Tailwind IntelliSense a interpreta e
+ *    passa a acusar erros falsos em todo o bloco.
  *
  * Componentes usam apenas utilitários semânticos (ex.: bg-background, text-primary-strong).
  * O modo escuro é aplicado pela classe .dark no <html> (ver src/app/theme).
@@ -47,8 +49,7 @@
   --color-input: var(--input);
   --color-input-border: var(--input-border);
   --color-subtitle: var(--subtitle);
-  /* Placeholder dos campos: --placeholder quando definido (modo escuro), senão o texto secundário */
-  --color-placeholder: var(--placeholder, var(--muted-foreground));
+  --color-placeholder: var(--placeholder);
   --color-input-background: var(--input-background);
   --color-ring: var(--ring);
   --color-focus-ring: var(--focus-ring);
@@ -186,6 +187,8 @@
   /* Borda de campos: light-sea-green nos dois modos (decisão de identidade; no claro fica 2:1) */
   --input-border: var(--viva-light-sea-green);
   --input-background: transparent;
+  /* Placeholder dos campos: o texto secundário */
+  --placeholder: var(--muted-foreground);
   --ring: var(--viva-teal-600);
   /* Indicador de foco (WCAG 2.4.13 AAA): contorno escuro com halo claro, visível em qualquer fundo */
   --focus-ring: var(--viva-teal-950);
@@ -202,6 +205,7 @@
   --card-primary-strong: var(--viva-teal-800);
   --card-border: var(--viva-teal-500);
   --card-input-border: var(--viva-light-sea-green);
+  --card-placeholder: var(--card-muted-foreground);
   --card-ring: var(--viva-teal-700);
 
   /* Marca */
@@ -293,6 +297,7 @@
   --card-primary-strong: var(--viva-teal-200);
   --card-border: var(--viva-teal-700);
   --card-input-border: var(--viva-light-sea-green);
+  --card-placeholder: var(--viva-pale-sky);
   --card-ring: var(--viva-teal-300);
 
   /* Marca: botão principal em light-sea-green com texto preto (9,1:1, AAA) */
@@ -338,6 +343,7 @@
   --border: var(--card-border);
   --input: var(--card-border);
   --input-border: var(--card-input-border);
+  --placeholder: var(--card-placeholder);
   --ring: var(--card-ring);
 }
 
