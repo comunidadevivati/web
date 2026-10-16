@@ -9,6 +9,10 @@ export const auth = {
     password: 'Senha',
     submit: 'Entrar',
     submitting: 'Entrando…',
+    success: {
+      title: 'Login realizado',
+      description: 'Bem-vindo(a) de volta à Comunidade Viva.',
+    },
     noAccount: 'Ainda não tem conta?',
     createAccount: 'Criar conta',
     validation: {
@@ -17,10 +21,6 @@ export const auth = {
       passwordRequired: 'Informe a sua senha.',
     },
     notices: {
-      registered: {
-        title: 'Conta criada com sucesso',
-        description: 'Agora é só entrar com o seu e-mail e senha.',
-      },
       expired: {
         title: 'Sua sessão expirou',
         description: 'Por segurança, entre novamente para continuar.',
@@ -47,6 +47,10 @@ export const auth = {
     close: 'Fechar',
     submit: 'Criar conta',
     submitting: 'Criando conta…',
+    success: {
+      title: 'Conta criada',
+      description: 'Bem-vindo(a) à Comunidade Viva.',
+    },
     submitHint: 'Preencha todos os campos corretamente para criar a conta.',
     fullName: 'Nome completo',
     fullNamePlaceholder: 'Ex.: Maria da Silva',

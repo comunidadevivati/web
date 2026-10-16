@@ -34,11 +34,10 @@ import { useTranslation } from 'react-i18next';
 type RegisterViewProps = {
   open: boolean;
   onOpenChange: (open: boolean) => void;
-  onRegistered: (email: string) => void;
 };
 
 // Modal de novo cadastro, aberto a partir do login.
-export const RegisterView = ({ onOpenChange, onRegistered, open }: RegisterViewProps) => {
+export const RegisterView = ({ onOpenChange, open }: RegisterViewProps) => {
   const {
     form,
     fieldErrors,
@@ -51,7 +50,7 @@ export const RegisterView = ({ onOpenChange, onRegistered, open }: RegisterViewP
     passwordRequirements,
     passwordStrength,
     submit,
-  } = useRegisterViewModel({ onOpenChange, onRegistered });
+  } = useRegisterViewModel({ onOpenChange });
 
   const { register } = form;
 

@@ -1,4 +1,5 @@
 import type { TranslationKey } from '@/app/i18n/translation-key';
+import { authSessionQueryOptions } from '@/features/auth/application/queries/auth-session.query';
 import { registerUseCase } from '@/features/auth/application/use-cases/register.use-case';
 import { TooManyAttemptsError } from '@/features/auth/domain/auth-session';
 import {
@@ -13,13 +14,15 @@ import {
   type RegisterFormInput,
   type RegisterNotice,
 } from '@/features/auth/presentation/models/register.model';
+import { notify } from '@/shared/feedback/notify';
 import {
   getPasswordRequirements,
   getPasswordStrength,
   getPersonalInfoTerms,
 } from '@/shared/validation/password-strength';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useNavigate } from '@tanstack/react-router';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
@@ -28,8 +31,6 @@ const CLOSE_BUTTON_REASON = 'close-press';
 
 type UseRegisterViewModelOptions = {
   onOpenChange: (open: boolean) => void;
-  // Conta criada: recebe o e-mail cadastrado para preencher o login.
-  onRegistered: (email: string) => void;
 };
 
 const getErrorNotice = (error: Error): RegisterNotice | null => {
@@ -49,11 +50,12 @@ const getErrorNotice = (error: Error): RegisterNotice | null => {
   return 'unavailable';
 };
 
-export const useRegisterViewModel = ({
-  onOpenChange,
-  onRegistered,
-}: UseRegisterViewModelOptions) => {
+export const useRegisterViewModel = ({ onOpenChange }: UseRegisterViewModelOptions) => {
   const { t } = useTranslation('auth');
+
+  const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
 
   const form = useForm<RegisterFormInput, unknown, RegisterFormData>({
     resolver: zodResolver(registerFormSchema),
@@ -90,12 +92,28 @@ export const useRegisterViewModel = ({
   const {
     error,
     isPending,
+    isSuccess,
     mutate,
     reset: resetMutation,
   } = useMutation({
     mutationFn: (registration: Registration) => registerUseCase(registration),
-    onSuccess: (_data, registration) => {
-      onRegistered(registration.email);
+    // O BFF já abriu a sessão no cadastro: como no login, a sessão em cache (null) ficou obsoleta e o
+    // guard de /_authenticated consulta o BFF de novo.
+    onSuccess: async ({ message }) => {
+      await queryClient.invalidateQueries({
+        queryKey: authSessionQueryOptions.queryKey,
+      });
+
+      await navigate({
+        to: '/dashboard',
+        replace: true,
+      });
+
+      // Cadastro também entra na aplicação: mensagem do BFF ou, sem ela, um texto padrão traduzido.
+      notify.success({
+        title: t('register.success.title'),
+        description: message ?? t('register.success.description'),
+      });
     },
     onError: (registrationError) => {
       if (registrationError instanceof EmailAlreadyRegisteredError) {
@@ -115,7 +133,10 @@ export const useRegisterViewModel = ({
 
   const notice = error ? getErrorNotice(error) : null;
 
-  const isSubmitDisabled = !isValid || isPending;
+  // Mantém o envio travado até a navegação para o dashboard terminar.
+  const isSubmitting = isPending || isSuccess;
+
+  const isSubmitDisabled = !isValid || isSubmitting;
 
   // Ao alterar a senha, revalida a confirmação se ela já foi preenchida.
   const passwordRegistration = register('password', {
@@ -147,7 +168,7 @@ export const useRegisterViewModel = ({
   // O modal só fecha pelo botão "X" (Esc e clique fora são ignorados, para não perder o que foi
   // digitado) e nunca durante o envio, para não perder o resultado do cadastro.
   const handleOpenChange = (open: boolean, reason?: string) => {
-    if (!open && (isPending || reason !== CLOSE_BUTTON_REASON)) {
+    if (!open && (isSubmitting || reason !== CLOSE_BUTTON_REASON)) {
       return;
     }
 
@@ -166,7 +187,7 @@ export const useRegisterViewModel = ({
   };
 
   const submit = handleSubmit(({ confirmPassword: _confirmPassword, ...registration }) => {
-    if (isPending) {
+    if (isSubmitting) {
       return;
     }
 
@@ -179,7 +200,7 @@ export const useRegisterViewModel = ({
     handleOpenChange,
     handleOpenChangeComplete,
     isSubmitDisabled,
-    isSubmitting: isPending,
+    isSubmitting,
     notice,
     passwordRegistration,
     passwordRequirements,

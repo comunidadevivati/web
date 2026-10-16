@@ -7,14 +7,18 @@ import {
   InvalidRegistrationError,
   type RegistrationGateway,
 } from '@/features/auth/domain/registration';
+import { parseSessionStart } from '@/features/auth/infrastructure/http/session-start.response';
 import { bffClient } from '@/shared/http/bff-client';
 import { isHTTPError } from 'ky';
 
 export const registrationHttpGateway: RegistrationGateway = {
-  // POST /auth/register: 201 = conta criada (sem sessão); 409 = e-mail já cadastrado.
+  // POST /auth/register: 201 = conta criada e sessão aberta pelo BFF (cookie HttpOnly, mesmo corpo
+  // do login); 409 = e-mail já cadastrado.
   register: async ({ email, fullName, password, phone }) => {
+    let response: Response;
+
     try {
-      await bffClient.post('auth/register', {
+      response = await bffClient.post('auth/register', {
         json: {
           name: fullName,
           phone,
@@ -39,5 +43,7 @@ export const registrationHttpGateway: RegistrationGateway = {
 
       throw new AuthServiceUnavailableError(error);
     }
+
+    return parseSessionStart(response);
   },
 };

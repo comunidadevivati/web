@@ -1,3 +1,5 @@
+import type { SessionStart } from '@/features/auth/domain/auth-session';
+
 // Dados de um novo cadastro, já normalizados (nome sem espaços extras, telefone só com dígitos,
 // e-mail em minúsculas). A senha vai direto ao BFF e nunca é guardada no front.
 export type Registration = {
@@ -26,5 +28,6 @@ export class InvalidRegistrationError extends Error {
 }
 
 export interface RegistrationGateway {
-  register: (registration: Registration) => Promise<void>;
+  // Cria a conta e a sessão no BFF (cookie HttpOnly): o usuário já sai do cadastro autenticado.
+  register: (registration: Registration) => Promise<SessionStart>;
 }

@@ -6,12 +6,7 @@ export const loginSearchSchema = z.object({
   reason: z.enum(['expired']).optional(),
 });
 
-export type LoginNotice =
-  | 'expired'
-  | 'registered'
-  | 'invalidCredentials'
-  | 'tooManyAttempts'
-  | 'unavailable';
+export type LoginNotice = 'expired' | 'invalidCredentials' | 'tooManyAttempts' | 'unavailable';
 
 // As mensagens de validação são chaves de tradução (namespace "auth"), traduzidas na exibição.
 const validationMessages = {

@@ -4,6 +4,7 @@ import {
   TooManyAttemptsError,
   type AuthSessionGateway,
 } from '@/features/auth/domain/auth-session';
+import { parseSessionStart } from '@/features/auth/infrastructure/http/session-start.response';
 import { bffClient } from '@/shared/http/bff-client';
 import { isHTTPError } from 'ky';
 import { z } from 'zod';
@@ -43,8 +44,10 @@ export const authSessionHttpGateway: AuthSessionGateway = {
 
   // POST /auth/login: o sucesso grava o cookie de sessão; 400/401 = credenciais recusadas.
   login: async (credentials) => {
+    let response: Response;
+
     try {
-      await bffClient.post('auth/login', {
+      response = await bffClient.post('auth/login', {
         json: credentials,
       });
     } catch (error) {
@@ -58,6 +61,8 @@ export const authSessionHttpGateway: AuthSessionGateway = {
 
       throw new AuthServiceUnavailableError(error);
     }
+
+    return parseSessionStart(response);
   },
 
   logout: async (csrfToken) => {

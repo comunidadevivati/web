@@ -18,14 +18,13 @@ import {
 } from '@/components/ui';
 import { useLoginViewModel } from '@/features/auth/presentation/view-models/login.view-model';
 import { RegisterView } from '@/features/auth/presentation/views/register.view';
-import { CircleAlertIcon, CircleCheckIcon, LogInIcon, UserPlusIcon } from 'lucide-react';
+import { CircleAlertIcon, LogInIcon, UserPlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const LoginView = () => {
   const {
     form,
     fieldErrors,
-    handleRegistered,
     isInfoNotice,
     isRegisterOpen,
     isSubmitting,
@@ -99,7 +98,7 @@ export const LoginView = () => {
             <Form className="grid gap-5" noValidate onSubmit={submit}>
               {notice && (
                 <Alert variant={isInfoNotice ? 'default' : 'destructive'}>
-                  {notice === 'registered' ? <CircleCheckIcon /> : <CircleAlertIcon />}
+                  <CircleAlertIcon />
 
                   <AlertTitle>{t(`login.notices.${notice}.title`)}</AlertTitle>
 
@@ -172,11 +171,7 @@ export const LoginView = () => {
         </Box>
       </Box>
 
-      <RegisterView
-        open={isRegisterOpen}
-        onOpenChange={setIsRegisterOpen}
-        onRegistered={handleRegistered}
-      />
+      <RegisterView open={isRegisterOpen} onOpenChange={setIsRegisterOpen} />
     </>
   );
 };

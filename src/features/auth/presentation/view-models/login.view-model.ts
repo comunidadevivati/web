@@ -11,6 +11,7 @@ import {
   type LoginFormData,
   type LoginNotice,
 } from '@/features/auth/presentation/models/login.model';
+import { notify } from '@/shared/feedback/notify';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
@@ -53,24 +54,15 @@ export const useLoginViewModel = () => {
     formState: { errors, isSubmitted, touchedFields },
     handleSubmit,
     resetField,
-    setValue,
   } = form;
 
   const values = useWatch({ control });
 
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
-  const [hasRegistered, setHasRegistered] = useState(false);
-
-  const {
-    error,
-    isPending,
-    isSuccess,
-    mutate,
-    reset: resetLogin,
-  } = useMutation({
+  const { error, isPending, isSuccess, mutate } = useMutation({
     mutationFn: (credentials: LoginCredentials) => loginUseCase(credentials),
-    onSuccess: async () => {
+    onSuccess: async ({ message }) => {
       // A sessão em cache (null) ficou obsoleta: o guard de /_authenticated consulta o BFF de novo.
       await queryClient.invalidateQueries({
         queryKey: authSessionQueryOptions.queryKey,
@@ -80,17 +72,19 @@ export const useLoginViewModel = () => {
         to: '/dashboard',
         replace: true,
       });
+
+      // Retorno do login: a mensagem do BFF ou, sem ela, um texto padrão traduzido.
+      notify.success({
+        title: t('login.success.title'),
+        description: message ?? t('login.success.description'),
+      });
     },
     onError: () => {
       resetField('password');
     },
   });
 
-  const registeredNotice = hasRegistered ? 'registered' : null;
-
-  const notice: LoginNotice | null = error
-    ? getErrorNotice(error)
-    : (registeredNotice ?? reason ?? null);
+  const notice: LoginNotice | null = error ? getErrorNotice(error) : (reason ?? null);
 
   // Mantém o overlay até a navegação para o dashboard terminar.
   const isSubmitting = isPending || isSuccess;
@@ -111,7 +105,7 @@ export const useLoginViewModel = () => {
   };
 
   // Avisos informativos (não são erros).
-  const isInfoNotice = notice === 'expired' || notice === 'registered';
+  const isInfoNotice = notice === 'expired';
 
   // O botão só trava durante o envio: o preenchimento automático de senhas nem sempre marca o
   // formulário como alterado, então a validação fica para o submit.
@@ -123,28 +117,12 @@ export const useLoginViewModel = () => {
     mutate(credentials);
   });
 
-  // Cadastro concluído: fecha o modal, avisa e deixa o e-mail pronto para o login.
-  const handleRegistered = (email: string) => {
-    setIsRegisterOpen(false);
-
-    setHasRegistered(true);
-
-    resetLogin();
-
-    setValue('email', email, {
-      shouldValidate: true,
-    });
-
-    resetField('password');
-  };
-
   const openRegister = () => {
     setIsRegisterOpen(true);
   };
 
   return {
     form,
-    handleRegistered,
     isInfoNotice,
     isRegisterOpen,
     openRegister,

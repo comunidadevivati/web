@@ -18,6 +18,11 @@ export type LoginCredentials = {
   password: string;
 };
 
+// Sessão aberta no BFF (login ou cadastro), com a mensagem de retorno do BFF quando houver.
+export type SessionStart = {
+  message?: string;
+};
+
 // O BFF não respondeu ou respondeu fora do contrato: não é possível saber se existe sessão.
 export class AuthServiceUnavailableError extends Error {
   constructor(cause?: unknown) {
@@ -49,6 +54,6 @@ export interface AuthSessionGateway {
   // Sessão atual ou null quando não há sessão (HTTP 401).
   getSession: () => Promise<AuthSession | null>;
   // Cria a sessão no BFF (cookie HttpOnly) a partir de e-mail e senha.
-  login: (credentials: LoginCredentials) => Promise<void>;
+  login: (credentials: LoginCredentials) => Promise<SessionStart>;
   logout: (csrfToken: string) => Promise<void>;
 }
