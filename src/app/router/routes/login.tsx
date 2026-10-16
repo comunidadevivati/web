@@ -9,7 +9,7 @@ export const Route = createFileRoute('/login')({
     meta: [{ title: getLocalizedPageTitle('login') }],
   }),
   validateSearch: loginSearchSchema,
-  // Com sessão ativa, vai direto ao dashboard. Se o BFF estiver indisponível, mostra o login com aviso.
+  // Com sessão ativa, vai direto ao dashboard. Sem sessão (ou com o BFF indisponível), mostra o login.
   beforeLoad: async ({ context: { queryClient } }) => {
     const session = await queryClient.fetchQuery(authSessionQueryOptions).catch(() => null);
 

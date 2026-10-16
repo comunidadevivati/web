@@ -4,14 +4,29 @@ export const auth = {
   login: {
     tagline: 'A place built to connect people, ministries and purposes.',
     title: 'Welcome',
-    subtitle: 'Securely access your account through the Comunidade Viva sign-in.',
+    subtitle: 'Sign in with your email and password to access your account.',
+    email: 'Email',
+    emailPlaceholder: 'name@example.com',
+    password: 'Password',
     submit: 'Sign in',
-    redirecting: 'Redirecting to sign-in…',
-    retry: 'Try again',
+    submitting: 'Signing in…',
+    validation: {
+      emailRequired: 'Enter your email.',
+      emailInvalid: 'Enter a valid email.',
+      passwordRequired: 'Enter your password.',
+    },
     notices: {
       expired: {
         title: 'Your session has expired',
         description: 'For your security, please sign in again to continue.',
+      },
+      invalidCredentials: {
+        title: 'Incorrect email or password',
+        description: 'Check the information you entered and try again.',
+      },
+      tooManyAttempts: {
+        title: 'Too many sign-in attempts',
+        description: 'Please wait a moment before trying again.',
       },
       unavailable: {
         title: 'Sign-in is currently unavailable',

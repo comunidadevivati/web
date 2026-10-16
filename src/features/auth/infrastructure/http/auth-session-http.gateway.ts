@@ -1,15 +1,14 @@
 import {
   AuthServiceUnavailableError,
+  InvalidCredentialsError,
+  TooManyLoginAttemptsError,
   type AuthSessionGateway,
 } from '@/features/auth/domain/auth-session';
 import { bffClient } from '@/shared/http/bff-client';
 import { isHTTPError } from 'ky';
 import { z } from 'zod';
 
-// Início do fluxo OIDC (Authorization Code + PKCE) no BFF, que redireciona ao Keycloak.
-const LOGIN_PATH = '/auth/login';
-
-// Contrato de GET /auth/me (apps/bff/src/auth/presentation/auth-me.controller.ts).
+// Contrato de GET /auth/me no BFF.
 const authMeResponseSchema = z.object({
   authenticated: z.literal(true),
   csrfToken: z.string().min(1),
@@ -20,8 +19,8 @@ const authMeResponseSchema = z.object({
   }),
 });
 
-const isUnauthorized = (error: unknown) => {
-  return isHTTPError(error) && error.response.status === 401;
+const hasStatus = (error: unknown, status: number) => {
+  return isHTTPError(error) && error.response.status === status;
 };
 
 export const authSessionHttpGateway: AuthSessionGateway = {
@@ -34,7 +33,7 @@ export const authSessionHttpGateway: AuthSessionGateway = {
         user,
       };
     } catch (error) {
-      if (isUnauthorized(error)) {
+      if (hasStatus(error, 401)) {
         return null;
       }
 
@@ -42,8 +41,23 @@ export const authSessionHttpGateway: AuthSessionGateway = {
     }
   },
 
-  startLogin: () => {
-    window.location.assign(LOGIN_PATH);
+  // POST /auth/login: o sucesso grava o cookie de sessão; 400/401 = credenciais recusadas.
+  login: async (credentials) => {
+    try {
+      await bffClient.post('auth/login', {
+        json: credentials,
+      });
+    } catch (error) {
+      if (hasStatus(error, 400) || hasStatus(error, 401)) {
+        throw new InvalidCredentialsError();
+      }
+
+      if (hasStatus(error, 429)) {
+        throw new TooManyLoginAttemptsError();
+      }
+
+      throw new AuthServiceUnavailableError(error);
+    }
   },
 
   logout: async (csrfToken) => {
@@ -55,7 +69,7 @@ export const authSessionHttpGateway: AuthSessionGateway = {
       });
     } catch (error) {
       // Sessão já expirada ou removida no BFF: não há o que encerrar.
-      if (isUnauthorized(error)) {
+      if (hasStatus(error, 401)) {
         return;
       }
 

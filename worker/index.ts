@@ -298,7 +298,7 @@ const proxyToBff = async (request: Request, env: WorkerEnv) => {
   headers.set('X-Forwarded-Proto', protocol.replace(':', ''));
 
   try {
-    // redirect: 'manual' devolve ao navegador os redirects do BFF (Keycloak e retorno ao front).
+    // redirect: 'manual' devolve ao navegador qualquer redirect do BFF sem segui-lo no Worker.
     return await fetch(new URL(`${pathname}${search}`, env.BFF_ORIGIN), {
       method: request.method,
       headers,

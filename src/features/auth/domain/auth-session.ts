@@ -1,4 +1,4 @@
-// Usuário autenticado, como o BFF o expõe a partir do token do Keycloak.
+// Usuário autenticado, como o BFF o expõe na sessão.
 export type AuthUser = {
   subject: string;
   email?: string;
@@ -12,6 +12,12 @@ export type AuthSession = {
   user: AuthUser;
 };
 
+// Credenciais digitadas no login. Vão direto ao BFF e nunca são guardadas no front.
+export type LoginCredentials = {
+  email: string;
+  password: string;
+};
+
 // O BFF não respondeu ou respondeu fora do contrato: não é possível saber se existe sessão.
 export class AuthServiceUnavailableError extends Error {
   constructor(cause?: unknown) {
@@ -21,10 +27,28 @@ export class AuthServiceUnavailableError extends Error {
   }
 }
 
+// E-mail ou senha recusados pelo BFF.
+export class InvalidCredentialsError extends Error {
+  constructor() {
+    super('Invalid credentials');
+
+    this.name = 'InvalidCredentialsError';
+  }
+}
+
+// Limite de tentativas de login atingido (HTTP 429).
+export class TooManyLoginAttemptsError extends Error {
+  constructor() {
+    super('Too many login attempts');
+
+    this.name = 'TooManyLoginAttemptsError';
+  }
+}
+
 export interface AuthSessionGateway {
   // Sessão atual ou null quando não há sessão (HTTP 401).
   getSession: () => Promise<AuthSession | null>;
-  // Leva o navegador ao início do fluxo OIDC no BFF (sai da SPA).
-  startLogin: () => void;
+  // Cria a sessão no BFF (cookie HttpOnly) a partir de e-mail e senha.
+  login: (credentials: LoginCredentials) => Promise<void>;
   logout: (csrfToken: string) => Promise<void>;
 }

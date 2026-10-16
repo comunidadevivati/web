@@ -6,7 +6,7 @@ const getWords = (value: string) => {
   return value.split(/[\s._-]+/).filter(Boolean);
 };
 
-// Nome exibido: o nome do Keycloak ou, sem ele, um nome a partir do e-mail
+// Nome exibido: o nome da sessão ou, sem ele, um nome a partir do e-mail
 // (ex.: thiago.figueiredo@... → Thiago Figueiredo).
 export const getUserDisplayName = ({ email, name }: AuthUser) => {
   if (name?.trim()) {

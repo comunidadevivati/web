@@ -7,24 +7,31 @@ import {
   AlertTitle,
   Box,
   Button,
+  Form,
   Heading,
   Image,
+  Input,
+  Label,
   LoadingOverlay,
   Text,
 } from '@/components/ui';
 import { useLoginViewModel } from '@/features/auth/presentation/view-models/login.view-model';
-import { cn } from '@/lib/utils';
-import { CircleAlertIcon, LogInIcon, RefreshCwIcon } from 'lucide-react';
+import { CircleAlertIcon, LogInIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const LoginView = () => {
-  const { isLoginDisabled, isRedirecting, isRetrying, login, notice, retry } = useLoginViewModel();
+  const { form, getFieldError, isSubmitting, notice, submit } = useLoginViewModel();
+
+  const {
+    formState: { errors },
+    register,
+  } = form;
 
   const { t } = useTranslation(['auth', 'common']);
 
   return (
     <>
-      {isRedirecting && <LoadingOverlay />}
+      {isSubmitting && <LoadingOverlay />}
 
       <Box className="grid min-h-dvh lg:grid-cols-[minmax(0,1fr)_minmax(0,1fr)]">
         <Box
@@ -64,7 +71,7 @@ export const LoginView = () => {
           <PreferencesControls className="absolute top-4 right-4 sm:right-6" tone="surface" />
 
           <Box className="w-full max-w-md rounded-2xl surface-card p-6 shadow-elevated-lg sm:p-8">
-            <Box className="mb-10 flex flex-col items-center text-center">
+            <Box className="mb-8 flex flex-col items-center text-center">
               <Image
                 alt=""
                 aria-hidden="true"
@@ -79,9 +86,9 @@ export const LoginView = () => {
               <Text className="mt-2 text-base">{t('login.subtitle')}</Text>
             </Box>
 
-            <Box className="grid gap-5">
+            <Form className="grid gap-5" noValidate onSubmit={submit}>
               {notice && (
-                <Alert variant={notice === 'unavailable' ? 'destructive' : 'default'}>
+                <Alert variant={notice === 'expired' ? 'default' : 'destructive'}>
                   <CircleAlertIcon />
 
                   <AlertTitle>{t(`login.notices.${notice}.title`)}</AlertTitle>
@@ -90,34 +97,57 @@ export const LoginView = () => {
                 </Alert>
               )}
 
-              {notice === 'unavailable' && (
-                <Button
-                  className="h-11 w-full"
-                  disabled={isRetrying}
-                  type="button"
-                  variant="outline"
-                  onClick={retry}
-                >
-                  <RefreshCwIcon
-                    className={cn(isRetrying && 'animate-spin')}
-                    data-icon="inline-start"
-                  />
-                  {t('login.retry')}
-                </Button>
-              )}
+              <Box className="grid gap-2">
+                <Label htmlFor="login-email">{t('login.email')}</Label>
+
+                <Input
+                  id="login-email"
+                  aria-invalid={Boolean(errors.email)}
+                  autoComplete="email"
+                  autoFocus
+                  className="h-11"
+                  inputMode="email"
+                  placeholder={t('login.emailPlaceholder')}
+                  type="email"
+                  {...register('email')}
+                />
+
+                {errors.email?.message && (
+                  <Text className="text-destructive" role="alert">
+                    {getFieldError(errors.email.message)}
+                  </Text>
+                )}
+              </Box>
+
+              <Box className="grid gap-2">
+                <Label htmlFor="login-password">{t('login.password')}</Label>
+
+                <Input
+                  id="login-password"
+                  aria-invalid={Boolean(errors.password)}
+                  autoComplete="current-password"
+                  className="h-11"
+                  type="password"
+                  {...register('password')}
+                />
+
+                {errors.password?.message && (
+                  <Text className="text-destructive" role="alert">
+                    {getFieldError(errors.password.message)}
+                  </Text>
+                )}
+              </Box>
 
               <Button
-                aria-busy={isRedirecting}
-                autoFocus
-                className="h-11 w-full"
-                disabled={isLoginDisabled}
-                type="button"
-                onClick={login}
+                aria-busy={isSubmitting}
+                className="mt-1 h-11 w-full"
+                disabled={isSubmitting}
+                type="submit"
               >
                 <LogInIcon data-icon="inline-start" />
-                {isRedirecting ? t('login.redirecting') : t('login.submit')}
+                {isSubmitting ? t('login.submitting') : t('login.submit')}
               </Button>
-            </Box>
+            </Form>
           </Box>
         </Box>
       </Box>

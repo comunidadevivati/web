@@ -3,14 +3,29 @@ export const auth = {
   login: {
     tagline: 'Um ambiente criado para conectar pessoas, ministérios e propósitos.',
     title: 'Bem-vindo',
-    subtitle: 'Acesse sua conta com segurança pelo login da Comunidade Viva.',
+    subtitle: 'Entre com seu e-mail e senha para acessar sua conta.',
+    email: 'E-mail',
+    emailPlaceholder: 'nome@exemplo.com',
+    password: 'Senha',
     submit: 'Entrar',
-    redirecting: 'Redirecionando para o login…',
-    retry: 'Tentar novamente',
+    submitting: 'Entrando…',
+    validation: {
+      emailRequired: 'Informe o seu e-mail.',
+      emailInvalid: 'Informe um e-mail válido.',
+      passwordRequired: 'Informe a sua senha.',
+    },
     notices: {
       expired: {
         title: 'Sua sessão expirou',
         description: 'Por segurança, entre novamente para continuar.',
+      },
+      invalidCredentials: {
+        title: 'E-mail ou senha incorretos',
+        description: 'Confira os dados informados e tente novamente.',
+      },
+      tooManyAttempts: {
+        title: 'Muitas tentativas de login',
+        description: 'Aguarde alguns instantes antes de tentar novamente.',
       },
       unavailable: {
         title: 'Login indisponível no momento',
