@@ -56,6 +56,8 @@
   --color-focus-ring-halo: var(--focus-ring-halo);
   --color-destructive: var(--destructive);
   --color-destructive-strong: var(--destructive-strong);
+  --color-success: var(--success);
+  --color-success-strong: var(--success-strong);
 
   /* Marca */
   --color-primary: var(--primary);
@@ -196,6 +198,9 @@
   --destructive: oklch(0.577 0.245 27.325);
   /* Texto de erro (Tailwind red-800): contraste AAA (7:1+) sobre fundo, cards e modais */
   --destructive-strong: oklch(0.444 0.177 26.899);
+  /* Sucesso: jungle-green em faixas e barras; tom forte (Tailwind green-800) em ícones, 6,8:1 */
+  --success: var(--viva-jungle-green);
+  --success-strong: #016630;
 
   /* Conteúdo dentro de cards (aplicado pelo utilitário surface-card) */
   --card-muted: var(--viva-teal-200);
@@ -288,6 +293,8 @@
   --destructive: oklch(0.704 0.191 22.216);
   /* Rosa bem claro: 7,1:1 sobre cards e modais (charcoal) e 9,6:1 sobre o fundo (charcoal-brown) */
   --destructive-strong: #ffeded;
+  /* Verde bem claro (Tailwind green-100): 7,3:1 sobre modais e toasts (charcoal) */
+  --success-strong: #dcfce7;
 
   /* Conteúdo dentro de cards */
   --card-muted: var(--viva-teal-900);

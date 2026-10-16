@@ -74,6 +74,11 @@ export const common = {
     goTo: 'Go to image {{number}}',
   },
   loading: 'Loading',
+  processing: 'Processing, please wait',
+  toast: {
+    close: 'Close notification',
+    secondsLeft: '{{seconds}}s',
+  },
   password: {
     show: 'Show password',
     hide: 'Hide password',

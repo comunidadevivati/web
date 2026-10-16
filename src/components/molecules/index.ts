@@ -5,6 +5,8 @@ export * from '@/components/molecules/form-field/form-field';
 
 export * from '@/components/molecules/locale-toggle/locale-toggle';
 
+export * from '@/components/molecules/notification-toast/notification-toast';
+
 export * from '@/components/molecules/password-input/password-input';
 
 export * from '@/components/molecules/password-strength-meter/password-strength-meter';

@@ -53,6 +53,8 @@ export * from '@/components/ui/subtitle';
 
 export * from '@/components/ui/text';
 
+export * from '@/components/ui/toast';
+
 export * from '@/components/ui/toggle';
 
 export * from '@/components/ui/toggle-group';
