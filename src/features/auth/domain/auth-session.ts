@@ -36,12 +36,12 @@ export class InvalidCredentialsError extends Error {
   }
 }
 
-// Limite de tentativas de login atingido (HTTP 429).
-export class TooManyLoginAttemptsError extends Error {
+// Limite de tentativas atingido no BFF (HTTP 429).
+export class TooManyAttemptsError extends Error {
   constructor() {
-    super('Too many login attempts');
+    super('Too many attempts');
 
-    this.name = 'TooManyLoginAttemptsError';
+    this.name = 'TooManyAttemptsError';
   }
 }
 

@@ -1,7 +1,7 @@
 import {
   AuthServiceUnavailableError,
   InvalidCredentialsError,
-  TooManyLoginAttemptsError,
+  TooManyAttemptsError,
   type AuthSessionGateway,
 } from '@/features/auth/domain/auth-session';
 import { bffClient } from '@/shared/http/bff-client';
@@ -53,7 +53,7 @@ export const authSessionHttpGateway: AuthSessionGateway = {
       }
 
       if (hasStatus(error, 429)) {
-        throw new TooManyLoginAttemptsError();
+        throw new TooManyAttemptsError();
       }
 
       throw new AuthServiceUnavailableError(error);

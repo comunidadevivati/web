@@ -9,12 +9,18 @@ export const auth = {
     password: 'Senha',
     submit: 'Entrar',
     submitting: 'Entrando…',
+    noAccount: 'Ainda não tem conta?',
+    createAccount: 'Criar conta',
     validation: {
       emailRequired: 'Informe o seu e-mail.',
       emailInvalid: 'Informe um e-mail válido.',
       passwordRequired: 'Informe a sua senha.',
     },
     notices: {
+      registered: {
+        title: 'Conta criada com sucesso',
+        description: 'Agora é só entrar com o seu e-mail e senha.',
+      },
       expired: {
         title: 'Sua sessão expirou',
         description: 'Por segurança, entre novamente para continuar.',
@@ -31,6 +37,59 @@ export const auth = {
         title: 'Login indisponível no momento',
         description:
           'Não foi possível conectar ao serviço de autenticação. Tente novamente em instantes.',
+      },
+    },
+  },
+  register: {
+    title: 'Criar conta',
+    description:
+      'Preencha os seus dados para se cadastrar na Comunidade Viva. Todos os campos são obrigatórios.',
+    close: 'Fechar',
+    submit: 'Criar conta',
+    submitting: 'Criando conta…',
+    submitHint: 'Preencha todos os campos corretamente para criar a conta.',
+    fullName: 'Nome completo',
+    fullNamePlaceholder: 'Ex.: Maria da Silva',
+    phone: 'Telefone com DDD',
+    phonePlaceholder: '(67) 99999-9999',
+    email: 'E-mail',
+    emailPlaceholder: 'nome@exemplo.com',
+    password: 'Senha',
+    confirmPassword: 'Confirmação de senha',
+    validation: {
+      fullNameRequired: 'Informe o seu nome completo.',
+      fullNameTooLong: 'O nome deve ter no máximo 120 caracteres.',
+      fullNameInvalidCharacters: 'Use apenas letras, espaços, apóstrofo, ponto e hífen.',
+      fullNameIncomplete: 'Informe nome e sobrenome.',
+      phoneRequired: 'Informe o seu telefone com DDD.',
+      phoneIncomplete: 'Telefone incompleto. Informe o DDD e o número.',
+      phoneInvalidAreaCode: 'DDD inválido.',
+      phoneInvalidNumber: 'Número inválido. Celulares têm 9 dígitos e começam com 9.',
+      emailRequired: 'Informe o seu e-mail.',
+      emailTooLong: 'O e-mail deve ter no máximo 254 caracteres.',
+      emailInvalid: 'Informe um e-mail válido.',
+      emailTaken: 'Já existe uma conta com este e-mail.',
+      passwordRequired: 'Crie uma senha.',
+      passwordTooShort: 'A senha deve ter pelo menos 8 caracteres.',
+      passwordTooLong: 'A senha deve ter no máximo 64 caracteres.',
+      passwordEdgeWhitespace: 'A senha não pode começar nem terminar com espaço.',
+      passwordWeak:
+        'Senha fraca. Combine letras maiúsculas e minúsculas, números e símbolos, sem dados pessoais ou sequências óbvias.',
+      confirmPasswordRequired: 'Confirme a sua senha.',
+      passwordMismatch: 'As senhas não conferem.',
+    },
+    notices: {
+      invalidData: {
+        title: 'Não foi possível concluir o cadastro',
+        description: 'Alguns dados foram recusados. Confira as informações e tente novamente.',
+      },
+      tooManyAttempts: {
+        title: 'Muitas tentativas de cadastro',
+        description: 'Aguarde alguns instantes antes de tentar novamente.',
+      },
+      unavailable: {
+        title: 'Cadastro indisponível no momento',
+        description: 'Não foi possível conectar ao serviço. Tente novamente em instantes.',
       },
     },
   },

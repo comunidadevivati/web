@@ -1,5 +1,6 @@
 import livingStoneGreen from '@/assets/brand/living-stone-green.png';
 import logoVivaWhite from '@/assets/brand/logo-viva-white.png';
+import { FormField, PasswordInput } from '@/components/molecules';
 import { PreferencesControls } from '@/components/organisms';
 import {
   Alert,
@@ -11,21 +12,29 @@ import {
   Heading,
   Image,
   Input,
-  Label,
   LoadingOverlay,
   Text,
 } from '@/components/ui';
 import { useLoginViewModel } from '@/features/auth/presentation/view-models/login.view-model';
-import { CircleAlertIcon, LogInIcon } from 'lucide-react';
+import { RegisterView } from '@/features/auth/presentation/views/register.view';
+import { CircleAlertIcon, CircleCheckIcon, LogInIcon, UserPlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const LoginView = () => {
-  const { form, getFieldError, isSubmitting, notice, submit } = useLoginViewModel();
-
   const {
-    formState: { errors },
-    register,
-  } = form;
+    form,
+    fieldErrors,
+    handleRegistered,
+    isInfoNotice,
+    isRegisterOpen,
+    isSubmitting,
+    notice,
+    openRegister,
+    setIsRegisterOpen,
+    submit,
+  } = useLoginViewModel();
+
+  const { register } = form;
 
   const { t } = useTranslation(['auth', 'common']);
 
@@ -88,8 +97,8 @@ export const LoginView = () => {
 
             <Form className="grid gap-5" noValidate onSubmit={submit}>
               {notice && (
-                <Alert variant={notice === 'expired' ? 'default' : 'destructive'}>
-                  <CircleAlertIcon />
+                <Alert variant={isInfoNotice ? 'default' : 'destructive'}>
+                  {notice === 'registered' ? <CircleCheckIcon /> : <CircleAlertIcon />}
 
                   <AlertTitle>{t(`login.notices.${notice}.title`)}</AlertTitle>
 
@@ -97,46 +106,38 @@ export const LoginView = () => {
                 </Alert>
               )}
 
-              <Box className="grid gap-2">
-                <Label htmlFor="login-email">{t('login.email')}</Label>
-
+              <FormField error={fieldErrors.email} id="login-email" label={t('login.email')}>
                 <Input
                   id="login-email"
-                  aria-invalid={Boolean(errors.email)}
+                  aria-describedby={fieldErrors.email ? 'login-email-error' : undefined}
+                  aria-invalid={Boolean(fieldErrors.email)}
+                  aria-required
+                  autoCapitalize="none"
                   autoComplete="email"
                   autoFocus
                   className="h-11"
                   inputMode="email"
                   placeholder={t('login.emailPlaceholder')}
+                  spellCheck={false}
                   type="email"
                   {...register('email')}
                 />
+              </FormField>
 
-                {errors.email?.message && (
-                  <Text className="text-destructive" role="alert">
-                    {getFieldError(errors.email.message)}
-                  </Text>
-                )}
-              </Box>
-
-              <Box className="grid gap-2">
-                <Label htmlFor="login-password">{t('login.password')}</Label>
-
-                <Input
+              <FormField
+                error={fieldErrors.password}
+                id="login-password"
+                label={t('login.password')}
+              >
+                <PasswordInput
                   id="login-password"
-                  aria-invalid={Boolean(errors.password)}
+                  aria-describedby={fieldErrors.password ? 'login-password-error' : undefined}
+                  aria-invalid={Boolean(fieldErrors.password)}
+                  aria-required
                   autoComplete="current-password"
-                  className="h-11"
-                  type="password"
                   {...register('password')}
                 />
-
-                {errors.password?.message && (
-                  <Text className="text-destructive" role="alert">
-                    {getFieldError(errors.password.message)}
-                  </Text>
-                )}
-              </Box>
+              </FormField>
 
               <Button
                 aria-busy={isSubmitting}
@@ -148,9 +149,34 @@ export const LoginView = () => {
                 {isSubmitting ? t('login.submitting') : t('login.submit')}
               </Button>
             </Form>
+
+            <Box
+              className="
+                mt-6 flex flex-wrap items-center justify-center gap-x-1 gap-y-2 text-center
+              "
+            >
+              <Text>{t('login.noAccount')}</Text>
+
+              <Button
+                className="h-10 px-2 text-foreground underline underline-offset-4"
+                disabled={isSubmitting}
+                type="button"
+                variant="link"
+                onClick={openRegister}
+              >
+                <UserPlusIcon data-icon="inline-start" />
+                {t('login.createAccount')}
+              </Button>
+            </Box>
           </Box>
         </Box>
       </Box>
+
+      <RegisterView
+        open={isRegisterOpen}
+        onOpenChange={setIsRegisterOpen}
+        onRegistered={handleRegistered}
+      />
     </>
   );
 };
