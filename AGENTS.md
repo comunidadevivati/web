@@ -741,29 +741,30 @@ Não introduzir outras famílias de cor sem decisão explícita.
 
 #### Tokens disponíveis
 
-| Token                                                                                                                                                                         | Uso                                                                                                                        | Claro                                 | Escuro                  |
-| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ----------------------- |
-| `background` / `foreground`                                                                                                                                                   | fundo de todas as páginas e texto sobre ele                                                                                | teal-200 / 950                        | charcoal-brown / branco |
-| `card` / `card-foreground`                                                                                                                                                    | cards, formulários e painéis sobre o fundo (via `surface-card`)                                                            | teal-100 / 950                        | charcoal / branco       |
-| `muted` / `muted-foreground`                                                                                                                                                  | superfícies sutis e texto secundário (sobre `background` e `card`)                                                         | teal-50 / 800                         | teal-950 / 200          |
-| `secondary` / `secondary-foreground`                                                                                                                                          | botões e superfícies secundárias                                                                                           | teal-100 / 950                        | teal-700 / 50           |
-| `border`, `input`, `ring`                                                                                                                                                     | bordas, campos e foco                                                                                                      | teal-300/300/600                      | teal-700/700/300        |
-| `input-border`                                                                                                                                                                | borda dos campos (`Input`, `InputGroup`), fixa (não muda no foco); no claro fica 2:1 por decisão de identidade             | light-sea-green                       | light-sea-green         |
-| `subtitle`                                                                                                                                                                    | subtítulos (componente `Subtitle`, 1rem, semibold, 90% de opacidade); 3,1:1 sobre o card escuro, por decisão de identidade | light-sea-green                       | light-sea-green         |
-| `input-background`                                                                                                                                                            | fundo dos campos                                                                                                           | transparente                          | charcoal                |
-| `placeholder`                                                                                                                                                                 | placeholder dos campos (via `field-control`, com 80% de opacidade)                                                         | texto secundário (`muted-foreground`) | pale-sky                |
-| `popover` / `popover-foreground`                                                                                                                                              | modais, menus e popovers                                                                                                   | teal-50 / 950                         | charcoal / branco       |
-| `focus-ring`, `focus-ring-halo`                                                                                                                                               | indicador de foco do teclado (contorno + halo), ver seção 33                                                               | teal-950 / branco                     | branco / charcoal       |
-| `destructive`                                                                                                                                                                 | erros e ações destrutivas                                                                                                  | vermelho                              | vermelho                |
-| `destructive-strong`                                                                                                                                                          | texto de erro (mensagens de campo, rótulo inválido, `Alert` destrutivo), contraste AAA 7:1+                                | red-800                               | vermelho claro          |
-| `primary` / `primary-foreground`                                                                                                                                              | cor da marca (Teal 500) e texto sobre ela                                                                                  | teal-500 / 950                        | light-sea-green / preto |
-| `primary-strong`                                                                                                                                                              | texto/ícone da marca sobre `background` e `card` (eyebrows, links, destaque)                                               | teal-800                              | teal-200                |
-| `brand-gradient-start`, `brand-gradient-middle`, `brand-gradient-end`, `brand-foreground`                                                                                     | painel de marca com gradiente (login) e texto sobre ele                                                                    | teal-600→800→950                      | igual                   |
-| `header`, `header-foreground`, `header-border`, `header-accent`, `header-accent-foreground`                                                                                   | headers (público, autenticado e Wi-Fi), iguais nos dois modos                                                              | teal-950 / white                      | igual                   |
-| `sidebar`, `sidebar-foreground`, `sidebar-muted-foreground`, `sidebar-primary`, `sidebar-primary-foreground`, `sidebar-accent`, `sidebar-accent-foreground`, `sidebar-border` | menu lateral do app autenticado                                                                                            | teal-400 / 950                        | teal-900 / white        |
-| `overlay`, `overlay-foreground`                                                                                                                                               | camadas sobre fotos/mídia (carrossel) e base das sombras                                                                   | black / white                         | igual                   |
-| `chart-1` … `chart-4`                                                                                                                                                         | cores categóricas de indicadores e gráficos                                                                                | ajustadas por modo                    | ajustadas por modo      |
-| `social-*`                                                                                                                                                                    | identidade oficial das redes sociais                                                                                       | igual                                 | igual                   |
+| Token                                                                                                                                                                         | Uso                                                                                                                        | Claro                                 | Escuro                   |
+| ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------- | ------------------------------------- | ------------------------ |
+| `background` / `foreground`                                                                                                                                                   | fundo de todas as páginas e texto sobre ele                                                                                | teal-200 / 950                        | charcoal-brown / branco  |
+| `card` / `card-foreground`                                                                                                                                                    | cards, formulários e painéis sobre o fundo (via `surface-card`)                                                            | teal-100 / 950                        | charcoal / branco        |
+| `muted` / `muted-foreground`                                                                                                                                                  | superfícies sutis e texto secundário (sobre `background` e `card`)                                                         | teal-50 / 800                         | teal-950 / 200           |
+| `secondary` / `secondary-foreground`                                                                                                                                          | botões e superfícies secundárias                                                                                           | teal-100 / 950                        | teal-700 / 50            |
+| `border`, `input`, `ring`                                                                                                                                                     | bordas, campos e foco                                                                                                      | teal-300/300/600                      | teal-700/700/300         |
+| `input-border`                                                                                                                                                                | borda dos campos (`Input`, `InputGroup`), fixa (não muda no foco); no claro fica 2:1 por decisão de identidade             | light-sea-green                       | light-sea-green          |
+| `subtitle`                                                                                                                                                                    | subtítulos (componente `Subtitle`, 1rem, semibold, 90% de opacidade); 3,1:1 sobre o card escuro, por decisão de identidade | light-sea-green                       | light-sea-green          |
+| `input-background`                                                                                                                                                            | fundo dos campos                                                                                                           | transparente                          | charcoal                 |
+| `placeholder`                                                                                                                                                                 | placeholder dos campos (via `field-control`, com 80% de opacidade)                                                         | texto secundário (`muted-foreground`) | pale-sky                 |
+| `popover` / `popover-foreground`                                                                                                                                              | modais, menus e popovers                                                                                                   | teal-50 / 950                         | charcoal / branco        |
+| `focus-ring`, `focus-ring-halo`                                                                                                                                               | indicador de foco do teclado (contorno + halo), ver seção 33                                                               | teal-950 / branco                     | branco / charcoal        |
+| `destructive`                                                                                                                                                                 | erros e ações destrutivas                                                                                                  | vermelho                              | vermelho                 |
+| `destructive-strong`                                                                                                                                                          | texto de erro (mensagens de campo, rótulo inválido, `Alert` destrutivo), contraste AAA 7:1+                                | red-800                               | vermelho claro           |
+| `success`, `success-strong`                                                                                                                                                   | sucesso: faixa e barra do toast (`success`) e ícone (`success-strong`, 6,8:1 / 7,3:1)                                      | jungle-green / green-800              | jungle-green / green-100 |
+| `primary` / `primary-foreground`                                                                                                                                              | cor da marca (Teal 500) e texto sobre ela                                                                                  | teal-500 / 950                        | light-sea-green / preto  |
+| `primary-strong`                                                                                                                                                              | texto/ícone da marca sobre `background` e `card` (eyebrows, links, destaque)                                               | teal-800                              | teal-200                 |
+| `brand-gradient-start`, `brand-gradient-middle`, `brand-gradient-end`, `brand-foreground`                                                                                     | painel de marca com gradiente (login) e texto sobre ele                                                                    | teal-600→800→950                      | igual                    |
+| `header`, `header-foreground`, `header-border`, `header-accent`, `header-accent-foreground`                                                                                   | headers (público, autenticado e Wi-Fi), iguais nos dois modos                                                              | teal-950 / white                      | igual                    |
+| `sidebar`, `sidebar-foreground`, `sidebar-muted-foreground`, `sidebar-primary`, `sidebar-primary-foreground`, `sidebar-accent`, `sidebar-accent-foreground`, `sidebar-border` | menu lateral do app autenticado                                                                                            | teal-400 / 950                        | teal-900 / white         |
+| `overlay`, `overlay-foreground`                                                                                                                                               | camadas sobre fotos/mídia (carrossel) e base das sombras                                                                   | black / white                         | igual                    |
+| `chart-1` … `chart-4`                                                                                                                                                         | cores categóricas de indicadores e gráficos                                                                                | ajustadas por modo                    | ajustadas por modo       |
+| `social-*`                                                                                                                                                                    | identidade oficial das redes sociais                                                                                       | igual                                 | igual                    |
 
 **Superfície de card:** cards usam o utilitário `surface-card` (definido com `@utility` no `src/index.css`) em vez de `bg-card`. Ele aplica o fundo do card e reescopa os tokens de conteúdo (`foreground`, `muted`, `muted-foreground`, `primary`, `primary-foreground`, `primary-strong`, `border`, `input`, `ring`) para os valores `--card-*`, mantendo o contraste de tudo que está dentro do card nos dois modos. Componentes dentro do card continuam usando os utilitários de sempre (`text-muted-foreground`, `bg-primary`...).
 
@@ -973,14 +974,14 @@ Não criar rotas da SPA começando com `/auth` ou `/api`. O service worker não 
 
 ### Contrato consumido
 
-| Endpoint              | Uso no front                                                                                                                                                                                      |
-| --------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `GET /auth/me`        | sessão atual: `{ authenticated, csrfToken, user: { subject, email?, name? } }`; 401 = sem sessão                                                                                                  |
-| `POST /auth/login`    | `{ email, password }`; sucesso grava o cookie de sessão; 400/401 = credenciais recusadas; 429 = limite de tentativas                                                                              |
-| `POST /auth/register` | `{ name, phone, email, password }` (telefone só com dígitos, e-mail em minúsculas); 201 = conta criada, sem sessão; 409 = e-mail já cadastrado; 400 = dados recusados; 429 = limite de tentativas |
-| `POST /auth/logout`   | encerra a sessão; exige o header `X-CSRF-Token`; 204                                                                                                                                              |
+| Endpoint              | Uso no front                                                                                                                                                                                                                                    |
+| --------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `GET /auth/me`        | sessão atual: `{ authenticated, csrfToken, user: { subject, email?, name? } }`; 401 = sem sessão                                                                                                                                                |
+| `POST /auth/login`    | `{ email, password }`; 200 grava o cookie de sessão e devolve `{ authenticated, message, csrfToken, user }`; 400/401 = credenciais recusadas; 429 = limite de tentativas                                                                        |
+| `POST /auth/register` | `{ name, phone, email, password }` (telefone só com dígitos, e-mail em minúsculas); 201 = conta criada e sessão aberta (cookie HttpOnly, mesmo formato do login); 409 = e-mail já cadastrado; 400 = dados recusados; 429 = limite de tentativas |
+| `POST /auth/logout`   | encerra a sessão; exige o header `X-CSRF-Token`; 200 com `{ authenticated: false, message }`                                                                                                                                                    |
 
-Contratos em `apps/bff/src/auth/presentation/*.controller.ts` do backend (o `POST /auth/login` com e-mail e senha foi definido no front junto da remoção do Keycloak; conferir o backend quando for implementado). Não inventar endpoints: conferir o backend antes de consumir algo novo.
+Contratos em `apps/bff/src/auth/presentation/*.controller.ts` do backend (`POST /auth/login`, `POST /auth/register`, `GET /auth/me` e `POST /auth/logout` implementados no BFF). Não inventar endpoints: conferir o backend antes de consumir algo novo.
 
 ### Código
 
@@ -1010,7 +1011,7 @@ O Router recebe `{ queryClient }` como contexto (`createRootRouteWithContext<Rou
 /login           beforeLoad: com sessão → /dashboard; sem sessão ou BFF indisponível → fica no login
 ```
 
-Após o `POST /auth/login`, o front invalida a sessão em cache e navega para `/dashboard`.
+Após o `POST /auth/login` ou o `POST /auth/register`, o front invalida a sessão em cache, navega para `/dashboard` e mostra a `message` do corpo da resposta (opcional, lida por `parseSessionStart`) em um toast de sucesso.
 
 ### Sessão expirada (401)
 
@@ -1031,7 +1032,7 @@ Após o `POST /auth/login`, o front invalida a sessão em cache e navega para `/
 - o campo de e-mail recebe foco ao entrar na tela; `autoComplete` `email` e `current-password`;
 - o botão `Entrar` só fica desabilitado durante o envio (o preenchimento automático de senhas nem sempre marca o formulário como alterado);
 - durante o envio: `LoadingOverlay`, botão desabilitado e texto `login.submitting`;
-- sucesso: invalida a sessão em cache e navega para `/dashboard` (`replace`);
+- sucesso: invalida a sessão em cache, navega para `/dashboard` (`replace`) e exibe um toast de sucesso (`login.success.title`) com a `message` devolvida pelo BFF; sem `message`, usa `login.success.description`;
 - avisos (`Alert`):
   - `?reason=expired` → sessão expirada;
   - 400/401 → e-mail ou senha incorretos (a senha é limpa);
@@ -1049,7 +1050,7 @@ Search params da rota validados por `loginSearchSchema` (`login.model.ts`).
 - força da senha (`src/shared/validation/password-strength.ts`): fraca, média ou forte, exibida pelo `PasswordStrengthMeter`. É fraca com menos de 8 caracteres, menos de 3 tipos de caractere (minúscula, maiúscula, número, símbolo), termos óbvios (`senha`, `qwerty`, `igreja`...), partes do nome ou do e-mail, ou sequências/repetições que derrubam a pontuação;
 - o botão `Criar conta` fica desabilitado até o formulário estar válido e durante o envio; o modal fecha **somente pelo botão "X"** (Esc e clique fora são ignorados) e nunca durante o envio; não há botão Cancelar;
 - 409 marca o campo de e-mail; demais falhas aparecem em `Alert` no modal;
-- sucesso: fecha o modal, mostra o aviso `login.notices.registered` e preenche o e-mail do login (o cadastro não abre sessão).
+- sucesso: o BFF já abre a sessão na resposta do cadastro (não há segunda chamada de login); o front invalida a sessão em cache e navega para `/dashboard` (`replace`), mantendo o envio travado até a navegação terminar, e exibe um toast de sucesso (`register.success.title`) com a `message` do BFF (ou `register.success.description`).
 
 ---
 
@@ -1289,25 +1290,22 @@ O conjunto definitivo de ícones PWA 192/512/maskable ainda deve ser tratado qua
 
 ## 21. Loading global
 
-`LoadingOverlay` deve:
+`LoadingOverlay` (`src/components/ui/loading-overlay.tsx`) é o único loading de tela cheia da aplicação. Ele:
 
-- ocupar toda a viewport;
-- ficar acima de toda a aplicação;
-- centralizar o spinner;
-- impedir scroll;
-- indicar cursor de espera;
-- bloquear interação visualmente;
-- restaurar `overflow` anterior no cleanup.
+- ocupa toda a viewport, acima de tudo (inclusive modais e toasts), com o fundo da página;
+- mostra o símbolo da Viva dentro de um anel girando e o texto `common:processing` ("Processando, por favor aguarde") com pontos animados: um ponto a cada 0,5s, de 1 a 5, recomeçando;
+- bloqueia **toda** interação: mouse/toque (overlay por cima), teclado (qualquer tecla é descartada), foco e leitor de tela (`inert` em todo o resto da página); mostra o cursor de espera e impede o scroll;
+- anuncia o texto uma única vez ao leitor de tela (`role="status"`), sem repetir a cada ponto;
+- restaura tudo ao sair; overlays simultâneos (ex.: request + troca de rota) compartilham o bloqueio e só liberam a tela quando o último sai.
 
-Uso atual:
+### Como ativar
 
-```tsx
-{
-  isSubmitting && <LoadingOverlay />;
-}
-```
+- em ViewModels, enquanto uma mutation estiver em andamento: `useGlobalLoading(isPending)`;
+- em fluxos imperativos: `await globalLoading.run(() => tarefa())` ou `const stop = globalLoading.start(); ... stop();`;
+- (`src/shared/feedback/global-loading.ts`; o organismo `GlobalLoading`, montado no `main.tsx`, exibe o overlay enquanto houver operação registrada);
+- renderizar `<LoadingOverlay />` direto continua válido (ex.: `RoutePending`, login, logout, Wi-Fi).
 
-Não criar spinners globais concorrentes sem necessidade.
+Não criar spinners globais concorrentes.
 
 ---
 
@@ -1933,14 +1931,23 @@ src/components/
 └── organisms/   organismos: blocos maiores de interface, compostos por moléculas e átomos
 ```
 
-- **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Sheet`, `Spinner`, `Subtitle` (subtítulo padrão de telas, cards e modais; o `DialogDescription` já renderiza um `Subtitle`), `Text`, `Tooltip`, `Dialog`, `Field` (`FieldGroup`, `FieldLabel`, `FieldError`...), `InputGroup`, `Progress`, `Separator`. Única camada que pode usar HTML nativo.
-- **`molecules/`:** `CardSectionHeader` (cabeçalho de seção de card com ícone, título e descrição), `LocaleToggle` (escolha de idioma), `PreferenceToggleGroup` (base dos seletores de preferência), `TooltipHint`, `UserMenu` (avatar com iniciais e menu da conta) (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido), `FormField` (rótulo, controle, descrição e erro de um campo), `PasswordInput` (senha com mostrar/ocultar), `PasswordStrengthMeter` (força da senha e requisitos), `PhoneInput` (telefone brasileiro com máscara, compatível com o `register` do RHF).
+- **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Sheet`, `Spinner`, `Subtitle` (subtítulo padrão de telas, cards e modais; o `DialogDescription` já renderiza um `Subtitle`), `Text`, `Toast` (primitivas do toast do shadcn sobre o Base UI), `Tooltip`, `Dialog`, `Field` (`FieldGroup`, `FieldLabel`, `FieldError`...), `InputGroup`, `Progress`, `Separator`. Única camada que pode usar HTML nativo.
+- **`molecules/`:** `CardSectionHeader` (cabeçalho de seção de card com ícone, título e descrição), `LocaleToggle` (escolha de idioma), `PreferenceToggleGroup` (base dos seletores de preferência), `TooltipHint`, `UserMenu` (avatar com iniciais e menu da conta) (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido), `FormField` (rótulo, controle, descrição e erro de um campo), `PasswordInput` (senha com mostrar/ocultar), `PasswordStrengthMeter` (força da senha e requisitos), `PhoneInput` (telefone brasileiro com máscara, compatível com o `register` do RHF), `NotificationToast` (toast de sucesso/erro com contagem regressiva).
 
 Regras de validação reutilizáveis e independentes de UI (telefone brasileiro, política de senha) ficam em `src/shared/validation`.
 
 **Campos de formulário (padrão único):** todo controle de formulário (input, campo com botão como o de senha, select, textarea, combobox...) usa as classes de `src/components/ui/field-control.ts`: `fieldControlClassName` quando o próprio elemento é o campo e `fieldGroupClassName` quando um contêiner envolve o campo e complementos (`InputGroup`). Elas definem altura (`h-11`, alvo de toque de 44px), fundo (`input-background`), borda (`input-border`, sempre a mesma cor, inclusive no foco), raio, texto (`foreground`, que não fica vermelho quando inválido), placeholder (`placeholder`), foco, inválido e desabilitado. Não definir cor, borda ou fundo próprios em um novo controle; ao adicionar um `select` ou `textarea` do shadcn, trocar as classes geradas por essas.
 
-- **`organisms/`:** `PublicHeader`, `AppFooter`, `AppSidebar`, `AppSidebarDrawer` (menu lateral em drawer no celular), `PreferencesControls` (idioma + tema), `PreferencesPopover` (preferências recolhidas em um botão), `StatusPage`.
+- **`organisms/`:** `PublicHeader`, `AppFooter`, `AppSidebar`, `AppSidebarDrawer` (menu lateral em drawer no celular), `PreferencesControls` (idioma + tema), `PreferencesPopover` (preferências recolhidas em um botão), `StatusPage`, `Toaster` (provedor global dos toasts, montado no `main.tsx`), `GlobalLoading` (exibe o `LoadingOverlay` quando acionado por `globalLoading`/`useGlobalLoading`).
+
+### Mensagens de retorno das requests (toast)
+
+- ViewModels exibem o retorno de uma request com `notify.success({ title, description })` ou `notify.error({ title, description })` (`src/shared/feedback/notify.ts`), sempre com textos já traduzidos (`t(...)`); não montar toasts à mão;
+- cada toast tem ícone, título, subtítulo opcional, botão de fechar ("X") e uma barra que conta de 7s até 0s (`TOAST_DURATION_MS`); ao chegar a 0s ele fecha sozinho;
+- a contagem pausa com o mouse ou o foco sobre o toast e com a aba em segundo plano (WCAG 2.2.1);
+- erros têm prioridade alta (anunciados na hora pelo leitor de tela) e sucesso prioridade baixa (anunciado sem interromper). Pelo padrão do Base UI, o toast de erro visível fica `aria-hidden` porque o anúncio sai por uma região `alert` própria; F6 leva o foco para os toasts;
+- no máximo 3 toasts visíveis, no topo (largura total no celular, à direita a partir de `sm`);
+- cores: faixa lateral e barra em `success`/`destructive`, ícone em `success-strong`/`destructive-strong`.
 
 Cada componente fica em sua própria pasta (`molecules/theme-toggle/theme-toggle.tsx`), junto do seu teste, e é exportado pelo `index.ts` do grupo (ver 7.12).
 
