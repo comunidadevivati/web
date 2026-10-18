@@ -9,7 +9,12 @@ import { z } from 'zod';
 
 const RESET_TOKEN_PATTERN = /^[A-Za-z0-9_-]{43}$/u;
 
-export type ResetPasswordNotice = 'invalidLink' | 'tooManyAttempts' | 'unavailable';
+// Avisos de falha da request, exibidos em toast (o link ausente aparece na própria tela).
+export type ResetPasswordNotice =
+  | 'invalidLink'
+  | 'tooManyAttempts'
+  | 'unavailable'
+  | 'weakPassword';
 
 export const resetPasswordValidationMessages = {
   passwordRequired: 'resetPassword.validation.passwordRequired',

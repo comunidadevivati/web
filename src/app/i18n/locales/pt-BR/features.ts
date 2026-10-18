@@ -82,7 +82,7 @@ export const auth = {
     backToLogin: 'Voltar para o login',
     success: {
       title: 'Senha redefinida',
-      description: 'Sua senha foi redefinida. Entre novamente para continuar.',
+      description: 'Senha redefinida com sucesso.',
     },
     validation: {
       passwordRequired: 'Crie uma nova senha.',
@@ -95,6 +95,10 @@ export const auth = {
       passwordMismatch: 'As senhas não conferem.',
     },
     notices: {
+      weakPassword: {
+        title: 'Senha não aceita',
+        description: 'A nova senha não atende aos requisitos de segurança.',
+      },
       invalidLink: {
         title: 'Link inválido ou expirado',
         description: 'Solicite um novo link na tela de login para redefinir sua senha.',

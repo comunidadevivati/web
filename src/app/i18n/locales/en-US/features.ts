@@ -82,7 +82,7 @@ export const auth = {
     backToLogin: 'Back to sign in',
     success: {
       title: 'Password reset',
-      description: 'Your password has been reset. Sign in again to continue.',
+      description: 'Your password was reset successfully.',
     },
     validation: {
       passwordRequired: 'Create a new password.',
@@ -95,6 +95,10 @@ export const auth = {
       passwordMismatch: 'Passwords do not match.',
     },
     notices: {
+      weakPassword: {
+        title: 'Password not accepted',
+        description: 'The new password does not meet the security requirements.',
+      },
       invalidLink: {
         title: 'Invalid or expired link',
         description: 'Request a new link from the sign-in page to reset your password.',

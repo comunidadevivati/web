@@ -19,7 +19,7 @@ import {
 import { useResetPasswordViewModel } from '@/features/auth/presentation/view-models/reset-password.view-model';
 import { cn } from '@/lib/utils';
 import { PASSWORD_MAX_LENGTH } from '@/shared/validation/password-strength';
-import { CheckCircleIcon, CircleAlertIcon, KeyRoundIcon, LogInIcon } from 'lucide-react';
+import { CircleAlertIcon, KeyRoundIcon, LogInIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 export const ResetPasswordView = () => {
@@ -27,15 +27,13 @@ export const ResetPasswordView = () => {
     fieldErrors,
     form,
     goToLogin,
+    isLinkMissing,
     isSubmitDisabled,
     isSubmitting,
-    isSuccess,
-    notice,
     passwordRegistration,
     passwordRequirements,
     passwordStrength,
     submit,
-    successMessage,
   } = useResetPasswordViewModel();
 
   const { register } = form;
@@ -99,24 +97,7 @@ export const ResetPasswordView = () => {
               <Subtitle className="mt-2">{t('resetPassword.description')}</Subtitle>
             </Box>
 
-            {isSuccess ? (
-              <Box className="grid gap-6 text-center" role="status">
-                <Box className="flex justify-center">
-                  <CheckCircleIcon aria-hidden="true" className="size-12 text-success-strong" />
-                </Box>
-
-                <Box className="grid gap-2">
-                  <Heading level={2}>{t('resetPassword.success.title')}</Heading>
-
-                  <Text>{successMessage ?? t('resetPassword.success.description')}</Text>
-                </Box>
-
-                <Button className="h-11 w-full" type="button" onClick={goToLogin}>
-                  <LogInIcon data-icon="inline-start" />
-                  {t('resetPassword.backToLogin')}
-                </Button>
-              </Box>
-            ) : notice === 'invalidLink' ? (
+            {isLinkMissing ? (
               <Box className="grid gap-6">
                 <Alert variant="destructive">
                   <CircleAlertIcon />
@@ -183,18 +164,6 @@ export const ResetPasswordView = () => {
                   </FormField>
                 </FieldGroup>
 
-                {notice && (
-                  <Alert variant="destructive">
-                    <CircleAlertIcon />
-
-                    <AlertTitle>{t(`resetPassword.notices.${notice}.title`)}</AlertTitle>
-
-                    <AlertDescription>
-                      {t(`resetPassword.notices.${notice}.description`)}
-                    </AlertDescription>
-                  </Alert>
-                )}
-
                 <Text className="sr-only" id="reset-password-submit-hint">
                   {t('resetPassword.submitHint')}
                 </Text>
@@ -211,6 +180,17 @@ export const ResetPasswordView = () => {
                 >
                   <KeyRoundIcon data-icon="inline-start" />
                   {isSubmitting ? t('resetPassword.submitting') : t('resetPassword.submit')}
+                </Button>
+
+                <Button
+                  className="h-11 w-full"
+                  disabled={isSubmitting}
+                  type="button"
+                  variant="outline"
+                  onClick={goToLogin}
+                >
+                  <LogInIcon data-icon="inline-start" />
+                  {t('resetPassword.backToLogin')}
                 </Button>
               </Form>
             )}

@@ -65,8 +65,8 @@ CORS. O front usa:
   429 = limite de tentativas);
 - `POST /auth/password-recovery`: `{ email }`; solicita a recuperação com resposta neutra, sem
   revelar se a conta existe;
-- `POST /auth/password-reset`: `{ token, password }`; redefine a senha a partir do link recebido e
-  encerra as sessões existentes;
+- `POST /auth/password-reset`: `{ token, password }`; redefine a senha a partir do link recebido,
+  encerra as sessões existentes e abre uma nova (o front segue para o dashboard com um toast);
 - `GET /auth/me`: sessão atual (401 = sem sessão), com o token CSRF mantido só em memória;
 - `POST /auth/logout`: encerra a sessão, com o header `X-CSRF-Token`.
 

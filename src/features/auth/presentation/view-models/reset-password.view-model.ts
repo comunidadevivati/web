@@ -1,4 +1,5 @@
 import type { TranslationKey } from '@/app/i18n/translation-key';
+import { authSessionQueryOptions } from '@/features/auth/application/queries/auth-session.query';
 import { resetPasswordUseCase } from '@/features/auth/application/use-cases/reset-password.use-case';
 import { TooManyAttemptsError } from '@/features/auth/domain/auth-session';
 import {
@@ -11,20 +12,21 @@ import {
   type ResetPasswordFormData,
   type ResetPasswordNotice,
 } from '@/features/auth/presentation/models/reset-password.model';
+import { notify } from '@/shared/feedback/notify';
 import {
   getPasswordRequirements,
   getPasswordStrength,
 } from '@/shared/validation/password-strength';
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation } from '@tanstack/react-query';
+import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
 import { useEffect, useState } from 'react';
 import { useForm, useWatch } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-const getErrorNotice = (error: Error): ResetPasswordNotice | null => {
+const getErrorNotice = (error: Error): ResetPasswordNotice => {
   if (error instanceof WeakPasswordResetError) {
-    return null;
+    return 'weakPassword';
   }
 
   if (error instanceof InvalidPasswordResetTokenError) {
@@ -44,6 +46,8 @@ export const useResetPasswordViewModel = () => {
   const [resetToken] = useState(token);
 
   const navigate = useNavigate();
+
+  const queryClient = useQueryClient();
 
   const { t } = useTranslation('auth');
 
@@ -83,10 +87,31 @@ export const useResetPasswordViewModel = () => {
     void navigate({ to: '/reset-password', search: {}, replace: true });
   }, [navigate, token]);
 
-  const { data, error, isPending, isSuccess, mutate } = useMutation({
+  const { isPending, isSuccess, mutate } = useMutation({
     mutationFn: (newPassword: string) =>
       resetPasswordUseCase({ password: newPassword, token: resetToken ?? '' }),
+    // O BFF já abriu a nova sessão: segue direto para a aplicação, como no login.
+    onSuccess: async ({ message }) => {
+      await queryClient.invalidateQueries({
+        queryKey: authSessionQueryOptions.queryKey,
+      });
+
+      await navigate({ to: '/dashboard', replace: true });
+
+      notify.success({
+        title: t('resetPassword.success.title'),
+        description: message ?? t('resetPassword.success.description'),
+      });
+    },
+    // Falhas da request: toast com o motivo, mantendo a pessoa nesta tela.
     onError: (resetError) => {
+      const errorNotice = getErrorNotice(resetError);
+
+      notify.error({
+        title: t(`resetPassword.notices.${errorNotice}.title`),
+        description: t(`resetPassword.notices.${errorNotice}.description`),
+      });
+
       if (resetError instanceof WeakPasswordResetError) {
         setError(
           'password',
@@ -100,11 +125,11 @@ export const useResetPasswordViewModel = () => {
     },
   });
 
-  const notice: ResetPasswordNotice | null = !resetToken
-    ? 'invalidLink'
-    : error
-      ? getErrorNotice(error)
-      : null;
+  // Sem token, a tela mostra o aviso de link inválido no lugar do formulário.
+  const isLinkMissing = !resetToken;
+
+  // Mantém o overlay até a navegação para o dashboard terminar.
+  const isSubmitting = isPending || isSuccess;
 
   const passwordRegistration = register('password', {
     onChange: () => {
@@ -127,7 +152,7 @@ export const useResetPasswordViewModel = () => {
     confirmPassword: getFieldError('confirmPassword'),
   };
 
-  const isSubmitDisabled = !isValid || isPending || !resetToken;
+  const isSubmitDisabled = !isValid || isSubmitting || isLinkMissing;
 
   const submit = handleSubmit(({ password: newPassword }) => {
     if (isSubmitDisabled) {
@@ -146,13 +171,11 @@ export const useResetPasswordViewModel = () => {
     form,
     goToLogin,
     isSubmitDisabled,
-    isSubmitting: isPending,
-    isSuccess,
-    notice,
+    isLinkMissing,
+    isSubmitting,
     passwordRegistration,
     passwordRequirements,
     passwordStrength,
     submit,
-    successMessage: data?.message,
   };
 };
