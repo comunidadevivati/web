@@ -10,6 +10,7 @@ export const common = {
     events: 'Eventos',
     contact: 'Contato',
     login: 'Login',
+    resetPassword: 'Redefinir senha',
     dashboard: 'Dashboard',
     guestWifi: 'Wi-Fi Visitantes',
   },

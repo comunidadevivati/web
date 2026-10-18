@@ -15,6 +15,7 @@ import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as EventosRouteImport } from './routes/eventos'
 import { Route as HistoriaRouteImport } from './routes/historia'
 import { Route as LoginRouteImport } from './routes/login'
+import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as WifiVisitantesRouteImport } from './routes/wifi-visitantes'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 
@@ -47,6 +48,11 @@ const LoginRoute = LoginRouteImport.update({
   path: '/login',
   getParentRoute: () => rootRouteImport,
 } as any)
+const ResetPasswordRoute = ResetPasswordRouteImport.update({
+  id: '/reset-password',
+  path: '/reset-password',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const WifiVisitantesRoute = WifiVisitantesRouteImport.update({
   id: '/wifi-visitantes',
   path: '/wifi-visitantes',
@@ -64,6 +70,7 @@ export interface FileRoutesByFullPath {
   '/eventos': typeof EventosRoute
   '/historia': typeof HistoriaRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/wifi-visitantes': typeof WifiVisitantesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
 }
@@ -73,6 +80,7 @@ export interface FileRoutesByTo {
   '/eventos': typeof EventosRoute
   '/historia': typeof HistoriaRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/wifi-visitantes': typeof WifiVisitantesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
 }
@@ -84,6 +92,7 @@ export interface FileRoutesById {
   '/eventos': typeof EventosRoute
   '/historia': typeof HistoriaRoute
   '/login': typeof LoginRoute
+  '/reset-password': typeof ResetPasswordRoute
   '/wifi-visitantes': typeof WifiVisitantesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
 }
@@ -95,6 +104,7 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/historia'
     | '/login'
+    | '/reset-password'
     | '/wifi-visitantes'
     | '/dashboard'
   fileRoutesByTo: FileRoutesByTo
@@ -104,6 +114,7 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/historia'
     | '/login'
+    | '/reset-password'
     | '/wifi-visitantes'
     | '/dashboard'
   id:
@@ -114,6 +125,7 @@ export interface FileRouteTypes {
     | '/eventos'
     | '/historia'
     | '/login'
+    | '/reset-password'
     | '/wifi-visitantes'
     | '/_authenticated/dashboard'
   fileRoutesById: FileRoutesById
@@ -125,6 +137,7 @@ export interface RootRouteChildren {
   EventosRoute: typeof EventosRoute
   HistoriaRoute: typeof HistoriaRoute
   LoginRoute: typeof LoginRoute
+  ResetPasswordRoute: typeof ResetPasswordRoute
   WifiVisitantesRoute: typeof WifiVisitantesRoute
 }
 
@@ -172,6 +185,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof LoginRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/reset-password': {
+      id: '/reset-password'
+      path: '/reset-password'
+      fullPath: '/reset-password'
+      preLoaderRoute: typeof ResetPasswordRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/wifi-visitantes': {
       id: '/wifi-visitantes'
       path: '/wifi-visitantes'
@@ -208,6 +228,7 @@ const rootRouteChildren: RootRouteChildren = {
   EventosRoute: EventosRoute,
   HistoriaRoute: HistoriaRoute,
   LoginRoute: LoginRoute,
+  ResetPasswordRoute: ResetPasswordRoute,
   WifiVisitantesRoute: WifiVisitantesRoute,
 }
 export const routeTree = rootRouteImport

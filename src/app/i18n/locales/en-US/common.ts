@@ -11,6 +11,7 @@ export const common = {
     events: 'Events',
     contact: 'Contact',
     login: 'Sign in',
+    resetPassword: 'Reset password',
     dashboard: 'Dashboard',
     guestWifi: 'Guest Wi-Fi',
   },
