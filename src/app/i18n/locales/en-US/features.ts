@@ -113,6 +113,27 @@ export const auth = {
       },
     },
   },
+  verifyEmail: {
+    tagline: 'Confirm your email to enjoy everything the community has prepared for you.',
+    title: 'Email verification',
+    verifying: 'Verifying your email…',
+    goToApp: 'Go to the app',
+    success: {
+      title: 'Email verified',
+      description: 'Your email was verified successfully.',
+    },
+    notices: {
+      invalidLink: {
+        title: 'Invalid or expired link',
+        description:
+          'Sign in and use "Resend verification email" in the account menu to receive a new link.',
+      },
+      unavailable: {
+        title: 'Verification is currently unavailable',
+        description: 'We could not reach the service. Please try again shortly.',
+      },
+    },
+  },
   register: {
     title: 'Create account',
     description: 'Fill in your details to sign up for Comunidade Viva. All fields are required.',
@@ -188,6 +209,11 @@ export const home = {
 export const dashboard = {
   title: 'Dashboard',
   subtitle: 'Overview of Comunidade Viva.',
+  unverified: {
+    title: 'Account not verified',
+    description:
+      'Confirm your email using the link we sent to unlock the app information. Did not get it? Use "Resend verification email" in the account menu.',
+  },
   states: {
     error: {
       title: 'Could not load the dashboard',
