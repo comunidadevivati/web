@@ -1238,7 +1238,7 @@ Schema atual:
 
 ```ts
 const envSchema = z.object({
-  VITE_ENV: z.enum(['development', 'homologation', 'staging', 'production']),
+  VITE_ENV: z.enum(['development', 'homologation', 'production']),
 });
 ```
 
@@ -1254,7 +1254,6 @@ Ambientes reconhecidos:
 ```text
 development
 homologation
-staging
 production
 ```
 
@@ -1557,9 +1556,12 @@ Não use Router cache como substituto de Query para server state.
 
 ### Estratégia atual
 
-Durante a fase inicial do projeto, mudanças têm sido feitas diretamente em `main`.
+Fluxo obrigatório: `feat/*`, `fix/*` ou `hotfix/*` → PR para `homologation` → PR para `main`.
 
-Não mudar esse fluxo por conta própria enquanto o responsável não solicitar branch/PR obrigatório.
+- nunca fazer commit ou push direto em `main` ou `homologation` (protegidas por rulesets);
+- `homologation` publica HML (`https://hml.comvivaeficaz.com.br`) e `main` publica produção;
+- a `main` só recebe PRs da `homologation`, com merge commit; após cada release, sincronizar a
+  `main` de volta na `homologation` por PR.
 
 ### Commits
 

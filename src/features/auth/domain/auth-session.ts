@@ -3,6 +3,8 @@ export type AuthUser = {
   subject: string;
   email?: string;
   name?: string;
+  // false enquanto o e-mail do cadastro não for confirmado pelo link enviado.
+  emailVerified: boolean;
 };
 
 // Sessão ativa no BFF. O cookie HttpOnly fica no navegador; o front só conhece o usuário e o token

@@ -10,6 +10,8 @@ export const common = {
     events: 'Eventos',
     contact: 'Contato',
     login: 'Login',
+    resetPassword: 'Redefinir senha',
+    verifyEmail: 'Verificar e-mail',
     dashboard: 'Dashboard',
     guestWifi: 'Wi-Fi Visitantes',
   },
@@ -21,6 +23,8 @@ export const common = {
     dashboard: 'Dashboard',
     login: 'Login',
     logout: 'Sair',
+    emailNotVerified: 'Não verificado',
+    resendVerification: 'Reenviar e-mail de verificação',
     accountMenu: 'Menu da conta',
     greeting: 'Olá, {{name}}',
     mainMenu: 'Menu principal',
@@ -34,6 +38,34 @@ export const common = {
     hideSidebar: 'Ocultar menu lateral',
     expandSidebar: 'Expandir menu lateral',
     collapseSidebar: 'Recolher menu lateral',
+  },
+  emailVerification: {
+    resendDialog: {
+      title: 'Reenviar e-mail de verificação',
+      description: 'O e-mail de verificação será enviado para {{email}} do usuário {{name}}.',
+      submit: 'Enviar',
+      submitting: 'Enviando…',
+      cancel: 'Cancelar',
+    },
+    resendSuccess: {
+      title: 'E-mail enviado',
+      description: 'Enviamos um novo link de verificação para o seu e-mail.',
+    },
+    resendErrors: {
+      alreadyVerified: {
+        title: 'E-mail já verificado',
+        description: 'Este e-mail já foi verificado.',
+      },
+      tooManyAttempts: {
+        title: 'Aguarde um pouco',
+        description: 'Aguarde alguns instantes antes de solicitar um novo e-mail.',
+      },
+      unavailable: {
+        title: 'Não foi possível enviar',
+        description:
+          'Não foi possível enviar o e-mail de verificação. Tente novamente em instantes.',
+      },
+    },
   },
   session: {
     logoutFailed: {

@@ -17,6 +17,7 @@ const authMeResponseSchema = z.object({
     subject: z.string().min(1),
     email: z.string().optional(),
     name: z.string().optional(),
+    emailVerified: z.boolean(),
   }),
 });
 

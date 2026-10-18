@@ -2,7 +2,7 @@
 /// <reference types="vite-plugin-pwa/client" />
 
 interface ImportMetaEnv {
-  readonly VITE_ENV: 'development' | 'homologation' | 'staging' | 'production';
+  readonly VITE_ENV: 'development' | 'homologation' | 'production';
 }
 
 interface ImportMeta {

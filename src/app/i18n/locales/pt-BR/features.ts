@@ -13,6 +13,7 @@ export const auth = {
       title: 'Login realizado',
       description: 'Bem-vindo(a) de volta à Comunidade Viva.',
     },
+    forgotPassword: 'Esqueci minha senha',
     noAccount: 'Ainda não tem conta?',
     createAccount: 'Criar conta',
     validation: {
@@ -37,6 +38,99 @@ export const auth = {
         title: 'Login indisponível no momento',
         description:
           'Não foi possível conectar ao serviço de autenticação. Tente novamente em instantes.',
+      },
+    },
+  },
+  forgotPassword: {
+    title: 'Recuperar senha',
+    description: 'Informe o e-mail da sua conta para receber um link de troca de senha.',
+    close: 'Fechar',
+    email: 'E-mail',
+    emailPlaceholder: 'nome@exemplo.com',
+    submit: 'Enviar',
+    submitting: 'Enviando…',
+    success: {
+      title: 'Solicitação enviada',
+      description:
+        'Se existir uma conta vinculada a {{email}}, o link chegará em alguns minutos. Confira também a caixa de spam.',
+    },
+    validation: {
+      emailRequired: 'Informe o seu e-mail.',
+      emailTooLong: 'O e-mail deve ter no máximo 254 caracteres.',
+      emailInvalid: 'Informe um e-mail válido.',
+    },
+    notices: {
+      tooManyAttempts: {
+        title: 'Muitas solicitações',
+        description: 'Aguarde alguns instantes antes de tentar novamente.',
+      },
+      unavailable: {
+        title: 'Envio indisponível no momento',
+        description: 'Não foi possível conectar ao serviço. Tente novamente em instantes.',
+      },
+    },
+  },
+  resetPassword: {
+    tagline: 'Sua conta protegida para você continuar conectado à nossa comunidade.',
+    title: 'Criar nova senha',
+    description: 'Defina uma senha segura e diferente da anterior.',
+    password: 'Nova senha',
+    confirmPassword: 'Confirmação da nova senha',
+    submit: 'Redefinir senha',
+    submitting: 'Redefinindo…',
+    submitHint: 'Preencha os dois campos corretamente para redefinir a senha.',
+    backToLogin: 'Voltar para o login',
+    success: {
+      title: 'Senha redefinida',
+      description: 'Senha redefinida com sucesso.',
+    },
+    validation: {
+      passwordRequired: 'Crie uma nova senha.',
+      passwordTooShort: 'A senha deve ter pelo menos 8 caracteres.',
+      passwordTooLong: 'A senha deve ter no máximo 64 caracteres.',
+      passwordEdgeWhitespace: 'A senha não pode começar nem terminar com espaço.',
+      passwordWeak:
+        'Senha fraca. Combine letras maiúsculas e minúsculas, números e símbolos, sem sequências óbvias.',
+      confirmPasswordRequired: 'Confirme a nova senha.',
+      passwordMismatch: 'As senhas não conferem.',
+    },
+    notices: {
+      weakPassword: {
+        title: 'Senha não aceita',
+        description: 'A nova senha não atende aos requisitos de segurança.',
+      },
+      invalidLink: {
+        title: 'Link inválido ou expirado',
+        description: 'Solicite um novo link na tela de login para redefinir sua senha.',
+      },
+      tooManyAttempts: {
+        title: 'Muitas tentativas',
+        description: 'Aguarde alguns instantes antes de tentar novamente.',
+      },
+      unavailable: {
+        title: 'Redefinição indisponível no momento',
+        description: 'Não foi possível conectar ao serviço. Tente novamente em instantes.',
+      },
+    },
+  },
+  verifyEmail: {
+    tagline: 'Confirme seu e-mail para aproveitar tudo o que a comunidade preparou para você.',
+    title: 'Verificação de e-mail',
+    verifying: 'Verificando seu e-mail…',
+    goToApp: 'Ir para a aplicação',
+    success: {
+      title: 'E-mail verificado',
+      description: 'E-mail verificado com sucesso.',
+    },
+    notices: {
+      invalidLink: {
+        title: 'Link inválido ou expirado',
+        description:
+          'Entre na aplicação e use "Reenviar e-mail de verificação", no menu da conta, para receber um novo link.',
+      },
+      unavailable: {
+        title: 'Verificação indisponível no momento',
+        description: 'Não foi possível conectar ao serviço. Tente novamente em instantes.',
       },
     },
   },
@@ -116,6 +210,11 @@ export const home = {
 export const dashboard = {
   title: 'Dashboard',
   subtitle: 'Visão geral da Comunidade Viva.',
+  unverified: {
+    title: 'Conta não verificada',
+    description:
+      'Confirme seu e-mail pelo link que enviamos para liberar as informações da aplicação. Não recebeu? Use "Reenviar e-mail de verificação" no menu da conta.',
+  },
   states: {
     error: {
       title: 'Não foi possível carregar o dashboard',

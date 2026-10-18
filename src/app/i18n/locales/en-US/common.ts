@@ -11,6 +11,8 @@ export const common = {
     events: 'Events',
     contact: 'Contact',
     login: 'Sign in',
+    resetPassword: 'Reset password',
+    verifyEmail: 'Verify email',
     dashboard: 'Dashboard',
     guestWifi: 'Guest Wi-Fi',
   },
@@ -22,6 +24,8 @@ export const common = {
     dashboard: 'Dashboard',
     login: 'Sign in',
     logout: 'Sign out',
+    emailNotVerified: 'Not verified',
+    resendVerification: 'Resend verification email',
     accountMenu: 'Account menu',
     greeting: 'Hello, {{name}}',
     mainMenu: 'Main menu',
@@ -35,6 +39,33 @@ export const common = {
     hideSidebar: 'Hide side menu',
     expandSidebar: 'Expand side menu',
     collapseSidebar: 'Collapse side menu',
+  },
+  emailVerification: {
+    resendDialog: {
+      title: 'Resend verification email',
+      description: 'The verification email will be sent to {{email}} for the user {{name}}.',
+      submit: 'Send',
+      submitting: 'Sending…',
+      cancel: 'Cancel',
+    },
+    resendSuccess: {
+      title: 'Email sent',
+      description: 'We sent a new verification link to your email.',
+    },
+    resendErrors: {
+      alreadyVerified: {
+        title: 'Email already verified',
+        description: 'This email has already been verified.',
+      },
+      tooManyAttempts: {
+        title: 'Please wait',
+        description: 'Please wait a moment before requesting a new email.',
+      },
+      unavailable: {
+        title: 'Could not send',
+        description: 'We could not send the verification email. Please try again shortly.',
+      },
+    },
   },
   session: {
     logoutFailed: {

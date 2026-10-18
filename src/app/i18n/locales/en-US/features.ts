@@ -14,6 +14,7 @@ export const auth = {
       title: 'Signed in',
       description: 'Welcome back to Comunidade Viva.',
     },
+    forgotPassword: 'Forgot my password',
     noAccount: "Don't have an account?",
     createAccount: 'Create account',
     validation: {
@@ -37,6 +38,99 @@ export const auth = {
       unavailable: {
         title: 'Sign-in is currently unavailable',
         description: 'We could not reach the authentication service. Please try again shortly.',
+      },
+    },
+  },
+  forgotPassword: {
+    title: 'Reset password',
+    description: 'Enter your account email to receive a link to change your password.',
+    close: 'Close',
+    email: 'Email',
+    emailPlaceholder: 'name@example.com',
+    submit: 'Send',
+    submitting: 'Sending…',
+    success: {
+      title: 'Request sent',
+      description:
+        'If an account is linked to {{email}}, the link will arrive in a few minutes. Please also check your spam folder.',
+    },
+    validation: {
+      emailRequired: 'Enter your email.',
+      emailTooLong: 'The email must be at most 254 characters.',
+      emailInvalid: 'Enter a valid email.',
+    },
+    notices: {
+      tooManyAttempts: {
+        title: 'Too many requests',
+        description: 'Please wait a moment before trying again.',
+      },
+      unavailable: {
+        title: 'Sending is currently unavailable',
+        description: 'We could not reach the service. Please try again shortly.',
+      },
+    },
+  },
+  resetPassword: {
+    tagline: 'Keep your account protected and stay connected to our community.',
+    title: 'Create a new password',
+    description: 'Choose a secure password that is different from the previous one.',
+    password: 'New password',
+    confirmPassword: 'Confirm new password',
+    submit: 'Reset password',
+    submitting: 'Resetting…',
+    submitHint: 'Fill in both fields correctly to reset your password.',
+    backToLogin: 'Back to sign in',
+    success: {
+      title: 'Password reset',
+      description: 'Your password was reset successfully.',
+    },
+    validation: {
+      passwordRequired: 'Create a new password.',
+      passwordTooShort: 'Your password must be at least 8 characters.',
+      passwordTooLong: 'Your password must be at most 64 characters.',
+      passwordEdgeWhitespace: 'Your password cannot start or end with a space.',
+      passwordWeak:
+        'Weak password. Mix uppercase and lowercase letters, numbers and symbols, without obvious sequences.',
+      confirmPasswordRequired: 'Confirm your new password.',
+      passwordMismatch: 'Passwords do not match.',
+    },
+    notices: {
+      weakPassword: {
+        title: 'Password not accepted',
+        description: 'The new password does not meet the security requirements.',
+      },
+      invalidLink: {
+        title: 'Invalid or expired link',
+        description: 'Request a new link from the sign-in page to reset your password.',
+      },
+      tooManyAttempts: {
+        title: 'Too many attempts',
+        description: 'Please wait a moment before trying again.',
+      },
+      unavailable: {
+        title: 'Password reset is currently unavailable',
+        description: 'We could not reach the service. Please try again shortly.',
+      },
+    },
+  },
+  verifyEmail: {
+    tagline: 'Confirm your email to enjoy everything the community has prepared for you.',
+    title: 'Email verification',
+    verifying: 'Verifying your email…',
+    goToApp: 'Go to the app',
+    success: {
+      title: 'Email verified',
+      description: 'Your email was verified successfully.',
+    },
+    notices: {
+      invalidLink: {
+        title: 'Invalid or expired link',
+        description:
+          'Sign in and use "Resend verification email" in the account menu to receive a new link.',
+      },
+      unavailable: {
+        title: 'Verification is currently unavailable',
+        description: 'We could not reach the service. Please try again shortly.',
       },
     },
   },
@@ -115,6 +209,11 @@ export const home = {
 export const dashboard = {
   title: 'Dashboard',
   subtitle: 'Overview of Comunidade Viva.',
+  unverified: {
+    title: 'Account not verified',
+    description:
+      'Confirm your email using the link we sent to unlock the app information. Did not get it? Use "Resend verification email" in the account menu.',
+  },
   states: {
     error: {
       title: 'Could not load the dashboard',
