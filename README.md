@@ -117,5 +117,9 @@ estático, com fallback de SPA.
 Cada Worker tem os próprios secrets (`BFF_ORIGIN` apontando para o BFF do mesmo ambiente). Não há
 ambiente de desenvolvimento publicado: o desenvolvimento é local, com BFF local ou de HML.
 
+Os dois Workers estão ligados ao repositório pelo Workers Builds: cada merge em `main` publica
+produção e cada merge em `homologation` publica HML. Os builds de prévia de outras branches ficam
+desligados, para que nenhuma branch rode com os secrets de um ambiente publicado.
+
 Nenhum commit ou push direto em `main` ou `homologation`: as alterações entram em `homologation`
 por PR aprovado, e a `main` só recebe PRs da `homologation`.
