@@ -1052,6 +1052,16 @@ Search params da rota validados por `loginSearchSchema` (`login.model.ts`).
 
 ---
 
+### Recuperação de senha
+
+- o link `Esqueci minha senha`, abaixo do campo de senha, abre o modal `ForgotPasswordView` (`Dialog` do shadcn) com um único campo de e-mail (`forgotPasswordFormSchema` em `forgot-password.model.ts`) e o botão `Enviar`;
+- `POST /auth/password-recovery` com `{ email }` (`passwordRecoveryHttpGateway`): o BFF responde sempre `200` com a mesma mensagem, sem revelar se a conta existe; 429 = muitas solicitações e demais falhas = indisponível;
+- sucesso: o mesmo modal troca o formulário pela confirmação neutra, sem botões (só o "X"), orientando que o link será enviado se a conta existir;
+- o link recebido abre `/reset-password?token=...`; a página captura o token somente em memória, remove-o da URL e envia `POST /auth/password-reset` com `{ token, password }`;
+- a tela de nova senha reutiliza a política e o medidor de força do cadastro; link inválido ou expirado leva o usuário de volta ao login, e o sucesso informa que as sessões existentes foram encerradas;
+- falhas técnicas da solicitação aparecem em toast (`notify.error`) e o modal continua no formulário;
+- o modal fecha **somente pelo botão "X"** (Esc e clique fora são ignorados) e nunca durante o envio; ao fechar, volta ao formulário vazio.
+
 ## 14. Layout autenticado
 
 O shell autenticado contém:
@@ -1236,7 +1246,7 @@ Schema atual:
 
 ```ts
 const envSchema = z.object({
-  VITE_ENV: z.enum(['development', 'homologation', 'staging', 'production']),
+  VITE_ENV: z.enum(['development', 'homologation', 'production']),
 });
 ```
 
@@ -1252,7 +1262,6 @@ Ambientes reconhecidos:
 ```text
 development
 homologation
-staging
 production
 ```
 
@@ -1555,9 +1564,12 @@ Não use Router cache como substituto de Query para server state.
 
 ### Estratégia atual
 
-Durante a fase inicial do projeto, mudanças têm sido feitas diretamente em `main`.
+Fluxo obrigatório: `feat/*`, `fix/*` ou `hotfix/*` → PR para `homologation` → PR para `main`.
 
-Não mudar esse fluxo por conta própria enquanto o responsável não solicitar branch/PR obrigatório.
+- nunca fazer commit ou push direto em `main` ou `homologation` (protegidas por rulesets);
+- `homologation` publica HML (`https://hml.comvivaeficaz.com.br`) e `main` publica produção;
+- a `main` só recebe PRs da `homologation`, com merge commit; após cada release, sincronizar a
+  `main` de volta na `homologation` por PR.
 
 ### Commits
 
