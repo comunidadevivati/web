@@ -158,3 +158,6 @@ test-results/
 # Cloudflare Workers (local)
 .dev.vars
 .wrangler
+
+# Arquivos temporários do gerador de rotas do TanStack Router (pnpm dev)
+.tanstack/
