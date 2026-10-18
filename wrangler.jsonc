@@ -12,14 +12,26 @@
     // Somente /api/* e /auth/* executam o Worker; o restante é servido direto como asset estático.
     "run_worker_first": ["/api/*", "/auth/*"],
   },
+  // Produção (branch main). O domínio personalizado cria o DNS e o certificado na zona Cloudflare.
+  "routes": [{ "pattern": "comvivaeficaz.com.br", "custom_domain": true }],
   "vars": {
     // Duração da liberação do Wi-Fi de visitantes, em minutos.
     "GUEST_WIFI_SESSION_MINUTES": "240",
   },
-  // Secrets (não versionados): pnpm exec wrangler secret put <NOME>
+  // Secrets (não versionados), por ambiente: pnpm exec wrangler secret put <NOME> [--env hml]
   // OMADA_CONTROLLER_URL, OMADA_CONTROLLER_ID, OMADA_SITE_ID, OMADA_OPERATOR_USERNAME,
   // OMADA_OPERATOR_PASSWORD
-  // Origem do BFF para o proxy de /auth/* (ex.: https://bff.exemplo.com), cadastrada como secret
-  // quando o BFF estiver publicado: BFF_ORIGIN
+  // Origem do BFF do ambiente para o proxy de /auth/* (ex.: https://comvivati-bff.onrender.com):
+  // BFF_ORIGIN
   "previews": {},
+  "env": {
+    // Homologação (branch homologation): Worker comunidade-viva-web-hml.
+    // Deploy: pnpm exec wrangler deploy --env hml. "vars" e "routes" não são herdados do topo.
+    "hml": {
+      "routes": [{ "pattern": "hml.comvivaeficaz.com.br", "custom_domain": true }],
+      "vars": {
+        "GUEST_WIFI_SESSION_MINUTES": "240",
+      },
+    },
+  },
 }

@@ -1,7 +1,7 @@
 import { z } from 'zod';
 
 const envSchema = z.object({
-  VITE_ENV: z.enum(['development', 'homologation', 'staging', 'production']),
+  VITE_ENV: z.enum(['development', 'homologation', 'production']),
 });
 
 const parsedEnv = envSchema.safeParse(import.meta.env);

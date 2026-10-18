@@ -60,6 +60,8 @@ export const useLoginViewModel = () => {
 
   const [isRegisterOpen, setIsRegisterOpen] = useState(false);
 
+  const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
+
   const { error, isPending, isSuccess, mutate } = useMutation({
     mutationFn: (credentials: LoginCredentials) => loginUseCase(credentials),
     onSuccess: async ({ message }) => {
@@ -121,8 +123,15 @@ export const useLoginViewModel = () => {
     setIsRegisterOpen(true);
   };
 
+  const openForgotPassword = () => {
+    setIsForgotPasswordOpen(true);
+  };
+
   return {
     form,
+    isForgotPasswordOpen,
+    openForgotPassword,
+    setIsForgotPasswordOpen,
     isInfoNotice,
     isRegisterOpen,
     openRegister,

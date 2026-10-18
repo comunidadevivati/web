@@ -69,6 +69,9 @@ web_modules/
 .env
 .env.*
 !.env.example
+# Versionados para o Workers Builds: somente valores públicos (VITE_*), nunca segredos.
+!.env.homologation
+!.env.production
 
 # parcel-bundler cache (https://parceljs.org/)
 .cache

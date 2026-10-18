@@ -17,6 +17,7 @@ import {
   Text,
 } from '@/components/ui';
 import { useLoginViewModel } from '@/features/auth/presentation/view-models/login.view-model';
+import { ForgotPasswordView } from '@/features/auth/presentation/views/forgot-password.view';
 import { RegisterView } from '@/features/auth/presentation/views/register.view';
 import { CircleAlertIcon, LogInIcon, UserPlusIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -25,11 +26,14 @@ export const LoginView = () => {
   const {
     form,
     fieldErrors,
+    isForgotPasswordOpen,
     isInfoNotice,
     isRegisterOpen,
     isSubmitting,
     notice,
+    openForgotPassword,
     openRegister,
+    setIsForgotPasswordOpen,
     setIsRegisterOpen,
     submit,
   } = useLoginViewModel();
@@ -138,6 +142,18 @@ export const LoginView = () => {
                 />
               </FormField>
 
+              <Box className="-mt-3 flex justify-end">
+                <Button
+                  className="h-10 px-2 text-foreground underline underline-offset-4"
+                  disabled={isSubmitting}
+                  type="button"
+                  variant="link"
+                  onClick={openForgotPassword}
+                >
+                  {t('login.forgotPassword')}
+                </Button>
+              </Box>
+
               <Button
                 aria-busy={isSubmitting}
                 className="mt-1 h-11 w-full"
@@ -172,6 +188,8 @@ export const LoginView = () => {
       </Box>
 
       <RegisterView open={isRegisterOpen} onOpenChange={setIsRegisterOpen} />
+
+      <ForgotPasswordView open={isForgotPasswordOpen} onOpenChange={setIsForgotPasswordOpen} />
     </>
   );
 };
