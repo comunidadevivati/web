@@ -113,6 +113,27 @@ export const auth = {
       },
     },
   },
+  verifyEmail: {
+    tagline: 'Confirme seu e-mail para aproveitar tudo o que a comunidade preparou para você.',
+    title: 'Verificação de e-mail',
+    verifying: 'Verificando seu e-mail…',
+    goToApp: 'Ir para a aplicação',
+    success: {
+      title: 'E-mail verificado',
+      description: 'E-mail verificado com sucesso.',
+    },
+    notices: {
+      invalidLink: {
+        title: 'Link inválido ou expirado',
+        description:
+          'Entre na aplicação e use "Reenviar e-mail de verificação", no menu da conta, para receber um novo link.',
+      },
+      unavailable: {
+        title: 'Verificação indisponível no momento',
+        description: 'Não foi possível conectar ao serviço. Tente novamente em instantes.',
+      },
+    },
+  },
   register: {
     title: 'Criar conta',
     description:
@@ -189,6 +210,11 @@ export const home = {
 export const dashboard = {
   title: 'Dashboard',
   subtitle: 'Visão geral da Comunidade Viva.',
+  unverified: {
+    title: 'Conta não verificada',
+    description:
+      'Confirme seu e-mail pelo link que enviamos para liberar as informações da aplicação. Não recebeu? Use "Reenviar e-mail de verificação" no menu da conta.',
+  },
   states: {
     error: {
       title: 'Não foi possível carregar o dashboard',

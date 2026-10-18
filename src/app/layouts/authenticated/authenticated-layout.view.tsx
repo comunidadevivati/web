@@ -6,6 +6,7 @@ import {
   AppFooter,
   AppSidebar,
   AppSidebarDrawer,
+  ResendVerificationDialog,
   type AppSidebarItem,
 } from '@/components/organisms';
 import {
@@ -22,6 +23,11 @@ import { cn } from 'cn';
 import { CircleAlertIcon, LayoutDashboardIcon, MenuIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
+// requiresVerifiedEmail: o item só aparece depois que a conta confirmar o e-mail.
+type NavigationItem = AppSidebarItem & {
+  requiresVerifiedEmail?: boolean;
+};
+
 const layoutColumns = {
   collapsed: cn('md:grid-cols-[4.5rem_minmax(0,1fr)]'),
   expanded: cn('md:grid-cols-[16.5rem_minmax(0,1fr)]'),
@@ -31,7 +37,13 @@ const layoutColumns = {
 export const AuthenticatedLayoutView = () => {
   const {
     hasLogoutError,
+    isEmailVerified,
     isLoggingOut,
+    isResendVerificationOpen,
+    isResendingVerification,
+    openResendVerification,
+    resendVerification,
+    setIsResendVerificationOpen,
     isMobileNavOpen,
     logout,
     openMobileNav,
@@ -54,9 +66,14 @@ export const AuthenticatedLayoutView = () => {
     ? t('navigation.showSidebar')
     : t('navigation.hideSidebar');
 
-  const sidebarItems: AppSidebarItem[] = [
+  const navigationItems: NavigationItem[] = [
     { label: t('navigation.dashboard'), icon: LayoutDashboardIcon, to: '/dashboard' },
   ];
+
+  // Conta não verificada: somente os itens liberados para ela (hoje, o Dashboard).
+  const sidebarItems: AppSidebarItem[] = navigationItems
+    .filter(({ requiresVerifiedEmail }) => isEmailVerified || !requiresVerifiedEmail)
+    .map(({ requiresVerifiedEmail: _requiresVerifiedEmail, ...item }) => item);
 
   return (
     <Box className="grid h-dvh grid-rows-[4.5rem_minmax(0,1fr)] bg-background">
@@ -140,14 +157,25 @@ export const AuthenticatedLayoutView = () => {
           <Box className="ml-auto flex items-center">
             <UserMenu
               email={userEmail}
+              emailVerified={isEmailVerified}
               greetingName={userName || userEmail}
               initials={userInitials}
               name={userName}
               onLogout={logout}
+              onResendVerification={openResendVerification}
             />
           </Box>
         </Box>
       </Box>
+
+      <ResendVerificationDialog
+        email={userEmail}
+        isSending={isResendingVerification}
+        name={userName}
+        open={isResendVerificationOpen}
+        onOpenChange={setIsResendVerificationOpen}
+        onSend={resendVerification}
+      />
 
       <AppSidebarDrawer
         isOpen={isMobileNavOpen}

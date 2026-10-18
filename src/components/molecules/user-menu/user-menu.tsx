@@ -12,11 +12,16 @@ import {
   Text,
 } from '@/components/ui';
 import { cn } from '@/lib/utils';
-import { ChevronDownIcon, LogOutIcon } from 'lucide-react';
+import { ChevronDownIcon, LogOutIcon, MailIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const headerFallbackClassName = cn(
   'bg-header-accent/15 font-semibold text-header-accent-foreground',
+);
+
+const unverifiedBadgeClassName = cn(
+  'w-fit rounded-full border border-destructive bg-destructive/50 px-3 py-1 text-[0.6875rem]',
+  'leading-4 font-light text-destructive-strong italic',
 );
 
 const greetingClassName = cn(
@@ -28,12 +33,23 @@ type UserMenuProps = {
   greetingName: string;
   name: string;
   email: string;
+  // false: exibe o badge "Não verificado" e a opção de reenviar o e-mail de verificação.
+  emailVerified: boolean;
   initials: string;
   onLogout: () => void;
+  onResendVerification: () => void;
 };
 
 // Saudação, separador e avatar do usuário logado (por enquanto, com as iniciais) que abre o menu da conta.
-export const UserMenu = ({ email, greetingName, initials, name, onLogout }: UserMenuProps) => {
+export const UserMenu = ({
+  email,
+  emailVerified,
+  greetingName,
+  initials,
+  name,
+  onLogout,
+  onResendVerification,
+}: UserMenuProps) => {
   const { t } = useTranslation();
 
   return (
@@ -79,11 +95,24 @@ export const UserMenu = ({ email, greetingName, initials, name, onLogout }: User
                 </Text>
 
                 <Text className="truncate text-xs text-muted-foreground">{email}</Text>
+
+                {!emailVerified && (
+                  <Text className={unverifiedBadgeClassName}>
+                    {t('navigation.emailNotVerified')}
+                  </Text>
+                )}
               </Box>
             </DropdownMenuLabel>
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
+
+          {!emailVerified && (
+            <DropdownMenuItem className="px-2 py-2" onClick={onResendVerification}>
+              <MailIcon />
+              {t('navigation.resendVerification')}
+            </DropdownMenuItem>
+          )}
 
           <DropdownMenuItem className="px-2 py-2" onClick={onLogout}>
             <LogOutIcon />

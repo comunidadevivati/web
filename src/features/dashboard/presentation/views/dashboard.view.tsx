@@ -22,6 +22,7 @@ import {
   CircleAlertIcon,
   Clock3Icon,
   HistoryIcon,
+  MailWarningIcon,
   RefreshCwIcon,
   UserRoundPlusIcon,
   UsersIcon,
@@ -67,7 +68,7 @@ const dashboardStyles = {
 };
 
 export const DashboardView = () => {
-  const { activities, events, hasError, isLoading, isRetrying, retry, summaries } =
+  const { activities, events, hasError, isEmailVerified, isLoading, isRetrying, retry, summaries } =
     useDashboardViewModel();
 
   const { t } = useTranslation('dashboard');
@@ -81,6 +82,16 @@ export const DashboardView = () => {
 
         <Text className="mt-1 text-muted-foreground">{t('subtitle')}</Text>
       </Box>
+
+      {!isEmailVerified && (
+        <Alert>
+          <MailWarningIcon />
+
+          <AlertTitle>{t('unverified.title')}</AlertTitle>
+
+          <AlertDescription>{t('unverified.description')}</AlertDescription>
+        </Alert>
+      )}
 
       {isLoading && (
         <Box className="flex min-h-64 items-center justify-center">
@@ -115,7 +126,7 @@ export const DashboardView = () => {
         </Alert>
       )}
 
-      {!isLoading && !hasError && (
+      {isEmailVerified && !isLoading && !hasError && (
         <>
           <Box className="grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
             {summaries.map((summary) => {

@@ -1,3 +1,4 @@
+import { authSessionQueryOptions } from '@/features/auth/application/queries/auth-session.query';
 import { dashboardOverviewQueryOptions } from '@/features/dashboard/application/queries/dashboard-overview.query';
 import {
   DASHBOARD_INDICATORS,
@@ -26,7 +27,15 @@ const getDayOffset = (date: Date) => {
 export const useDashboardViewModel = () => {
   const { i18n, t } = useTranslation('dashboard');
 
-  const { data, isError, isFetching, isPending, refetch } = useQuery(dashboardOverviewQueryOptions);
+  // Conta sem e-mail verificado: não carrega nenhuma informação, só o aviso.
+  const { data: session } = useQuery(authSessionQueryOptions);
+
+  const isEmailVerified = session?.user.emailVerified ?? false;
+
+  const { data, isError, isFetching, isPending, refetch } = useQuery({
+    ...dashboardOverviewQueryOptions,
+    enabled: isEmailVerified,
+  });
 
   const { language } = i18n;
 
@@ -80,7 +89,8 @@ export const useDashboardViewModel = () => {
     activities,
     events,
     hasError: isError,
-    isLoading: isPending,
+    isEmailVerified,
+    isLoading: isEmailVerified && isPending,
     isRetrying: isFetching,
     retry,
     summaries,

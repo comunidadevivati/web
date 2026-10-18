@@ -67,7 +67,15 @@ CORS. O front usa:
   revelar se a conta existe;
 - `POST /auth/password-reset`: `{ token, password }`; redefine a senha a partir do link recebido,
   encerra as sessões existentes e abre uma nova (o front segue para o dashboard com um toast);
-- `GET /auth/me`: sessão atual (401 = sem sessão), com o token CSRF mantido só em memória;
+- `POST /auth/email-verification`: `{ token }`; confirma o e-mail pelo link (rota `/verify-email`);
+- `POST /auth/email-verification/resend`: reenvia o link para o e-mail da sessão, com o header
+  `X-CSRF-Token`;
+- `GET /auth/me`: sessão atual com `user.emailVerified` (401 = sem sessão), com o token CSRF mantido só em memória;
+
+Conta com `emailVerified: false` mostra o badge "Não verificado" e a opção de reenvio no menu da
+conta, e só o menu Dashboard, que exibe apenas o aviso de conta não verificada. Itens futuros do
+menu lateral podem usar `requiresVerifiedEmail` para ficar ocultos até a verificação.
+
 - `POST /auth/logout`: encerra a sessão, com o header `X-CSRF-Token`.
 
 ### Rodar com o BFF local
