@@ -21,7 +21,7 @@
   // Secrets (não versionados), por ambiente: pnpm exec wrangler secret put <NOME> [--env hml]
   // OMADA_CONTROLLER_URL, OMADA_CONTROLLER_ID, OMADA_SITE_ID, OMADA_OPERATOR_USERNAME,
   // OMADA_OPERATOR_PASSWORD
-  // Origem do BFF do ambiente para o proxy de /auth/* (ex.: https://comvivati-bff.onrender.com):
+  // Origem do BFF do ambiente para o proxy de /auth/* e /api/v1/* (ex.: https://comvivati-bff.onrender.com):
   // BFF_ORIGIN
   "previews": {},
   "env": {

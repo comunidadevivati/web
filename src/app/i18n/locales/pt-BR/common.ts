@@ -14,6 +14,8 @@ export const common = {
     verifyEmail: 'Verificar e-mail',
     dashboard: 'Dashboard',
     guestWifi: 'Wi-Fi Visitantes',
+    organization: 'Organização',
+    congregations: 'Congregações',
   },
   navigation: {
     home: 'Home',
@@ -21,6 +23,8 @@ export const common = {
     events: 'Eventos',
     contact: 'Contato',
     dashboard: 'Dashboard',
+    organization: 'Organização',
+    congregations: 'Congregações',
     login: 'Login',
     logout: 'Sair',
     emailNotVerified: 'Não verificado',
