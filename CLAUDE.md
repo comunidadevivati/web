@@ -1188,6 +1188,19 @@ Feature `src/features/organization` (namespace i18n `organization`), consumindo 
 
 ---
 
+## 15.2 Membros
+
+Feature `src/features/members` (namespace i18n `members`), consumindo `/api/v1/members` e `/api/v1/memberships` do BFF:
+
+- rota `/membros` (lista): busca por nome (aplicada ao enviar), filtro por situação (padrão: ativos) e por congregação (`Select`), paginação por cursor e cadastro em modal (`MemberFormView`); o membro recém-registrado abre direto na ficha;
+- rota `/membros/$memberId` (ficha): dados pessoais, edição (bloqueada para arquivado), ações de situação conforme a situação atual (ativo: inativar; inativo: ativar ou arquivar; arquivado: restaurar) e histórico de vínculos;
+- vínculos: registro em modal (`MembershipFormView`, somente congregações ativas, opção de vínculo principal), ativação de pendente e encerramento; encerrado é histórico e não reabre;
+- toda mudança de situação passa por `ConfirmActionDialog`; conflitos (409) mostram o `detail` do servidor (ex.: vínculo principal já ativo, vínculos abertos ao inativar);
+- dados pessoais do MVP: nome completo, data de nascimento, telefone e e-mail (ADR 0007 do backend);
+- a lista de congregações para escolha vem de `congregationOptionsQueryOptions` (feature organization, até 100 itens).
+
+---
+
 ## 16. TanStack Query
 
 Configuração global atual:
@@ -1961,8 +1974,8 @@ src/components/
 └── organisms/   organismos: blocos maiores de interface, compostos por moléculas e átomos
 ```
 
-- **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Sheet`, `Spinner`, `Subtitle` (subtítulo padrão de telas, cards e modais; o `DialogDescription` já renderiza um `Subtitle`), `Text`, `Toast` (primitivas do toast do shadcn sobre o Base UI), `Tooltip`, `Dialog`, `Field` (`FieldGroup`, `FieldLabel`, `FieldError`...), `InputGroup`, `Progress`, `Separator`. Única camada que pode usar HTML nativo.
-- **`molecules/`:** `CardSectionHeader` (cabeçalho de seção de card com ícone, título e descrição), `LocaleToggle` (escolha de idioma), `PreferenceToggleGroup` (base dos seletores de preferência), `TooltipHint`, `UserMenu` (avatar com iniciais e menu da conta) (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido), `FormField` (rótulo, controle, descrição e erro de um campo), `PasswordInput` (senha com mostrar/ocultar), `PasswordStrengthMeter` (força da senha e requisitos), `PhoneInput` (telefone brasileiro com máscara, compatível com o `register` do RHF), `NotificationToast` (toast de sucesso/erro com contagem regressiva).
+- **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Sheet`, `Spinner`, `Subtitle` (subtítulo padrão de telas, cards e modais; o `DialogDescription` já renderiza um `Subtitle`), `Text`, `Toast` (primitivas do toast do shadcn sobre o Base UI), `Tooltip`, `Dialog`, `Field` (`FieldGroup`, `FieldLabel`, `FieldError`...), `InputGroup`, `Progress`, `Select` (`SelectTrigger` usa `fieldControlClassName`), `Separator`. Única camada que pode usar HTML nativo.
+- **`molecules/`:** `CardSectionHeader` (cabeçalho de seção de card com ícone, título e descrição), `LocaleToggle` (escolha de idioma), `PreferenceToggleGroup` (base dos seletores de preferência), `TooltipHint`, `UserMenu` (avatar com iniciais e menu da conta) (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido), `StatusBadge` (situação de um registro, com tom `success`, `warning` ou `neutral`), `FormField` (rótulo, controle, descrição e erro de um campo), `PasswordInput` (senha com mostrar/ocultar), `PasswordStrengthMeter` (força da senha e requisitos), `PhoneInput` (telefone brasileiro com máscara, compatível com o `register` do RHF), `NotificationToast` (toast de sucesso/erro com contagem regressiva).
 
 Regras de validação reutilizáveis e independentes de UI (telefone brasileiro, política de senha) ficam em `src/shared/validation`.
 

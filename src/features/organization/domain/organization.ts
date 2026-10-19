@@ -56,6 +56,8 @@ export type CongregationPage = {
 export type CongregationFilters = {
   status: CongregationStatus | null;
   cursor: string | null;
+  // Itens por página (o BFF aceita até 100; sem valor, usa o padrão de 20).
+  limit?: number;
 };
 
 export type OrganizationDetails = {

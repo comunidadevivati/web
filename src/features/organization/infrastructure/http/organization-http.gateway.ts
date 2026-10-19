@@ -7,6 +7,7 @@ import {
   type OrganizationGateway,
 } from '@/features/organization/domain/organization';
 import { bffClient } from '@/shared/http/bff-client';
+import { readProblemDetails } from '@/shared/http/problem-details';
 import { isHTTPError } from 'ky';
 import { z } from 'zod';
 
@@ -52,18 +53,6 @@ const congregationPageSchema = z.object({
   nextCursor: z.string().nullable(),
 });
 
-// RFC 9457 (Problem Details): só os campos usados pelo front.
-const problemSchema = z.object({
-  detail: z.string().optional(),
-  fields: z.array(z.string()).optional(),
-});
-
-const readProblem = async (response: Response) => {
-  const parsed = problemSchema.safeParse(await response.json().catch(() => null));
-
-  return parsed.success ? parsed.data : {};
-};
-
 // Normaliza as falhas do BFF em erros do domínio. O 401 (sessão expirada) já é tratado pelo
 // bffClient, que leva ao login; aqui ele vira apenas indisponibilidade.
 const toDomainError = async (error: unknown) => {
@@ -75,7 +64,7 @@ const toDomainError = async (error: unknown) => {
 
   switch (response.status) {
     case 400: {
-      const { fields = [] } = await readProblem(response);
+      const { fields = [] } = await readProblemDetails(response);
 
       return new InvalidOrganizationDataError(fields);
     }
@@ -87,7 +76,7 @@ const toDomainError = async (error: unknown) => {
       return new OrganizationNotFoundError();
 
     case 409: {
-      const { detail } = await readProblem(response);
+      const { detail } = await readProblemDetails(response);
 
       return new OrganizationConflictError(detail);
     }
@@ -141,8 +130,12 @@ export const organizationHttpGateway: OrganizationGateway = {
     );
   },
 
-  listCongregations: ({ cursor, status }) => {
+  listCongregations: ({ cursor, limit, status }) => {
     const searchParams = new URLSearchParams();
+
+    if (limit) {
+      searchParams.set('limit', String(limit));
+    }
 
     if (status) {
       searchParams.set('status', status);

@@ -489,3 +489,179 @@ export const organization = {
     },
   },
 } as const;
+
+export const members = {
+  status: {
+    ACTIVE: 'Ativo',
+    INACTIVE: 'Inativo',
+    ARCHIVED: 'Arquivado',
+  },
+  membershipStatus: {
+    PENDING: 'Pendente',
+    ACTIVE: 'Ativo',
+    INACTIVE: 'Encerrado',
+  },
+  actions: {
+    activate: 'Ativar',
+    deactivate: 'Inativar',
+    archive: 'Arquivar',
+    restore: 'Restaurar',
+    end: 'Encerrar',
+    edit: 'Editar',
+    retry: 'Tentar novamente',
+  },
+  fields: {
+    fullName: 'Nome completo',
+    birthDate: 'Data de nascimento',
+    phone: 'Telefone',
+    email: 'E-mail',
+    optional: '{{label}} (opcional)',
+    phonePlaceholder: '(67) 99999-9999',
+    emailPlaceholder: 'nome@exemplo.com',
+    congregation: 'Congregação',
+    congregationPlaceholder: 'Selecione a congregação',
+    primary: 'Vínculo principal',
+    primaryHint: 'A congregação de referência do membro. Só pode haver um vínculo principal ativo.',
+  },
+  validation: {
+    fullNameRequired: 'Informe o nome completo.',
+    fullNameInvalid: 'Use de 2 a 120 caracteres: letras, espaço, apóstrofo, ponto ou hífen.',
+    birthDateInvalid: 'Informe uma data válida, entre 1900 e hoje.',
+    emailInvalid: 'Informe um e-mail válido.',
+    phoneIncomplete: 'Informe o telefone completo com DDD.',
+    phoneInvalidAreaCode: 'Informe um DDD válido.',
+    phoneInvalidNumber: 'Informe um número de telefone válido.',
+    congregationRequired: 'Selecione a congregação.',
+    invalid: 'Valor recusado pelo servidor. Confira e tente novamente.',
+  },
+  notices: {
+    invalidData: {
+      title: 'Dados recusados',
+      description: 'Confira os campos destacados e tente novamente.',
+    },
+    conflict: {
+      title: 'Não foi possível concluir',
+      description: 'Os dados foram alterados por outra operação. Recarregue e tente novamente.',
+    },
+    notFound: {
+      title: 'Registro não encontrado',
+      description: 'O registro pode ter sido removido. Volte para a lista de membros.',
+    },
+    accessDenied: {
+      title: 'Acesso não liberado',
+      description: 'Confirme o seu e-mail para acessar os dados de membros.',
+    },
+    unavailable: {
+      title: 'Serviço indisponível',
+      description: 'Não foi possível conectar ao serviço. Tente novamente em instantes.',
+    },
+  },
+  listPage: {
+    title: 'Membros',
+    subtitle: 'Pessoas da comunidade e seus vínculos com as congregações.',
+    create: 'Novo membro',
+    searchLabel: 'Buscar por nome',
+    searchPlaceholder: 'Digite parte do nome',
+    search: 'Buscar',
+    statusFilterLabel: 'Filtrar por situação',
+    filters: {
+      ALL: 'Todos',
+      ACTIVE: 'Ativos',
+      INACTIVE: 'Inativos',
+      ARCHIVED: 'Arquivados',
+    },
+    congregationLabel: 'Congregação',
+    allCongregations: 'Todas as congregações',
+    empty: 'Nenhum membro encontrado.',
+    loadMore: 'Carregar mais',
+    loadingMore: 'Carregando…',
+    birthDate: 'Nascimento: {{date}}',
+  },
+  detailPage: {
+    back: 'Voltar para membros',
+    profile: 'Dados pessoais',
+    notInformed: 'Não informado',
+    memberships: 'Vínculos com congregações',
+    membershipsDescription: 'Histórico completo, inclusive vínculos encerrados.',
+    addMembership: 'Novo vínculo',
+    membershipsEmpty: 'Nenhum vínculo registrado.',
+    primary: 'Principal',
+    startedOn: 'Início: {{date}}',
+    endedOn: 'Encerramento: {{date}}',
+    removedCongregation: 'Congregação não encontrada',
+    inactiveHint: 'Somente membros ativos podem receber novos vínculos.',
+  },
+  memberForm: {
+    createTitle: 'Novo membro',
+    createDescription: 'O membro é registrado como ativo. Os vínculos são adicionados depois.',
+    editTitle: 'Editar membro',
+    editDescription: 'Atualize os dados de {{name}}.',
+    close: 'Fechar',
+    submit: 'Salvar',
+    submitting: 'Salvando…',
+    success: {
+      createTitle: 'Membro registrado',
+      createDescription: '{{name}} foi registrado(a).',
+      editTitle: 'Membro atualizado',
+      editDescription: 'Os dados de {{name}} foram salvos.',
+    },
+  },
+  membershipForm: {
+    title: 'Novo vínculo',
+    description: 'O vínculo de {{name}} é registrado como pendente e pode ser ativado em seguida.',
+    close: 'Fechar',
+    submit: 'Registrar vínculo',
+    submitting: 'Registrando…',
+    noCongregations: 'Não há congregação ativa disponível para vínculo.',
+    success: {
+      title: 'Vínculo registrado',
+      description: 'Vínculo com {{congregation}} registrado como pendente.',
+    },
+  },
+  confirm: {
+    cancel: 'Cancelar',
+    confirming: 'Salvando…',
+    member: {
+      activate: {
+        title: 'Ativar {{name}}?',
+        description: 'O membro volta a participar normalmente e pode receber novos vínculos.',
+      },
+      deactivate: {
+        title: 'Inativar {{name}}?',
+        description: 'O membro deixa de participar. Encerre antes os vínculos ativos ou pendentes.',
+      },
+      archive: {
+        title: 'Arquivar {{name}}?',
+        description:
+          'O membro sai das listas do dia a dia e fica somente leitura. O histórico é preservado.',
+      },
+      restore: {
+        title: 'Restaurar {{name}}?',
+        description: 'O membro volta como inativo e pode ser editado e reativado.',
+      },
+    },
+    membership: {
+      activate: {
+        title: 'Ativar o vínculo com {{congregation}}?',
+        description: 'A data de hoje fica registrada como início do vínculo.',
+      },
+      deactivate: {
+        title: 'Encerrar o vínculo com {{congregation}}?',
+        description:
+          'A data de hoje fica registrada como encerramento. O vínculo encerrado não pode ser reaberto.',
+      },
+    },
+    success: {
+      member: {
+        activate: 'Membro ativado',
+        deactivate: 'Membro inativado',
+        archive: 'Membro arquivado',
+        restore: 'Membro restaurado',
+      },
+      membership: {
+        activate: 'Vínculo ativado',
+        deactivate: 'Vínculo encerrado',
+      },
+    },
+  },
+} as const;

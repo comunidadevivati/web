@@ -488,3 +488,178 @@ export const organization = {
     },
   },
 } as const satisfies Translations['organization'];
+
+export const members = {
+  status: {
+    ACTIVE: 'Active',
+    INACTIVE: 'Inactive',
+    ARCHIVED: 'Archived',
+  },
+  membershipStatus: {
+    PENDING: 'Pending',
+    ACTIVE: 'Active',
+    INACTIVE: 'Ended',
+  },
+  actions: {
+    activate: 'Activate',
+    deactivate: 'Deactivate',
+    archive: 'Archive',
+    restore: 'Restore',
+    end: 'End',
+    edit: 'Edit',
+    retry: 'Try again',
+  },
+  fields: {
+    fullName: 'Full name',
+    birthDate: 'Date of birth',
+    phone: 'Phone',
+    email: 'Email',
+    optional: '{{label}} (optional)',
+    phonePlaceholder: '(67) 99999-9999',
+    emailPlaceholder: 'name@example.com',
+    congregation: 'Congregation',
+    congregationPlaceholder: 'Select the congregation',
+    primary: 'Primary membership',
+    primaryHint: "The member's reference congregation. Only one primary membership can be active.",
+  },
+  validation: {
+    fullNameRequired: 'Enter the full name.',
+    fullNameInvalid: 'Use 2 to 120 characters: letters, spaces, apostrophes, periods or hyphens.',
+    birthDateInvalid: 'Enter a valid date between 1900 and today.',
+    emailInvalid: 'Enter a valid email.',
+    phoneIncomplete: 'Enter the full phone number with area code.',
+    phoneInvalidAreaCode: 'Enter a valid area code.',
+    phoneInvalidNumber: 'Enter a valid phone number.',
+    congregationRequired: 'Select the congregation.',
+    invalid: 'Value rejected by the server. Check it and try again.',
+  },
+  notices: {
+    invalidData: {
+      title: 'Data rejected',
+      description: 'Check the highlighted fields and try again.',
+    },
+    conflict: {
+      title: 'Could not complete',
+      description: 'The data was changed by another operation. Reload and try again.',
+    },
+    notFound: {
+      title: 'Record not found',
+      description: 'The record may have been removed. Go back to the member list.',
+    },
+    accessDenied: {
+      title: 'Access not granted',
+      description: 'Confirm your email to access member data.',
+    },
+    unavailable: {
+      title: 'Service unavailable',
+      description: 'Could not connect to the service. Try again in a moment.',
+    },
+  },
+  listPage: {
+    title: 'Members',
+    subtitle: 'People in the community and their congregation memberships.',
+    create: 'New member',
+    searchLabel: 'Search by name',
+    searchPlaceholder: 'Type part of the name',
+    search: 'Search',
+    statusFilterLabel: 'Filter by status',
+    filters: {
+      ALL: 'All',
+      ACTIVE: 'Active',
+      INACTIVE: 'Inactive',
+      ARCHIVED: 'Archived',
+    },
+    congregationLabel: 'Congregation',
+    allCongregations: 'All congregations',
+    empty: 'No members found.',
+    loadMore: 'Load more',
+    loadingMore: 'Loading…',
+    birthDate: 'Born: {{date}}',
+  },
+  detailPage: {
+    back: 'Back to members',
+    profile: 'Personal data',
+    notInformed: 'Not provided',
+    memberships: 'Congregation memberships',
+    membershipsDescription: 'Full history, including ended memberships.',
+    addMembership: 'New membership',
+    membershipsEmpty: 'No memberships registered.',
+    primary: 'Primary',
+    startedOn: 'Started: {{date}}',
+    endedOn: 'Ended: {{date}}',
+    removedCongregation: 'Congregation not found',
+    inactiveHint: 'Only active members can receive new memberships.',
+  },
+  memberForm: {
+    createTitle: 'New member',
+    createDescription: 'The member is registered as active. Memberships are added afterwards.',
+    editTitle: 'Edit member',
+    editDescription: 'Update the data of {{name}}.',
+    close: 'Close',
+    submit: 'Save',
+    submitting: 'Saving…',
+    success: {
+      createTitle: 'Member registered',
+      createDescription: '{{name}} was registered.',
+      editTitle: 'Member updated',
+      editDescription: 'The data of {{name}} was saved.',
+    },
+  },
+  membershipForm: {
+    title: 'New membership',
+    description: 'The membership of {{name}} is registered as pending and can be activated next.',
+    close: 'Close',
+    submit: 'Register membership',
+    submitting: 'Registering…',
+    noCongregations: 'There is no active congregation available.',
+    success: {
+      title: 'Membership registered',
+      description: 'Membership with {{congregation}} registered as pending.',
+    },
+  },
+  confirm: {
+    cancel: 'Cancel',
+    confirming: 'Saving…',
+    member: {
+      activate: {
+        title: 'Activate {{name}}?',
+        description: 'The member takes part normally again and can receive new memberships.',
+      },
+      deactivate: {
+        title: 'Deactivate {{name}}?',
+        description: 'The member stops taking part. End active or pending memberships first.',
+      },
+      archive: {
+        title: 'Archive {{name}}?',
+        description:
+          'The member leaves the day-to-day lists and becomes read-only. History is preserved.',
+      },
+      restore: {
+        title: 'Restore {{name}}?',
+        description: 'The member returns as inactive and can be edited and reactivated.',
+      },
+    },
+    membership: {
+      activate: {
+        title: 'Activate the membership with {{congregation}}?',
+        description: "Today's date is recorded as the start of the membership.",
+      },
+      deactivate: {
+        title: 'End the membership with {{congregation}}?',
+        description: "Today's date is recorded as the end. An ended membership cannot be reopened.",
+      },
+    },
+    success: {
+      member: {
+        activate: 'Member activated',
+        deactivate: 'Member deactivated',
+        archive: 'Member archived',
+        restore: 'Member restored',
+      },
+      membership: {
+        activate: 'Membership activated',
+        deactivate: 'Membership ended',
+      },
+    },
+  },
+} as const satisfies Translations['members'];

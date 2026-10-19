@@ -5,6 +5,7 @@ import {
   dashboard,
   guestWifi,
   home,
+  members,
   organization,
 } from '@/app/i18n/locales/pt-BR/features';
 
@@ -17,4 +18,5 @@ export const ptBR = {
   contact,
   guestWifi,
   organization,
+  members,
 } as const;

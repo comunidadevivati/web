@@ -21,6 +21,8 @@ import { Route as WifiVisitantesRouteImport } from './routes/wifi-visitantes'
 import { Route as AuthenticatedCongregacoesRouteImport } from './routes/_authenticated.congregacoes'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 import { Route as AuthenticatedOrganizacaoRouteImport } from './routes/_authenticated.organizacao'
+import { Route as AuthenticatedMembrosIndexRouteImport } from './routes/_authenticated.membros.index'
+import { Route as AuthenticatedMembrosMemberIdRouteImport } from './routes/_authenticated.membros.$memberId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -83,6 +85,18 @@ const AuthenticatedOrganizacaoRoute =
     path: '/organizacao',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedMembrosIndexRoute =
+  AuthenticatedMembrosIndexRouteImport.update({
+    id: '/membros/',
+    path: '/membros/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMembrosMemberIdRoute =
+  AuthenticatedMembrosMemberIdRouteImport.update({
+    id: '/membros/$memberId',
+    path: '/membros/$memberId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -96,6 +110,8 @@ export interface FileRoutesByFullPath {
   '/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
+  '/membros/': typeof AuthenticatedMembrosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -109,6 +125,8 @@ export interface FileRoutesByTo {
   '/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
+  '/membros': typeof AuthenticatedMembrosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -124,6 +142,8 @@ export interface FileRoutesById {
   '/_authenticated/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/_authenticated/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
+  '/_authenticated/membros/': typeof AuthenticatedMembrosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -139,6 +159,8 @@ export interface FileRouteTypes {
     | '/congregacoes'
     | '/dashboard'
     | '/organizacao'
+    | '/membros/$memberId'
+    | '/membros/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -152,6 +174,8 @@ export interface FileRouteTypes {
     | '/congregacoes'
     | '/dashboard'
     | '/organizacao'
+    | '/membros/$memberId'
+    | '/membros'
   id:
     | '__root__'
     | '/'
@@ -166,6 +190,8 @@ export interface FileRouteTypes {
     | '/_authenticated/congregacoes'
     | '/_authenticated/dashboard'
     | '/_authenticated/organizacao'
+    | '/_authenticated/membros/$memberId'
+    | '/_authenticated/membros/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -266,6 +292,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrganizacaoRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/membros/': {
+      id: '/_authenticated/membros/'
+      path: '/membros'
+      fullPath: '/membros/'
+      preLoaderRoute: typeof AuthenticatedMembrosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/membros/$memberId': {
+      id: '/_authenticated/membros/$memberId'
+      path: '/membros/$memberId'
+      fullPath: '/membros/$memberId'
+      preLoaderRoute: typeof AuthenticatedMembrosMemberIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -273,12 +313,16 @@ interface AuthenticatedRouteChildren {
   AuthenticatedCongregacoesRoute: typeof AuthenticatedCongregacoesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedOrganizacaoRoute: typeof AuthenticatedOrganizacaoRoute
+  AuthenticatedMembrosMemberIdRoute: typeof AuthenticatedMembrosMemberIdRoute
+  AuthenticatedMembrosIndexRoute: typeof AuthenticatedMembrosIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCongregacoesRoute: AuthenticatedCongregacoesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedOrganizacaoRoute: AuthenticatedOrganizacaoRoute,
+  AuthenticatedMembrosMemberIdRoute: AuthenticatedMembrosMemberIdRoute,
+  AuthenticatedMembrosIndexRoute: AuthenticatedMembrosIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

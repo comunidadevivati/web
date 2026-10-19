@@ -11,6 +11,16 @@ export const organizationQueryOptions = queryOptions({
   queryFn: () => getOrganizationUseCase(),
 });
 
+// Primeiras 100 congregações (todas, no porte atual), para escolha em formulários e filtros.
+export const congregationOptionsQueryOptions = queryOptions({
+  queryKey: [...ORGANIZATION_QUERY_KEY, 'congregations', 'options'],
+  queryFn: async () => {
+    const { items } = await listCongregationsUseCase({ status: null, cursor: null, limit: 100 });
+
+    return items;
+  },
+});
+
 // Lista paginada por cursor, com filtro opcional de situação.
 export const congregationsQueryOptions = (status: CongregationStatus | null) => {
   return infiniteQueryOptions({

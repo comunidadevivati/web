@@ -16,6 +16,8 @@ export const common = {
     guestWifi: 'Wi-Fi Visitantes',
     organization: 'Organização',
     congregations: 'Congregações',
+    members: 'Membros',
+    member: 'Membro',
   },
   navigation: {
     home: 'Home',
@@ -25,6 +27,7 @@ export const common = {
     dashboard: 'Dashboard',
     organization: 'Organização',
     congregations: 'Congregações',
+    members: 'Membros',
     login: 'Login',
     logout: 'Sair',
     emailNotVerified: 'Não verificado',
