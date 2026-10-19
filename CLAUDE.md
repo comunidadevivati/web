@@ -1188,6 +1188,19 @@ Feature `src/features/organization` (namespace i18n `organization`), consumindo 
 
 ---
 
+## 15.2 Usuários
+
+Feature `src/features/users` (namespace i18n `users`), consumindo `/api/v1/users` do BFF (gestão das contas de acesso, ADR 0008 do backend):
+
+- rota `/usuarios` (menu "Usuários", somente com e-mail verificado): busca por nome ou e-mail (aplicada ao enviar), filtros combináveis em chips (ativas ou suspensas + verificadas ou não verificadas; "Todas" limpa os demais e não tem o "X" de remover) e paginação por cursor; datas no padrão "16/10/2026 às 16:31:28", com o momento da suspensão no badge "Suspensa";
+- tabela a partir de `md` (`Table` do shadcn) com as colunas usuário, telefone, verificação do e-mail, situação, cadastro e ações (a conta logada recebe a tag "Você" ao lado da verificação); abaixo de `md`, um card por conta;
+- **Novo usuário** (`UserCreateFormView`): os mesmos campos, regras (`registerFormSchema`), textos (namespace `auth`) e medidor de força de senha do cadastro da tela de login; o BFF envia o link de verificação e **não** abre sessão para a nova conta;
+- **Editar** (`UserEditFormView`): nome, telefone e e-mail com as mesmas regras do cadastro; trocar o e-mail mostra um aviso e, ao salvar, a conta volta a "não verificada" com um novo link;
+- ações com confirmação (`UserActionDialog`): suspender/reativar qualquer outra conta e excluir definitivamente somente conta não verificada; a própria conta ("Você") não tem essas ações;
+- recusas das requests (400, 403, 404 e 409, inclusive e-mail já cadastrado) são decididas pelo BFF e exibidas em **toast** com a mensagem do servidor (`message`, lida de `error.data` do Ky 2), com texto traduzido como reserva; o formulário fica aberto para correção. O `code` estável (`email_taken`, `self_action`, `verified_account`) só escolhe o título.
+
+---
+
 ## 16. TanStack Query
 
 Configuração global atual:
@@ -1961,8 +1974,8 @@ src/components/
 └── organisms/   organismos: blocos maiores de interface, compostos por moléculas e átomos
 ```
 
-- **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Sheet`, `Spinner`, `Subtitle` (subtítulo padrão de telas, cards e modais; o `DialogDescription` já renderiza um `Subtitle`), `Text`, `Toast` (primitivas do toast do shadcn sobre o Base UI), `Tooltip`, `Dialog`, `Field` (`FieldGroup`, `FieldLabel`, `FieldError`...), `InputGroup`, `Progress`, `Separator`. Única camada que pode usar HTML nativo.
-- **`molecules/`:** `CardSectionHeader` (cabeçalho de seção de card com ícone, título e descrição), `LocaleToggle` (escolha de idioma), `PreferenceToggleGroup` (base dos seletores de preferência), `TooltipHint`, `UserMenu` (avatar com iniciais e menu da conta) (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido), `FormField` (rótulo, controle, descrição e erro de um campo), `PasswordInput` (senha com mostrar/ocultar), `PasswordStrengthMeter` (força da senha e requisitos), `PhoneInput` (telefone brasileiro com máscara, compatível com o `register` do RHF), `NotificationToast` (toast de sucesso/erro com contagem regressiva).
+- **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Sheet`, `Spinner`, `Subtitle` (subtítulo padrão de telas, cards e modais; o `DialogDescription` já renderiza um `Subtitle`), `Text`, `Toast` (primitivas do toast do shadcn sobre o Base UI), `Tooltip`, `Dialog`, `Field` (`FieldGroup`, `FieldLabel`, `FieldError`...), `InputGroup`, `Progress`, `Separator`, `Table` (tabelas de dados; o contêiner rola na horizontal, nunca a página). Única camada que pode usar HTML nativo.
+- **`molecules/`:** `CardSectionHeader` (cabeçalho de seção de card com ícone, título e descrição), `LocaleToggle` (escolha de idioma), `PreferenceToggleGroup` (base dos seletores de preferência), `TooltipHint`, `UserMenu` (avatar com iniciais e menu da conta) (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido), `StatusBadge` (situação de um registro, com tom `success`, `warning` ou `neutral`), `FormField` (rótulo, controle, descrição e erro de um campo), `PasswordInput` (senha com mostrar/ocultar), `PasswordStrengthMeter` (força da senha e requisitos), `PhoneInput` (telefone brasileiro com máscara, compatível com o `register` do RHF), `NotificationToast` (toast de sucesso/erro com contagem regressiva).
 
 Regras de validação reutilizáveis e independentes de UI (telefone brasileiro, política de senha) ficam em `src/shared/validation`.
 

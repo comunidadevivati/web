@@ -17,6 +17,8 @@ export * from '@/components/molecules/preference-toggle-group/preference-toggle-
 
 export * from '@/components/molecules/sidebar-nav-item/sidebar-nav-item';
 
+export * from '@/components/molecules/status-badge/status-badge';
+
 export * from '@/components/molecules/theme-toggle/theme-toggle';
 
 export * from '@/components/molecules/tooltip-hint/tooltip-hint';
