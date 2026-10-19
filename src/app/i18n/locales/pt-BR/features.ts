@@ -665,3 +665,136 @@ export const members = {
     },
   },
 } as const;
+
+export const users = {
+  status: {
+    ACTIVE: 'Ativa',
+    SUSPENDED: 'Suspensa',
+    suspendedAt: 'Suspensa em {{dateTime}}',
+  },
+  verification: {
+    verified: 'Verificada',
+    unverified: 'Não verificada',
+  },
+  actions: {
+    suspend: 'Suspender',
+    reactivate: 'Reativar',
+    delete: 'Excluir',
+    retry: 'Tentar novamente',
+  },
+  notices: {
+    invalidData: {
+      title: 'Dados recusados',
+      description: 'Confira os campos e tente novamente.',
+    },
+    emailTaken: {
+      title: 'E-mail já cadastrado',
+      description: 'Já existe uma conta com este e-mail.',
+    },
+    conflict: {
+      title: 'Não foi possível concluir',
+      description: 'A operação não é permitida para esta conta.',
+    },
+    notFound: {
+      title: 'Usuário não encontrado',
+      description: 'A conta pode ter sido excluída. Atualize a lista.',
+    },
+    accessDenied: {
+      title: 'Acesso não liberado',
+      description: 'Confirme o seu e-mail para gerenciar usuários.',
+    },
+    unavailable: {
+      title: 'Serviço indisponível',
+      description: 'Não foi possível conectar ao serviço. Tente novamente em instantes.',
+    },
+  },
+  listPage: {
+    title: 'Usuários',
+    subtitle: 'Contas de acesso cadastradas na plataforma.',
+    create: 'Novo usuário',
+    searchLabel: 'Buscar por nome ou e-mail',
+    searchPlaceholder: 'Digite parte do nome ou do e-mail',
+    search: 'Buscar',
+    filtersLabel: 'Filtrar contas',
+    removeFilter: 'Remover o filtro {{filter}}',
+    filters: {
+      ALL: 'Todas',
+      ACTIVE: 'Ativas',
+      SUSPENDED: 'Suspensas',
+      VERIFIED: 'Verificadas',
+      UNVERIFIED: 'Não verificadas',
+    },
+    columns: {
+      user: 'Usuário',
+      phone: 'Telefone',
+      verification: 'E-mail',
+      status: 'Situação',
+      createdAt: 'Cadastro',
+      actions: 'Ações',
+    },
+    you: 'Você',
+    notInformed: 'Não informado',
+    createdAt: 'Cadastro: {{date}}',
+    dateTime: '{{date}} às {{time}}',
+    empty: 'Nenhum usuário encontrado.',
+    loadMore: 'Carregar mais',
+    loadingMore: 'Carregando…',
+    actionLabels: {
+      edit: 'Editar {{name}}',
+      suspend: 'Suspender {{name}}',
+      reactivate: 'Reativar {{name}}',
+      delete: 'Excluir {{name}}',
+    },
+  },
+  createForm: {
+    title: 'Novo usuário',
+    description:
+      'Os mesmos dados do cadastro da tela de login. A pessoa recebe um link para confirmar o e-mail.',
+    close: 'Fechar',
+    submit: 'Cadastrar',
+    submitting: 'Cadastrando…',
+    success: {
+      title: 'Usuário cadastrado',
+      description: 'Enviamos o link de verificação para {{email}}.',
+    },
+  },
+  editForm: {
+    title: 'Editar usuário',
+    description: 'Atualize os dados de {{name}}. A senha é trocada pela recuperação de senha.',
+    emailAlertTitle: 'O e-mail precisará ser verificado de novo',
+    emailHint:
+      'Ao salvar, a conta volta a ficar não verificada e um novo link é enviado para o endereço novo.',
+    close: 'Fechar',
+    submit: 'Salvar',
+    submitting: 'Salvando…',
+    success: {
+      title: 'Usuário atualizado',
+      description: 'Os dados de {{name}} foram salvos.',
+      emailChanged: 'Enviamos um novo link de verificação para {{email}}.',
+    },
+  },
+  confirm: {
+    cancel: 'Cancelar',
+    confirming: 'Salvando…',
+    suspend: {
+      title: 'Suspender {{name}}?',
+      description:
+        'A pessoa não consegue mais entrar e as sessões abertas são encerradas. A conta pode ser reativada depois.',
+    },
+    reactivate: {
+      title: 'Reativar {{name}}?',
+      description: 'A pessoa volta a poder entrar com e-mail e senha.',
+    },
+    delete: {
+      title: 'Excluir {{name}} definitivamente?',
+      description:
+        'A conta nunca confirmou o e-mail e será apagada sem possibilidade de recuperação.',
+    },
+    success: {
+      suspend: 'Usuário suspenso',
+      reactivate: 'Usuário reativado',
+      delete: 'Usuário excluído',
+      description: 'Operação concluída para {{name}}.',
+    },
+  },
+} as const;

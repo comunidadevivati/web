@@ -21,6 +21,7 @@ import { Route as WifiVisitantesRouteImport } from './routes/wifi-visitantes'
 import { Route as AuthenticatedCongregacoesRouteImport } from './routes/_authenticated.congregacoes'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 import { Route as AuthenticatedOrganizacaoRouteImport } from './routes/_authenticated.organizacao'
+import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated.usuarios'
 import { Route as AuthenticatedMembrosIndexRouteImport } from './routes/_authenticated.membros.index'
 import { Route as AuthenticatedMembrosMemberIdRouteImport } from './routes/_authenticated.membros.$memberId'
 
@@ -85,6 +86,11 @@ const AuthenticatedOrganizacaoRoute =
     path: '/organizacao',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedMembrosIndexRoute =
   AuthenticatedMembrosIndexRouteImport.update({
     id: '/membros/',
@@ -110,6 +116,7 @@ export interface FileRoutesByFullPath {
   '/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/usuarios': typeof AuthenticatedUsuariosRoute
   '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/membros/': typeof AuthenticatedMembrosIndexRoute
 }
@@ -125,6 +132,7 @@ export interface FileRoutesByTo {
   '/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/usuarios': typeof AuthenticatedUsuariosRoute
   '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/membros': typeof AuthenticatedMembrosIndexRoute
 }
@@ -142,6 +150,7 @@ export interface FileRoutesById {
   '/_authenticated/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
   '/_authenticated/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/_authenticated/membros/': typeof AuthenticatedMembrosIndexRoute
 }
@@ -159,6 +168,7 @@ export interface FileRouteTypes {
     | '/congregacoes'
     | '/dashboard'
     | '/organizacao'
+    | '/usuarios'
     | '/membros/$memberId'
     | '/membros/'
   fileRoutesByTo: FileRoutesByTo
@@ -174,6 +184,7 @@ export interface FileRouteTypes {
     | '/congregacoes'
     | '/dashboard'
     | '/organizacao'
+    | '/usuarios'
     | '/membros/$memberId'
     | '/membros'
   id:
@@ -190,6 +201,7 @@ export interface FileRouteTypes {
     | '/_authenticated/congregacoes'
     | '/_authenticated/dashboard'
     | '/_authenticated/organizacao'
+    | '/_authenticated/usuarios'
     | '/_authenticated/membros/$memberId'
     | '/_authenticated/membros/'
   fileRoutesById: FileRoutesById
@@ -292,6 +304,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrganizacaoRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/usuarios': {
+      id: '/_authenticated/usuarios'
+      path: '/usuarios'
+      fullPath: '/usuarios'
+      preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/membros/': {
       id: '/_authenticated/membros/'
       path: '/membros'
@@ -313,6 +332,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedCongregacoesRoute: typeof AuthenticatedCongregacoesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedOrganizacaoRoute: typeof AuthenticatedOrganizacaoRoute
+  AuthenticatedUsuariosRoute: typeof AuthenticatedUsuariosRoute
   AuthenticatedMembrosMemberIdRoute: typeof AuthenticatedMembrosMemberIdRoute
   AuthenticatedMembrosIndexRoute: typeof AuthenticatedMembrosIndexRoute
 }
@@ -321,6 +341,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCongregacoesRoute: AuthenticatedCongregacoesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedOrganizacaoRoute: AuthenticatedOrganizacaoRoute,
+  AuthenticatedUsuariosRoute: AuthenticatedUsuariosRoute,
   AuthenticatedMembrosMemberIdRoute: AuthenticatedMembrosMemberIdRoute,
   AuthenticatedMembrosIndexRoute: AuthenticatedMembrosIndexRoute,
 }

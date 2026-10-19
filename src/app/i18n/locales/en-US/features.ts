@@ -663,3 +663,136 @@ export const members = {
     },
   },
 } as const satisfies Translations['members'];
+
+export const users = {
+  status: {
+    ACTIVE: 'Active',
+    SUSPENDED: 'Suspended',
+    suspendedAt: 'Suspended on {{dateTime}}',
+  },
+  verification: {
+    verified: 'Verified',
+    unverified: 'Not verified',
+  },
+  actions: {
+    suspend: 'Suspend',
+    reactivate: 'Reactivate',
+    delete: 'Delete',
+    retry: 'Try again',
+  },
+  notices: {
+    invalidData: {
+      title: 'Data rejected',
+      description: 'Check the fields and try again.',
+    },
+    emailTaken: {
+      title: 'Email already registered',
+      description: 'An account with this email already exists.',
+    },
+    conflict: {
+      title: 'Could not complete',
+      description: 'This operation is not allowed for this account.',
+    },
+    notFound: {
+      title: 'User not found',
+      description: 'The account may have been deleted. Refresh the list.',
+    },
+    accessDenied: {
+      title: 'Access not granted',
+      description: 'Confirm your email to manage users.',
+    },
+    unavailable: {
+      title: 'Service unavailable',
+      description: 'Could not connect to the service. Try again in a moment.',
+    },
+  },
+  listPage: {
+    title: 'Users',
+    subtitle: 'Access accounts registered on the platform.',
+    create: 'New user',
+    searchLabel: 'Search by name or email',
+    searchPlaceholder: 'Type part of the name or email',
+    search: 'Search',
+    filtersLabel: 'Filter accounts',
+    removeFilter: 'Remove the {{filter}} filter',
+    filters: {
+      ALL: 'All',
+      ACTIVE: 'Active',
+      SUSPENDED: 'Suspended',
+      VERIFIED: 'Verified',
+      UNVERIFIED: 'Not verified',
+    },
+    columns: {
+      user: 'User',
+      phone: 'Phone',
+      verification: 'Email',
+      status: 'Status',
+      createdAt: 'Created',
+      actions: 'Actions',
+    },
+    you: 'You',
+    notInformed: 'Not provided',
+    createdAt: 'Created: {{date}}',
+    dateTime: '{{date}} at {{time}}',
+    empty: 'No users found.',
+    loadMore: 'Load more',
+    loadingMore: 'Loading…',
+    actionLabels: {
+      edit: 'Edit {{name}}',
+      suspend: 'Suspend {{name}}',
+      reactivate: 'Reactivate {{name}}',
+      delete: 'Delete {{name}}',
+    },
+  },
+  createForm: {
+    title: 'New user',
+    description:
+      'The same data as the sign-up on the login screen. The person receives a link to confirm the email.',
+    close: 'Close',
+    submit: 'Create',
+    submitting: 'Creating…',
+    success: {
+      title: 'User created',
+      description: 'We sent the verification link to {{email}}.',
+    },
+  },
+  editForm: {
+    title: 'Edit user',
+    description: 'Update the data of {{name}}. The password is changed through password recovery.',
+    emailAlertTitle: 'The email will need to be verified again',
+    emailHint:
+      'When you save, the account becomes unverified and a new link is sent to the new address.',
+    close: 'Close',
+    submit: 'Save',
+    submitting: 'Saving…',
+    success: {
+      title: 'User updated',
+      description: 'The data of {{name}} was saved.',
+      emailChanged: 'We sent a new verification link to {{email}}.',
+    },
+  },
+  confirm: {
+    cancel: 'Cancel',
+    confirming: 'Saving…',
+    suspend: {
+      title: 'Suspend {{name}}?',
+      description:
+        'The person can no longer sign in and open sessions are ended. The account can be reactivated later.',
+    },
+    reactivate: {
+      title: 'Reactivate {{name}}?',
+      description: 'The person can sign in with email and password again.',
+    },
+    delete: {
+      title: 'Delete {{name}} permanently?',
+      description:
+        'The account never confirmed its email and will be deleted with no way to recover it.',
+    },
+    success: {
+      suspend: 'User suspended',
+      reactivate: 'User reactivated',
+      delete: 'User deleted',
+      description: 'Operation completed for {{name}}.',
+    },
+  },
+} as const satisfies Translations['users'];
