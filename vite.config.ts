@@ -18,10 +18,10 @@ export default defineConfig(({ mode }) => ({
       usePolling: true,
       interval: 100,
     },
-    // Em produção o Worker repassa /auth/* ao BFF; no dev, o próprio Vite faz esse papel.
+    // Em produção o Worker repassa /auth/* e /api/v1/* ao BFF; no dev, o próprio Vite faz esse papel.
     // changeOrigin: o BFF de HML no Render é roteado pelo Host, que precisa ser o do destino.
     proxy: {
-      '^/auth/': {
+      '^/(?:auth|api/v1)/': {
         target: loadEnv(mode, process.cwd(), '').BFF_PROXY_TARGET || 'http://localhost:3000',
         changeOrigin: true,
       },

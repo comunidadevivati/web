@@ -957,10 +957,10 @@ React (formulário) → POST /auth/login → BFF
 
 ### Mesma origem (proxy)
 
-As rotas `/auth/*` são servidas **na origem do front**:
+As rotas `/auth/*` e `/api/v1/*` (API de negócio do BFF, ex.: organização) são servidas **na origem do front**:
 
-- produção: o Worker (`worker/index.ts`) repassa `/auth/*` para `BFF_ORIGIN` (secret do Worker), com `redirect: 'manual'`, devolvendo respostas e `Set-Cookie` sem alteração;
-- dev: o proxy do Vite (`server.proxy` em `vite.config.ts`) repassa `/auth/*` para `BFF_PROXY_TARGET` (padrão `http://localhost:3000`).
+- produção: o Worker (`worker/index.ts`) repassa `/auth/*` e `/api/v1/*` para `BFF_ORIGIN` (secret do Worker), com `redirect: 'manual'`, devolvendo respostas e `Set-Cookie` sem alteração;
+- dev: o proxy do Vite (`server.proxy` em `vite.config.ts`) repassa `/auth/*` e `/api/v1/*` para `BFF_PROXY_TARGET` (padrão `http://localhost:3000`).
 
 Motivo: o cookie `SameSite=Lax` não é enviado em `fetch` entre sites diferentes (e `*.workers.dev` é sufixo público). Na mesma origem não há CORS nem `credentials: 'include'`.
 
@@ -1168,6 +1168,26 @@ DashboardViewModel → dashboardOverviewQueryOptions (TanStack Query) → getDas
 
 ---
 
+## 15.1 Organização e congregações
+
+Feature `src/features/organization` (namespace i18n `organization`), consumindo a API de negócio do BFF, que repassa à Core API:
+
+| Endpoint (BFF)                                         | Uso no front                                                     |
+| ------------------------------------------------------ | ---------------------------------------------------------------- |
+| `GET/PATCH /api/v1/organization`                       | dados da Matriz; o PATCH exige `version` (concorrência otimista) |
+| `POST /api/v1/organization/{activate,deactivate}`      | situação da organização                                          |
+| `GET /api/v1/congregations?status&cursor`              | lista paginada por cursor (`{ items, nextCursor }`)              |
+| `POST /api/v1/congregations`, `PATCH .../:id`          | registro (nasce `DRAFT`) e edição (com `version`)                |
+| `POST /api/v1/congregations/:id/{activate,deactivate}` | situação da congregação                                          |
+
+- rotas `/organizacao` e `/congregacoes`, filhas de `/_authenticated`; os itens do menu exigem e-mail verificado (o BFF responde 403 sem ele);
+- toda escrita envia `X-CSRF-Token` (token da sessão em cache); erros são RFC 9457 (`detail`, `fields`) e o gateway os normaliza em erros do domínio (400 → campos marcados no formulário, 409 → conflito com o `detail` do servidor, 403/404/demais);
+- conflito de versão na edição fecha o modal, avisa em toast e recarrega os dados;
+- ativação/inativação passa por confirmação (`StatusChangeDialog`);
+- CNPJ, CEP e UF são validados em `src/shared/validation/brazilian-address.ts`, com as mesmas regras da Core API.
+
+---
+
 ## 16. TanStack Query
 
 Configuração global atual:
@@ -1224,7 +1244,7 @@ Ky é o cliente HTTP adotado para o novo projeto.
 
 Clientes existentes (`src/shared/http`):
 
-- `bffClient`: BFF, na mesma origem (`/auth/*` e futuras rotas do BFF repassadas pelo Worker/proxy do Vite); trata 401 fora de `/auth/*` como sessão expirada;
+- `bffClient`: BFF, na mesma origem (`/auth/*` e `/api/v1/*`, repassadas pelo Worker/proxy do Vite); trata 401 fora de `/auth/*` como sessão expirada;
 - `workerApiClient`: endpoints do próprio Worker (`/api/*`).
 
 Regras:
@@ -1681,7 +1701,7 @@ Build de produção usa o build Vite do projeto e deploy via Wrangler.
 
 O Worker em `worker/index.ts` executa **somente** para `/api/*` e `/auth/*` (`run_worker_first`); o restante continua servido como asset estático.
 
-- `/auth/*`: proxy para o BFF em `BFF_ORIGIN` (secret opcional; sem ele, responde 503 `bff_not_configured`). Ver seção 12.
+- `/auth/*` e `/api/v1/*`: proxy para o BFF em `BFF_ORIGIN` (secret opcional; sem ele, responde 503 `bff_not_configured`). Ver seção 12.
 
 Uso atual: `POST /api/guest-wifi/authorize`, que libera a rede "VIVA - Visitantes" no Omada Controller (External Portal Server). A rota pública `/wifi-visitantes` (fora de qualquer menu) é o portal cativo configurado no Omada.
 

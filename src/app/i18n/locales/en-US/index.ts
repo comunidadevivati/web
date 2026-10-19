@@ -1,6 +1,13 @@
 import type { Translations } from '@/app/i18n/i18n.model';
 import { common } from '@/app/i18n/locales/en-US/common';
-import { auth, contact, dashboard, guestWifi, home } from '@/app/i18n/locales/en-US/features';
+import {
+  auth,
+  contact,
+  dashboard,
+  guestWifi,
+  home,
+  organization,
+} from '@/app/i18n/locales/en-US/features';
 
 export const enUS = {
   common,
@@ -9,4 +16,5 @@ export const enUS = {
   dashboard,
   contact,
   guestWifi,
+  organization,
 } as const satisfies Translations;
