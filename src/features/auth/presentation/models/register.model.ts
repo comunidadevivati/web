@@ -51,7 +51,8 @@ const getNameWords = (value: string) => {
   return value.split(' ').filter(Boolean);
 };
 
-const fullNameSchema = z
+// Também usado pela gestão de usuários (mesmas regras do cadastro).
+export const fullNameSchema = z
   .string()
   .trim()
   .transform((value) => value.replace(/\s+/g, ' '))
@@ -73,7 +74,8 @@ const fullNameSchema = z
       }, registerValidationMessages.fullNameIncomplete),
   );
 
-const phoneSchema = z
+// Também usado pela gestão de usuários (mesmas regras do cadastro).
+export const phoneSchema = z
   .string()
   .min(1, registerValidationMessages.phoneRequired)
   .superRefine((value, context) => {
@@ -88,7 +90,8 @@ const phoneSchema = z
   })
   .transform(getPhoneDigits);
 
-const emailSchema = z
+// Também usado pela gestão de usuários (mesmas regras do cadastro).
+export const emailSchema = z
   .string()
   .trim()
   .toLowerCase()

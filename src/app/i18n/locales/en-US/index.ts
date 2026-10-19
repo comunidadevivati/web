@@ -7,6 +7,7 @@ import {
   guestWifi,
   home,
   organization,
+  users,
 } from '@/app/i18n/locales/en-US/features';
 
 export const enUS = {
@@ -17,4 +18,5 @@ export const enUS = {
   contact,
   guestWifi,
   organization,
+  users,
 } as const satisfies Translations;

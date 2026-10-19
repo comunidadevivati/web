@@ -26,6 +26,7 @@ import {
   CircleAlertIcon,
   LayoutDashboardIcon,
   MenuIcon,
+  UserCogIcon,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -84,6 +85,12 @@ export const AuthenticatedLayoutView = () => {
       label: t('navigation.congregations'),
       icon: ChurchIcon,
       to: '/congregacoes',
+      requiresVerifiedEmail: true,
+    },
+    {
+      label: t('navigation.users'),
+      icon: UserCogIcon,
+      to: '/usuarios',
       requiresVerifiedEmail: true,
     },
   ];
