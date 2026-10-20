@@ -1192,7 +1192,7 @@ Feature `src/features/organization` (namespace i18n `organization`), consumindo 
 
 Feature `src/features/users` (namespace i18n `users`), consumindo `/api/v1/users` do BFF (gestão das contas de acesso, ADR 0008 do backend):
 
-- rota `/usuarios` (menu "Usuários", somente com e-mail verificado): busca por nome ou e-mail (aplicada ao enviar), filtros combináveis em chips (ativas ou suspensas + verificadas ou não verificadas; "Todas" limpa os demais e não tem o "X" de remover) e paginação por cursor; datas no padrão "16/10/2026 às 16:31:28", com o momento da suspensão no badge "Suspensa";
+- rota `/usuarios` (menu "Usuários", somente com e-mail verificado): busca por nome ou e-mail (aplicada ao enviar), filtros combináveis em chips (ativas ou suspensas + verificadas ou não verificadas; "Todas" limpa os demais e não tem o "X" de remover) e paginação por cursor. Lista somente contas que ainda não viraram Pessoa (`hasPerson=false`): quem vira Pessoa e membro passa a aparecer só em Membros; datas no padrão "16/10/2026 às 16:31:28", com o momento da suspensão no badge "Suspensa";
 - tabela a partir de `md` (`Table` do shadcn) com as colunas usuário, telefone, verificação do e-mail, situação, cadastro e ações (a conta logada recebe a tag "Você" ao lado da verificação); abaixo de `md`, um card por conta;
 - **Novo usuário** (`UserCreateFormView`): os mesmos campos, regras (`registerFormSchema`), textos (namespace `auth`) e medidor de força de senha do cadastro da tela de login; o BFF envia o link de verificação e **não** abre sessão para a nova conta;
 - **Editar** (`UserEditFormView`): nome, telefone e e-mail com as mesmas regras do cadastro; trocar o e-mail mostra um aviso e, ao salvar, a conta volta a "não verificada" com um novo link;
@@ -1205,11 +1205,14 @@ Feature `src/features/users` (namespace i18n `users`), consumindo `/api/v1/users
 
 Feature `src/features/members` (namespace i18n `members`), consumindo `/api/v1/members` e `/api/v1/memberships` do BFF:
 
-- rota `/membros` (lista): busca por nome (aplicada ao enviar), filtro por situação (padrão: ativos) e por congregação (`Select`), paginação por cursor e cadastro em modal (`MemberFormView`); o membro recém-registrado abre direto na ficha;
-- rota `/membros/$memberId` (ficha): dados pessoais, edição (bloqueada para arquivado), ações de situação conforme a situação atual (ativo: inativar; inativo: ativar ou arquivar; arquivado: restaurar) e histórico de vínculos;
+- rota `/membros` (lista): busca por nome (aplicada ao enviar), filtro por situação (padrão: ativos) e por congregação (`Select`) e paginação por cursor;
+- **regra em cadeia**: só vira Pessoa a conta cadastrada e com e-mail verificado, e só vira membro quem é Pessoa (ADR 0009 do backend). O membro não guarda dados pessoais: `Member.person` traz os dados da Pessoa, exibidos na lista e na ficha;
+- **um membro nunca é cadastrado do zero**: o botão **Criar membro** abre o modal `MemberCreateView`, que lista somente as contas com e-mail verificado que ainda não são Pessoa (`GET /api/v1/users?emailVerified=true&hasPerson=false`, paginada). A primeira coluna tem checkbox (com "selecionar todos" no cabeçalho) e a última o botão **Vincular**, que converte só aquela conta; **Vincular todos** é liberado com mais de uma conta marcada e converte somente as marcadas (`POST /api/v1/users/members`, em lotes de até 50). Vincular cria a Pessoa (com nome, e-mail e telefone da conta) e o membro;
+- depois da conversão o modal **não fecha**: mostra o toast de sucesso, de conversão parcial ou de erro, recarrega a lista de contas e volta ao estado inicial (seleção limpa). Como os demais modais, fecha somente pelo "X" (Esc e clique fora são ignorados), nunca durante a conversão, e bloqueia a aplicação enquanto aberto (foco preso no modal);
+- rota `/membros/$memberId` (ficha): dados pessoais da Pessoa (somente leitura; a edição virá com a tela da Pessoa), ações de situação conforme a situação atual (ativo: inativar; inativo: ativar ou arquivar; arquivado: restaurar) e histórico de vínculos;
 - vínculos: registro em modal (`MembershipFormView`, somente congregações ativas, opção de vínculo principal), ativação de pendente e encerramento; encerrado é histórico e não reabre;
 - toda mudança de situação passa por `ConfirmActionDialog`; conflitos (409) mostram o `detail` do servidor (ex.: vínculo principal já ativo, vínculos abertos ao inativar);
-- dados pessoais do MVP: nome completo, data de nascimento, telefone e e-mail (ADR 0007 do backend);
+- dados pessoais do MVP: nome completo, data de nascimento, telefone e e-mail (ADR 0009 do backend); a conta guarda o vínculo com a Pessoa (`personId`);
 - a lista de congregações para escolha vem de `congregationOptionsQueryOptions` (feature organization, até 100 itens).
 
 ---

@@ -11,15 +11,19 @@ import { readProblemDetails } from '@/shared/http/problem-details';
 import { isHTTPError } from 'ky';
 import { z } from 'zod';
 
-// Contratos de /api/v1/members e /api/v1/memberships no BFF (repassados da Core API).
+// Contratos de /api/v1/members e /api/v1/memberships no BFF (repassados da Core API) e da
+// conversão de contas em membros (POST /api/v1/users/members).
 const memberSchema = z.object({
   id: z.string(),
-  fullName: z.string(),
-  birthDate: z.string().nullable(),
-  phone: z.string().nullable(),
-  email: z.string().nullable(),
   status: z.enum(['ACTIVE', 'INACTIVE', 'ARCHIVED']),
   version: z.number().int(),
+  person: z.object({
+    id: z.string(),
+    fullName: z.string(),
+    birthDate: z.string().nullable(),
+    phone: z.string().nullable(),
+    email: z.string().nullable(),
+  }),
 });
 
 const memberPageSchema = z.object({
@@ -39,18 +43,35 @@ const membershipSchema = z.object({
   congregation: z.object({ code: z.string(), name: z.string() }).nullable(),
 });
 
+const memberFromUserOutcomesSchema = z.object({
+  items: z.array(
+    z.object({
+      userId: z.string(),
+      status: z.enum([
+        'linked',
+        'already_linked',
+        'not_found',
+        'unverified',
+        'rejected',
+        'unavailable',
+      ]),
+    }),
+  ),
+});
+
 // Normaliza as falhas do BFF em erros do domínio. O 401 (sessão expirada) já é tratado pelo
 // bffClient, que leva ao login; aqui ele vira apenas indisponibilidade.
-const toDomainError = async (error: unknown) => {
+// O corpo do erro vem em error.data: o Ky 2 já o consumiu ao criar o HTTPError.
+const toDomainError = (error: unknown) => {
   if (!isHTTPError(error)) {
     return new MembersServiceUnavailableError(error);
   }
 
-  const { response } = error;
+  const { data, response } = error;
 
   switch (response.status) {
     case 400: {
-      const { fields = [] } = await readProblemDetails(response);
+      const { fields = [] } = readProblemDetails(data);
 
       return new InvalidMemberDataError(fields);
     }
@@ -62,7 +83,7 @@ const toDomainError = async (error: unknown) => {
       return new MemberNotFoundError();
 
     case 409: {
-      const { detail } = await readProblemDetails(response);
+      const { detail } = readProblemDetails(data);
 
       return new MemberConflictError(detail);
     }
@@ -78,7 +99,7 @@ const request = async <T>(schema: z.ZodType<T>, send: () => Promise<Response>) =
   try {
     body = await (await send()).json();
   } catch (error) {
-    throw await toDomainError(error);
+    throw toDomainError(error);
   }
 
   const parsed = schema.safeParse(body);
@@ -115,19 +136,16 @@ export const membersHttpGateway: MembersGateway = {
     return request(memberSchema, () => bffClient.get(memberPath(id)));
   },
 
-  registerMember: (csrfToken, profile) => {
-    return request(memberSchema, () =>
-      bffClient.post('api/v1/members', { headers: csrfHeaders(csrfToken), json: profile }),
-    );
-  },
-
-  updateMember: (csrfToken, id, version, profile) => {
-    return request(memberSchema, () =>
-      bffClient.patch(memberPath(id), {
+  // A conversão fica na gestão de contas do BFF (Identity guarda o vínculo conta → membro).
+  createMembersFromUsers: async (csrfToken, userIds) => {
+    const { items } = await request(memberFromUserOutcomesSchema, () =>
+      bffClient.post('api/v1/users/members', {
         headers: csrfHeaders(csrfToken),
-        json: { version, ...profile },
+        json: { userIds },
       }),
     );
+
+    return items;
   },
 
   changeMemberStatus: (csrfToken, id, action) => {

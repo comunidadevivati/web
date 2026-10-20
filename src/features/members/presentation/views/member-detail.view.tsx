@@ -18,7 +18,6 @@ import {
   MembershipStatusBadge,
 } from '@/features/members/presentation/components/member-status-badge';
 import { useMemberDetailViewModel } from '@/features/members/presentation/view-models/member-detail.view-model';
-import { MemberFormView } from '@/features/members/presentation/views/member-form.view';
 import { MembershipFormView } from '@/features/members/presentation/views/membership-form.view';
 import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
@@ -31,7 +30,6 @@ import {
   CircleAlertIcon,
   LinkIcon,
   MailIcon,
-  PencilIcon,
   PhoneIcon,
   PowerIcon,
   PowerOffIcon,
@@ -53,13 +51,11 @@ export const MemberDetailView = () => {
   const {
     cancelAction,
     canAddMembership,
-    canEdit,
     confirmAction,
     confirmContent,
     errorNotice,
     formKey,
     hasMembershipsError,
-    isEditOpen,
     isLoading,
     isLoadingMemberships,
     isMembershipFormOpen,
@@ -68,13 +64,11 @@ export const MemberDetailView = () => {
     member,
     memberActions,
     membershipItems,
-    openEdit,
     openMembershipForm,
     profile,
     requestMemberAction,
     requestMembershipAction,
     retry,
-    setIsEditOpen,
     setIsMembershipFormOpen,
   } = useMemberDetailViewModel();
 
@@ -142,13 +136,13 @@ export const MemberDetailView = () => {
                     font-semibold text-primary-strong uppercase
                   "
                 >
-                  {member.fullName.slice(0, 2)}
+                  {member.person.fullName.slice(0, 2)}
                 </Box>
 
                 <Box className="grid min-w-0 gap-1.5">
                   <Box className="flex flex-wrap items-center gap-2">
                     <Heading className="text-xl font-semibold break-words text-foreground">
-                      {member.fullName}
+                      {member.person.fullName}
                     </Heading>
 
                     <MemberStatusBadge status={member.status} />
@@ -159,13 +153,6 @@ export const MemberDetailView = () => {
               </Box>
 
               <Box className="flex flex-wrap gap-2">
-                {canEdit && (
-                  <Button className="h-10" type="button" variant="outline" onClick={openEdit}>
-                    <PencilIcon data-icon="inline-start" />
-                    {t('actions.edit')}
-                  </Button>
-                )}
-
                 {memberActions.map((action) => {
                   const Icon = memberActionIcons[action];
 
@@ -352,13 +339,6 @@ export const MemberDetailView = () => {
               )}
             </CardContent>
           </Card>
-
-          <MemberFormView
-            key={`member-${formKey}`}
-            member={member}
-            open={isEditOpen}
-            onOpenChange={setIsEditOpen}
-          />
 
           <MembershipFormView
             key={`membership-${formKey}`}

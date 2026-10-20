@@ -55,16 +55,17 @@ const congregationPageSchema = z.object({
 
 // Normaliza as falhas do BFF em erros do domínio. O 401 (sessão expirada) já é tratado pelo
 // bffClient, que leva ao login; aqui ele vira apenas indisponibilidade.
-const toDomainError = async (error: unknown) => {
+// O corpo do erro vem em error.data: o Ky 2 já o consumiu ao criar o HTTPError.
+const toDomainError = (error: unknown) => {
   if (!isHTTPError(error)) {
     return new OrganizationServiceUnavailableError(error);
   }
 
-  const { response } = error;
+  const { data, response } = error;
 
   switch (response.status) {
     case 400: {
-      const { fields = [] } = await readProblemDetails(response);
+      const { fields = [] } = readProblemDetails(data);
 
       return new InvalidOrganizationDataError(fields);
     }
@@ -76,7 +77,7 @@ const toDomainError = async (error: unknown) => {
       return new OrganizationNotFoundError();
 
     case 409: {
-      const { detail } = await readProblemDetails(response);
+      const { detail } = readProblemDetails(data);
 
       return new OrganizationConflictError(detail);
     }
@@ -92,7 +93,7 @@ const request = async <T>(schema: z.ZodType<T>, send: () => Promise<Response>) =
   try {
     body = await (await send()).json();
   } catch (error) {
-    throw await toDomainError(error);
+    throw toDomainError(error);
   }
 
   const parsed = schema.safeParse(body);

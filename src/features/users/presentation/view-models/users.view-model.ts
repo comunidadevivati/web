@@ -63,6 +63,8 @@ export const useUsersViewModel = () => {
   } = useInfiniteQuery(
     usersQueryOptions({
       ...filterSelection,
+      // Quem já virou Pessoa (e membro) sai da lista de usuários: aparece em Membros.
+      hasPerson: false,
       search: search || null,
     }),
   );

@@ -20,7 +20,7 @@ import {
 } from '@/components/ui';
 import { MemberStatusBadge } from '@/features/members/presentation/components/member-status-badge';
 import { useMembersViewModel } from '@/features/members/presentation/view-models/members.view-model';
-import { MemberFormView } from '@/features/members/presentation/views/member-form.view';
+import { MemberCreateView } from '@/features/members/presentation/views/member-create.view';
 import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
 import {
@@ -29,9 +29,9 @@ import {
   CircleAlertIcon,
   MailIcon,
   PhoneIcon,
-  PlusIcon,
   RefreshCwIcon,
   SearchIcon,
+  UserPlusIcon,
   UsersIcon,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
@@ -76,7 +76,7 @@ export const MembersView = () => {
         </Box>
 
         <Button className="h-11 w-full sm:w-auto sm:px-5" type="button" onClick={openCreate}>
-          <PlusIcon data-icon="inline-start" />
+          <UserPlusIcon data-icon="inline-start" />
           {t('listPage.create')}
         </Button>
       </Box>
@@ -211,13 +211,13 @@ export const MembersView = () => {
                   font-semibold text-primary-strong uppercase
                 "
               >
-                {member.fullName.slice(0, 2)}
+                {member.person.fullName.slice(0, 2)}
               </Box>
 
               <Box className="grid min-w-0 flex-1 gap-1.5">
                 <Box className="flex flex-wrap items-center gap-2">
                   <Text className="truncate text-sm font-semibold text-foreground">
-                    {member.fullName}
+                    {member.person.fullName}
                   </Text>
 
                   <MemberStatusBadge status={member.status} />
@@ -232,11 +232,11 @@ export const MembersView = () => {
                     </Box>
                   )}
 
-                  {member.email && (
+                  {member.person.email && (
                     <Box className="flex min-w-0 items-center gap-1.5">
                       <MailIcon aria-hidden="true" className="size-3.5 text-primary-strong" />
 
-                      <Text className="truncate text-xs">{member.email}</Text>
+                      <Text className="truncate text-xs">{member.person.email}</Text>
                     </Box>
                   )}
 
@@ -276,12 +276,7 @@ export const MembersView = () => {
         </Button>
       )}
 
-      <MemberFormView
-        key={createFormKey}
-        member={null}
-        open={isCreateOpen}
-        onOpenChange={setIsCreateOpen}
-      />
+      <MemberCreateView key={createFormKey} open={isCreateOpen} onOpenChange={setIsCreateOpen} />
     </Box>
   );
 };

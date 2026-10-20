@@ -51,8 +51,6 @@ export const useMemberDetailViewModel = () => {
     isPending: isLoadingMemberships,
   } = useQuery({ ...membershipsQueryOptions(memberId), enabled: Boolean(member) });
 
-  const [isEditOpen, setIsEditOpen] = useState(false);
-
   const [isMembershipFormOpen, setIsMembershipFormOpen] = useState(false);
 
   // Cada abertura monta um formulário novo, com os dados atuais.
@@ -113,10 +111,11 @@ export const useMemberDetailViewModel = () => {
     return dateFormatter.format(new Date(`${iso}T00:00:00Z`));
   };
 
+  // Dados pessoais da Pessoa (somente leitura aqui; são editados no cadastro da Pessoa).
   const profile = member && {
-    birthDate: member.birthDate ? formatDate(member.birthDate) : null,
-    phone: member.phone ? formatPhone(member.phone) : null,
-    email: member.email,
+    birthDate: member.person.birthDate ? formatDate(member.person.birthDate) : null,
+    phone: member.person.phone ? formatPhone(member.person.phone) : null,
+    email: member.person.email,
   };
 
   const membershipItems = memberships.map((membership) => ({
@@ -132,12 +131,6 @@ export const useMemberDetailViewModel = () => {
   }));
 
   const memberActions = member ? memberActionsByStatus[member.status] : [];
-
-  const openEdit = () => {
-    setFormKey((key) => key + 1);
-
-    setIsEditOpen(true);
-  };
 
   const openMembershipForm = () => {
     setFormKey((key) => key + 1);
@@ -157,7 +150,7 @@ export const useMemberDetailViewModel = () => {
   const getConfirmContent = (request: MembersActionRequest): ConfirmActionContent => {
     if (request.kind === 'member') {
       return {
-        title: t(`confirm.member.${request.action}.title`, { name: member?.fullName ?? '' }),
+        title: t(`confirm.member.${request.action}.title`, { name: member?.person.fullName ?? '' }),
         description: t(`confirm.member.${request.action}.description`),
         confirmLabel: t(`actions.${request.action}`),
         isDestructive: DESTRUCTIVE_ACTIONS.has(request.action),
@@ -197,13 +190,11 @@ export const useMemberDetailViewModel = () => {
   return {
     cancelAction,
     canAddMembership: member?.status === 'ACTIVE',
-    canEdit: member !== undefined && member.status !== 'ARCHIVED',
     confirmAction,
     confirmContent,
     errorNotice: error ? getMembersNotice(error) : null,
     formKey,
     hasMembershipsError: Boolean(membershipsError),
-    isEditOpen,
     isLoading: isPending,
     isLoadingMemberships: Boolean(member) && isLoadingMemberships,
     isMembershipFormOpen,
@@ -212,7 +203,6 @@ export const useMemberDetailViewModel = () => {
     member,
     memberActions,
     membershipItems,
-    openEdit,
     openMembershipForm,
     profile,
     requestMemberAction: (action: (typeof memberActions)[number]) => {
@@ -220,7 +210,6 @@ export const useMemberDetailViewModel = () => {
     },
     requestMembershipAction,
     retry,
-    setIsEditOpen,
     setIsMembershipFormOpen,
   };
 };

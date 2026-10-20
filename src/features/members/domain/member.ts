@@ -8,23 +8,23 @@ export type MembershipStatus = 'PENDING' | 'ACTIVE' | 'INACTIVE';
 
 export type MembershipStatusAction = 'activate' | 'deactivate';
 
-// Telefone chega só com dígitos; e-mail em minúsculas; data de nascimento ISO (AAAA-MM-DD).
-export type Member = {
+// Pessoa: cadastro completo de quem virou membro, fonte dos dados pessoais exibidos. Telefone chega
+// só com dígitos; e-mail em minúsculas; data de nascimento ISO (AAAA-MM-DD).
+export type MemberPerson = {
   id: string;
   fullName: string;
   birthDate: string | null;
   phone: string | null;
   email: string | null;
-  status: MemberStatus;
-  // Versão lida: a edição a devolve (concorrência otimista).
-  version: number;
 };
 
-export type MemberProfile = {
-  fullName: string;
-  birthDate: string | null;
-  phone: string | null;
-  email: string | null;
+// Para ser membro é preciso ser Pessoa, e para ser Pessoa é preciso ser usuário verificado. O membro
+// guarda somente a situação; os dados pessoais são os da Pessoa.
+export type Member = {
+  id: string;
+  status: MemberStatus;
+  version: number;
+  person: MemberPerson;
 };
 
 export type MemberPage = {
@@ -36,7 +36,7 @@ export type MemberFilters = {
   status: MemberStatus | null;
   // Membros com vínculo pendente ou ativo nesta congregação.
   congregationId: string | null;
-  // Trecho do nome.
+  // Trecho do nome da Pessoa.
   search: string | null;
   cursor: string | null;
 };
@@ -54,6 +54,23 @@ export type Membership = {
   version: number;
   // Código e nome da congregação; null se ela não estiver mais no catálogo.
   congregation: { code: string; name: string } | null;
+};
+
+// Resultado da conversão de uma conta em membro. Um membro nunca é cadastrado do zero: ele é
+// gerado a partir de uma conta com e-mail verificado (nome, e-mail e telefone copiados da conta).
+// linked: membro criado agora; already_linked: a conta já era membro; rejected: dados recusados
+// pelas regras de Members; unavailable: falha técnica.
+export type MemberFromUserStatus =
+  | 'linked'
+  | 'already_linked'
+  | 'not_found'
+  | 'unverified'
+  | 'rejected'
+  | 'unavailable';
+
+export type MemberFromUserOutcome = {
+  userId: string;
+  status: MemberFromUserStatus;
 };
 
 export type MembershipRegistration = {
@@ -114,17 +131,15 @@ export class MembersServiceUnavailableError extends Error {
   }
 }
 
-// Alterações exigem o token CSRF da sessão; a edição do perfil exige também a versão lida.
+// Alterações exigem o token CSRF da sessão. Os dados pessoais não são editados pelo membro.
 export interface MembersGateway {
   listMembers: (filters: MemberFilters) => Promise<MemberPage>;
   getMember: (id: string) => Promise<Member>;
-  registerMember: (csrfToken: string, profile: MemberProfile) => Promise<Member>;
-  updateMember: (
+  // Converte as contas (1 a 50 por pedido) em membros; devolve o resultado de cada conta.
+  createMembersFromUsers: (
     csrfToken: string,
-    id: string,
-    version: number,
-    profile: MemberProfile,
-  ) => Promise<Member>;
+    userIds: readonly string[],
+  ) => Promise<MemberFromUserOutcome[]>;
   changeMemberStatus: (
     csrfToken: string,
     id: string,

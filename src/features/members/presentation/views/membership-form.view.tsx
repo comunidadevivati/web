@@ -71,7 +71,7 @@ export const MembershipFormView = ({ member, onOpenChange, open }: MembershipFor
           </DialogTitle>
 
           <DialogDescription>
-            {t('membershipForm.description', { name: member.fullName })}
+            {t('membershipForm.description', { name: member.person.fullName })}
           </DialogDescription>
         </DialogHeader>
 

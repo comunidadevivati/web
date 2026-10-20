@@ -17,6 +17,8 @@ export type UserAccount = {
   createdAt: string;
   // Data e hora da suspensão em ISO 8601; nulo enquanto a conta está ativa.
   suspendedAt: string | null;
+  // Pessoa (cadastro completo) gerada a partir desta conta ao virar membro; nula enquanto não houver.
+  personId: string | null;
 };
 
 export type UserPage = {
@@ -28,6 +30,8 @@ export type UserFilters = {
   status: UserStatus | null;
   // true = somente e-mails verificados; false = somente não verificados; null = todos.
   emailVerified: boolean | null;
+  // true = somente contas que já viraram Pessoa (e membro); false = somente as que ainda não.
+  hasPerson: boolean | null;
   // Trecho do nome ou do e-mail.
   search: string | null;
   cursor: string | null;

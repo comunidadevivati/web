@@ -25,7 +25,7 @@ export const useMembersViewModel = () => {
 
   const [isCreateOpen, setIsCreateOpen] = useState(false);
 
-  // Cada abertura monta um formulário novo.
+  // Cada abertura monta o modal "Criar membro" no estado inicial.
   const [createFormKey, setCreateFormKey] = useState(0);
 
   const {
@@ -65,8 +65,8 @@ export const useMembersViewModel = () => {
     .flatMap(({ items: page }) => page)
     .map((member) => ({
       member,
-      phone: member.phone ? formatPhone(member.phone) : null,
-      birthDate: member.birthDate ? formatBirthDate(member.birthDate) : null,
+      phone: member.person.phone ? formatPhone(member.person.phone) : null,
+      birthDate: member.person.birthDate ? formatBirthDate(member.person.birthDate) : null,
     }));
 
   const filters = MEMBER_STATUS_FILTERS.map((value) => ({

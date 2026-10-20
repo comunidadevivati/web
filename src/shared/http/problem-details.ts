@@ -8,9 +8,10 @@ const problemSchema = z.object({
 
 export type ProblemDetails = z.infer<typeof problemSchema>;
 
-// Lê o corpo de erro sem falhar: resposta vazia ou fora do contrato vira {}.
-export const readProblemDetails = async (response: Response): Promise<ProblemDetails> => {
-  const parsed = problemSchema.safeParse(await response.json().catch(() => null));
+// Lê o corpo de erro sem falhar: resposta vazia ou fora do contrato vira {}. Recebe o error.data do
+// HTTPError do Ky 2, que já consumiu o corpo (response.json() não funciona mais).
+export const readProblemDetails = (data: unknown): ProblemDetails => {
+  const parsed = problemSchema.safeParse(data);
 
   return parsed.success ? parsed.data : {};
 };
