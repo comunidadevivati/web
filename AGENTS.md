@@ -1209,6 +1209,19 @@ Feature `src/features/members` (namespace i18n `members`), consumindo `/api/v1/m
 
 ---
 
+## 15.4 Galeria (álbuns)
+
+Feature `src/features/gallery` (namespace i18n `gallery`), consumindo `/api/v1/gallery` do BFF (ADR 0010 do backend):
+
+- rota `/site/albuns` (menu **Site → Álbuns**, somente com e-mail verificado; o grupo Site reúne as parametrizações do site público): lista paginada, mais recentes primeiro, com situação (Rascunho, Publicado, Arquivado), data e quantidade de fotos prontas; **Novo álbum** abre `AlbumFormView` (título, data do culto ou evento, descrição opcional) e o álbum criado abre direto na página dele;
+- rota `/site/albuns/$albumId`: dados do álbum (com o endereço público `/fotos/{slug}`, que não muda com o título), edição em modal e a grade de fotos;
+- **Adicionar fotos**: seletor múltiplo (JPEG, PNG ou WebP, até 25 MB cada). `uploadPhotosUseCase` pede as URLs ao BFF em lotes de até 50, envia cada arquivo **direto ao bucket de mídia** (área privada) (PUT pré-assinado por `XMLHttpRequest`, para ter progresso; sem cookies, com o `Content-Type` assinado), três por vez, e confirma cada envio. A falha de um arquivo não interrompe os demais; a lista de envios mostra o andamento e o motivo das falhas, e sair da página durante o envio pede confirmação do navegador;
+- o processamento (variantes AVIF/WebP, remoção de metadados e GPS) é assíncrono no servidor: a grade consulta de novo a cada 3 s enquanto houver foto em processamento. As miniaturas são URLs de validade curta (1 h) e usam o placeholder borrado enquanto carregam;
+- excluir foto é definitivo e passa por `DeletePhotoDialog`; os modais fecham somente pelo "X" (ou Cancelar) e nunca durante o envio;
+- publicação, capa, CDN e a seção pública **Fotos** chegam na próxima etapa.
+
+---
+
 ## 16. TanStack Query
 
 Configuração global atual:
@@ -1983,7 +1996,7 @@ src/components/
 ```
 
 - **`ui/` (átomos):** `Alert`, `Anchor`, `Box`, `Button`, `Card`, `Carousel`, `Checkbox`, `Form`, `Heading`, `Image`, `Input`, `Label`, `LoadingOverlay`, `Sheet`, `Spinner`, `Subtitle` (subtítulo padrão de telas, cards e modais; o `DialogDescription` já renderiza um `Subtitle`), `Text`, `Toast` (primitivas do toast do shadcn sobre o Base UI), `Tooltip`, `Dialog`, `Field` (`FieldGroup`, `FieldLabel`, `FieldError`...), `InputGroup`, `Progress`, `Select` (`SelectTrigger` usa `fieldControlClassName`), `Separator`, `Table` (tabelas de dados; o contêiner rola na horizontal, nunca a página). Única camada que pode usar HTML nativo.
-- **`molecules/`:** `CardSectionHeader` (cabeçalho de seção de card com ícone, título e descrição), `LocaleToggle` (escolha de idioma), `PreferenceToggleGroup` (base dos seletores de preferência), `TooltipHint`, `UserMenu` (avatar com iniciais e menu da conta) (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido), `StatusBadge` (situação de um registro, com tom `success`, `warning` ou `neutral`), `FormField` (rótulo, controle, descrição e erro de um campo), `PasswordInput` (senha com mostrar/ocultar), `PasswordStrengthMeter` (força da senha e requisitos), `PhoneInput` (telefone brasileiro com máscara, compatível com o `register` do RHF), `NotificationToast` (toast de sucesso/erro com contagem regressiva).
+- **`molecules/`:** `CardSectionHeader` (cabeçalho de seção de card com ícone, título e descrição), `LocaleToggle` (escolha de idioma), `PreferenceToggleGroup` (base dos seletores de preferência), `TooltipHint`, `UserMenu` (avatar com iniciais e menu da conta) (tooltip do shadcn sobre um elemento interativo), `ThemeToggle` (escolha de tema), `SidebarNavItem` (item do menu lateral com tooltip quando recolhido), `SidebarNavGroup` (grupo do menu lateral com subitens, ex.: Site → Álbuns; aberto quando a rota atual pertence a ele e, recolhido, mostra os ícones dos subitens), `StatusBadge` (situação de um registro, com tom `success`, `warning` ou `neutral`), `FormField` (rótulo, controle, descrição e erro de um campo), `PasswordInput` (senha com mostrar/ocultar), `PasswordStrengthMeter` (força da senha e requisitos), `PhoneInput` (telefone brasileiro com máscara, compatível com o `register` do RHF), `NotificationToast` (toast de sucesso/erro com contagem regressiva).
 
 Regras de validação reutilizáveis e independentes de UI (telefone brasileiro, política de senha) ficam em `src/shared/validation`.
 

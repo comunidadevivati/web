@@ -15,6 +15,8 @@ export * from '@/components/molecules/phone-input/phone-input';
 
 export * from '@/components/molecules/preference-toggle-group/preference-toggle-group';
 
+export * from '@/components/molecules/sidebar-nav-group/sidebar-nav-group';
+
 export * from '@/components/molecules/sidebar-nav-item/sidebar-nav-item';
 
 export * from '@/components/molecules/status-badge/status-badge';

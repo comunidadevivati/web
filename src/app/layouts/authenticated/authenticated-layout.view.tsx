@@ -24,6 +24,8 @@ import {
   Building2Icon,
   ChurchIcon,
   CircleAlertIcon,
+  GlobeIcon,
+  ImagesIcon,
   LayoutDashboardIcon,
   MenuIcon,
   UserCogIcon,
@@ -98,6 +100,12 @@ export const AuthenticatedLayoutView = () => {
       label: t('navigation.members'),
       icon: UsersIcon,
       to: '/membros',
+      requiresVerifiedEmail: true,
+    },
+    {
+      label: t('navigation.site'),
+      icon: GlobeIcon,
+      children: [{ label: t('navigation.albums'), icon: ImagesIcon, to: '/site/albuns' }],
       requiresVerifiedEmail: true,
     },
   ];

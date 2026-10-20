@@ -20,6 +20,8 @@ export const common = {
     users: 'Users',
     members: 'Members',
     member: 'Member',
+    albums: 'Albums',
+    album: 'Album',
   },
   navigation: {
     home: 'Home',
@@ -31,6 +33,8 @@ export const common = {
     congregations: 'Congregations',
     users: 'Users',
     members: 'Members',
+    site: 'Website',
+    albums: 'Albums',
     login: 'Sign in',
     logout: 'Sign out',
     emailNotVerified: 'Not verified',

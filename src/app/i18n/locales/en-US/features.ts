@@ -811,3 +811,135 @@ export const users = {
     },
   },
 } as const satisfies Translations['users'];
+
+export const gallery = {
+  status: {
+    DRAFT: 'Draft',
+    PUBLISHED: 'Published',
+    ARCHIVED: 'Archived',
+  },
+  photoStatus: {
+    PROCESSING: 'Processing',
+    READY: 'Ready',
+    FAILED: 'Failed',
+  },
+  photoFailure: {
+    invalid_image: 'The file is not a valid image.',
+    processing_error: 'The photo could not be processed. Delete it and upload it again.',
+  },
+  actions: {
+    edit: 'Edit',
+    retry: 'Try again',
+    addPhotos: 'Add photos',
+    delete: 'Delete photo',
+  },
+  fields: {
+    title: 'Title',
+    titlePlaceholder: 'E.g. Sunday Service',
+    occurredOn: 'Service or event date',
+    description: 'Description (optional)',
+    descriptionPlaceholder: 'A summary of the service or event.',
+  },
+  validation: {
+    titleRequired: 'Enter the title.',
+    titleInvalid: 'Use up to 120 characters.',
+    occurredOnInvalid: 'Enter a valid date from 2000 to today.',
+    descriptionInvalid: 'Use up to 2000 characters.',
+    invalid: 'Value rejected by the server. Check it and try again.',
+  },
+  notices: {
+    invalidData: {
+      title: 'Data rejected',
+      description: 'Check the highlighted fields and try again.',
+    },
+    conflict: {
+      title: 'Could not complete',
+      description: 'The data was changed by another operation. Reload and try again.',
+    },
+    notFound: {
+      title: 'Album not found',
+      description: 'The album may have been removed. Go back to the album list.',
+    },
+    accessDenied: {
+      title: 'Access not granted',
+      description: 'Confirm your email to manage the gallery.',
+    },
+    unavailable: {
+      title: 'Service unavailable',
+      description: 'Could not connect to the service. Try again in a moment.',
+    },
+  },
+  listPage: {
+    title: 'Albums',
+    subtitle: 'Photos from services and events. Uploaded photos stay private until published.',
+    create: 'New album',
+    empty: 'No albums yet.',
+    loadMore: 'Load more',
+    loadingMore: 'Loading…',
+    photoCount_one: '{{count}} photo',
+    photoCount_other: '{{count}} photos',
+  },
+  detailPage: {
+    back: 'Back to albums',
+    photos: 'Photos',
+    photosDescription: 'Only published photos will appear in the Photos section of the website.',
+    empty: 'No photos uploaded yet.',
+    hint: 'JPEG, PNG or WebP, up to 25 MB each. Photos are optimized and lose their location (GPS).',
+    publicAddress: 'Website address: /fotos/{{slug}}',
+    photoAlt: 'Photo {{position}} of the album {{title}}',
+  },
+  uploads: {
+    title: 'Uploads',
+    clear: 'Clear finished',
+    stage: {
+      waiting: 'Queued',
+      sending: 'Uploading {{percent}}%',
+      confirming: 'Confirming…',
+      done: 'Uploaded. Processing on the server…',
+      failed: 'Failed',
+    },
+    failure: {
+      invalidType: 'Format not accepted. Use JPEG, PNG or WebP.',
+      tooLarge: 'File larger than 25 MB.',
+      rejected: 'Upload rejected by the server.',
+      transfer: 'The file could not be uploaded. Check the connection and try again.',
+      unavailable: 'Service unavailable. Try again in a moment.',
+    },
+    success: {
+      title_one: 'Photo uploaded',
+      title_other: 'Photos uploaded',
+      description_one: 'The photo is being optimized and shows up in the album shortly.',
+      description_other: '{{count}} photos are being optimized and show up in the album shortly.',
+    },
+    partial: {
+      title: 'Some uploads failed',
+      description_one: '{{failed}} of {{count}} file was not uploaded. Check the upload list.',
+      description_other: '{{failed}} of {{count}} files were not uploaded. Check the upload list.',
+    },
+  },
+  albumForm: {
+    createTitle: 'New album',
+    createDescription: 'The album starts as a draft and does not appear on the website.',
+    editTitle: 'Edit album',
+    editDescription: 'Update the data of {{title}}. The website address does not change.',
+    close: 'Close',
+    submit: 'Save',
+    submitting: 'Saving…',
+    success: {
+      createTitle: 'Album created',
+      createDescription: 'Now add the photos of {{title}}.',
+      editTitle: 'Album updated',
+      editDescription: 'The data of {{title}} was saved.',
+    },
+  },
+  confirmDelete: {
+    title: 'Delete this photo?',
+    description:
+      'The uploaded file and the optimized versions are permanently deleted. This cannot be undone.',
+    close: 'Close',
+    cancel: 'Cancel',
+    confirm: 'Delete',
+    confirming: 'Deleting…',
+    success: 'Photo deleted',
+  },
+} as const satisfies Translations['gallery'];

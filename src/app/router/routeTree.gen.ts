@@ -24,6 +24,8 @@ import { Route as AuthenticatedOrganizacaoRouteImport } from './routes/_authenti
 import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated.usuarios'
 import { Route as AuthenticatedMembrosIndexRouteImport } from './routes/_authenticated.membros.index'
 import { Route as AuthenticatedMembrosMemberIdRouteImport } from './routes/_authenticated.membros.$memberId'
+import { Route as AuthenticatedSiteAlbunsIndexRouteImport } from './routes/_authenticated.site.albuns.index'
+import { Route as AuthenticatedSiteAlbunsAlbumIdRouteImport } from './routes/_authenticated.site.albuns.$albumId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -103,6 +105,18 @@ const AuthenticatedMembrosMemberIdRoute =
     path: '/membros/$memberId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedSiteAlbunsIndexRoute =
+  AuthenticatedSiteAlbunsIndexRouteImport.update({
+    id: '/site/albuns/',
+    path: '/site/albuns/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSiteAlbunsAlbumIdRoute =
+  AuthenticatedSiteAlbunsAlbumIdRouteImport.update({
+    id: '/site/albuns/$albumId',
+    path: '/site/albuns/$albumId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -119,6 +133,8 @@ export interface FileRoutesByFullPath {
   '/usuarios': typeof AuthenticatedUsuariosRoute
   '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/membros/': typeof AuthenticatedMembrosIndexRoute
+  '/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  '/site/albuns/': typeof AuthenticatedSiteAlbunsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -135,6 +151,8 @@ export interface FileRoutesByTo {
   '/usuarios': typeof AuthenticatedUsuariosRoute
   '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/membros': typeof AuthenticatedMembrosIndexRoute
+  '/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  '/site/albuns': typeof AuthenticatedSiteAlbunsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -153,6 +171,8 @@ export interface FileRoutesById {
   '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
   '/_authenticated/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/_authenticated/membros/': typeof AuthenticatedMembrosIndexRoute
+  '/_authenticated/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  '/_authenticated/site/albuns/': typeof AuthenticatedSiteAlbunsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -171,6 +191,8 @@ export interface FileRouteTypes {
     | '/usuarios'
     | '/membros/$memberId'
     | '/membros/'
+    | '/site/albuns/$albumId'
+    | '/site/albuns/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -187,6 +209,8 @@ export interface FileRouteTypes {
     | '/usuarios'
     | '/membros/$memberId'
     | '/membros'
+    | '/site/albuns/$albumId'
+    | '/site/albuns'
   id:
     | '__root__'
     | '/'
@@ -204,6 +228,8 @@ export interface FileRouteTypes {
     | '/_authenticated/usuarios'
     | '/_authenticated/membros/$memberId'
     | '/_authenticated/membros/'
+    | '/_authenticated/site/albuns/$albumId'
+    | '/_authenticated/site/albuns/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -325,6 +351,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMembrosMemberIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/site/albuns/': {
+      id: '/_authenticated/site/albuns/'
+      path: '/site/albuns'
+      fullPath: '/site/albuns/'
+      preLoaderRoute: typeof AuthenticatedSiteAlbunsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/site/albuns/$albumId': {
+      id: '/_authenticated/site/albuns/$albumId'
+      path: '/site/albuns/$albumId'
+      fullPath: '/site/albuns/$albumId'
+      preLoaderRoute: typeof AuthenticatedSiteAlbunsAlbumIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -335,6 +375,8 @@ interface AuthenticatedRouteChildren {
   AuthenticatedUsuariosRoute: typeof AuthenticatedUsuariosRoute
   AuthenticatedMembrosMemberIdRoute: typeof AuthenticatedMembrosMemberIdRoute
   AuthenticatedMembrosIndexRoute: typeof AuthenticatedMembrosIndexRoute
+  AuthenticatedSiteAlbunsAlbumIdRoute: typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  AuthenticatedSiteAlbunsIndexRoute: typeof AuthenticatedSiteAlbunsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -344,6 +386,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedUsuariosRoute: AuthenticatedUsuariosRoute,
   AuthenticatedMembrosMemberIdRoute: AuthenticatedMembrosMemberIdRoute,
   AuthenticatedMembrosIndexRoute: AuthenticatedMembrosIndexRoute,
+  AuthenticatedSiteAlbunsAlbumIdRoute: AuthenticatedSiteAlbunsAlbumIdRoute,
+  AuthenticatedSiteAlbunsIndexRoute: AuthenticatedSiteAlbunsIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
