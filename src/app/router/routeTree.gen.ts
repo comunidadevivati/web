@@ -22,6 +22,8 @@ import { Route as AuthenticatedCongregacoesRouteImport } from './routes/_authent
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 import { Route as AuthenticatedOrganizacaoRouteImport } from './routes/_authenticated.organizacao'
 import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated.usuarios'
+import { Route as AuthenticatedMembrosIndexRouteImport } from './routes/_authenticated.membros.index'
+import { Route as AuthenticatedMembrosMemberIdRouteImport } from './routes/_authenticated.membros.$memberId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -89,6 +91,18 @@ const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedMembrosIndexRoute =
+  AuthenticatedMembrosIndexRouteImport.update({
+    id: '/membros/',
+    path: '/membros/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMembrosMemberIdRoute =
+  AuthenticatedMembrosMemberIdRouteImport.update({
+    id: '/membros/$memberId',
+    path: '/membros/$memberId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -103,6 +117,8 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
+  '/membros/': typeof AuthenticatedMembrosIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -117,6 +133,8 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
+  '/membros': typeof AuthenticatedMembrosIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -133,6 +151,8 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/organizacao': typeof AuthenticatedOrganizacaoRoute
   '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
+  '/_authenticated/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
+  '/_authenticated/membros/': typeof AuthenticatedMembrosIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -149,6 +169,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/organizacao'
     | '/usuarios'
+    | '/membros/$memberId'
+    | '/membros/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -163,6 +185,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/organizacao'
     | '/usuarios'
+    | '/membros/$memberId'
+    | '/membros'
   id:
     | '__root__'
     | '/'
@@ -178,6 +202,8 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/organizacao'
     | '/_authenticated/usuarios'
+    | '/_authenticated/membros/$memberId'
+    | '/_authenticated/membros/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -285,6 +311,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/membros/': {
+      id: '/_authenticated/membros/'
+      path: '/membros'
+      fullPath: '/membros/'
+      preLoaderRoute: typeof AuthenticatedMembrosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/membros/$memberId': {
+      id: '/_authenticated/membros/$memberId'
+      path: '/membros/$memberId'
+      fullPath: '/membros/$memberId'
+      preLoaderRoute: typeof AuthenticatedMembrosMemberIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -293,6 +333,8 @@ interface AuthenticatedRouteChildren {
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedOrganizacaoRoute: typeof AuthenticatedOrganizacaoRoute
   AuthenticatedUsuariosRoute: typeof AuthenticatedUsuariosRoute
+  AuthenticatedMembrosMemberIdRoute: typeof AuthenticatedMembrosMemberIdRoute
+  AuthenticatedMembrosIndexRoute: typeof AuthenticatedMembrosIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -300,6 +342,8 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedOrganizacaoRoute: AuthenticatedOrganizacaoRoute,
   AuthenticatedUsuariosRoute: AuthenticatedUsuariosRoute,
+  AuthenticatedMembrosMemberIdRoute: AuthenticatedMembrosMemberIdRoute,
+  AuthenticatedMembrosIndexRoute: AuthenticatedMembrosIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

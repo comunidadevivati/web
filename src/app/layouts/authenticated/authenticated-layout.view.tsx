@@ -27,6 +27,7 @@ import {
   LayoutDashboardIcon,
   MenuIcon,
   UserCogIcon,
+  UsersIcon,
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
@@ -91,6 +92,12 @@ export const AuthenticatedLayoutView = () => {
       label: t('navigation.users'),
       icon: UserCogIcon,
       to: '/usuarios',
+      requiresVerifiedEmail: true,
+    },
+    {
+      label: t('navigation.members'),
+      icon: UsersIcon,
+      to: '/membros',
       requiresVerifiedEmail: true,
     },
   ];

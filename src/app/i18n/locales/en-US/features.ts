@@ -489,6 +489,196 @@ export const organization = {
   },
 } as const satisfies Translations['organization'];
 
+export const members = {
+  status: {
+    ACTIVE: 'Active',
+    INACTIVE: 'Inactive',
+    ARCHIVED: 'Archived',
+  },
+  membershipStatus: {
+    PENDING: 'Pending',
+    ACTIVE: 'Active',
+    INACTIVE: 'Ended',
+  },
+  actions: {
+    activate: 'Activate',
+    deactivate: 'Deactivate',
+    archive: 'Archive',
+    restore: 'Restore',
+    end: 'End',
+    retry: 'Try again',
+  },
+  fields: {
+    fullName: 'Full name',
+    birthDate: 'Date of birth',
+    phone: 'Phone',
+    email: 'Email',
+    congregation: 'Congregation',
+    congregationPlaceholder: 'Select the congregation',
+    primary: 'Primary membership',
+    primaryHint: "The member's reference congregation. Only one primary membership can be active.",
+  },
+  validation: {
+    congregationRequired: 'Select the congregation.',
+    invalid: 'Value rejected by the server. Check it and try again.',
+  },
+  notices: {
+    invalidData: {
+      title: 'Data rejected',
+      description: 'Check the highlighted fields and try again.',
+    },
+    conflict: {
+      title: 'Could not complete',
+      description: 'The data was changed by another operation. Reload and try again.',
+    },
+    notFound: {
+      title: 'Record not found',
+      description: 'The record may have been removed. Go back to the member list.',
+    },
+    accessDenied: {
+      title: 'Access not granted',
+      description: 'Confirm your email to access member data.',
+    },
+    unavailable: {
+      title: 'Service unavailable',
+      description: 'Could not connect to the service. Try again in a moment.',
+    },
+  },
+  listPage: {
+    title: 'Members',
+    subtitle: 'People in the community and their congregation memberships.',
+    create: 'Create member',
+    searchLabel: 'Search by name',
+    searchPlaceholder: 'Type part of the name',
+    search: 'Search',
+    statusFilterLabel: 'Filter by status',
+    filters: {
+      ALL: 'All',
+      ACTIVE: 'Active',
+      INACTIVE: 'Inactive',
+      ARCHIVED: 'Archived',
+    },
+    congregationLabel: 'Congregation',
+    allCongregations: 'All congregations',
+    empty: 'No members found.',
+    loadMore: 'Load more',
+    loadingMore: 'Loading…',
+    birthDate: 'Born: {{date}}',
+  },
+  detailPage: {
+    back: 'Back to members',
+    profile: 'Personal data',
+    notInformed: 'Not provided',
+    memberships: 'Congregation memberships',
+    membershipsDescription: 'Full history, including ended memberships.',
+    addMembership: 'New membership',
+    membershipsEmpty: 'No memberships registered.',
+    primary: 'Primary',
+    startedOn: 'Started: {{date}}',
+    endedOn: 'Ended: {{date}}',
+    removedCongregation: 'Congregation not found',
+    inactiveHint: 'Only active members can receive new memberships.',
+  },
+  memberCreate: {
+    title: 'Create member',
+    description:
+      'Users with a verified account who are not members yet. Linking turns the account into a Person (with the account data) and the Person into a member; congregation memberships are added later, on the member page.',
+    close: 'Close',
+    selected_one: '{{count}} user selected',
+    selected_other: '{{count}} users selected',
+    linkAll: 'Link all',
+    linking: 'Linking…',
+    link: 'Link',
+    linkUser: 'Link {{name}} as a member',
+    selectAll: 'Select all users in the list',
+    select: 'Select {{name}}',
+    empty: 'No verified users waiting to become members.',
+    columns: {
+      user: 'User',
+      phone: 'Phone',
+      action: 'Action',
+    },
+    success: {
+      title_one: 'Member created',
+      title_other: 'Members created',
+      description_one: '{{name}} is now a member.',
+      description_other: '{{count}} users are now members.',
+    },
+    failure: {
+      title: 'No member created',
+      not_found: "{{name}}'s account was not found. It may have been deleted.",
+      unverified: "{{name}}'s account does not have a verified email.",
+      rejected:
+        "{{name}}'s account data was rejected by the member registry. Fix the name or phone in Users.",
+      unavailable: 'Could not convert {{name}} right now. Try again in a moment.',
+    },
+    partial: {
+      title: 'Partial conversion',
+      description_one:
+        '{{created}} of {{count}} user became a member. Check the ones still listed.',
+      description_other:
+        '{{created}} of {{count}} users became members. Check the ones still listed.',
+    },
+  },
+  membershipForm: {
+    title: 'New membership',
+    description: 'The membership of {{name}} is registered as pending and can be activated next.',
+    close: 'Close',
+    submit: 'Register membership',
+    submitting: 'Registering…',
+    noCongregations: 'There is no active congregation available.',
+    success: {
+      title: 'Membership registered',
+      description: 'Membership with {{congregation}} registered as pending.',
+    },
+  },
+  confirm: {
+    cancel: 'Cancel',
+    confirming: 'Saving…',
+    member: {
+      activate: {
+        title: 'Activate {{name}}?',
+        description: 'The member takes part normally again and can receive new memberships.',
+      },
+      deactivate: {
+        title: 'Deactivate {{name}}?',
+        description: 'The member stops taking part. End active or pending memberships first.',
+      },
+      archive: {
+        title: 'Archive {{name}}?',
+        description:
+          'The member leaves the day-to-day lists and becomes read-only. History is preserved.',
+      },
+      restore: {
+        title: 'Restore {{name}}?',
+        description: 'The member returns as inactive and can be edited and reactivated.',
+      },
+    },
+    membership: {
+      activate: {
+        title: 'Activate the membership with {{congregation}}?',
+        description: "Today's date is recorded as the start of the membership.",
+      },
+      deactivate: {
+        title: 'End the membership with {{congregation}}?',
+        description: "Today's date is recorded as the end. An ended membership cannot be reopened.",
+      },
+    },
+    success: {
+      member: {
+        activate: 'Member activated',
+        deactivate: 'Member deactivated',
+        archive: 'Member archived',
+        restore: 'Member restored',
+      },
+      membership: {
+        activate: 'Membership activated',
+        deactivate: 'Membership ended',
+      },
+    },
+  },
+} as const satisfies Translations['members'];
+
 export const users = {
   status: {
     ACTIVE: 'Active',

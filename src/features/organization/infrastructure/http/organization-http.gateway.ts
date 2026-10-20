@@ -7,6 +7,7 @@ import {
   type OrganizationGateway,
 } from '@/features/organization/domain/organization';
 import { bffClient } from '@/shared/http/bff-client';
+import { readProblemDetails } from '@/shared/http/problem-details';
 import { isHTTPError } from 'ky';
 import { z } from 'zod';
 
@@ -52,30 +53,19 @@ const congregationPageSchema = z.object({
   nextCursor: z.string().nullable(),
 });
 
-// RFC 9457 (Problem Details): só os campos usados pelo front.
-const problemSchema = z.object({
-  detail: z.string().optional(),
-  fields: z.array(z.string()).optional(),
-});
-
-const readProblem = async (response: Response) => {
-  const parsed = problemSchema.safeParse(await response.json().catch(() => null));
-
-  return parsed.success ? parsed.data : {};
-};
-
 // Normaliza as falhas do BFF em erros do domínio. O 401 (sessão expirada) já é tratado pelo
 // bffClient, que leva ao login; aqui ele vira apenas indisponibilidade.
-const toDomainError = async (error: unknown) => {
+// O corpo do erro vem em error.data: o Ky 2 já o consumiu ao criar o HTTPError.
+const toDomainError = (error: unknown) => {
   if (!isHTTPError(error)) {
     return new OrganizationServiceUnavailableError(error);
   }
 
-  const { response } = error;
+  const { data, response } = error;
 
   switch (response.status) {
     case 400: {
-      const { fields = [] } = await readProblem(response);
+      const { fields = [] } = readProblemDetails(data);
 
       return new InvalidOrganizationDataError(fields);
     }
@@ -87,7 +77,7 @@ const toDomainError = async (error: unknown) => {
       return new OrganizationNotFoundError();
 
     case 409: {
-      const { detail } = await readProblem(response);
+      const { detail } = readProblemDetails(data);
 
       return new OrganizationConflictError(detail);
     }
@@ -103,7 +93,7 @@ const request = async <T>(schema: z.ZodType<T>, send: () => Promise<Response>) =
   try {
     body = await (await send()).json();
   } catch (error) {
-    throw await toDomainError(error);
+    throw toDomainError(error);
   }
 
   const parsed = schema.safeParse(body);
@@ -141,8 +131,12 @@ export const organizationHttpGateway: OrganizationGateway = {
     );
   },
 
-  listCongregations: ({ cursor, status }) => {
+  listCongregations: ({ cursor, limit, status }) => {
     const searchParams = new URLSearchParams();
+
+    if (limit) {
+      searchParams.set('limit', String(limit));
+    }
 
     if (status) {
       searchParams.set('status', status);

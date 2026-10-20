@@ -18,6 +18,8 @@ export const common = {
     organization: 'Organization',
     congregations: 'Congregations',
     users: 'Users',
+    members: 'Members',
+    member: 'Member',
   },
   navigation: {
     home: 'Home',
@@ -28,6 +30,7 @@ export const common = {
     organization: 'Organization',
     congregations: 'Congregations',
     users: 'Users',
+    members: 'Members',
     login: 'Sign in',
     logout: 'Sign out',
     emailNotVerified: 'Not verified',

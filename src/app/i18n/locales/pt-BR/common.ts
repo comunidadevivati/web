@@ -17,6 +17,8 @@ export const common = {
     organization: 'Organização',
     congregations: 'Congregações',
     users: 'Usuários',
+    members: 'Membros',
+    member: 'Membro',
   },
   navigation: {
     home: 'Home',
@@ -27,6 +29,7 @@ export const common = {
     organization: 'Organização',
     congregations: 'Congregações',
     users: 'Usuários',
+    members: 'Membros',
     login: 'Login',
     logout: 'Sair',
     emailNotVerified: 'Não verificado',

@@ -6,6 +6,7 @@ import {
   dashboard,
   guestWifi,
   home,
+  members,
   organization,
   users,
 } from '@/app/i18n/locales/en-US/features';
@@ -19,4 +20,5 @@ export const enUS = {
   guestWifi,
   organization,
   users,
+  members,
 } as const satisfies Translations;

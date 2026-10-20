@@ -21,6 +21,7 @@ const userSchema = z.object({
   emailVerified: z.boolean(),
   createdAt: z.string(),
   suspendedAt: z.string().nullable(),
+  personId: z.string().nullable(),
 });
 
 const userPageSchema = z.object({
@@ -99,7 +100,7 @@ const userPath = (id: string) => {
 };
 
 export const usersHttpGateway: UsersGateway = {
-  listUsers: ({ cursor, emailVerified, search, status }) => {
+  listUsers: ({ cursor, emailVerified, hasPerson, search, status }) => {
     const searchParams = new URLSearchParams();
 
     for (const [key, value] of Object.entries({ cursor, search, status })) {
@@ -110,6 +111,10 @@ export const usersHttpGateway: UsersGateway = {
 
     if (emailVerified !== null) {
       searchParams.set('emailVerified', String(emailVerified));
+    }
+
+    if (hasPerson !== null) {
+      searchParams.set('hasPerson', String(hasPerson));
     }
 
     return request(userPageSchema, () => bffClient.get('api/v1/users', { searchParams }));
