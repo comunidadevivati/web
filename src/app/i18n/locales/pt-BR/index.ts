@@ -3,6 +3,7 @@ import {
   auth,
   contact,
   dashboard,
+  gallery,
   guestWifi,
   home,
   members,
@@ -21,4 +22,5 @@ export const ptBR = {
   organization,
   users,
   members,
+  gallery,
 } as const;

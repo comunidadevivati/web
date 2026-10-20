@@ -813,3 +813,137 @@ export const users = {
     },
   },
 } as const;
+
+export const gallery = {
+  status: {
+    DRAFT: 'Rascunho',
+    PUBLISHED: 'Publicado',
+    ARCHIVED: 'Arquivado',
+  },
+  photoStatus: {
+    PROCESSING: 'Processando',
+    READY: 'Pronta',
+    FAILED: 'Falhou',
+  },
+  photoFailure: {
+    invalid_image: 'O arquivo não é uma imagem válida.',
+    processing_error: 'Não foi possível processar a foto. Exclua e envie de novo.',
+  },
+  actions: {
+    edit: 'Editar',
+    retry: 'Tentar novamente',
+    addPhotos: 'Adicionar fotos',
+    delete: 'Excluir foto',
+  },
+  fields: {
+    title: 'Título',
+    titlePlaceholder: 'Ex.: Culto de Domingo',
+    occurredOn: 'Data do culto ou evento',
+    description: 'Descrição (opcional)',
+    descriptionPlaceholder: 'Um resumo do culto ou evento.',
+  },
+  validation: {
+    titleRequired: 'Informe o título.',
+    titleInvalid: 'Use até 120 caracteres.',
+    occurredOnInvalid: 'Informe uma data válida, de 2000 até hoje.',
+    descriptionInvalid: 'Use até 2000 caracteres.',
+    invalid: 'Valor recusado pelo servidor. Confira e tente novamente.',
+  },
+  notices: {
+    invalidData: {
+      title: 'Dados recusados',
+      description: 'Confira os campos destacados e tente novamente.',
+    },
+    conflict: {
+      title: 'Não foi possível concluir',
+      description: 'Os dados foram alterados por outra operação. Recarregue e tente novamente.',
+    },
+    notFound: {
+      title: 'Álbum não encontrado',
+      description: 'O álbum pode ter sido removido. Volte para a lista de álbuns.',
+    },
+    accessDenied: {
+      title: 'Acesso não liberado',
+      description: 'Confirme o seu e-mail para gerenciar a galeria.',
+    },
+    unavailable: {
+      title: 'Serviço indisponível',
+      description: 'Não foi possível conectar ao serviço. Tente novamente em instantes.',
+    },
+  },
+  listPage: {
+    title: 'Álbuns',
+    subtitle: 'Fotos dos cultos e eventos. As fotos enviadas ficam privadas até serem publicadas.',
+    create: 'Novo álbum',
+    empty: 'Nenhum álbum criado.',
+    loadMore: 'Carregar mais',
+    loadingMore: 'Carregando…',
+    photoCount_one: '{{count}} foto',
+    photoCount_other: '{{count}} fotos',
+  },
+  detailPage: {
+    back: 'Voltar para álbuns',
+    photos: 'Fotos',
+    photosDescription: 'Somente fotos publicadas aparecerão na seção Fotos do site.',
+    empty: 'Nenhuma foto enviada ainda.',
+    hint: 'JPEG, PNG ou WebP, até 25 MB cada. As fotos são otimizadas e perdem a localização (GPS).',
+    publicAddress: 'Endereço no site: /fotos/{{slug}}',
+    photoAlt: 'Foto {{position}} do álbum {{title}}',
+  },
+  uploads: {
+    title: 'Envios',
+    clear: 'Limpar concluídos',
+    stage: {
+      waiting: 'Na fila',
+      sending: 'Enviando {{percent}}%',
+      confirming: 'Confirmando…',
+      done: 'Enviada. Processando no servidor…',
+      failed: 'Falhou',
+    },
+    failure: {
+      invalidType: 'Formato não aceito. Use JPEG, PNG ou WebP.',
+      tooLarge: 'Arquivo maior que 25 MB.',
+      rejected: 'Envio recusado pelo servidor.',
+      transfer: 'Falha ao enviar o arquivo. Verifique a conexão e tente de novo.',
+      unavailable: 'Serviço indisponível. Tente novamente em instantes.',
+    },
+    success: {
+      title_one: 'Foto enviada',
+      title_other: 'Fotos enviadas',
+      description_one: 'A foto está sendo otimizada e aparece no álbum em instantes.',
+      description_other: '{{count}} fotos estão sendo otimizadas e aparecem no álbum em instantes.',
+    },
+    partial: {
+      title: 'Alguns envios falharam',
+      description_one:
+        '{{failed}} de {{count}} arquivo não foi enviado. Confira a lista de envios.',
+      description_other:
+        '{{failed}} de {{count}} arquivos não foram enviados. Confira a lista de envios.',
+    },
+  },
+  albumForm: {
+    createTitle: 'Novo álbum',
+    createDescription: 'O álbum nasce como rascunho e não aparece no site.',
+    editTitle: 'Editar álbum',
+    editDescription: 'Atualize os dados de {{title}}. O endereço no site não muda.',
+    close: 'Fechar',
+    submit: 'Salvar',
+    submitting: 'Salvando…',
+    success: {
+      createTitle: 'Álbum criado',
+      createDescription: 'Agora é só adicionar as fotos de {{title}}.',
+      editTitle: 'Álbum atualizado',
+      editDescription: 'Os dados de {{title}} foram salvos.',
+    },
+  },
+  confirmDelete: {
+    title: 'Excluir esta foto?',
+    description:
+      'O arquivo enviado e as versões otimizadas são apagados definitivamente. Não é possível desfazer.',
+    close: 'Fechar',
+    cancel: 'Cancelar',
+    confirm: 'Excluir',
+    confirming: 'Excluindo…',
+    success: 'Foto excluída',
+  },
+} as const;

@@ -1,14 +1,52 @@
-import { SidebarNavItem, TooltipHint } from '@/components/molecules';
+import {
+  SidebarNavGroup,
+  SidebarNavItem,
+  TooltipHint,
+  type SidebarNavLink,
+} from '@/components/molecules';
 import { Box, Button, Text } from '@/components/ui';
 import { cn } from '@/lib/utils';
-import type { LinkProps } from '@tanstack/react-router';
 import { LogOutIcon, PanelLeftCloseIcon, PanelLeftOpenIcon, type LucideIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-export type AppSidebarItem = {
-  label: string;
-  icon: LucideIcon;
-  to: LinkProps['to'];
+// Item do menu: link direto ou grupo com subitens (ex.: Site → Álbuns).
+export type AppSidebarItem =
+  | SidebarNavLink
+  | { label: string; icon: LucideIcon; children: SidebarNavLink[] };
+
+type AppSidebarNavigationProps = {
+  items: AppSidebarItem[];
+  isCollapsed: boolean;
+  onNavigate?: () => void;
+};
+
+// Lista de itens compartilhada pela sidebar (desktop) e pelo drawer (telas pequenas).
+export const AppSidebarNavigation = ({
+  isCollapsed,
+  items,
+  onNavigate,
+}: AppSidebarNavigationProps) => {
+  return items.map((item) =>
+    'children' in item ? (
+      <SidebarNavGroup
+        key={item.label}
+        icon={item.icon}
+        isCollapsed={isCollapsed}
+        items={item.children}
+        label={item.label}
+        onNavigate={onNavigate}
+      />
+    ) : (
+      <SidebarNavItem
+        key={item.label}
+        icon={item.icon}
+        isCollapsed={isCollapsed}
+        label={item.label}
+        to={item.to}
+        onClick={onNavigate}
+      />
+    ),
+  );
 };
 
 type AppSidebarProps = {
@@ -64,15 +102,7 @@ export const AppSidebar = ({ isCollapsed, items, onLogout, onToggleCollapse }: A
         </Box>
 
         <Box aria-label={t('navigation.sidebar')} className="grid gap-1" role="navigation">
-          {items.map((item) => (
-            <SidebarNavItem
-              key={item.label}
-              icon={item.icon}
-              isCollapsed={isCollapsed}
-              label={item.label}
-              to={item.to}
-            />
-          ))}
+          <AppSidebarNavigation isCollapsed={isCollapsed} items={items} />
         </Box>
       </Box>
 

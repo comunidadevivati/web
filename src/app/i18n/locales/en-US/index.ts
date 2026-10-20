@@ -4,6 +4,7 @@ import {
   auth,
   contact,
   dashboard,
+  gallery,
   guestWifi,
   home,
   members,
@@ -21,4 +22,5 @@ export const enUS = {
   organization,
   users,
   members,
+  gallery,
 } as const satisfies Translations;
