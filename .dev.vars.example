@@ -8,5 +8,5 @@ OMADA_OPERATOR_USERNAME=<usuario-hotspot-operator>
 # Valores com "#" precisam de aspas, senão o restante vira comentário.
 OMADA_OPERATOR_PASSWORD="<senha-hotspot-operator>"
 
-# Origem do BFF para o proxy de /auth/* (wrangler dev). Em produção: wrangler secret put BFF_ORIGIN
+# Origem do BFF para o proxy de /auth/* e /api/v1/* (wrangler dev). Em produção: wrangler secret put BFF_ORIGIN
 BFF_ORIGIN=http://localhost:3000

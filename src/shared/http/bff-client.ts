@@ -12,7 +12,7 @@ export const setBffUnauthorizedListener = (listener: UnauthorizedListener) => {
   unauthorizedListener = listener;
 };
 
-// Cliente do BFF. Em produção o Worker repassa as rotas ao BFF na mesma origem do front (no dev, o
+// Cliente do BFF (/auth/* e /api/v1/*). Em produção o Worker repassa as rotas ao BFF na mesma origem do front (no dev, o
 // proxy do Vite), então o cookie de sessão HttpOnly segue automaticamente, sem CORS.
 export const bffClient = ky.create({
   prefix: '/',

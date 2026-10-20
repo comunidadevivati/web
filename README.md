@@ -38,10 +38,10 @@ A aplicação abre em `http://localhost:5173`.
 | `.env.homologation` | sim        | Build de homologação (`pnpm build:homologation`)                    |
 | `.env.production`   | sim        | Build de produção (`pnpm build` ou `pnpm build:production`)         |
 
-| Variável           | Onde         | Uso                                                                      |
-| ------------------ | ------------ | ------------------------------------------------------------------------ |
-| `VITE_ENV`         | todos        | Ambiente (`development`, `homologation`, `production`).                  |
-| `BFF_PROXY_TARGET` | `.env.local` | Somente no dev: destino do proxy do Vite para `/auth/*` (BFF local/HML). |
+| Variável           | Onde         | Uso                                                                                    |
+| ------------------ | ------------ | -------------------------------------------------------------------------------------- |
+| `VITE_ENV`         | todos        | Ambiente (`development`, `homologation`, `production`).                                |
+| `BFF_PROXY_TARGET` | `.env.local` | Somente no dev: destino do proxy do Vite para `/auth/*` e `/api/v1/*` (BFF local/HML). |
 
 Variáveis `VITE_*` vão para o bundle: nunca coloque segredos nelas. Os arquivos versionados contêm
 só valores públicos, porque o Workers Builds compila a partir do Git.
@@ -55,10 +55,10 @@ O login é por e-mail e senha no BFF (`comunidadevivati/backend`). O front envia
 BFF e não guarda nada: a sessão é um cookie HttpOnly emitido pelo BFF.
 
 ```text
-Navegador ──/auth/*──▶ Worker (produção) ou proxy do Vite (dev) ──▶ BFF
+Navegador ──/auth/* e /api/v1/*──▶ Worker (produção) ou proxy do Vite (dev) ──▶ BFF
 ```
 
-As rotas `/auth/*` passam pela mesma origem do front, então o cookie `SameSite=Lax` funciona sem
+As rotas `/auth/*` e `/api/v1/*` passam pela mesma origem do front, então o cookie `SameSite=Lax` funciona sem
 CORS. O front usa:
 
 - `POST /auth/login`: `{ email, password }`; sucesso grava o cookie (401 = credenciais inválidas,
@@ -106,7 +106,7 @@ HML e o cookie de sessão fica em `localhost`. O primeiro acesso pode demorar (c
 ## Deploy
 
 Cloudflare Workers + Static Assets (`wrangler.jsonc`). O Worker (`worker/index.ts`) só executa em
-`/api/*` (Wi-Fi de visitantes) e `/auth/*` (proxy para o BFF); o restante é servido como asset
+`/api/*` (Wi-Fi de visitantes; `/api/v1/*` é proxy para o BFF) e `/auth/*` (proxy para o BFF); o restante é servido como asset
 estático, com fallback de SPA.
 
 | Ambiente    | Branch         | Worker                    | Domínio                            | Deploy (Workers Builds)                                 |
@@ -116,6 +116,10 @@ estático, com fallback de SPA.
 
 Cada Worker tem os próprios secrets (`BFF_ORIGIN` apontando para o BFF do mesmo ambiente). Não há
 ambiente de desenvolvimento publicado: o desenvolvimento é local, com BFF local ou de HML.
+
+Os dois Workers estão ligados ao repositório pelo Workers Builds: cada merge em `main` publica
+produção e cada merge em `homologation` publica HML. Os builds de prévia de outras branches ficam
+desligados, para que nenhuma branch rode com os secrets de um ambiente publicado.
 
 Nenhum commit ou push direto em `main` ou `homologation`: as alterações entram em `homologation`
 por PR aprovado, e a `main` só recebe PRs da `homologation`.

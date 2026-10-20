@@ -20,7 +20,17 @@ import {
 } from '@/components/ui';
 import { Link, Outlet } from '@tanstack/react-router';
 import { cn } from 'cn';
-import { CircleAlertIcon, LayoutDashboardIcon, MenuIcon } from 'lucide-react';
+import {
+  Building2Icon,
+  ChurchIcon,
+  CircleAlertIcon,
+  GlobeIcon,
+  ImagesIcon,
+  LayoutDashboardIcon,
+  MenuIcon,
+  UserCogIcon,
+  UsersIcon,
+} from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 // requiresVerifiedEmail: o item só aparece depois que a conta confirmar o e-mail.
@@ -68,6 +78,36 @@ export const AuthenticatedLayoutView = () => {
 
   const navigationItems: NavigationItem[] = [
     { label: t('navigation.dashboard'), icon: LayoutDashboardIcon, to: '/dashboard' },
+    {
+      label: t('navigation.organization'),
+      icon: Building2Icon,
+      to: '/organizacao',
+      requiresVerifiedEmail: true,
+    },
+    {
+      label: t('navigation.congregations'),
+      icon: ChurchIcon,
+      to: '/congregacoes',
+      requiresVerifiedEmail: true,
+    },
+    {
+      label: t('navigation.users'),
+      icon: UserCogIcon,
+      to: '/usuarios',
+      requiresVerifiedEmail: true,
+    },
+    {
+      label: t('navigation.members'),
+      icon: UsersIcon,
+      to: '/membros',
+      requiresVerifiedEmail: true,
+    },
+    {
+      label: t('navigation.site'),
+      icon: GlobeIcon,
+      children: [{ label: t('navigation.albums'), icon: ImagesIcon, to: '/site/albuns' }],
+      requiresVerifiedEmail: true,
+    },
   ];
 
   // Conta não verificada: somente os itens liberados para ela (hoje, o Dashboard).

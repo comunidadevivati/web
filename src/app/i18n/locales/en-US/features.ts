@@ -343,3 +343,603 @@ export const guestWifi = {
     redirect_other: 'You will be taken to the website in {{count}} seconds.',
   },
 } as const satisfies Translations['guestWifi'];
+
+export const organization = {
+  status: {
+    ACTIVE: 'Active',
+    INACTIVE: 'Inactive',
+    DRAFT: 'Draft',
+  },
+  actions: {
+    edit: 'Edit',
+    activate: 'Activate',
+    deactivate: 'Deactivate',
+    retry: 'Try again',
+  },
+  fields: {
+    legalName: 'Legal name',
+    tradeName: 'Trade name',
+    name: 'Name',
+    code: 'Institutional code',
+    codeHint: 'Letters, numbers and hyphens (e.g. CG-NORTE). It cannot be changed later.',
+    cnpj: 'CNPJ',
+    phone: 'Phone',
+    email: 'Email',
+    optional: '{{label}} (optional)',
+    street: 'Street',
+    number: 'Number',
+    complement: 'Complement',
+    district: 'District',
+    city: 'City',
+    state: 'State',
+    postalCode: 'ZIP code (CEP)',
+    cnpjPlaceholder: '00.000.000/0000-00',
+    phonePlaceholder: '(67) 99999-9999',
+    emailPlaceholder: 'contact@example.com',
+    postalCodePlaceholder: '00000-000',
+    statePlaceholder: 'MS',
+  },
+  details: {
+    contact: 'Contact',
+    address: 'Address',
+    region: '{{city}}/{{state}} · ZIP {{postalCode}}',
+    notInformed: 'Not provided',
+  },
+  validation: {
+    required: 'Fill in this field.',
+    tooLong: 'The text is longer than allowed.',
+    invalid: 'Value rejected by the server. Check it and try again.',
+    cnpjInvalid: 'Enter a valid CNPJ.',
+    postalCodeInvalid: 'Enter an 8-digit ZIP code (CEP).',
+    stateInvalid: 'Enter a Brazilian state abbreviation (e.g. MS).',
+    emailInvalid: 'Enter a valid email.',
+    codeInvalid: 'Use 2 to 20 letters, numbers or hyphens, with no hyphen at the ends.',
+    phoneIncomplete: 'Enter the full phone number with area code.',
+    phoneInvalidAreaCode: 'Enter a valid area code.',
+    phoneInvalidNumber: 'Enter a valid phone number.',
+  },
+  notices: {
+    invalidData: {
+      title: 'Data rejected',
+      description: 'Check the highlighted fields and try again.',
+    },
+    conflict: {
+      title: 'Could not complete',
+      description: 'The data was changed by another operation. Reload and try again.',
+    },
+    notFound: {
+      title: 'Record not found',
+      description: 'The record may have been removed. Refresh the page.',
+    },
+    accessDenied: {
+      title: 'Access not granted',
+      description: 'Confirm your email to access the organization data.',
+    },
+    unavailable: {
+      title: 'Service unavailable',
+      description: 'Could not connect to the service. Try again in a moment.',
+    },
+  },
+  statusDialog: {
+    activateTitle: 'Activate {{name}}?',
+    deactivateTitle: 'Deactivate {{name}}?',
+    organizationActivate:
+      'The organization will allow congregations to be registered and activated again.',
+    organizationDeactivate:
+      'While the organization is inactive, no congregation can be registered or activated.',
+    congregationActivate: 'The congregation will operate normally.',
+    congregationDeactivate: 'The congregation will stop operating until it is reactivated.',
+    cancel: 'Cancel',
+    confirming: 'Saving…',
+    success: {
+      activate: 'Activated',
+      deactivate: 'Deactivated',
+      description: '{{name}} is now "{{status}}".',
+    },
+  },
+  organizationPage: {
+    title: 'Organization',
+    subtitle: 'Institutional data of Igreja Evangélica Viva e Eficaz (headquarters organization).',
+    edit: 'Edit data',
+  },
+  organizationForm: {
+    title: 'Edit organization',
+    description: 'Update the institutional data of the organization.',
+    close: 'Close',
+    submit: 'Save',
+    submitting: 'Saving…',
+    success: {
+      title: 'Organization updated',
+      description: 'The organization data was saved.',
+    },
+  },
+  congregationsPage: {
+    title: 'Congregations',
+    subtitle: 'Local churches linked to the organization.',
+    create: 'New congregation',
+    filterLabel: 'Filter by status',
+    filters: {
+      ALL: 'All',
+      ACTIVE: 'Active',
+      DRAFT: 'Drafts',
+      INACTIVE: 'Inactive',
+    },
+    headquarters: 'Main church',
+    empty: 'No congregations found.',
+    loadMore: 'Load more',
+    loadingMore: 'Loading…',
+    editLabel: 'Edit {{name}}',
+    activateLabel: 'Activate {{name}}',
+    deactivateLabel: 'Deactivate {{name}}',
+  },
+  congregationForm: {
+    createTitle: 'New congregation',
+    createDescription: 'The congregation is registered as a draft and can be activated next.',
+    editTitle: 'Edit congregation',
+    editDescription: 'Update the data of {{name}}.',
+    close: 'Close',
+    submit: 'Save',
+    submitting: 'Saving…',
+    success: {
+      createTitle: 'Congregation registered',
+      createDescription: '{{name}} was registered as a draft.',
+      editTitle: 'Congregation updated',
+      editDescription: 'The data of {{name}} was saved.',
+    },
+  },
+} as const satisfies Translations['organization'];
+
+export const members = {
+  status: {
+    ACTIVE: 'Active',
+    INACTIVE: 'Inactive',
+    ARCHIVED: 'Archived',
+  },
+  membershipStatus: {
+    PENDING: 'Pending',
+    ACTIVE: 'Active',
+    INACTIVE: 'Ended',
+  },
+  actions: {
+    activate: 'Activate',
+    deactivate: 'Deactivate',
+    archive: 'Archive',
+    restore: 'Restore',
+    end: 'End',
+    retry: 'Try again',
+  },
+  fields: {
+    fullName: 'Full name',
+    birthDate: 'Date of birth',
+    phone: 'Phone',
+    email: 'Email',
+    congregation: 'Congregation',
+    congregationPlaceholder: 'Select the congregation',
+    primary: 'Primary membership',
+    primaryHint: "The member's reference congregation. Only one primary membership can be active.",
+  },
+  validation: {
+    congregationRequired: 'Select the congregation.',
+    invalid: 'Value rejected by the server. Check it and try again.',
+  },
+  notices: {
+    invalidData: {
+      title: 'Data rejected',
+      description: 'Check the highlighted fields and try again.',
+    },
+    conflict: {
+      title: 'Could not complete',
+      description: 'The data was changed by another operation. Reload and try again.',
+    },
+    notFound: {
+      title: 'Record not found',
+      description: 'The record may have been removed. Go back to the member list.',
+    },
+    accessDenied: {
+      title: 'Access not granted',
+      description: 'Confirm your email to access member data.',
+    },
+    unavailable: {
+      title: 'Service unavailable',
+      description: 'Could not connect to the service. Try again in a moment.',
+    },
+  },
+  listPage: {
+    title: 'Members',
+    subtitle: 'People in the community and their congregation memberships.',
+    create: 'Create member',
+    searchLabel: 'Search by name',
+    searchPlaceholder: 'Type part of the name',
+    search: 'Search',
+    statusFilterLabel: 'Filter by status',
+    filters: {
+      ALL: 'All',
+      ACTIVE: 'Active',
+      INACTIVE: 'Inactive',
+      ARCHIVED: 'Archived',
+    },
+    congregationLabel: 'Congregation',
+    allCongregations: 'All congregations',
+    empty: 'No members found.',
+    loadMore: 'Load more',
+    loadingMore: 'Loading…',
+    birthDate: 'Born: {{date}}',
+  },
+  detailPage: {
+    back: 'Back to members',
+    profile: 'Personal data',
+    notInformed: 'Not provided',
+    memberships: 'Congregation memberships',
+    membershipsDescription: 'Full history, including ended memberships.',
+    addMembership: 'New membership',
+    membershipsEmpty: 'No memberships registered.',
+    primary: 'Primary',
+    startedOn: 'Started: {{date}}',
+    endedOn: 'Ended: {{date}}',
+    removedCongregation: 'Congregation not found',
+    inactiveHint: 'Only active members can receive new memberships.',
+  },
+  memberCreate: {
+    title: 'Create member',
+    description:
+      'Users with a verified account who are not members yet. Linking turns the account into a Person (with the account data) and the Person into a member; congregation memberships are added later, on the member page.',
+    close: 'Close',
+    selected_one: '{{count}} user selected',
+    selected_other: '{{count}} users selected',
+    linkAll: 'Link all',
+    linking: 'Linking…',
+    link: 'Link',
+    linkUser: 'Link {{name}} as a member',
+    selectAll: 'Select all users in the list',
+    select: 'Select {{name}}',
+    empty: 'No verified users waiting to become members.',
+    columns: {
+      user: 'User',
+      phone: 'Phone',
+      action: 'Action',
+    },
+    success: {
+      title_one: 'Member created',
+      title_other: 'Members created',
+      description_one: '{{name}} is now a member.',
+      description_other: '{{count}} users are now members.',
+    },
+    failure: {
+      title: 'No member created',
+      not_found: "{{name}}'s account was not found. It may have been deleted.",
+      unverified: "{{name}}'s account does not have a verified email.",
+      rejected:
+        "{{name}}'s account data was rejected by the member registry. Fix the name or phone in Users.",
+      unavailable: 'Could not convert {{name}} right now. Try again in a moment.',
+    },
+    partial: {
+      title: 'Partial conversion',
+      description_one:
+        '{{created}} of {{count}} user became a member. Check the ones still listed.',
+      description_other:
+        '{{created}} of {{count}} users became members. Check the ones still listed.',
+    },
+  },
+  membershipForm: {
+    title: 'New membership',
+    description: 'The membership of {{name}} is registered as pending and can be activated next.',
+    close: 'Close',
+    submit: 'Register membership',
+    submitting: 'Registering…',
+    noCongregations: 'There is no active congregation available.',
+    success: {
+      title: 'Membership registered',
+      description: 'Membership with {{congregation}} registered as pending.',
+    },
+  },
+  confirm: {
+    cancel: 'Cancel',
+    confirming: 'Saving…',
+    member: {
+      activate: {
+        title: 'Activate {{name}}?',
+        description: 'The member takes part normally again and can receive new memberships.',
+      },
+      deactivate: {
+        title: 'Deactivate {{name}}?',
+        description: 'The member stops taking part. End active or pending memberships first.',
+      },
+      archive: {
+        title: 'Archive {{name}}?',
+        description:
+          'The member leaves the day-to-day lists and becomes read-only. History is preserved.',
+      },
+      restore: {
+        title: 'Restore {{name}}?',
+        description: 'The member returns as inactive and can be edited and reactivated.',
+      },
+    },
+    membership: {
+      activate: {
+        title: 'Activate the membership with {{congregation}}?',
+        description: "Today's date is recorded as the start of the membership.",
+      },
+      deactivate: {
+        title: 'End the membership with {{congregation}}?',
+        description: "Today's date is recorded as the end. An ended membership cannot be reopened.",
+      },
+    },
+    success: {
+      member: {
+        activate: 'Member activated',
+        deactivate: 'Member deactivated',
+        archive: 'Member archived',
+        restore: 'Member restored',
+      },
+      membership: {
+        activate: 'Membership activated',
+        deactivate: 'Membership ended',
+      },
+    },
+  },
+} as const satisfies Translations['members'];
+
+export const users = {
+  status: {
+    ACTIVE: 'Active',
+    SUSPENDED: 'Suspended',
+    suspendedAt: 'Suspended on {{dateTime}}',
+  },
+  verification: {
+    verified: 'Verified',
+    unverified: 'Not verified',
+  },
+  actions: {
+    suspend: 'Suspend',
+    reactivate: 'Reactivate',
+    delete: 'Delete',
+    retry: 'Try again',
+  },
+  notices: {
+    invalidData: {
+      title: 'Data rejected',
+      description: 'Check the fields and try again.',
+    },
+    emailTaken: {
+      title: 'Email already registered',
+      description: 'An account with this email already exists.',
+    },
+    conflict: {
+      title: 'Could not complete',
+      description: 'This operation is not allowed for this account.',
+    },
+    notFound: {
+      title: 'User not found',
+      description: 'The account may have been deleted. Refresh the list.',
+    },
+    accessDenied: {
+      title: 'Access not granted',
+      description: 'Confirm your email to manage users.',
+    },
+    unavailable: {
+      title: 'Service unavailable',
+      description: 'Could not connect to the service. Try again in a moment.',
+    },
+  },
+  listPage: {
+    title: 'Users',
+    subtitle: 'Access accounts registered on the platform.',
+    create: 'New user',
+    searchLabel: 'Search by name or email',
+    searchPlaceholder: 'Type part of the name or email',
+    search: 'Search',
+    filtersLabel: 'Filter accounts',
+    removeFilter: 'Remove the {{filter}} filter',
+    filters: {
+      ALL: 'All',
+      ACTIVE: 'Active',
+      SUSPENDED: 'Suspended',
+      VERIFIED: 'Verified',
+      UNVERIFIED: 'Not verified',
+    },
+    columns: {
+      user: 'User',
+      phone: 'Phone',
+      verification: 'Email',
+      status: 'Status',
+      createdAt: 'Created',
+      actions: 'Actions',
+    },
+    you: 'You',
+    notInformed: 'Not provided',
+    createdAt: 'Created: {{date}}',
+    dateTime: '{{date}} at {{time}}',
+    empty: 'No users found.',
+    loadMore: 'Load more',
+    loadingMore: 'Loading…',
+    actionLabels: {
+      edit: 'Edit {{name}}',
+      suspend: 'Suspend {{name}}',
+      reactivate: 'Reactivate {{name}}',
+      delete: 'Delete {{name}}',
+    },
+  },
+  createForm: {
+    title: 'New user',
+    description:
+      'The same data as the sign-up on the login screen. The person receives a link to confirm the email.',
+    close: 'Close',
+    submit: 'Create',
+    submitting: 'Creating…',
+    success: {
+      title: 'User created',
+      description: 'We sent the verification link to {{email}}.',
+    },
+  },
+  editForm: {
+    title: 'Edit user',
+    description: 'Update the data of {{name}}. The password is changed through password recovery.',
+    emailAlertTitle: 'The email will need to be verified again',
+    emailHint:
+      'When you save, the account becomes unverified and a new link is sent to the new address.',
+    close: 'Close',
+    submit: 'Save',
+    submitting: 'Saving…',
+    success: {
+      title: 'User updated',
+      description: 'The data of {{name}} was saved.',
+      emailChanged: 'We sent a new verification link to {{email}}.',
+    },
+  },
+  confirm: {
+    cancel: 'Cancel',
+    confirming: 'Saving…',
+    suspend: {
+      title: 'Suspend {{name}}?',
+      description:
+        'The person can no longer sign in and open sessions are ended. The account can be reactivated later.',
+    },
+    reactivate: {
+      title: 'Reactivate {{name}}?',
+      description: 'The person can sign in with email and password again.',
+    },
+    delete: {
+      title: 'Delete {{name}} permanently?',
+      description:
+        'The account never confirmed its email and will be deleted with no way to recover it.',
+    },
+    success: {
+      suspend: 'User suspended',
+      reactivate: 'User reactivated',
+      delete: 'User deleted',
+      description: 'Operation completed for {{name}}.',
+    },
+  },
+} as const satisfies Translations['users'];
+
+export const gallery = {
+  status: {
+    DRAFT: 'Draft',
+    PUBLISHED: 'Published',
+    ARCHIVED: 'Archived',
+  },
+  photoStatus: {
+    PROCESSING: 'Processing',
+    READY: 'Ready',
+    FAILED: 'Failed',
+  },
+  photoFailure: {
+    invalid_image: 'The file is not a valid image.',
+    processing_error: 'The photo could not be processed. Delete it and upload it again.',
+  },
+  actions: {
+    edit: 'Edit',
+    retry: 'Try again',
+    addPhotos: 'Add photos',
+    delete: 'Delete photo',
+  },
+  fields: {
+    title: 'Title',
+    titlePlaceholder: 'E.g. Sunday Service',
+    occurredOn: 'Service or event date',
+    description: 'Description (optional)',
+    descriptionPlaceholder: 'A summary of the service or event.',
+  },
+  validation: {
+    titleRequired: 'Enter the title.',
+    titleInvalid: 'Use up to 120 characters.',
+    occurredOnInvalid: 'Enter a valid date from 2000 to today.',
+    descriptionInvalid: 'Use up to 2000 characters.',
+    invalid: 'Value rejected by the server. Check it and try again.',
+  },
+  notices: {
+    invalidData: {
+      title: 'Data rejected',
+      description: 'Check the highlighted fields and try again.',
+    },
+    conflict: {
+      title: 'Could not complete',
+      description: 'The data was changed by another operation. Reload and try again.',
+    },
+    notFound: {
+      title: 'Album not found',
+      description: 'The album may have been removed. Go back to the album list.',
+    },
+    accessDenied: {
+      title: 'Access not granted',
+      description: 'Confirm your email to manage the gallery.',
+    },
+    unavailable: {
+      title: 'Service unavailable',
+      description: 'Could not connect to the service. Try again in a moment.',
+    },
+  },
+  listPage: {
+    title: 'Albums',
+    subtitle: 'Photos from services and events. Uploaded photos stay private until published.',
+    create: 'New album',
+    empty: 'No albums yet.',
+    loadMore: 'Load more',
+    loadingMore: 'Loading…',
+    photoCount_one: '{{count}} photo',
+    photoCount_other: '{{count}} photos',
+  },
+  detailPage: {
+    back: 'Back to albums',
+    photos: 'Photos',
+    photosDescription: 'Only published photos will appear in the Photos section of the website.',
+    empty: 'No photos uploaded yet.',
+    hint: 'JPEG, PNG or WebP, up to 25 MB each. Photos are optimized and lose their location (GPS).',
+    publicAddress: 'Website address: /fotos/{{slug}}',
+    photoAlt: 'Photo {{position}} of the album {{title}}',
+  },
+  uploads: {
+    title: 'Uploads',
+    clear: 'Clear finished',
+    stage: {
+      waiting: 'Queued',
+      sending: 'Uploading {{percent}}%',
+      confirming: 'Confirming…',
+      done: 'Uploaded. Processing on the server…',
+      failed: 'Failed',
+    },
+    failure: {
+      invalidType: 'Format not accepted. Use JPEG, PNG or WebP.',
+      tooLarge: 'File larger than 25 MB.',
+      rejected: 'Upload rejected by the server.',
+      transfer: 'The file could not be uploaded. Check the connection and try again.',
+      unavailable: 'Service unavailable. Try again in a moment.',
+    },
+    success: {
+      title_one: 'Photo uploaded',
+      title_other: 'Photos uploaded',
+      description_one: 'The photo is being optimized and shows up in the album shortly.',
+      description_other: '{{count}} photos are being optimized and show up in the album shortly.',
+    },
+    partial: {
+      title: 'Some uploads failed',
+      description_one: '{{failed}} of {{count}} file was not uploaded. Check the upload list.',
+      description_other: '{{failed}} of {{count}} files were not uploaded. Check the upload list.',
+    },
+  },
+  albumForm: {
+    createTitle: 'New album',
+    createDescription: 'The album starts as a draft and does not appear on the website.',
+    editTitle: 'Edit album',
+    editDescription: 'Update the data of {{title}}. The website address does not change.',
+    close: 'Close',
+    submit: 'Save',
+    submitting: 'Saving…',
+    success: {
+      createTitle: 'Album created',
+      createDescription: 'Now add the photos of {{title}}.',
+      editTitle: 'Album updated',
+      editDescription: 'The data of {{title}} was saved.',
+    },
+  },
+  confirmDelete: {
+    title: 'Delete this photo?',
+    description:
+      'The uploaded file and the optimized versions are permanently deleted. This cannot be undone.',
+    close: 'Close',
+    cancel: 'Cancel',
+    confirm: 'Delete',
+    confirming: 'Deleting…',
+    success: 'Photo deleted',
+  },
+} as const satisfies Translations['gallery'];

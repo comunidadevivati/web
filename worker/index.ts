@@ -6,8 +6,8 @@ import { z } from 'zod';
  * Os assets estáticos (SPA) são servidos diretamente pela Cloudflare; este Worker só executa
  * para /api/* e /auth/* (ver `run_worker_first` em wrangler.jsonc).
  *
- * /auth/*
- * Repassa as rotas de sessão ao BFF (BFF_ORIGIN) na mesma origem do front: o cookie de sessão
+ * /auth/* e /api/v1/*
+ * Repassa as rotas de sessão e da API de negócio (ex.: organização e congregações) ao BFF (BFF_ORIGIN) na mesma origem do front: o cookie de sessão
  * (HttpOnly, SameSite=Lax) fica no domínio do front e não há CORS. Redirects e Set-Cookie do BFF
  * voltam ao navegador sem alteração.
  *
@@ -19,9 +19,9 @@ import { z } from 'zod';
 
 const GUEST_WIFI_AUTHORIZE_PATH = '/api/guest-wifi/authorize';
 
-const BFF_PROXY_PATH_PREFIX = '/auth/';
+const BFF_PROXY_PATH_PREFIXES = ['/auth/', '/api/v1/'];
 
-// BFF_ORIGIN é opcional enquanto o BFF não está publicado: sem ele, /auth/* responde 503.
+// BFF_ORIGIN é opcional enquanto o BFF não está publicado: sem ele, o proxy responde 503.
 type WorkerEnv = Env & {
   BFF_ORIGIN?: string;
 };
@@ -320,7 +320,7 @@ export default {
       return handleGuestWifiAuthorize(request, env);
     }
 
-    if (pathname.startsWith(BFF_PROXY_PATH_PREFIX)) {
+    if (BFF_PROXY_PATH_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
       return proxyToBff(request, env);
     }
 

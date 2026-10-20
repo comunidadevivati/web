@@ -18,7 +18,14 @@ import { Route as LoginRouteImport } from './routes/login'
 import { Route as ResetPasswordRouteImport } from './routes/reset-password'
 import { Route as VerifyEmailRouteImport } from './routes/verify-email'
 import { Route as WifiVisitantesRouteImport } from './routes/wifi-visitantes'
+import { Route as AuthenticatedCongregacoesRouteImport } from './routes/_authenticated.congregacoes'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
+import { Route as AuthenticatedOrganizacaoRouteImport } from './routes/_authenticated.organizacao'
+import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated.usuarios'
+import { Route as AuthenticatedMembrosIndexRouteImport } from './routes/_authenticated.membros.index'
+import { Route as AuthenticatedMembrosMemberIdRouteImport } from './routes/_authenticated.membros.$memberId'
+import { Route as AuthenticatedSiteAlbunsIndexRouteImport } from './routes/_authenticated.site.albuns.index'
+import { Route as AuthenticatedSiteAlbunsAlbumIdRouteImport } from './routes/_authenticated.site.albuns.$albumId'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -64,11 +71,52 @@ const WifiVisitantesRoute = WifiVisitantesRouteImport.update({
   path: '/wifi-visitantes',
   getParentRoute: () => rootRouteImport,
 } as any)
+const AuthenticatedCongregacoesRoute =
+  AuthenticatedCongregacoesRouteImport.update({
+    id: '/congregacoes',
+    path: '/congregacoes',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedDashboardRoute = AuthenticatedDashboardRouteImport.update({
   id: '/dashboard',
   path: '/dashboard',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const AuthenticatedOrganizacaoRoute =
+  AuthenticatedOrganizacaoRouteImport.update({
+    id: '/organizacao',
+    path: '/organizacao',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
+  id: '/usuarios',
+  path: '/usuarios',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
+const AuthenticatedMembrosIndexRoute =
+  AuthenticatedMembrosIndexRouteImport.update({
+    id: '/membros/',
+    path: '/membros/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedMembrosMemberIdRoute =
+  AuthenticatedMembrosMemberIdRouteImport.update({
+    id: '/membros/$memberId',
+    path: '/membros/$memberId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSiteAlbunsIndexRoute =
+  AuthenticatedSiteAlbunsIndexRouteImport.update({
+    id: '/site/albuns/',
+    path: '/site/albuns/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedSiteAlbunsAlbumIdRoute =
+  AuthenticatedSiteAlbunsAlbumIdRouteImport.update({
+    id: '/site/albuns/$albumId',
+    path: '/site/albuns/$albumId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -79,7 +127,14 @@ export interface FileRoutesByFullPath {
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
   '/wifi-visitantes': typeof WifiVisitantesRoute
+  '/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
+  '/membros/': typeof AuthenticatedMembrosIndexRoute
+  '/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  '/site/albuns/': typeof AuthenticatedSiteAlbunsIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -90,7 +145,14 @@ export interface FileRoutesByTo {
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
   '/wifi-visitantes': typeof WifiVisitantesRoute
+  '/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
+  '/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
+  '/membros': typeof AuthenticatedMembrosIndexRoute
+  '/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  '/site/albuns': typeof AuthenticatedSiteAlbunsIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -103,7 +165,14 @@ export interface FileRoutesById {
   '/reset-password': typeof ResetPasswordRoute
   '/verify-email': typeof VerifyEmailRoute
   '/wifi-visitantes': typeof WifiVisitantesRoute
+  '/_authenticated/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
+  '/_authenticated/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
+  '/_authenticated/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
+  '/_authenticated/membros/': typeof AuthenticatedMembrosIndexRoute
+  '/_authenticated/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  '/_authenticated/site/albuns/': typeof AuthenticatedSiteAlbunsIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -116,7 +185,14 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/verify-email'
     | '/wifi-visitantes'
+    | '/congregacoes'
     | '/dashboard'
+    | '/organizacao'
+    | '/usuarios'
+    | '/membros/$memberId'
+    | '/membros/'
+    | '/site/albuns/$albumId'
+    | '/site/albuns/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -127,7 +203,14 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/verify-email'
     | '/wifi-visitantes'
+    | '/congregacoes'
     | '/dashboard'
+    | '/organizacao'
+    | '/usuarios'
+    | '/membros/$memberId'
+    | '/membros'
+    | '/site/albuns/$albumId'
+    | '/site/albuns'
   id:
     | '__root__'
     | '/'
@@ -139,7 +222,14 @@ export interface FileRouteTypes {
     | '/reset-password'
     | '/verify-email'
     | '/wifi-visitantes'
+    | '/_authenticated/congregacoes'
     | '/_authenticated/dashboard'
+    | '/_authenticated/organizacao'
+    | '/_authenticated/usuarios'
+    | '/_authenticated/membros/$memberId'
+    | '/_authenticated/membros/'
+    | '/_authenticated/site/albuns/$albumId'
+    | '/_authenticated/site/albuns/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -219,6 +309,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof WifiVisitantesRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/_authenticated/congregacoes': {
+      id: '/_authenticated/congregacoes'
+      path: '/congregacoes'
+      fullPath: '/congregacoes'
+      preLoaderRoute: typeof AuthenticatedCongregacoesRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/dashboard': {
       id: '/_authenticated/dashboard'
       path: '/dashboard'
@@ -226,15 +323,71 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedDashboardRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/organizacao': {
+      id: '/_authenticated/organizacao'
+      path: '/organizacao'
+      fullPath: '/organizacao'
+      preLoaderRoute: typeof AuthenticatedOrganizacaoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/usuarios': {
+      id: '/_authenticated/usuarios'
+      path: '/usuarios'
+      fullPath: '/usuarios'
+      preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/membros/': {
+      id: '/_authenticated/membros/'
+      path: '/membros'
+      fullPath: '/membros/'
+      preLoaderRoute: typeof AuthenticatedMembrosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/membros/$memberId': {
+      id: '/_authenticated/membros/$memberId'
+      path: '/membros/$memberId'
+      fullPath: '/membros/$memberId'
+      preLoaderRoute: typeof AuthenticatedMembrosMemberIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/site/albuns/': {
+      id: '/_authenticated/site/albuns/'
+      path: '/site/albuns'
+      fullPath: '/site/albuns/'
+      preLoaderRoute: typeof AuthenticatedSiteAlbunsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/site/albuns/$albumId': {
+      id: '/_authenticated/site/albuns/$albumId'
+      path: '/site/albuns/$albumId'
+      fullPath: '/site/albuns/$albumId'
+      preLoaderRoute: typeof AuthenticatedSiteAlbunsAlbumIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
 interface AuthenticatedRouteChildren {
+  AuthenticatedCongregacoesRoute: typeof AuthenticatedCongregacoesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
+  AuthenticatedOrganizacaoRoute: typeof AuthenticatedOrganizacaoRoute
+  AuthenticatedUsuariosRoute: typeof AuthenticatedUsuariosRoute
+  AuthenticatedMembrosMemberIdRoute: typeof AuthenticatedMembrosMemberIdRoute
+  AuthenticatedMembrosIndexRoute: typeof AuthenticatedMembrosIndexRoute
+  AuthenticatedSiteAlbunsAlbumIdRoute: typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  AuthenticatedSiteAlbunsIndexRoute: typeof AuthenticatedSiteAlbunsIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
+  AuthenticatedCongregacoesRoute: AuthenticatedCongregacoesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
+  AuthenticatedOrganizacaoRoute: AuthenticatedOrganizacaoRoute,
+  AuthenticatedUsuariosRoute: AuthenticatedUsuariosRoute,
+  AuthenticatedMembrosMemberIdRoute: AuthenticatedMembrosMemberIdRoute,
+  AuthenticatedMembrosIndexRoute: AuthenticatedMembrosIndexRoute,
+  AuthenticatedSiteAlbunsAlbumIdRoute: AuthenticatedSiteAlbunsAlbumIdRoute,
+  AuthenticatedSiteAlbunsIndexRoute: AuthenticatedSiteAlbunsIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(

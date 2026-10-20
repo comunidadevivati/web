@@ -1,6 +1,9 @@
 import livingStoneGreen from '@/assets/brand/living-stone-green.png';
 import { SidebarNavItem } from '@/components/molecules';
-import type { AppSidebarItem } from '@/components/organisms/app-sidebar/app-sidebar';
+import {
+  AppSidebarNavigation,
+  type AppSidebarItem,
+} from '@/components/organisms/app-sidebar/app-sidebar';
 import { Box, Image, Sheet, SheetContent, SheetTitle } from '@/components/ui';
 import { cn } from '@/lib/utils';
 import { LogOutIcon } from 'lucide-react';
@@ -70,16 +73,7 @@ export const AppSidebarDrawer = ({
 
         <Box className="flex min-h-0 flex-1 flex-col overflow-y-auto p-3">
           <Box aria-label={t('navigation.sidebar')} className="grid gap-1" role="navigation">
-            {items.map((item) => (
-              <SidebarNavItem
-                key={item.label}
-                icon={item.icon}
-                isCollapsed={false}
-                label={item.label}
-                to={item.to}
-                onClick={close}
-              />
-            ))}
+            <AppSidebarNavigation isCollapsed={false} items={items} onNavigate={close} />
           </Box>
         </Box>
 
