@@ -18,6 +18,8 @@ const authMeResponseSchema = z.object({
     email: z.string().optional(),
     name: z.string().optional(),
     emailVerified: z.boolean(),
+    // Padrão false: um BFF anterior ao campo não derruba o login, só mantém os menus fechados.
+    isMember: z.boolean().default(false),
   }),
 });
 

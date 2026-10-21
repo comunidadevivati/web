@@ -44,7 +44,7 @@ export const useAuthenticatedLayoutViewModel = () => {
   // Drawer do menu lateral em telas pequenas (abaixo de md).
   const [isMobileNavOpen, setIsMobileNavOpen] = useState(false);
 
-  const user = session?.user ?? { subject: '', emailVerified: false };
+  const user = session?.user ?? { subject: '', emailVerified: false, isMember: false };
 
   const userEmail = user.email ?? '';
 
@@ -53,6 +53,8 @@ export const useAuthenticatedLayoutViewModel = () => {
   const userName = getUserDisplayName(user);
 
   const isEmailVerified = user.emailVerified;
+
+  const { isMember } = user;
 
   // Confirmação antes de reenviar o link de verificação do e-mail.
   const [isResendVerificationOpen, setIsResendVerificationOpen] = useState(false);
@@ -160,6 +162,7 @@ export const useAuthenticatedLayoutViewModel = () => {
   return {
     hasLogoutError,
     isEmailVerified,
+    isMember,
     isResendVerificationOpen,
     isResendingVerification,
     openResendVerification,
