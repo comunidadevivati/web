@@ -33,9 +33,9 @@ import {
 } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
-// requiresVerifiedEmail: o item só aparece depois que a conta confirmar o e-mail.
+// requiresMember: o item só aparece para contas que já são de membros.
 type NavigationItem = AppSidebarItem & {
-  requiresVerifiedEmail?: boolean;
+  requiresMember?: boolean;
 };
 
 const layoutColumns = {
@@ -49,6 +49,7 @@ export const AuthenticatedLayoutView = () => {
     hasLogoutError,
     isEmailVerified,
     isLoggingOut,
+    isMember,
     isResendVerificationOpen,
     isResendingVerification,
     openResendVerification,
@@ -82,38 +83,38 @@ export const AuthenticatedLayoutView = () => {
       label: t('navigation.organization'),
       icon: Building2Icon,
       to: '/organizacao',
-      requiresVerifiedEmail: true,
+      requiresMember: true,
     },
     {
       label: t('navigation.congregations'),
       icon: ChurchIcon,
       to: '/congregacoes',
-      requiresVerifiedEmail: true,
+      requiresMember: true,
     },
     {
       label: t('navigation.users'),
       icon: UserCogIcon,
       to: '/usuarios',
-      requiresVerifiedEmail: true,
+      requiresMember: true,
     },
     {
       label: t('navigation.members'),
       icon: UsersIcon,
       to: '/membros',
-      requiresVerifiedEmail: true,
+      requiresMember: true,
     },
     {
       label: t('navigation.site'),
       icon: GlobeIcon,
       children: [{ label: t('navigation.albums'), icon: ImagesIcon, to: '/site/albuns' }],
-      requiresVerifiedEmail: true,
+      requiresMember: true,
     },
   ];
 
-  // Conta não verificada: somente os itens liberados para ela (hoje, o Dashboard).
+  // Conta que ainda não é de membro (verificada ou não): somente o Dashboard.
   const sidebarItems: AppSidebarItem[] = navigationItems
-    .filter(({ requiresVerifiedEmail }) => isEmailVerified || !requiresVerifiedEmail)
-    .map(({ requiresVerifiedEmail: _requiresVerifiedEmail, ...item }) => item);
+    .filter(({ requiresMember }) => isMember || !requiresMember)
+    .map(({ requiresMember: _requiresMember, ...item }) => item);
 
   return (
     <Box className="grid h-dvh grid-rows-[4.5rem_minmax(0,1fr)] bg-background">

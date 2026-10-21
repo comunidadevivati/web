@@ -5,6 +5,8 @@ export type AuthUser = {
   name?: string;
   // false enquanto o e-mail do cadastro não for confirmado pelo link enviado.
   emailVerified: boolean;
+  // true quando a conta já virou membro: só então o painel libera os menus além do Dashboard.
+  isMember: boolean;
 };
 
 // Sessão ativa no BFF. O cookie HttpOnly fica no navegador; o front só conhece o usuário e o token
