@@ -150,6 +150,10 @@ export const common = {
     met: 'atendido',
     notMet: 'pendente',
   },
+  serverWake: {
+    title: 'Conectando ao servidor…',
+    description: 'O serviço estava em repouso e pode levar até um minuto para responder.',
+  },
   pwa: {
     title: 'Nova versão disponível',
     description: 'Uma nova versão da Comunidade Viva está disponível.',
