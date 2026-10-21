@@ -8,7 +8,7 @@ import { useState } from 'react';
 import { useTranslation } from 'react-i18next';
 
 type MenuItem = {
-  key: Extract<PageTitleKey, 'home' | 'history' | 'events' | 'contact'>;
+  key: Extract<PageTitleKey, 'home' | 'history' | 'events' | 'photos' | 'contact'>;
   to: LinkProps['to'];
 };
 
@@ -16,6 +16,7 @@ const menuItems: MenuItem[] = [
   { key: 'home', to: '/' },
   { key: 'history', to: '/historia' },
   { key: 'events', to: '/eventos' },
+  { key: 'photos', to: '/fotos' },
   { key: 'contact', to: '/contato' },
 ];
 

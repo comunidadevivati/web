@@ -9,6 +9,7 @@ import {
   home,
   members,
   organization,
+  photos,
   users,
 } from '@/app/i18n/locales/en-US/features';
 
@@ -23,4 +24,5 @@ export const enUS = {
   users,
   members,
   gallery,
+  photos,
 } as const satisfies Translations;

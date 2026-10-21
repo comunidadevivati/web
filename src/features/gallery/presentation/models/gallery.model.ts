@@ -10,6 +10,7 @@ import {
   type Album,
   type AlbumDetails,
   type AlbumStatus,
+  type AlbumStatusAction,
   type PhotoStatus,
 } from '@/features/gallery/domain/gallery';
 import { z } from 'zod';
@@ -26,6 +27,13 @@ export const albumStatusTones: Record<AlbumStatus, StatusBadgeTone> = {
   DRAFT: 'warning',
   PUBLISHED: 'success',
   ARCHIVED: 'neutral',
+};
+
+// Transições oferecidas no painel para cada status do álbum.
+export const albumStatusActions: Record<AlbumStatus, AlbumStatusAction[]> = {
+  DRAFT: ['publish', 'archive'],
+  PUBLISHED: ['unpublish'],
+  ARCHIVED: ['restore'],
 };
 
 export const photoStatusTones: Record<PhotoStatus, StatusBadgeTone> = {
@@ -129,14 +137,21 @@ export const toAlbumFormInput = (album: Album | null): AlbumFormInput => ({
   description: album?.description ?? '',
 });
 
-// Arquivo selecionado no painel e o andamento do envio.
+// Arquivo selecionado no painel e o andamento do envio. O arquivo fica guardado para o reenvio.
 export type UploadItem = UploadUpdate & {
   key: string;
   name: string;
+  file: File;
 };
 
 export const isFinishedUpload = ({ stage }: UploadItem) => {
   return stage === 'done' || stage === 'failed';
+};
+
+// Só falhas passageiras (rede ou serviço fora do ar) valem novo envio; formato, tamanho e recusas
+// do servidor falhariam de novo.
+export const isRetryableUpload = ({ failure, stage }: UploadItem) => {
+  return stage === 'failed' && (failure === 'transfer' || failure === 'unavailable');
 };
 
 // Data civil ISO exibida no idioma atual, sem deslocamento de fuso.
