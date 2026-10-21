@@ -15,8 +15,18 @@ export type Album = {
   publishedAt: string | null;
   // Versão lida: a edição a devolve (concorrência otimista).
   version: number;
-  // Fotos prontas (processadas).
+  // Fotos prontas (processadas) e, delas, as publicadas no site.
   photoCount: number;
+  publishedPhotoCount: number;
+};
+
+// Transições do álbum: publicar exige ao menos uma foto publicada; arquivar exige rascunho.
+export type AlbumStatusAction = 'publish' | 'unpublish' | 'archive' | 'restore';
+
+// Lote de "publicar todas": o painel repete enquanto houver fotos restantes.
+export type PublishBatch = {
+  published: number;
+  remaining: number;
 };
 
 export type AlbumDetails = {
@@ -45,6 +55,8 @@ export type Photo = {
   failure: PhotoFailure | null;
   // URL de leitura de validade curta, somente para fotos prontas.
   previewUrl: string | null;
+  // Publicada no site; null quando não publicada.
+  publishedAt: string | null;
   version: number;
 };
 
@@ -162,6 +174,15 @@ export interface GalleryGateway {
   ) => Promise<UploadTicket[]>;
   completeUpload: (csrfToken: string, photoId: string) => Promise<Photo>;
   deletePhoto: (csrfToken: string, photoId: string) => Promise<void>;
+  publishPhoto: (csrfToken: string, photoId: string) => Promise<Photo>;
+  unpublishPhoto: (csrfToken: string, photoId: string) => Promise<Photo>;
+  publishAlbumPhotos: (csrfToken: string, albumId: string) => Promise<PublishBatch>;
+  setAlbumCover: (csrfToken: string, albumId: string, photoId: string) => Promise<Album>;
+  changeAlbumStatus: (
+    csrfToken: string,
+    albumId: string,
+    action: AlbumStatusAction,
+  ) => Promise<Album>;
 }
 
 // Envio direto do navegador ao bucket (fora do BFF), com progresso de 0 a 1.

@@ -890,9 +890,56 @@ export const gallery = {
     publicAddress: 'Endereço no site: /fotos/{{slug}}',
     photoAlt: 'Foto {{position}} do álbum {{title}}',
   },
+  publication: {
+    summary: 'Publicadas no site: {{published}} de {{total}}',
+    photo: {
+      badge: 'Publicada',
+      publish: 'Publicar',
+      unpublish: 'Despublicar',
+      publishFor: 'Publicar no site: {{alt}}',
+      unpublishFor: 'Tirar do site: {{alt}}',
+      published: 'Foto publicada no site',
+      unpublished: 'Foto retirada do site',
+    },
+    cover: {
+      badge: 'Capa',
+      set: 'Usar como capa',
+      setFor: 'Usar como capa do álbum: {{alt}}',
+      success: 'Capa do álbum atualizada',
+    },
+    publishAll: {
+      label_one: 'Publicar {{count}} foto',
+      label_other: 'Publicar {{count}} fotos',
+      progress_one: 'Publicando… {{count}} foto',
+      progress_other: 'Publicando… {{count}} fotos',
+      success_one: '{{count}} foto publicada',
+      success_other: '{{count}} fotos publicadas',
+    },
+    status: {
+      publish: {
+        label: 'Publicar álbum',
+        hint: 'Publique ao menos uma foto para publicar o álbum.',
+        success: 'Álbum publicado no site',
+      },
+      unpublish: {
+        label: 'Despublicar álbum',
+        success: 'Álbum retirado do site. As fotos continuam publicadas.',
+      },
+      archive: {
+        label: 'Arquivar',
+        success: 'Álbum arquivado',
+      },
+      restore: {
+        label: 'Restaurar',
+        success: 'Álbum restaurado como rascunho',
+      },
+    },
+  },
   uploads: {
     title: 'Envios',
     clear: 'Limpar concluídos',
+    retry: 'Tentar novamente',
+    retryFile: 'Tentar enviar {{name}} novamente',
     stage: {
       waiting: 'Na fila',
       sending: 'Enviando {{percent}}%',
@@ -945,5 +992,36 @@ export const gallery = {
     confirm: 'Excluir',
     confirming: 'Excluindo…',
     success: 'Foto excluída',
+  },
+} as const;
+
+export const photos = {
+  eyebrow: 'Galeria',
+  title: 'Fotos',
+  description: 'Momentos dos cultos e eventos da Comunidade Viva e Eficaz.',
+  empty: 'Nenhum álbum publicado ainda.',
+  loadMore: 'Carregar mais',
+  loadingMore: 'Carregando…',
+  retry: 'Tentar novamente',
+  back: 'Voltar para os álbuns',
+  photoCount_one: '{{count}} foto',
+  photoCount_other: '{{count}} fotos',
+  photoAlt: 'Foto {{position}} do álbum {{title}}',
+  openPhoto: 'Abrir a foto {{position}}',
+  lightbox: {
+    close: 'Fechar',
+    previous: 'Foto anterior',
+    next: 'Próxima foto',
+    position: '{{position}} de {{total}}',
+  },
+  notices: {
+    notFound: {
+      title: 'Álbum não encontrado',
+      description: 'O álbum pode ter sido removido ou ainda não foi publicado.',
+    },
+    unavailable: {
+      title: 'Fotos indisponíveis',
+      description: 'Não foi possível carregar as fotos. Tente novamente em instantes.',
+    },
   },
 } as const;

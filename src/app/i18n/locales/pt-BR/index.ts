@@ -8,6 +8,7 @@ import {
   home,
   members,
   organization,
+  photos,
   users,
 } from '@/app/i18n/locales/pt-BR/features';
 
@@ -23,4 +24,5 @@ export const ptBR = {
   users,
   members,
   gallery,
+  photos,
 } as const;

@@ -13,6 +13,7 @@ import {
   Spinner,
   Text,
 } from '@/components/ui';
+import type { AlbumStatusAction } from '@/features/gallery/domain/gallery';
 import { DeletePhotoDialog } from '@/features/gallery/presentation/components/delete-photo-dialog';
 import { PhotoTile } from '@/features/gallery/presentation/components/photo-tile';
 import { UploadList } from '@/features/gallery/presentation/components/upload-list';
@@ -21,21 +22,33 @@ import {
   albumStatusTones,
 } from '@/features/gallery/presentation/models/gallery.model';
 import { useAlbumDetailViewModel } from '@/features/gallery/presentation/view-models/album-detail.view-model';
+import { useAlbumPublicationViewModel } from '@/features/gallery/presentation/view-models/album-publication.view-model';
 import { AlbumFormView } from '@/features/gallery/presentation/views/album-form.view';
 import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
 import {
+  ArchiveIcon,
+  ArchiveRestoreIcon,
   ArrowLeftIcon,
   CalendarIcon,
   CircleAlertIcon,
+  EyeOffIcon,
   GlobeIcon,
   ImagePlusIcon,
   ImagesIcon,
   PencilIcon,
   RefreshCwIcon,
+  type LucideIcon,
 } from 'lucide-react';
 import { useRef } from 'react';
 import { useTranslation } from 'react-i18next';
+
+const statusActionIcons: Record<AlbumStatusAction, LucideIcon> = {
+  publish: GlobeIcon,
+  unpublish: EyeOffIcon,
+  archive: ArchiveIcon,
+  restore: ArchiveRestoreIcon,
+};
 
 // Página do álbum (rota /site/albuns/$albumId): dados, envio de fotos e grade das fotos enviadas.
 export const AlbumDetailView = () => {
@@ -65,10 +78,13 @@ export const AlbumDetailView = () => {
     photos,
     requestDelete,
     retry,
+    retryUpload,
     setIsEditOpen,
     uploadFiles,
     uploads,
   } = useAlbumDetailViewModel();
+
+  const publication = useAlbumPublicationViewModel();
 
   const { t } = useTranslation('gallery');
 
@@ -160,6 +176,8 @@ export const AlbumDetailView = () => {
 
                     <Text className="text-sm">{photoCount}</Text>
 
+                    <Text className="text-sm">{publication.publishedSummary}</Text>
+
                     <Box className="flex min-w-0 items-center gap-1.5">
                       <GlobeIcon aria-hidden="true" className="size-3.5 text-primary-strong" />
 
@@ -172,15 +190,53 @@ export const AlbumDetailView = () => {
                   {album.description && (
                     <Text className="mt-1 whitespace-pre-line">{album.description}</Text>
                   )}
+
+                  {album.status === 'DRAFT' && album.publishedPhotoCount === 0 && (
+                    <Text className="mt-1 text-sm text-muted-foreground">
+                      {t('publication.status.publish.hint')}
+                    </Text>
+                  )}
                 </Box>
               </Box>
 
-              {canEdit && (
-                <Button className="h-10" type="button" variant="outline" onClick={openEdit}>
-                  <PencilIcon data-icon="inline-start" />
-                  {t('actions.edit')}
-                </Button>
-              )}
+              <Box className="flex flex-wrap gap-2 sm:justify-end">
+                {publication.statusActions.map((action) => {
+                  const Icon = statusActionIcons[action];
+
+                  const isPending = publication.pendingStatusAction === action;
+
+                  return (
+                    <Button
+                      key={action}
+                      aria-busy={isPending}
+                      className="h-10"
+                      disabled={!publication.canRunStatusAction(action)}
+                      title={
+                        action === 'publish' && !publication.canRunStatusAction(action)
+                          ? t('publication.status.publish.hint')
+                          : undefined
+                      }
+                      type="button"
+                      variant={action === 'publish' ? 'default' : 'outline'}
+                      onClick={() => publication.changeStatus(action)}
+                    >
+                      {isPending ? (
+                        <Spinner data-icon="inline-start" />
+                      ) : (
+                        <Icon data-icon="inline-start" />
+                      )}
+                      {t(`publication.status.${action}.label`)}
+                    </Button>
+                  );
+                })}
+
+                {canEdit && (
+                  <Button className="h-10" type="button" variant="outline" onClick={openEdit}>
+                    <PencilIcon data-icon="inline-start" />
+                    {t('actions.edit')}
+                  </Button>
+                )}
+              </Box>
             </CardHeader>
           </Card>
 
@@ -213,9 +269,32 @@ export const AlbumDetailView = () => {
                   }}
                 />
 
+                {publication.unpublishedCount > 0 && (
+                  <Button
+                    aria-busy={publication.isPublishingAll}
+                    className="ml-auto h-10"
+                    disabled={!publication.canPublishPhotos}
+                    type="button"
+                    variant="outline"
+                    onClick={publication.publishAll}
+                  >
+                    {publication.isPublishingAll ? (
+                      <Spinner data-icon="inline-start" />
+                    ) : (
+                      <GlobeIcon data-icon="inline-start" />
+                    )}
+                    {t(
+                      publication.isPublishingAll
+                        ? 'publication.publishAll.progress'
+                        : 'publication.publishAll.label',
+                      { count: publication.publishAllCount },
+                    )}
+                  </Button>
+                )}
+
                 <Button
                   aria-busy={isUploading}
-                  className="ml-auto h-10"
+                  className={cn('h-10', publication.unpublishedCount === 0 && 'ml-auto')}
                   disabled={!canEdit || isUploading}
                   type="button"
                   onClick={() => fileInput.current?.click()}
@@ -231,8 +310,10 @@ export const AlbumDetailView = () => {
 
               <UploadList
                 canClear={hasFinishedUploads}
+                canRetry={canEdit && !isUploading}
                 items={uploads}
                 onClear={clearFinishedUploads}
+                onRetry={retryUpload}
               />
 
               {isLoadingPhotos && (
@@ -261,9 +342,15 @@ export const AlbumDetailView = () => {
                     <PhotoTile
                       key={photo.id}
                       alt={alt}
+                      canPublish={publication.canPublishPhotos}
+                      canUnpublish={publication.canUnpublishPhotos}
                       disabled={isDeleting}
+                      isBusy={publication.busyPhotoId === photo.id}
+                      isCover={publication.coverPhotoId === photo.id}
                       photo={photo}
                       onDelete={requestDelete}
+                      onSetCover={publication.setCover}
+                      onTogglePublication={publication.togglePhotoPublication}
                     />
                   ))}
                 </Box>
