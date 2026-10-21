@@ -62,7 +62,7 @@ export const useLoginViewModel = () => {
 
   const [isForgotPasswordOpen, setIsForgotPasswordOpen] = useState(false);
 
-  const { error, isPending, isSuccess, mutate } = useMutation({
+  const { isPending, isSuccess, mutate } = useMutation({
     mutationFn: (credentials: LoginCredentials) => loginUseCase(credentials),
     onSuccess: async ({ message }) => {
       // A sessão em cache (null) ficou obsoleta: o guard de /_authenticated consulta o BFF de novo.
@@ -81,12 +81,21 @@ export const useLoginViewModel = () => {
         description: message ?? t('login.success.description'),
       });
     },
-    onError: () => {
+    // Falhas da requisição vão para o toast; o formulário fica livre para nova tentativa.
+    onError: (loginError) => {
       resetField('password');
+
+      const errorNotice = getErrorNotice(loginError);
+
+      notify.error({
+        title: t(`login.notices.${errorNotice}.title`),
+        description: t(`login.notices.${errorNotice}.description`),
+      });
     },
   });
 
-  const notice: LoginNotice | null = error ? getErrorNotice(error) : (reason ?? null);
+  // Aviso fixo na página só para o motivo de chegada (ex.: sessão expirada), não para erros.
+  const notice: LoginNotice | null = reason ?? null;
 
   // Mantém o overlay até a navegação para o dashboard terminar.
   const isSubmitting = isPending || isSuccess;

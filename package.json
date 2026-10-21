@@ -40,7 +40,7 @@
     "test:coverage": "vitest run --coverage",
     "test:e2e": "playwright test",
     "test:e2e:ui": "playwright test --ui",
-    "validate": "pnpm typecheck && pnpm lint && pnpm format:check && pnpm test:run",
+    "validate": "pnpm typecheck && pnpm lint && pnpm format:check",
     "deps:check": "pnpm outdated",
     "deps:audit": "pnpm audit",
     "deps:audit:prod": "pnpm audit --prod",

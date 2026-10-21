@@ -22,6 +22,8 @@ import { Route as AuthenticatedCongregacoesRouteImport } from './routes/_authent
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 import { Route as AuthenticatedOrganizacaoRouteImport } from './routes/_authenticated.organizacao'
 import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated.usuarios'
+import { Route as FotosIndexRouteImport } from './routes/fotos.index'
+import { Route as FotosSlugRouteImport } from './routes/fotos.$slug'
 import { Route as AuthenticatedMembrosIndexRouteImport } from './routes/_authenticated.membros.index'
 import { Route as AuthenticatedMembrosMemberIdRouteImport } from './routes/_authenticated.membros.$memberId'
 import { Route as AuthenticatedSiteAlbunsIndexRouteImport } from './routes/_authenticated.site.albuns.index'
@@ -93,6 +95,16 @@ const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const FotosIndexRoute = FotosIndexRouteImport.update({
+  id: '/fotos/',
+  path: '/fotos/',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const FotosSlugRoute = FotosSlugRouteImport.update({
+  id: '/fotos/$slug',
+  path: '/fotos/$slug',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const AuthenticatedMembrosIndexRoute =
   AuthenticatedMembrosIndexRouteImport.update({
     id: '/membros/',
@@ -131,6 +143,8 @@ export interface FileRoutesByFullPath {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/fotos/$slug': typeof FotosSlugRoute
+  '/fotos/': typeof FotosIndexRoute
   '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/membros/': typeof AuthenticatedMembrosIndexRoute
   '/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
@@ -149,6 +163,8 @@ export interface FileRoutesByTo {
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/fotos/$slug': typeof FotosSlugRoute
+  '/fotos': typeof FotosIndexRoute
   '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/membros': typeof AuthenticatedMembrosIndexRoute
   '/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
@@ -169,6 +185,8 @@ export interface FileRoutesById {
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/organizacao': typeof AuthenticatedOrganizacaoRoute
   '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
+  '/fotos/$slug': typeof FotosSlugRoute
+  '/fotos/': typeof FotosIndexRoute
   '/_authenticated/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/_authenticated/membros/': typeof AuthenticatedMembrosIndexRoute
   '/_authenticated/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
@@ -189,6 +207,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/organizacao'
     | '/usuarios'
+    | '/fotos/$slug'
+    | '/fotos/'
     | '/membros/$memberId'
     | '/membros/'
     | '/site/albuns/$albumId'
@@ -207,6 +227,8 @@ export interface FileRouteTypes {
     | '/dashboard'
     | '/organizacao'
     | '/usuarios'
+    | '/fotos/$slug'
+    | '/fotos'
     | '/membros/$memberId'
     | '/membros'
     | '/site/albuns/$albumId'
@@ -226,6 +248,8 @@ export interface FileRouteTypes {
     | '/_authenticated/dashboard'
     | '/_authenticated/organizacao'
     | '/_authenticated/usuarios'
+    | '/fotos/$slug'
+    | '/fotos/'
     | '/_authenticated/membros/$memberId'
     | '/_authenticated/membros/'
     | '/_authenticated/site/albuns/$albumId'
@@ -242,6 +266,8 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   WifiVisitantesRoute: typeof WifiVisitantesRoute
+  FotosSlugRoute: typeof FotosSlugRoute
+  FotosIndexRoute: typeof FotosIndexRoute
 }
 
 declare module '@tanstack/react-router' {
@@ -337,6 +363,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/fotos/': {
+      id: '/fotos/'
+      path: '/fotos'
+      fullPath: '/fotos/'
+      preLoaderRoute: typeof FotosIndexRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/fotos/$slug': {
+      id: '/fotos/$slug'
+      path: '/fotos/$slug'
+      fullPath: '/fotos/$slug'
+      preLoaderRoute: typeof FotosSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/_authenticated/membros/': {
       id: '/_authenticated/membros/'
       path: '/membros'
@@ -404,6 +444,8 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   WifiVisitantesRoute: WifiVisitantesRoute,
+  FotosSlugRoute: FotosSlugRoute,
+  FotosIndexRoute: FotosIndexRoute,
 }
 export const routeTree = rootRouteImport
   ._addFileChildren(rootRouteChildren)

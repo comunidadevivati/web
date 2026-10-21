@@ -14,6 +14,7 @@ import {
   formatCivilDate,
   getGalleryNotice,
   isFinishedUpload,
+  isRetryableUpload,
   type UploadItem,
 } from '@/features/gallery/presentation/models/gallery.model';
 import { notify } from '@/shared/feedback/notify';
@@ -86,24 +87,14 @@ export const useAlbumDetailViewModel = () => {
       alt: t('detailPage.photoAlt', { position: index + 1, title: album?.title ?? '' }),
     }));
 
-  const uploadFiles = async (selected: FileList | null) => {
-    const files = [...(selected ?? [])];
-
-    if (!session || !album || files.length === 0 || isUploading) {
+  const sendUploads = async (items: UploadItem[]) => {
+    if (!session || !album) {
       return;
     }
 
-    const keys = files.map(() => crypto.randomUUID());
+    const keys = items.map(({ key }) => key);
 
-    setUploads((current) => [
-      ...current.filter((item) => !isFinishedUpload(item)),
-      ...files.map(({ name }, index) => ({
-        key: keys[index] ?? name,
-        name,
-        stage: 'waiting' as const,
-        progress: 0,
-      })),
-    ]);
+    const files = items.map(({ file }) => file);
 
     setIsUploading(true);
 
@@ -137,6 +128,47 @@ export const useAlbumDetailViewModel = () => {
 
       await refresh();
     }
+  };
+
+  const uploadFiles = async (selected: FileList | null) => {
+    const files = [...(selected ?? [])];
+
+    if (!session || !album || files.length === 0 || isUploading) {
+      return;
+    }
+
+    const items = files.map((file) => ({
+      key: crypto.randomUUID(),
+      name: file.name,
+      file,
+      stage: 'waiting' as const,
+      progress: 0,
+    }));
+
+    setUploads((current) => [...current.filter((item) => !isFinishedUpload(item)), ...items]);
+
+    await sendUploads(items);
+  };
+
+  // Reenvia um arquivo que falhou por rede ou indisponibilidade, mantendo-o na mesma posição.
+  const retryUpload = async (key: string) => {
+    const item = uploads.find((upload) => upload.key === key);
+
+    if (!item || !isRetryableUpload(item) || isUploading) {
+      return;
+    }
+
+    const waiting: UploadItem = {
+      key: item.key,
+      name: item.name,
+      file: item.file,
+      stage: 'waiting',
+      progress: 0,
+    };
+
+    setUploads((current) => current.map((upload) => (upload.key === key ? waiting : upload)));
+
+    await sendUploads([waiting]);
   };
 
   const clearFinishedUploads = () => {
@@ -212,6 +244,9 @@ export const useAlbumDetailViewModel = () => {
     requestDelete: setDeleteTarget,
     retry: () => {
       void refetch();
+    },
+    retryUpload: (key: string) => {
+      void retryUpload(key);
     },
     setIsEditOpen,
     uploadFiles,

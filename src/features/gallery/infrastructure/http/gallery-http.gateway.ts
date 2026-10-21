@@ -23,6 +23,7 @@ const albumSchema = z.object({
   publishedAt: z.string().nullable(),
   version: z.number().int(),
   photoCount: z.number().int(),
+  publishedPhotoCount: z.number().int(),
 });
 
 const albumPageSchema = z.object({
@@ -39,7 +40,13 @@ const photoSchema = z.object({
   placeholder: z.string().nullable(),
   failure: z.enum(['invalid_image', 'processing_error']).nullable(),
   previewUrl: z.string().nullable(),
+  publishedAt: z.string().nullable(),
   version: z.number().int(),
+});
+
+const publishBatchSchema = z.object({
+  published: z.number().int(),
+  remaining: z.number().int(),
 });
 
 const photoPageSchema = z.object({
@@ -187,5 +194,38 @@ export const galleryHttpGateway: GalleryGateway = {
 
   deletePhoto: async (csrfToken, photoId) => {
     await send(() => bffClient.delete(photoPath(photoId), { headers: csrfHeaders(csrfToken) }));
+  },
+
+  publishPhoto: (csrfToken, photoId) => {
+    return request(photoSchema, () =>
+      bffClient.post(`${photoPath(photoId)}/publish`, { headers: csrfHeaders(csrfToken) }),
+    );
+  },
+
+  unpublishPhoto: (csrfToken, photoId) => {
+    return request(photoSchema, () =>
+      bffClient.post(`${photoPath(photoId)}/unpublish`, { headers: csrfHeaders(csrfToken) }),
+    );
+  },
+
+  publishAlbumPhotos: (csrfToken, albumId) => {
+    return request(publishBatchSchema, () =>
+      bffClient.post(`${albumPath(albumId)}/photos/publish`, { headers: csrfHeaders(csrfToken) }),
+    );
+  },
+
+  setAlbumCover: (csrfToken, albumId, photoId) => {
+    return request(albumSchema, () =>
+      bffClient.put(`${albumPath(albumId)}/cover`, {
+        headers: csrfHeaders(csrfToken),
+        json: { photoId },
+      }),
+    );
+  },
+
+  changeAlbumStatus: (csrfToken, albumId, action) => {
+    return request(albumSchema, () =>
+      bffClient.post(`${albumPath(albumId)}/${action}`, { headers: csrfHeaders(csrfToken) }),
+    );
   },
 };

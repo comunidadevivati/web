@@ -888,9 +888,56 @@ export const gallery = {
     publicAddress: 'Website address: /fotos/{{slug}}',
     photoAlt: 'Photo {{position}} of the album {{title}}',
   },
+  publication: {
+    summary: 'Published on the site: {{published}} of {{total}}',
+    photo: {
+      badge: 'Published',
+      publish: 'Publish',
+      unpublish: 'Unpublish',
+      publishFor: 'Publish on the site: {{alt}}',
+      unpublishFor: 'Remove from the site: {{alt}}',
+      published: 'Photo published on the site',
+      unpublished: 'Photo removed from the site',
+    },
+    cover: {
+      badge: 'Cover',
+      set: 'Use as cover',
+      setFor: 'Use as album cover: {{alt}}',
+      success: 'Album cover updated',
+    },
+    publishAll: {
+      label_one: 'Publish {{count}} photo',
+      label_other: 'Publish {{count}} photos',
+      progress_one: 'Publishing… {{count}} photo',
+      progress_other: 'Publishing… {{count}} photos',
+      success_one: '{{count}} photo published',
+      success_other: '{{count}} photos published',
+    },
+    status: {
+      publish: {
+        label: 'Publish album',
+        hint: 'Publish at least one photo to publish the album.',
+        success: 'Album published on the site',
+      },
+      unpublish: {
+        label: 'Unpublish album',
+        success: 'Album removed from the site. The photos stay published.',
+      },
+      archive: {
+        label: 'Archive',
+        success: 'Album archived',
+      },
+      restore: {
+        label: 'Restore',
+        success: 'Album restored as a draft',
+      },
+    },
+  },
   uploads: {
     title: 'Uploads',
     clear: 'Clear finished',
+    retry: 'Try again',
+    retryFile: 'Try uploading {{name}} again',
     stage: {
       waiting: 'Queued',
       sending: 'Uploading {{percent}}%',
@@ -943,3 +990,34 @@ export const gallery = {
     success: 'Photo deleted',
   },
 } as const satisfies Translations['gallery'];
+
+export const photos = {
+  eyebrow: 'Gallery',
+  title: 'Photos',
+  description: 'Moments from the services and events of Comunidade Viva e Eficaz.',
+  empty: 'No albums published yet.',
+  loadMore: 'Load more',
+  loadingMore: 'Loading…',
+  retry: 'Try again',
+  back: 'Back to albums',
+  photoCount_one: '{{count}} photo',
+  photoCount_other: '{{count}} photos',
+  photoAlt: 'Photo {{position}} of the album {{title}}',
+  openPhoto: 'Open photo {{position}}',
+  lightbox: {
+    close: 'Close',
+    previous: 'Previous photo',
+    next: 'Next photo',
+    position: '{{position}} of {{total}}',
+  },
+  notices: {
+    notFound: {
+      title: 'Album not found',
+      description: 'The album may have been removed or is not published yet.',
+    },
+    unavailable: {
+      title: 'Photos unavailable',
+      description: 'The photos could not be loaded. Try again in a moment.',
+    },
+  },
+};
