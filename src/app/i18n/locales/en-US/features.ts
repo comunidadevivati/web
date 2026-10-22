@@ -1021,3 +1021,239 @@ export const photos = {
     },
   },
 };
+
+export const profile = {
+  page: {
+    title: 'My profile',
+    subtitle: 'Your personal data, address, social networks and account settings.',
+  },
+  avatar: {
+    alt: 'Photo of {{name}}',
+    change: 'Change photo',
+    add: 'Add photo',
+    remove: 'Remove photo',
+    uploading: 'Uploading…',
+    hint: 'JPEG, PNG or WebP up to 10 MB. The photo is cropped to a square.',
+  },
+  sections: {
+    personal: {
+      title: 'Personal data',
+      description: 'How you appear to the community and how we can reach you.',
+    },
+    address: {
+      title: 'Address',
+      description: 'Optional. If you fill it in, provide the full address.',
+    },
+    social: {
+      title: 'Social networks',
+      description: 'Links to your profiles. All of them are optional.',
+    },
+    security: {
+      title: 'Security',
+      description: 'Password and sign-in email. Both changes require your current password.',
+    },
+    subscriptions: {
+      title: 'Subscriptions',
+      description: 'Choose what you want to receive from the community.',
+    },
+  },
+  fields: {
+    optional: '{{label}} (optional)',
+    fullName: 'Full name',
+    sex: 'Sex',
+    sexes: {
+      none: 'Not informed',
+      MALE: 'Male',
+      FEMALE: 'Female',
+    },
+    birthDate: 'Date of birth',
+    phone: 'Phone 1',
+    secondaryPhone: 'Phone 2',
+    email: 'Primary email',
+    emailHint: 'This is your sign-in email, already verified. To change it, use Security.',
+    secondaryEmail: 'Secondary email',
+    secondaryEmailHint: 'It does not need to be verified.',
+    postalCode: 'Postal code',
+    postalCodePlaceholder: '00000-000',
+    street: 'Street',
+    number: 'Number',
+    complement: 'Complement',
+    district: 'District',
+    city: 'City',
+    state: 'State',
+    statePlaceholder: 'State',
+    country: 'Country',
+    reference: 'Reference point',
+    instagram: 'Instagram',
+    facebook: 'Facebook',
+    linkedin: 'LinkedIn',
+    twitter: 'X (Twitter)',
+    youtube: 'YouTube',
+    socialPlaceholders: {
+      instagram: 'https://instagram.com/your-username',
+      facebook: 'https://facebook.com/your-username',
+      linkedin: 'https://linkedin.com/in/your-username',
+      twitter: 'https://x.com/your-username',
+      youtube: 'https://youtube.com/@your-channel',
+    },
+  },
+  actions: {
+    save: 'Save changes',
+    saving: 'Saving…',
+    discard: 'Discard changes',
+    retry: 'Try again',
+  },
+  success: {
+    saved: {
+      title: 'Profile updated',
+      description: 'Your data has been saved.',
+    },
+    avatarSaved: {
+      title: 'Photo updated',
+      description: 'The new photo is already on your profile.',
+    },
+    avatarRemoved: {
+      title: 'Photo removed',
+      description: 'Your profile shows your initials again.',
+    },
+    subscriptions: {
+      title: 'Subscriptions updated',
+      on: 'You will receive the community news by email.',
+      off: 'You will no longer receive the community news by email.',
+    },
+  },
+  notices: {
+    invalidData: {
+      title: 'Check the data',
+      description: 'Some fields were rejected. Fix the highlighted fields and save again.',
+    },
+    conflict: {
+      title: 'Profile changed elsewhere',
+      description: 'We reloaded the latest data. Review it and save again.',
+    },
+    accessDenied: {
+      title: 'Profile unavailable',
+      description: 'Only members have a profile.',
+    },
+    unavailable: {
+      title: 'Profile unavailable right now',
+      description: 'The service could not be reached. Try again in a moment.',
+    },
+    avatarType: {
+      title: 'Format not accepted',
+      description: 'Choose a JPEG, PNG or WebP photo.',
+    },
+    avatarSize: {
+      title: 'Photo too large',
+      description: 'Choose a photo up to 10 MB.',
+    },
+    avatarTransfer: {
+      title: 'The photo could not be uploaded',
+      description: 'The upload was interrupted. Check your connection and try again.',
+    },
+  },
+  security: {
+    accessEmail: 'Sign-in email',
+    password: 'Password',
+    passwordHint: 'Changing the password signs out the other open sessions of your account.',
+    changePassword: 'Change password',
+    changeEmail: 'Change email',
+  },
+  changePassword: {
+    title: 'Change password',
+    description: 'Enter your current password and choose a new, secure one.',
+    close: 'Close',
+    currentPassword: 'Current password',
+    newPassword: 'New password',
+    confirmPassword: 'Confirm new password',
+    submit: 'Change password',
+    submitting: 'Changing…',
+    cancel: 'Cancel',
+    success: {
+      title: 'Password changed',
+      description: 'The other sessions of your account have been signed out.',
+    },
+  },
+  changeEmail: {
+    title: 'Change sign-in email',
+    description:
+      'We will send a confirmation link to the new email. The current email stays valid until you open the link.',
+    close: 'Close',
+    newEmail: 'New email',
+    newEmailPlaceholder: 'name@example.com',
+    currentPassword: 'Current password',
+    submit: 'Send link',
+    submitting: 'Sending…',
+    cancel: 'Cancel',
+    success: {
+      title: 'Confirm the new email',
+      description: 'We sent a link to {{email}}. Also check your spam folder.',
+    },
+  },
+  securityNotices: {
+    invalidPassword: {
+      title: 'Wrong current password',
+      description: 'Check your current password and try again.',
+    },
+    weakPassword: {
+      title: 'Password not accepted',
+      description:
+        'The new password does not meet the security requirements or equals the current one.',
+    },
+    sameEmail: {
+      title: 'Same email',
+      description: 'This is already your sign-in email.',
+    },
+    emailTaken: {
+      title: 'Email in use',
+      description: 'An account with this email already exists.',
+    },
+    tooManyAttempts: {
+      title: 'Too many requests',
+      description: 'Wait a moment before trying again.',
+    },
+    invalidLink: {
+      title: 'Invalid or expired link',
+      description: 'Request the email change again from your profile.',
+    },
+    unavailable: {
+      title: 'Service unavailable right now',
+      description: 'The operation could not be completed. Try again in a moment.',
+    },
+  },
+  subscriptions: {
+    news: 'Receive community news by email',
+    newsHint: 'Announcements, events and news, sent to your sign-in email.',
+  },
+  confirmEmailChange: {
+    tagline: 'Your account protected so you stay connected to our community.',
+    title: 'Confirm new email',
+    confirming: 'Confirming your new email…',
+    goToApp: 'Go to my profile',
+    success: {
+      title: 'Email changed',
+      description: 'From now on, sign in with the new email.',
+    },
+  },
+  validation: {
+    required: 'Fill in this field.',
+    tooLong: 'Text longer than allowed.',
+    invalid: 'Invalid value.',
+    fullNameInvalid: 'Use only letters, spaces, apostrophe, period and hyphen.',
+    birthDateInvalid: 'Enter a date between 1900 and today.',
+    emailInvalid: 'Enter a valid email.',
+    postalCodeInvalid: 'Enter an 8-digit postal code.',
+    stateInvalid: 'Enter a state abbreviation (e.g. MS).',
+    socialLinkInvalid: 'Enter the link to your profile on this network.',
+    phoneIncomplete: 'Enter the full phone number, with area code.',
+    phoneInvalidAreaCode: 'Invalid area code.',
+    phoneInvalidNumber: 'Invalid phone number.',
+    passwordRequired: 'Enter the password.',
+    passwordTooShort: 'The password must be at least 8 characters long.',
+    passwordTooLong: 'The password must be at most 64 characters long.',
+    passwordEdgeWhitespace: 'The password cannot start or end with a space.',
+    passwordWeak: 'Weak password. Follow the requirements below.',
+    passwordMismatch: 'The passwords do not match.',
+    passwordSameAsCurrent: 'The new password must be different from the current one.',
+  },
+} as const satisfies Translations['profile'];

@@ -1280,6 +1280,7 @@ Clientes existentes (`src/shared/http`):
 
 - `bffClient`: BFF, na mesma origem (`/auth/*` e `/api/v1/*`, repassadas pelo Worker/proxy do Vite); trata 401 fora de `/auth/*` como sessão expirada;
 - `workerApiClient`: endpoints do próprio Worker (`/api/*`).
+- `keepServersAwake` (`wake-servers.ts`, chamado no `main.tsx`): ao abrir o site e ao voltar para a aba (no máximo a cada 5 min), chama `GET /api/v1/wake` no BFF, que acorda PostgreSQL e Core API; não bloqueia a tela.
 
 Regras:
 

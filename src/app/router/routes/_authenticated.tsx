@@ -6,8 +6,13 @@ const DASHBOARD_PATH = '/dashboard';
 
 export const Route = createFileRoute('/_authenticated')({
   // Exige sessão no BFF. Sem sessão, ou com o BFF indisponível, leva ao login (que exibe o motivo).
+  // Com a sessão em cache, a navegação não espera o BFF: ela é revalidada em segundo plano. Esperar
+  // aqui deixava o layout inteiro pendente e a tela era redesenhada a cada troca de página; sessão
+  // expirada continua sendo tratada pelo 401 do bffClient.
   beforeLoad: async ({ context: { queryClient }, location }) => {
-    const session = await queryClient.fetchQuery(authSessionQueryOptions).catch(() => null);
+    const session = await queryClient
+      .ensureQueryData({ ...authSessionQueryOptions, revalidateIfStale: true })
+      .catch(() => null);
 
     if (!session) {
       throw redirect({

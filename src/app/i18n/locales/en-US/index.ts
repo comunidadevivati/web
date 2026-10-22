@@ -10,6 +10,7 @@ import {
   members,
   organization,
   photos,
+  profile,
   users,
 } from '@/app/i18n/locales/en-US/features';
 
@@ -25,4 +26,5 @@ export const enUS = {
   members,
   gallery,
   photos,
+  profile,
 } as const satisfies Translations;

@@ -23,6 +23,8 @@ export const common = {
     album: 'Álbum',
     photos: 'Fotos',
     photoAlbum: 'Álbum de fotos',
+    profile: 'Perfil',
+    confirmEmailChange: 'Confirmar e-mail',
   },
   navigation: {
     home: 'Home',
@@ -37,6 +39,7 @@ export const common = {
     members: 'Membros',
     site: 'Site',
     albums: 'Álbuns',
+    profile: 'Perfil',
     login: 'Login',
     logout: 'Sair',
     emailNotVerified: 'Não verificado',

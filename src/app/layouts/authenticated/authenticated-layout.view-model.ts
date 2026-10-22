@@ -8,6 +8,7 @@ import { logoutUseCase } from '@/features/auth/application/use-cases/logout.use-
 import { resendEmailVerificationUseCase } from '@/features/auth/application/use-cases/resend-email-verification.use-case';
 import { TooManyAttemptsError } from '@/features/auth/domain/auth-session';
 import { EmailAlreadyVerifiedError } from '@/features/auth/domain/email-verification';
+import { profileQueryOptions } from '@/features/profile/application/queries/profile.query';
 import { notify } from '@/shared/feedback/notify';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
@@ -55,6 +56,15 @@ export const useAuthenticatedLayoutViewModel = () => {
   const isEmailVerified = user.emailVerified;
 
   const { isMember } = user;
+
+  // Foto do cabeçalho: só membros têm Perfil (e foto).
+  const { data: profile } = useQuery({ ...profileQueryOptions, enabled: isMember });
+
+  const userAvatarUrl = isMember ? (profile?.avatarUrl ?? null) : null;
+
+  const openProfile = () => {
+    void navigate({ to: '/perfil' });
+  };
 
   // Confirmação antes de reenviar o link de verificação do e-mail.
   const [isResendVerificationOpen, setIsResendVerificationOpen] = useState(false);
@@ -172,10 +182,12 @@ export const useAuthenticatedLayoutViewModel = () => {
     isMobileNavOpen,
     logout,
     openMobileNav,
+    openProfile,
     setIsMobileNavOpen,
     sidebarMode,
     toggleSidebarCollapse,
     toggleSidebarVisibility,
+    userAvatarUrl,
     userEmail,
     userInitials,
     userName,
