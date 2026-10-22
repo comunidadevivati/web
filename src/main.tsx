@@ -5,9 +5,12 @@ import { router } from '@/app/router/router';
 import { GlobalLoading, ServerWakeNotice, Toaster } from '@/components/organisms';
 import { TooltipProvider } from '@/components/ui';
 import '@/index.css';
+import { keepServersAwake } from '@/shared/http/wake-servers';
 import { RouterProvider } from '@tanstack/react-router';
 import { StrictMode } from 'react';
 import { createRoot } from 'react-dom/client';
+
+keepServersAwake();
 
 createRoot(document.getElementById('root')!).render(
   <StrictMode>
