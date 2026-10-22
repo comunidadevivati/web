@@ -1025,3 +1025,238 @@ export const photos = {
     },
   },
 } as const;
+
+export const profile = {
+  page: {
+    title: 'Meu perfil',
+    subtitle: 'Seus dados pessoais, endereço, redes sociais e as configurações da sua conta.',
+  },
+  avatar: {
+    alt: 'Foto de {{name}}',
+    change: 'Alterar foto',
+    add: 'Adicionar foto',
+    remove: 'Remover foto',
+    uploading: 'Enviando…',
+    hint: 'JPEG, PNG ou WebP de até 10 MB. A foto é recortada em formato quadrado.',
+  },
+  sections: {
+    personal: {
+      title: 'Dados pessoais',
+      description: 'Como você aparece para a comunidade e como podemos falar com você.',
+    },
+    address: {
+      title: 'Endereço',
+      description: 'Opcional. Se informar, preencha o endereço completo.',
+    },
+    social: {
+      title: 'Redes sociais',
+      description: 'Links dos seus perfis. Todos são opcionais.',
+    },
+    security: {
+      title: 'Segurança',
+      description: 'Senha e e-mail de acesso. As duas alterações pedem a sua senha atual.',
+    },
+    subscriptions: {
+      title: 'Inscrições',
+      description: 'Escolha o que você quer receber da comunidade.',
+    },
+  },
+  fields: {
+    optional: '{{label}} (opcional)',
+    fullName: 'Nome completo',
+    sex: 'Sexo',
+    sexes: {
+      none: 'Não informado',
+      MALE: 'Masculino',
+      FEMALE: 'Feminino',
+    },
+    birthDate: 'Data de nascimento',
+    phone: 'Telefone 1',
+    secondaryPhone: 'Telefone 2',
+    email: 'E-mail principal',
+    emailHint: 'É o seu e-mail de acesso, já verificado. Para trocá-lo, use Segurança.',
+    secondaryEmail: 'E-mail secundário',
+    secondaryEmailHint: 'Não precisa ser verificado.',
+    postalCode: 'CEP',
+    postalCodePlaceholder: '00000-000',
+    street: 'Logradouro',
+    number: 'Número',
+    complement: 'Complemento',
+    district: 'Bairro',
+    city: 'Cidade',
+    state: 'Estado',
+    statePlaceholder: 'UF',
+    country: 'País',
+    reference: 'Ponto de referência',
+    instagram: 'Instagram',
+    facebook: 'Facebook',
+    linkedin: 'LinkedIn',
+    twitter: 'X (Twitter)',
+    youtube: 'YouTube',
+    socialPlaceholders: {
+      instagram: 'https://instagram.com/seu-usuario',
+      facebook: 'https://facebook.com/seu-usuario',
+      linkedin: 'https://linkedin.com/in/seu-usuario',
+      twitter: 'https://x.com/seu-usuario',
+      youtube: 'https://youtube.com/@seu-canal',
+    },
+  },
+  actions: {
+    save: 'Salvar alterações',
+    saving: 'Salvando…',
+    discard: 'Descartar alterações',
+    retry: 'Tentar novamente',
+  },
+  success: {
+    saved: {
+      title: 'Perfil atualizado',
+      description: 'Seus dados foram salvos.',
+    },
+    avatarSaved: {
+      title: 'Foto atualizada',
+      description: 'A nova foto já aparece no seu perfil.',
+    },
+    avatarRemoved: {
+      title: 'Foto removida',
+      description: 'Seu perfil voltou a mostrar as iniciais do seu nome.',
+    },
+    subscriptions: {
+      title: 'Inscrições atualizadas',
+      on: 'Você vai receber as notícias da comunidade por e-mail.',
+      off: 'Você não vai mais receber as notícias da comunidade por e-mail.',
+    },
+  },
+  notices: {
+    invalidData: {
+      title: 'Confira os dados',
+      description: 'Alguns campos foram recusados. Corrija os campos destacados e salve de novo.',
+    },
+    conflict: {
+      title: 'Perfil alterado em outro lugar',
+      description: 'Recarregamos os dados mais recentes. Confira e salve de novo.',
+    },
+    accessDenied: {
+      title: 'Perfil indisponível',
+      description: 'Somente membros têm perfil.',
+    },
+    unavailable: {
+      title: 'Perfil indisponível no momento',
+      description: 'Não foi possível conectar ao serviço. Tente novamente em instantes.',
+    },
+    avatarType: {
+      title: 'Formato não aceito',
+      description: 'Escolha uma foto JPEG, PNG ou WebP.',
+    },
+    avatarSize: {
+      title: 'Foto muito grande',
+      description: 'Escolha uma foto de até 10 MB.',
+    },
+    avatarTransfer: {
+      title: 'Não foi possível enviar a foto',
+      description: 'O envio foi interrompido. Verifique a conexão e tente novamente.',
+    },
+  },
+  security: {
+    accessEmail: 'E-mail de acesso',
+    password: 'Senha',
+    passwordHint: 'Ao trocar a senha, as outras sessões abertas da sua conta são encerradas.',
+    changePassword: 'Alterar senha',
+    changeEmail: 'Alterar e-mail',
+  },
+  changePassword: {
+    title: 'Alterar senha',
+    description: 'Informe a senha atual e escolha uma nova senha segura.',
+    close: 'Fechar',
+    currentPassword: 'Senha atual',
+    newPassword: 'Nova senha',
+    confirmPassword: 'Confirmação da nova senha',
+    submit: 'Alterar senha',
+    submitting: 'Alterando…',
+    cancel: 'Cancelar',
+    success: {
+      title: 'Senha alterada',
+      description: 'As outras sessões da sua conta foram encerradas.',
+    },
+  },
+  changeEmail: {
+    title: 'Alterar e-mail de acesso',
+    description:
+      'Enviaremos um link de confirmação para o novo e-mail. O e-mail atual continua valendo até você abrir o link.',
+    close: 'Fechar',
+    newEmail: 'Novo e-mail',
+    newEmailPlaceholder: 'nome@exemplo.com',
+    currentPassword: 'Senha atual',
+    submit: 'Enviar link',
+    submitting: 'Enviando…',
+    cancel: 'Cancelar',
+    success: {
+      title: 'Confirme o novo e-mail',
+      description: 'Enviamos um link para {{email}}. Confira também a caixa de spam.',
+    },
+  },
+  securityNotices: {
+    invalidPassword: {
+      title: 'Senha atual incorreta',
+      description: 'Confira a senha atual e tente novamente.',
+    },
+    weakPassword: {
+      title: 'Senha não aceita',
+      description: 'A nova senha não atende aos requisitos de segurança ou é igual à atual.',
+    },
+    sameEmail: {
+      title: 'Mesmo e-mail',
+      description: 'Este já é o seu e-mail de acesso.',
+    },
+    emailTaken: {
+      title: 'E-mail em uso',
+      description: 'Já existe uma conta com este e-mail.',
+    },
+    tooManyAttempts: {
+      title: 'Muitas solicitações',
+      description: 'Aguarde alguns instantes antes de tentar novamente.',
+    },
+    invalidLink: {
+      title: 'Link inválido ou expirado',
+      description: 'Peça a troca de e-mail de novo pelo seu perfil.',
+    },
+    unavailable: {
+      title: 'Serviço indisponível no momento',
+      description: 'Não foi possível concluir a operação. Tente novamente em instantes.',
+    },
+  },
+  subscriptions: {
+    news: 'Receber notícias da comunidade por e-mail',
+    newsHint: 'Avisos, eventos e novidades, no seu e-mail de acesso.',
+  },
+  confirmEmailChange: {
+    tagline: 'Sua conta protegida para você continuar conectado à nossa comunidade.',
+    title: 'Confirmar novo e-mail',
+    confirming: 'Confirmando o seu novo e-mail…',
+    goToApp: 'Ir para o meu perfil',
+    success: {
+      title: 'E-mail alterado',
+      description: 'A partir de agora, entre com o novo e-mail.',
+    },
+  },
+  validation: {
+    required: 'Preencha este campo.',
+    tooLong: 'Texto maior que o permitido.',
+    invalid: 'Valor inválido.',
+    fullNameInvalid: 'Use somente letras, espaços, apóstrofo, ponto e hífen.',
+    birthDateInvalid: 'Informe uma data entre 1900 e hoje.',
+    emailInvalid: 'Informe um e-mail válido.',
+    postalCodeInvalid: 'Informe um CEP com 8 dígitos.',
+    stateInvalid: 'Informe a sigla de um estado (ex.: MS).',
+    socialLinkInvalid: 'Informe o link do seu perfil nesta rede.',
+    phoneIncomplete: 'Informe o telefone completo, com DDD.',
+    phoneInvalidAreaCode: 'DDD inválido.',
+    phoneInvalidNumber: 'Número de telefone inválido.',
+    passwordRequired: 'Informe a senha.',
+    passwordTooShort: 'A senha deve ter pelo menos 8 caracteres.',
+    passwordTooLong: 'A senha deve ter no máximo 64 caracteres.',
+    passwordEdgeWhitespace: 'A senha não pode começar nem terminar com espaço.',
+    passwordWeak: 'Senha fraca. Siga os requisitos abaixo.',
+    passwordMismatch: 'As senhas não conferem.',
+    passwordSameAsCurrent: 'A nova senha precisa ser diferente da atual.',
+  },
+} as const;

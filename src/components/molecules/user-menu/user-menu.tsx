@@ -1,6 +1,7 @@
 import {
   Avatar,
   AvatarFallback,
+  AvatarImage,
   Box,
   DropdownMenu,
   DropdownMenuContent,
@@ -12,7 +13,7 @@ import {
   Text,
 } from '@/components/ui';
 import { cn } from '@/lib/utils';
-import { ChevronDownIcon, LogOutIcon, MailIcon } from 'lucide-react';
+import { ChevronDownIcon, LogOutIcon, MailIcon, UserRoundIcon } from 'lucide-react';
 import { useTranslation } from 'react-i18next';
 
 const headerFallbackClassName = cn(
@@ -36,18 +37,24 @@ type UserMenuProps = {
   // false: exibe o badge "Não verificado" e a opção de reenviar o e-mail de verificação.
   emailVerified: boolean;
   initials: string;
+  // Foto do perfil (somente membros); sem ela, as iniciais.
+  avatarUrl?: string | null;
   onLogout: () => void;
+  // Ausente para quem não tem Perfil (ainda não é membro): o item não aparece.
+  onOpenProfile?: () => void;
   onResendVerification: () => void;
 };
 
 // Saudação, separador e avatar do usuário logado (por enquanto, com as iniciais) que abre o menu da conta.
 export const UserMenu = ({
+  avatarUrl,
   email,
   emailVerified,
   greetingName,
   initials,
   name,
   onLogout,
+  onOpenProfile,
   onResendVerification,
 }: UserMenuProps) => {
   const { t } = useTranslation();
@@ -70,6 +77,8 @@ export const UserMenu = ({
           "
         >
           <Avatar className="size-9 after:border-header-accent/40">
+            {avatarUrl && <AvatarImage alt="" src={avatarUrl} />}
+
             <AvatarFallback className={headerFallbackClassName}>{initials}</AvatarFallback>
           </Avatar>
 
@@ -84,6 +93,8 @@ export const UserMenu = ({
           <DropdownMenuGroup>
             <DropdownMenuLabel className="flex items-center gap-3 px-2 py-2">
               <Avatar size="lg">
+                {avatarUrl && <AvatarImage alt="" src={avatarUrl} />}
+
                 <AvatarFallback className="bg-primary/15 font-semibold text-primary-strong">
                   {initials}
                 </AvatarFallback>
@@ -106,6 +117,13 @@ export const UserMenu = ({
           </DropdownMenuGroup>
 
           <DropdownMenuSeparator />
+
+          {onOpenProfile && (
+            <DropdownMenuItem className="px-2 py-2" onClick={onOpenProfile}>
+              <UserRoundIcon />
+              {t('navigation.profile')}
+            </DropdownMenuItem>
+          )}
 
           {!emailVerified && (
             <DropdownMenuItem className="px-2 py-2" onClick={onResendVerification}>

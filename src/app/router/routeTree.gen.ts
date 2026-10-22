@@ -11,6 +11,7 @@
 import { Route as rootRouteImport } from './routes/__root'
 import { Route as IndexRouteImport } from './routes/index'
 import { Route as AuthenticatedRouteImport } from './routes/_authenticated'
+import { Route as ConfirmEmailChangeRouteImport } from './routes/confirm-email-change'
 import { Route as ContatoRouteImport } from './routes/contato'
 import { Route as EventosRouteImport } from './routes/eventos'
 import { Route as HistoriaRouteImport } from './routes/historia'
@@ -21,6 +22,7 @@ import { Route as WifiVisitantesRouteImport } from './routes/wifi-visitantes'
 import { Route as AuthenticatedCongregacoesRouteImport } from './routes/_authenticated.congregacoes'
 import { Route as AuthenticatedDashboardRouteImport } from './routes/_authenticated.dashboard'
 import { Route as AuthenticatedOrganizacaoRouteImport } from './routes/_authenticated.organizacao'
+import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated.perfil'
 import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated.usuarios'
 import { Route as FotosIndexRouteImport } from './routes/fotos.index'
 import { Route as FotosSlugRouteImport } from './routes/fotos.$slug'
@@ -36,6 +38,11 @@ const IndexRoute = IndexRouteImport.update({
 } as any)
 const AuthenticatedRoute = AuthenticatedRouteImport.update({
   id: '/_authenticated',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ConfirmEmailChangeRoute = ConfirmEmailChangeRouteImport.update({
+  id: '/confirm-email-change',
+  path: '/confirm-email-change',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ContatoRoute = ContatoRouteImport.update({
@@ -90,6 +97,11 @@ const AuthenticatedOrganizacaoRoute =
     path: '/organizacao',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedPerfilRoute = AuthenticatedPerfilRouteImport.update({
+  id: '/perfil',
+  path: '/perfil',
+  getParentRoute: () => AuthenticatedRoute,
+} as any)
 const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
   id: '/usuarios',
   path: '/usuarios',
@@ -132,6 +144,7 @@ const AuthenticatedSiteAlbunsAlbumIdRoute =
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
+  '/confirm-email-change': typeof ConfirmEmailChangeRoute
   '/contato': typeof ContatoRoute
   '/eventos': typeof EventosRoute
   '/historia': typeof HistoriaRoute
@@ -142,6 +155,7 @@ export interface FileRoutesByFullPath {
   '/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
   '/fotos/$slug': typeof FotosSlugRoute
   '/fotos/': typeof FotosIndexRoute
@@ -152,6 +166,7 @@ export interface FileRoutesByFullPath {
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
+  '/confirm-email-change': typeof ConfirmEmailChangeRoute
   '/contato': typeof ContatoRoute
   '/eventos': typeof EventosRoute
   '/historia': typeof HistoriaRoute
@@ -162,6 +177,7 @@ export interface FileRoutesByTo {
   '/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/dashboard': typeof AuthenticatedDashboardRoute
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/perfil': typeof AuthenticatedPerfilRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
   '/fotos/$slug': typeof FotosSlugRoute
   '/fotos': typeof FotosIndexRoute
@@ -174,6 +190,7 @@ export interface FileRoutesById {
   __root__: typeof rootRouteImport
   '/': typeof IndexRoute
   '/_authenticated': typeof AuthenticatedRouteWithChildren
+  '/confirm-email-change': typeof ConfirmEmailChangeRoute
   '/contato': typeof ContatoRoute
   '/eventos': typeof EventosRoute
   '/historia': typeof HistoriaRoute
@@ -184,6 +201,7 @@ export interface FileRoutesById {
   '/_authenticated/congregacoes': typeof AuthenticatedCongregacoesRoute
   '/_authenticated/dashboard': typeof AuthenticatedDashboardRoute
   '/_authenticated/organizacao': typeof AuthenticatedOrganizacaoRoute
+  '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
   '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
   '/fotos/$slug': typeof FotosSlugRoute
   '/fotos/': typeof FotosIndexRoute
@@ -196,6 +214,7 @@ export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
   fullPaths:
     | '/'
+    | '/confirm-email-change'
     | '/contato'
     | '/eventos'
     | '/historia'
@@ -206,6 +225,7 @@ export interface FileRouteTypes {
     | '/congregacoes'
     | '/dashboard'
     | '/organizacao'
+    | '/perfil'
     | '/usuarios'
     | '/fotos/$slug'
     | '/fotos/'
@@ -216,6 +236,7 @@ export interface FileRouteTypes {
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
+    | '/confirm-email-change'
     | '/contato'
     | '/eventos'
     | '/historia'
@@ -226,6 +247,7 @@ export interface FileRouteTypes {
     | '/congregacoes'
     | '/dashboard'
     | '/organizacao'
+    | '/perfil'
     | '/usuarios'
     | '/fotos/$slug'
     | '/fotos'
@@ -237,6 +259,7 @@ export interface FileRouteTypes {
     | '__root__'
     | '/'
     | '/_authenticated'
+    | '/confirm-email-change'
     | '/contato'
     | '/eventos'
     | '/historia'
@@ -247,6 +270,7 @@ export interface FileRouteTypes {
     | '/_authenticated/congregacoes'
     | '/_authenticated/dashboard'
     | '/_authenticated/organizacao'
+    | '/_authenticated/perfil'
     | '/_authenticated/usuarios'
     | '/fotos/$slug'
     | '/fotos/'
@@ -259,6 +283,7 @@ export interface FileRouteTypes {
 export interface RootRouteChildren {
   IndexRoute: typeof IndexRoute
   AuthenticatedRoute: typeof AuthenticatedRouteWithChildren
+  ConfirmEmailChangeRoute: typeof ConfirmEmailChangeRoute
   ContatoRoute: typeof ContatoRoute
   EventosRoute: typeof EventosRoute
   HistoriaRoute: typeof HistoriaRoute
@@ -284,6 +309,13 @@ declare module '@tanstack/react-router' {
       path: ''
       fullPath: '/'
       preLoaderRoute: typeof AuthenticatedRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/confirm-email-change': {
+      id: '/confirm-email-change'
+      path: '/confirm-email-change'
+      fullPath: '/confirm-email-change'
+      preLoaderRoute: typeof ConfirmEmailChangeRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/contato': {
@@ -356,6 +388,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedOrganizacaoRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/perfil': {
+      id: '/_authenticated/perfil'
+      path: '/perfil'
+      fullPath: '/perfil'
+      preLoaderRoute: typeof AuthenticatedPerfilRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/usuarios': {
       id: '/_authenticated/usuarios'
       path: '/usuarios'
@@ -412,6 +451,7 @@ interface AuthenticatedRouteChildren {
   AuthenticatedCongregacoesRoute: typeof AuthenticatedCongregacoesRoute
   AuthenticatedDashboardRoute: typeof AuthenticatedDashboardRoute
   AuthenticatedOrganizacaoRoute: typeof AuthenticatedOrganizacaoRoute
+  AuthenticatedPerfilRoute: typeof AuthenticatedPerfilRoute
   AuthenticatedUsuariosRoute: typeof AuthenticatedUsuariosRoute
   AuthenticatedMembrosMemberIdRoute: typeof AuthenticatedMembrosMemberIdRoute
   AuthenticatedMembrosIndexRoute: typeof AuthenticatedMembrosIndexRoute
@@ -423,6 +463,7 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedCongregacoesRoute: AuthenticatedCongregacoesRoute,
   AuthenticatedDashboardRoute: AuthenticatedDashboardRoute,
   AuthenticatedOrganizacaoRoute: AuthenticatedOrganizacaoRoute,
+  AuthenticatedPerfilRoute: AuthenticatedPerfilRoute,
   AuthenticatedUsuariosRoute: AuthenticatedUsuariosRoute,
   AuthenticatedMembrosMemberIdRoute: AuthenticatedMembrosMemberIdRoute,
   AuthenticatedMembrosIndexRoute: AuthenticatedMembrosIndexRoute,
@@ -437,6 +478,7 @@ const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
 const rootRouteChildren: RootRouteChildren = {
   IndexRoute: IndexRoute,
   AuthenticatedRoute: AuthenticatedRouteWithChildren,
+  ConfirmEmailChangeRoute: ConfirmEmailChangeRoute,
   ContatoRoute: ContatoRoute,
   EventosRoute: EventosRoute,
   HistoriaRoute: HistoriaRoute,

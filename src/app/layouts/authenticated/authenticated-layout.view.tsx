@@ -58,10 +58,12 @@ export const AuthenticatedLayoutView = () => {
     isMobileNavOpen,
     logout,
     openMobileNav,
+    openProfile,
     setIsMobileNavOpen,
     sidebarMode,
     toggleSidebarCollapse,
     toggleSidebarVisibility,
+    userAvatarUrl,
     userEmail,
     userInitials,
     userName,
@@ -197,12 +199,14 @@ export const AuthenticatedLayoutView = () => {
 
           <Box className="ml-auto flex items-center">
             <UserMenu
+              avatarUrl={userAvatarUrl}
               email={userEmail}
               emailVerified={isEmailVerified}
               greetingName={userName || userEmail}
               initials={userInitials}
               name={userName}
               onLogout={logout}
+              onOpenProfile={isMember ? openProfile : undefined}
               onResendVerification={openResendVerification}
             />
           </Box>
