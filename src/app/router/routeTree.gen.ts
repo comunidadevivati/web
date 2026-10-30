@@ -24,12 +24,23 @@ import { Route as AuthenticatedDashboardRouteImport } from './routes/_authentica
 import { Route as AuthenticatedOrganizacaoRouteImport } from './routes/_authenticated.organizacao'
 import { Route as AuthenticatedPerfilRouteImport } from './routes/_authenticated.perfil'
 import { Route as AuthenticatedUsuariosRouteImport } from './routes/_authenticated.usuarios'
+import { Route as FormulariosResponderRouteImport } from './routes/formularios.responder'
 import { Route as FotosIndexRouteImport } from './routes/fotos.index'
 import { Route as FotosSlugRouteImport } from './routes/fotos.$slug'
 import { Route as AuthenticatedMembrosIndexRouteImport } from './routes/_authenticated.membros.index'
 import { Route as AuthenticatedMembrosMemberIdRouteImport } from './routes/_authenticated.membros.$memberId'
+import { Route as AuthenticatedComunicacaoEmailsIndexRouteImport } from './routes/_authenticated.comunicacao.emails.index'
+import { Route as AuthenticatedDepartamentosLiderancaIndexRouteImport } from './routes/_authenticated.departamentos.lideranca.index'
 import { Route as AuthenticatedSiteAlbunsIndexRouteImport } from './routes/_authenticated.site.albuns.index'
 import { Route as AuthenticatedSiteAlbunsAlbumIdRouteImport } from './routes/_authenticated.site.albuns.$albumId'
+import { Route as AuthenticatedComunicacaoEmailsGruposIndexRouteImport } from './routes/_authenticated.comunicacao.emails.grupos.index'
+import { Route as AuthenticatedComunicacaoEmailsGruposGroupIdRouteImport } from './routes/_authenticated.comunicacao.emails.grupos.$groupId'
+import { Route as AuthenticatedComunicacaoEmailsGruposNovoRouteImport } from './routes/_authenticated.comunicacao.emails.grupos.novo'
+import { Route as AuthenticatedDepartamentosLiderancaFormulariosIndexRouteImport } from './routes/_authenticated.departamentos.lideranca.formularios.index'
+import { Route as AuthenticatedDepartamentosLiderancaFormulariosNovoRouteImport } from './routes/_authenticated.departamentos.lideranca.formularios.novo'
+import { Route as AuthenticatedDepartamentosLiderancaFormulariosFormIdIndexRouteImport } from './routes/_authenticated.departamentos.lideranca.formularios.$formId.index'
+import { Route as AuthenticatedDepartamentosLiderancaFormulariosFormIdRelatorioRouteImport } from './routes/_authenticated.departamentos.lideranca.formularios.$formId.relatorio'
+import { Route as AuthenticatedDepartamentosLiderancaFormulariosFormIdRespostasRouteImport } from './routes/_authenticated.departamentos.lideranca.formularios.$formId.respostas'
 
 const IndexRoute = IndexRouteImport.update({
   id: '/',
@@ -107,6 +118,11 @@ const AuthenticatedUsuariosRoute = AuthenticatedUsuariosRouteImport.update({
   path: '/usuarios',
   getParentRoute: () => AuthenticatedRoute,
 } as any)
+const FormulariosResponderRoute = FormulariosResponderRouteImport.update({
+  id: '/formularios/responder',
+  path: '/formularios/responder',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const FotosIndexRoute = FotosIndexRouteImport.update({
   id: '/fotos/',
   path: '/fotos/',
@@ -129,6 +145,18 @@ const AuthenticatedMembrosMemberIdRoute =
     path: '/membros/$memberId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedComunicacaoEmailsIndexRoute =
+  AuthenticatedComunicacaoEmailsIndexRouteImport.update({
+    id: '/comunicacao/emails/',
+    path: '/comunicacao/emails/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDepartamentosLiderancaIndexRoute =
+  AuthenticatedDepartamentosLiderancaIndexRouteImport.update({
+    id: '/departamentos/lideranca/',
+    path: '/departamentos/lideranca/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
 const AuthenticatedSiteAlbunsIndexRoute =
   AuthenticatedSiteAlbunsIndexRouteImport.update({
     id: '/site/albuns/',
@@ -141,6 +169,58 @@ const AuthenticatedSiteAlbunsAlbumIdRoute =
     path: '/site/albuns/$albumId',
     getParentRoute: () => AuthenticatedRoute,
   } as any)
+const AuthenticatedComunicacaoEmailsGruposIndexRoute =
+  AuthenticatedComunicacaoEmailsGruposIndexRouteImport.update({
+    id: '/comunicacao/emails/grupos/',
+    path: '/comunicacao/emails/grupos/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedComunicacaoEmailsGruposGroupIdRoute =
+  AuthenticatedComunicacaoEmailsGruposGroupIdRouteImport.update({
+    id: '/comunicacao/emails/grupos/$groupId',
+    path: '/comunicacao/emails/grupos/$groupId',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedComunicacaoEmailsGruposNovoRoute =
+  AuthenticatedComunicacaoEmailsGruposNovoRouteImport.update({
+    id: '/comunicacao/emails/grupos/novo',
+    path: '/comunicacao/emails/grupos/novo',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDepartamentosLiderancaFormulariosIndexRoute =
+  AuthenticatedDepartamentosLiderancaFormulariosIndexRouteImport.update({
+    id: '/departamentos/lideranca/formularios/',
+    path: '/departamentos/lideranca/formularios/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDepartamentosLiderancaFormulariosNovoRoute =
+  AuthenticatedDepartamentosLiderancaFormulariosNovoRouteImport.update({
+    id: '/departamentos/lideranca/formularios/novo',
+    path: '/departamentos/lideranca/formularios/novo',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDepartamentosLiderancaFormulariosFormIdIndexRoute =
+  AuthenticatedDepartamentosLiderancaFormulariosFormIdIndexRouteImport.update({
+    id: '/departamentos/lideranca/formularios/$formId/',
+    path: '/departamentos/lideranca/formularios/$formId/',
+    getParentRoute: () => AuthenticatedRoute,
+  } as any)
+const AuthenticatedDepartamentosLiderancaFormulariosFormIdRelatorioRoute =
+  AuthenticatedDepartamentosLiderancaFormulariosFormIdRelatorioRouteImport.update(
+    {
+      id: '/departamentos/lideranca/formularios/$formId/relatorio',
+      path: '/departamentos/lideranca/formularios/$formId/relatorio',
+      getParentRoute: () => AuthenticatedRoute,
+    } as any,
+  )
+const AuthenticatedDepartamentosLiderancaFormulariosFormIdRespostasRoute =
+  AuthenticatedDepartamentosLiderancaFormulariosFormIdRespostasRouteImport.update(
+    {
+      id: '/departamentos/lideranca/formularios/$formId/respostas',
+      path: '/departamentos/lideranca/formularios/$formId/respostas',
+      getParentRoute: () => AuthenticatedRoute,
+    } as any,
+  )
 
 export interface FileRoutesByFullPath {
   '/': typeof IndexRoute
@@ -157,12 +237,23 @@ export interface FileRoutesByFullPath {
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/formularios/responder': typeof FormulariosResponderRoute
   '/fotos/$slug': typeof FotosSlugRoute
   '/fotos/': typeof FotosIndexRoute
   '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/membros/': typeof AuthenticatedMembrosIndexRoute
   '/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  '/comunicacao/emails/': typeof AuthenticatedComunicacaoEmailsIndexRoute
+  '/departamentos/lideranca/': typeof AuthenticatedDepartamentosLiderancaIndexRoute
   '/site/albuns/': typeof AuthenticatedSiteAlbunsIndexRoute
+  '/comunicacao/emails/grupos/$groupId': typeof AuthenticatedComunicacaoEmailsGruposGroupIdRoute
+  '/comunicacao/emails/grupos/novo': typeof AuthenticatedComunicacaoEmailsGruposNovoRoute
+  '/departamentos/lideranca/formularios/novo': typeof AuthenticatedDepartamentosLiderancaFormulariosNovoRoute
+  '/comunicacao/emails/grupos/': typeof AuthenticatedComunicacaoEmailsGruposIndexRoute
+  '/departamentos/lideranca/formularios/': typeof AuthenticatedDepartamentosLiderancaFormulariosIndexRoute
+  '/departamentos/lideranca/formularios/$formId/relatorio': typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdRelatorioRoute
+  '/departamentos/lideranca/formularios/$formId/respostas': typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdRespostasRoute
+  '/departamentos/lideranca/formularios/$formId/': typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdIndexRoute
 }
 export interface FileRoutesByTo {
   '/': typeof IndexRoute
@@ -179,12 +270,23 @@ export interface FileRoutesByTo {
   '/organizacao': typeof AuthenticatedOrganizacaoRoute
   '/perfil': typeof AuthenticatedPerfilRoute
   '/usuarios': typeof AuthenticatedUsuariosRoute
+  '/formularios/responder': typeof FormulariosResponderRoute
   '/fotos/$slug': typeof FotosSlugRoute
   '/fotos': typeof FotosIndexRoute
   '/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/membros': typeof AuthenticatedMembrosIndexRoute
   '/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  '/comunicacao/emails': typeof AuthenticatedComunicacaoEmailsIndexRoute
+  '/departamentos/lideranca': typeof AuthenticatedDepartamentosLiderancaIndexRoute
   '/site/albuns': typeof AuthenticatedSiteAlbunsIndexRoute
+  '/comunicacao/emails/grupos/$groupId': typeof AuthenticatedComunicacaoEmailsGruposGroupIdRoute
+  '/comunicacao/emails/grupos/novo': typeof AuthenticatedComunicacaoEmailsGruposNovoRoute
+  '/departamentos/lideranca/formularios/novo': typeof AuthenticatedDepartamentosLiderancaFormulariosNovoRoute
+  '/comunicacao/emails/grupos': typeof AuthenticatedComunicacaoEmailsGruposIndexRoute
+  '/departamentos/lideranca/formularios': typeof AuthenticatedDepartamentosLiderancaFormulariosIndexRoute
+  '/departamentos/lideranca/formularios/$formId/relatorio': typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdRelatorioRoute
+  '/departamentos/lideranca/formularios/$formId/respostas': typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdRespostasRoute
+  '/departamentos/lideranca/formularios/$formId': typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdIndexRoute
 }
 export interface FileRoutesById {
   __root__: typeof rootRouteImport
@@ -203,12 +305,23 @@ export interface FileRoutesById {
   '/_authenticated/organizacao': typeof AuthenticatedOrganizacaoRoute
   '/_authenticated/perfil': typeof AuthenticatedPerfilRoute
   '/_authenticated/usuarios': typeof AuthenticatedUsuariosRoute
+  '/formularios/responder': typeof FormulariosResponderRoute
   '/fotos/$slug': typeof FotosSlugRoute
   '/fotos/': typeof FotosIndexRoute
   '/_authenticated/membros/$memberId': typeof AuthenticatedMembrosMemberIdRoute
   '/_authenticated/membros/': typeof AuthenticatedMembrosIndexRoute
   '/_authenticated/site/albuns/$albumId': typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  '/_authenticated/comunicacao/emails/': typeof AuthenticatedComunicacaoEmailsIndexRoute
+  '/_authenticated/departamentos/lideranca/': typeof AuthenticatedDepartamentosLiderancaIndexRoute
   '/_authenticated/site/albuns/': typeof AuthenticatedSiteAlbunsIndexRoute
+  '/_authenticated/comunicacao/emails/grupos/$groupId': typeof AuthenticatedComunicacaoEmailsGruposGroupIdRoute
+  '/_authenticated/comunicacao/emails/grupos/novo': typeof AuthenticatedComunicacaoEmailsGruposNovoRoute
+  '/_authenticated/departamentos/lideranca/formularios/novo': typeof AuthenticatedDepartamentosLiderancaFormulariosNovoRoute
+  '/_authenticated/comunicacao/emails/grupos/': typeof AuthenticatedComunicacaoEmailsGruposIndexRoute
+  '/_authenticated/departamentos/lideranca/formularios/': typeof AuthenticatedDepartamentosLiderancaFormulariosIndexRoute
+  '/_authenticated/departamentos/lideranca/formularios/$formId/relatorio': typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdRelatorioRoute
+  '/_authenticated/departamentos/lideranca/formularios/$formId/respostas': typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdRespostasRoute
+  '/_authenticated/departamentos/lideranca/formularios/$formId/': typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdIndexRoute
 }
 export interface FileRouteTypes {
   fileRoutesByFullPath: FileRoutesByFullPath
@@ -227,12 +340,23 @@ export interface FileRouteTypes {
     | '/organizacao'
     | '/perfil'
     | '/usuarios'
+    | '/formularios/responder'
     | '/fotos/$slug'
     | '/fotos/'
     | '/membros/$memberId'
     | '/membros/'
     | '/site/albuns/$albumId'
+    | '/comunicacao/emails/'
+    | '/departamentos/lideranca/'
     | '/site/albuns/'
+    | '/comunicacao/emails/grupos/$groupId'
+    | '/comunicacao/emails/grupos/novo'
+    | '/departamentos/lideranca/formularios/novo'
+    | '/comunicacao/emails/grupos/'
+    | '/departamentos/lideranca/formularios/'
+    | '/departamentos/lideranca/formularios/$formId/relatorio'
+    | '/departamentos/lideranca/formularios/$formId/respostas'
+    | '/departamentos/lideranca/formularios/$formId/'
   fileRoutesByTo: FileRoutesByTo
   to:
     | '/'
@@ -249,12 +373,23 @@ export interface FileRouteTypes {
     | '/organizacao'
     | '/perfil'
     | '/usuarios'
+    | '/formularios/responder'
     | '/fotos/$slug'
     | '/fotos'
     | '/membros/$memberId'
     | '/membros'
     | '/site/albuns/$albumId'
+    | '/comunicacao/emails'
+    | '/departamentos/lideranca'
     | '/site/albuns'
+    | '/comunicacao/emails/grupos/$groupId'
+    | '/comunicacao/emails/grupos/novo'
+    | '/departamentos/lideranca/formularios/novo'
+    | '/comunicacao/emails/grupos'
+    | '/departamentos/lideranca/formularios'
+    | '/departamentos/lideranca/formularios/$formId/relatorio'
+    | '/departamentos/lideranca/formularios/$formId/respostas'
+    | '/departamentos/lideranca/formularios/$formId'
   id:
     | '__root__'
     | '/'
@@ -272,12 +407,23 @@ export interface FileRouteTypes {
     | '/_authenticated/organizacao'
     | '/_authenticated/perfil'
     | '/_authenticated/usuarios'
+    | '/formularios/responder'
     | '/fotos/$slug'
     | '/fotos/'
     | '/_authenticated/membros/$memberId'
     | '/_authenticated/membros/'
     | '/_authenticated/site/albuns/$albumId'
+    | '/_authenticated/comunicacao/emails/'
+    | '/_authenticated/departamentos/lideranca/'
     | '/_authenticated/site/albuns/'
+    | '/_authenticated/comunicacao/emails/grupos/$groupId'
+    | '/_authenticated/comunicacao/emails/grupos/novo'
+    | '/_authenticated/departamentos/lideranca/formularios/novo'
+    | '/_authenticated/comunicacao/emails/grupos/'
+    | '/_authenticated/departamentos/lideranca/formularios/'
+    | '/_authenticated/departamentos/lideranca/formularios/$formId/relatorio'
+    | '/_authenticated/departamentos/lideranca/formularios/$formId/respostas'
+    | '/_authenticated/departamentos/lideranca/formularios/$formId/'
   fileRoutesById: FileRoutesById
 }
 export interface RootRouteChildren {
@@ -291,6 +437,7 @@ export interface RootRouteChildren {
   ResetPasswordRoute: typeof ResetPasswordRoute
   VerifyEmailRoute: typeof VerifyEmailRoute
   WifiVisitantesRoute: typeof WifiVisitantesRoute
+  FormulariosResponderRoute: typeof FormulariosResponderRoute
   FotosSlugRoute: typeof FotosSlugRoute
   FotosIndexRoute: typeof FotosIndexRoute
 }
@@ -402,6 +549,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedUsuariosRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/formularios/responder': {
+      id: '/formularios/responder'
+      path: '/formularios/responder'
+      fullPath: '/formularios/responder'
+      preLoaderRoute: typeof FormulariosResponderRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/fotos/': {
       id: '/fotos/'
       path: '/fotos'
@@ -430,6 +584,20 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedMembrosMemberIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/comunicacao/emails/': {
+      id: '/_authenticated/comunicacao/emails/'
+      path: '/comunicacao/emails'
+      fullPath: '/comunicacao/emails/'
+      preLoaderRoute: typeof AuthenticatedComunicacaoEmailsIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/departamentos/lideranca/': {
+      id: '/_authenticated/departamentos/lideranca/'
+      path: '/departamentos/lideranca'
+      fullPath: '/departamentos/lideranca/'
+      preLoaderRoute: typeof AuthenticatedDepartamentosLiderancaIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
     '/_authenticated/site/albuns/': {
       id: '/_authenticated/site/albuns/'
       path: '/site/albuns'
@@ -444,6 +612,62 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof AuthenticatedSiteAlbunsAlbumIdRouteImport
       parentRoute: typeof AuthenticatedRoute
     }
+    '/_authenticated/comunicacao/emails/grupos/': {
+      id: '/_authenticated/comunicacao/emails/grupos/'
+      path: '/comunicacao/emails/grupos'
+      fullPath: '/comunicacao/emails/grupos/'
+      preLoaderRoute: typeof AuthenticatedComunicacaoEmailsGruposIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/comunicacao/emails/grupos/$groupId': {
+      id: '/_authenticated/comunicacao/emails/grupos/$groupId'
+      path: '/comunicacao/emails/grupos/$groupId'
+      fullPath: '/comunicacao/emails/grupos/$groupId'
+      preLoaderRoute: typeof AuthenticatedComunicacaoEmailsGruposGroupIdRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/comunicacao/emails/grupos/novo': {
+      id: '/_authenticated/comunicacao/emails/grupos/novo'
+      path: '/comunicacao/emails/grupos/novo'
+      fullPath: '/comunicacao/emails/grupos/novo'
+      preLoaderRoute: typeof AuthenticatedComunicacaoEmailsGruposNovoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/departamentos/lideranca/formularios/': {
+      id: '/_authenticated/departamentos/lideranca/formularios/'
+      path: '/departamentos/lideranca/formularios'
+      fullPath: '/departamentos/lideranca/formularios/'
+      preLoaderRoute: typeof AuthenticatedDepartamentosLiderancaFormulariosIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/departamentos/lideranca/formularios/novo': {
+      id: '/_authenticated/departamentos/lideranca/formularios/novo'
+      path: '/departamentos/lideranca/formularios/novo'
+      fullPath: '/departamentos/lideranca/formularios/novo'
+      preLoaderRoute: typeof AuthenticatedDepartamentosLiderancaFormulariosNovoRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/departamentos/lideranca/formularios/$formId/': {
+      id: '/_authenticated/departamentos/lideranca/formularios/$formId/'
+      path: '/departamentos/lideranca/formularios/$formId'
+      fullPath: '/departamentos/lideranca/formularios/$formId/'
+      preLoaderRoute: typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdIndexRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/departamentos/lideranca/formularios/$formId/relatorio': {
+      id: '/_authenticated/departamentos/lideranca/formularios/$formId/relatorio'
+      path: '/departamentos/lideranca/formularios/$formId/relatorio'
+      fullPath: '/departamentos/lideranca/formularios/$formId/relatorio'
+      preLoaderRoute: typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdRelatorioRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
+    '/_authenticated/departamentos/lideranca/formularios/$formId/respostas': {
+      id: '/_authenticated/departamentos/lideranca/formularios/$formId/respostas'
+      path: '/departamentos/lideranca/formularios/$formId/respostas'
+      fullPath: '/departamentos/lideranca/formularios/$formId/respostas'
+      preLoaderRoute: typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdRespostasRouteImport
+      parentRoute: typeof AuthenticatedRoute
+    }
   }
 }
 
@@ -456,7 +680,17 @@ interface AuthenticatedRouteChildren {
   AuthenticatedMembrosMemberIdRoute: typeof AuthenticatedMembrosMemberIdRoute
   AuthenticatedMembrosIndexRoute: typeof AuthenticatedMembrosIndexRoute
   AuthenticatedSiteAlbunsAlbumIdRoute: typeof AuthenticatedSiteAlbunsAlbumIdRoute
+  AuthenticatedComunicacaoEmailsIndexRoute: typeof AuthenticatedComunicacaoEmailsIndexRoute
+  AuthenticatedDepartamentosLiderancaIndexRoute: typeof AuthenticatedDepartamentosLiderancaIndexRoute
   AuthenticatedSiteAlbunsIndexRoute: typeof AuthenticatedSiteAlbunsIndexRoute
+  AuthenticatedComunicacaoEmailsGruposGroupIdRoute: typeof AuthenticatedComunicacaoEmailsGruposGroupIdRoute
+  AuthenticatedComunicacaoEmailsGruposNovoRoute: typeof AuthenticatedComunicacaoEmailsGruposNovoRoute
+  AuthenticatedDepartamentosLiderancaFormulariosNovoRoute: typeof AuthenticatedDepartamentosLiderancaFormulariosNovoRoute
+  AuthenticatedComunicacaoEmailsGruposIndexRoute: typeof AuthenticatedComunicacaoEmailsGruposIndexRoute
+  AuthenticatedDepartamentosLiderancaFormulariosIndexRoute: typeof AuthenticatedDepartamentosLiderancaFormulariosIndexRoute
+  AuthenticatedDepartamentosLiderancaFormulariosFormIdRelatorioRoute: typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdRelatorioRoute
+  AuthenticatedDepartamentosLiderancaFormulariosFormIdRespostasRoute: typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdRespostasRoute
+  AuthenticatedDepartamentosLiderancaFormulariosFormIdIndexRoute: typeof AuthenticatedDepartamentosLiderancaFormulariosFormIdIndexRoute
 }
 
 const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
@@ -468,7 +702,27 @@ const AuthenticatedRouteChildren: AuthenticatedRouteChildren = {
   AuthenticatedMembrosMemberIdRoute: AuthenticatedMembrosMemberIdRoute,
   AuthenticatedMembrosIndexRoute: AuthenticatedMembrosIndexRoute,
   AuthenticatedSiteAlbunsAlbumIdRoute: AuthenticatedSiteAlbunsAlbumIdRoute,
+  AuthenticatedComunicacaoEmailsIndexRoute:
+    AuthenticatedComunicacaoEmailsIndexRoute,
+  AuthenticatedDepartamentosLiderancaIndexRoute:
+    AuthenticatedDepartamentosLiderancaIndexRoute,
   AuthenticatedSiteAlbunsIndexRoute: AuthenticatedSiteAlbunsIndexRoute,
+  AuthenticatedComunicacaoEmailsGruposGroupIdRoute:
+    AuthenticatedComunicacaoEmailsGruposGroupIdRoute,
+  AuthenticatedComunicacaoEmailsGruposNovoRoute:
+    AuthenticatedComunicacaoEmailsGruposNovoRoute,
+  AuthenticatedDepartamentosLiderancaFormulariosNovoRoute:
+    AuthenticatedDepartamentosLiderancaFormulariosNovoRoute,
+  AuthenticatedComunicacaoEmailsGruposIndexRoute:
+    AuthenticatedComunicacaoEmailsGruposIndexRoute,
+  AuthenticatedDepartamentosLiderancaFormulariosIndexRoute:
+    AuthenticatedDepartamentosLiderancaFormulariosIndexRoute,
+  AuthenticatedDepartamentosLiderancaFormulariosFormIdRelatorioRoute:
+    AuthenticatedDepartamentosLiderancaFormulariosFormIdRelatorioRoute,
+  AuthenticatedDepartamentosLiderancaFormulariosFormIdRespostasRoute:
+    AuthenticatedDepartamentosLiderancaFormulariosFormIdRespostasRoute,
+  AuthenticatedDepartamentosLiderancaFormulariosFormIdIndexRoute:
+    AuthenticatedDepartamentosLiderancaFormulariosFormIdIndexRoute,
 }
 
 const AuthenticatedRouteWithChildren = AuthenticatedRoute._addFileChildren(
@@ -486,6 +740,7 @@ const rootRouteChildren: RootRouteChildren = {
   ResetPasswordRoute: ResetPasswordRoute,
   VerifyEmailRoute: VerifyEmailRoute,
   WifiVisitantesRoute: WifiVisitantesRoute,
+  FormulariosResponderRoute: FormulariosResponderRoute,
   FotosSlugRoute: FotosSlugRoute,
   FotosIndexRoute: FotosIndexRoute,
 }

@@ -1257,3 +1257,760 @@ export const profile = {
     passwordSameAsCurrent: 'The new password must be different from the current one.',
   },
 } as const satisfies Translations['profile'];
+
+export const departments = {
+  eyebrow: 'Departments',
+  leadership: {
+    title: 'Leadership',
+    subtitle: 'Tools and follow-up for the Leadership department.',
+    cards: {
+      forms: {
+        title: 'Forms',
+        description: 'Surveys and evaluations sent by email.',
+        details: '{{published}} published · {{draft}} unpublished',
+        open: 'Open forms',
+      },
+    },
+  },
+} as const satisfies Translations['departments'];
+
+export const forms = {
+  report: {
+    title: 'Report',
+    toResponses: 'See answers per person',
+    exportCsv: 'Export CSV (Excel)',
+    openPdf: 'Open PDF',
+    anonymous:
+      'Results are consolidated: there is no way to know what each person answered. The CSV has no names or dates.',
+    empty: 'There are no link answers to consolidate yet.',
+    paperNote:
+      'Paper answers count in participation, but their content is in the attachments and is not part of the results below.',
+    summary: {
+      invited: 'Invited',
+      answered: 'Answered',
+      digital: 'By link',
+      paper: 'On paper',
+      pending: 'Pending',
+    },
+    rating: {
+      title: 'Overall rating',
+      label: 'Overall rating {{value}} out of {{max}}',
+    },
+    answeredCount_one: '{{count}} answer',
+    answeredCount_other: '{{count}} answers',
+    barValue: '{{count}} · {{percent}}%',
+    chartLabel: 'Results for question {{title}}',
+    scaleAverage: 'average (out of {{max}})',
+    stats: {
+      average: 'Average',
+      minimum: 'Minimum',
+      maximum: 'Maximum',
+    },
+    searchLabel: 'Search the answers to question {{title}}',
+    searchPlaceholder: 'Search answers',
+    noMatches: 'No answers found.',
+    purged: {
+      title: 'Answers deleted',
+      description:
+        'The content of the answers was deleted on {{date}} (LGPD). Only participation numbers remain.',
+    },
+  },
+  settings: {
+    anonymous: 'Anonymous survey',
+    anonymousHint:
+      'The panel shows who answered, but never what each person answered: answers only appear in the consolidated report. Cannot be changed after the first answer.',
+    allowAnswerEdit: 'Allow changing the answer',
+    allowAnswerEditHint:
+      'Whoever answered by link can change the answer until the end of the period.',
+    allowAnswerEditAnonymous:
+      'Unavailable in anonymous surveys (the answer is not linked to the person).',
+    consent: 'Consent text (LGPD)',
+    consentHint:
+      'Optional. When filled, respondents must check "I have read and agree" before sending.',
+    consentPlaceholder:
+      'E.g.: I authorize the leadership to use my answers to plan the ministries.',
+  },
+  scale: {
+    groupLabel: 'Scale settings for question {{number}}',
+    min: 'Starts at',
+    max: 'Ends at',
+    minLabel: 'Start label (optional)',
+    maxLabel: 'End label (optional)',
+    minLabelPlaceholder: 'E.g.: Strongly disagree',
+    maxLabelPlaceholder: 'E.g.: Strongly agree',
+    namedPoints: 'Name each point',
+    pointLabel: 'Name of {{value}}',
+    preset: {
+      apply: 'Use Terrible, Bad, Fair, Good, Excellent',
+      terrible: 'Terrible',
+      bad: 'Bad',
+      fair: 'Fair',
+      good: 'Good',
+      excellent: 'Excellent',
+    },
+  },
+  duplicate: {
+    success: {
+      title: 'Form duplicated',
+      description: 'The copy "{{title}}" was created as unpublished.',
+    },
+  },
+  templates: {
+    label: 'Start from an existing form (template)',
+    placeholder: 'Choose a form',
+    hint: 'Creates an unpublished copy with the questions, settings and image. Invitations and answers are not copied.',
+    use: 'Use as template',
+    success: {
+      title: 'Copy created',
+      description: 'The form "{{title}}" was created from the template.',
+    },
+  },
+  status: {
+    DRAFT: 'Unpublished',
+    PUBLISHED: 'Published',
+    FINISHED: 'Finished',
+    CANCELLED: 'Cancelled',
+  },
+  fieldTypes: {
+    INPUT: 'Short text (input)',
+    TEXTAREA: 'Long text (textarea)',
+    CHECKBOX: 'Multiple choice (checkbox)',
+    RADIO: 'Single choice (radio)',
+    SELECT: 'Dropdown list (select)',
+    SCALE: 'Scale (e.g.: 1 to 5)',
+    DATE: 'Date',
+    NUMBER: 'Number',
+  },
+  actions: {
+    retry: 'Try again',
+    edit: 'Edit',
+    duplicate: 'Duplicate',
+    report: 'Report',
+    view: 'View',
+    delete: 'Delete',
+    preview: 'Preview form',
+    previewNamed: 'Preview the form {{title}}',
+    menu: 'More actions',
+    menuNamed: 'Actions for the form {{title}}',
+    responses: 'Answers',
+  },
+  statusActions: {
+    publish: {
+      label: 'Publish',
+      title: 'Publish form',
+      description:
+        'The form "{{title}}" will be published. To notify people, use "Send group emails" afterwards.',
+      confirm: 'Publish',
+      success: {
+        title: 'Form published',
+        description: 'The form "{{title}}" was published.',
+      },
+    },
+    unpublish: {
+      label: 'Unpublish',
+      title: 'Unpublish form',
+      description:
+        'The form "{{title}}" goes back to unpublished and stops receiving answers until it is published again.',
+      confirm: 'Unpublish',
+      success: {
+        title: 'Form unpublished',
+        description: 'The form "{{title}}" is unpublished again.',
+      },
+    },
+    finish: {
+      label: 'Finish',
+      title: 'Finish form',
+      description:
+        'The form "{{title}}" will be finished: it will no longer receive answers or be editable. This cannot be undone.',
+      confirm: 'Finish',
+      success: {
+        title: 'Form finished',
+        description: 'The form "{{title}}" was finished.',
+      },
+    },
+    cancel: {
+      label: 'Cancel form',
+      title: 'Cancel form',
+      description:
+        'The form "{{title}}" will be cancelled: it will no longer receive answers or be editable. This cannot be undone.',
+      confirm: 'Cancel form',
+      success: {
+        title: 'Form cancelled',
+        description: 'The form "{{title}}" was cancelled.',
+      },
+    },
+    sendEmails: {
+      label: 'Send group emails',
+      title: 'Send group emails',
+      description:
+        'Each person in the groups of "{{title}}" will receive an email with a personal link to answer. The form is locked while sending.',
+      confirm: 'Send emails',
+      success: {
+        title: 'Sending started',
+        description: 'The emails for "{{title}}" are being sent.',
+      },
+    },
+    remindPending: {
+      label: 'Send reminder to pending',
+      title: 'Reminder to pending',
+      description:
+        'Whoever has not answered "{{title}}" yet gets a reminder with a new link (the previous one stops working). The form is locked while sending.',
+      confirm: 'Send reminder',
+      success: {
+        title: 'Reminder started',
+        description: 'The reminders for "{{title}}" are being sent.',
+      },
+    },
+    purgeAnswers: {
+      label: 'Delete answers',
+      title: 'Delete answers (LGPD)',
+      description:
+        'The content of the answers to "{{title}}" will be deleted: link answers, anonymous answers and paper answer attachments. Only who answered and through which channel stays recorded. This cannot be undone.',
+      confirm: 'Delete answers',
+      success: {
+        title: 'Answers deleted',
+        description: 'The content of the answers to "{{title}}" was deleted.',
+      },
+    },
+    resendEmails: {
+      label: 'Resend group emails',
+      title: 'Resend group emails',
+      description:
+        'Whoever has not answered "{{title}}" yet gets a new link (the previous one stops working), and whoever joined the groups later gets their first one. Whoever already answered is not emailed again.',
+      confirm: 'Resend emails',
+      success: {
+        title: 'Resending started',
+        description: 'The emails for "{{title}}" are being sent.',
+      },
+    },
+  },
+  responses: {
+    title: 'Answers',
+    toReport: 'See consolidated report',
+    anonymous: {
+      title: 'Anonymous survey',
+      description:
+        'Only who answered is shown here. What each person answered is not linked to them and only appears in the consolidated report.',
+    },
+    summary: '{{answered}} of {{invited}} answered',
+    empty: 'No invitations sent yet. Use "Send group emails" in the form menu.',
+    menuNamed: 'Actions for {{name}}',
+    sentAt: 'Invitation sent on {{date}}',
+    answeredAt: 'Answered on {{date}}',
+    delivery: {
+      SENT: 'Email sent',
+      DELAYED: 'Email delivery delayed',
+      DELIVERED: 'Email delivered',
+      OPENED: 'Email opened',
+      CLICKED: 'Email link clicked',
+      BOUNCED: 'Email bounced (invalid address)',
+      COMPLAINED: 'Email marked as spam',
+      FAILED: 'Email failed to send',
+    },
+    states: {
+      PENDING: 'Pending',
+      DIGITAL: 'Answered by link',
+      PAPER: 'Answered on paper',
+    },
+    actions: {
+      viewAnswers: 'View answers',
+      markPaper: 'Mark as answered on paper',
+      attach: 'Attach filled form',
+      replaceAttachment: 'Replace attachment',
+      openPdf: 'Open PDF',
+      openImage: 'Open image',
+      unmark: 'Undo paper answer',
+    },
+    answersDialog: {
+      close: 'Close',
+      description: '{{email}} · answered on {{date}}',
+      noAnswer: 'No answer',
+      print: 'Open PDF',
+    },
+    print: {
+      blocked: {
+        title: 'New tab blocked',
+        description: 'Allow pop-up windows for this site and try again.',
+      },
+    },
+    paper: {
+      close: 'Close',
+      title: 'Paper answer',
+      description:
+        'Record that {{name}} answered the printed version. Optionally, attach the scanned filled form.',
+      attachTitle: 'Paper answer attachment',
+      attachDescription: 'Attach the form filled by {{name}} (replaces the current attachment).',
+      fileOptional: 'Filled form (optional)',
+      fileRequired: 'Filled form',
+      dropzone: {
+        idle: 'PDF, JPG, JPEG or PNG, up to 2 MB.',
+        hover: 'Click here to select the file',
+        drag: 'Drop here to attach the file',
+      },
+      replaceHint: 'There is already an attachment. Choose another file to replace it.',
+      selectedHint: 'To replace it, drop another file on it or click it.',
+      issues: {
+        type: 'Use a PDF, JPG, JPEG or PNG file.',
+        size: 'The file is larger than 2 MB.',
+      },
+      cancel: 'Cancel',
+      confirm: 'Save',
+      confirming: 'Saving…',
+      success: {
+        title: 'Paper answer recorded',
+        description: 'The answer from {{name}} was recorded.',
+      },
+    },
+    unmark: {
+      close: 'Close',
+      title: 'Undo paper answer',
+      description:
+        'The paper answer from {{name}} is removed and the attachment is deleted. The invitation becomes pending again.',
+      cancel: 'Cancel',
+      confirm: 'Undo',
+      confirming: 'Undoing…',
+      success: {
+        title: 'Paper answer undone',
+        description: 'The invitation of {{name}} is pending again.',
+      },
+    },
+  },
+  emailDispatch: {
+    sending: 'Sending group emails',
+    menuLocked: 'Wait for the emails to finish sending',
+    editorLocked: 'The form is locked until the emails to the groups finish sending.',
+    sent: { title: 'Emails sent' },
+    failed: { title: 'Emails failed to send' },
+    result: '"{{title}}": {{sent}} sent, {{failed}} failed.',
+  },
+  answer: {
+    fields: {
+      name: 'Name',
+      email: 'Email',
+    },
+    submit: 'Send answers',
+    update: 'Update answers',
+    requiredSr: '(required)',
+    requiredLegend: '* Required question',
+    selectPlaceholder: 'Select an option',
+    sendCopy: 'Receive a PDF copy of the answers at {{email}}',
+    draftRestored: 'We restored the draft you started in this browser.',
+    consent: {
+      label: 'I have read and agree',
+    },
+    anonymous: {
+      title: 'Anonymous answers',
+      description:
+        'Your name is only used to record that you answered. The answers are not linked to you.',
+    },
+    submitting: 'Sending…',
+    success: {
+      title: 'Answers sent',
+      description: 'Thank you! Your answers were recorded.',
+      withCopy: 'Thank you! Your answers were recorded, and the PDF copy is on its way by email.',
+    },
+    answered: {
+      title: 'Form answered',
+      description: 'Your answers were recorded on {{date}}. See below what you answered.',
+      paperDescription: 'Your answer on the printed version was recorded on {{date}}.',
+      anonymousDescription:
+        'Your anonymous answer was recorded on {{date}}. Because it is anonymous, it cannot be shown back.',
+      editableDescription:
+        'Your answers were recorded on {{date}}. You can change them below until the end of the period.',
+    },
+    availability: {
+      NOT_STARTED: {
+        title: 'Not open yet',
+        description: 'This form accepts answers from {{period}}.',
+      },
+      ENDED: {
+        title: 'Period ended',
+        description: 'This form accepted answers from {{period}}.',
+      },
+      CLOSED: {
+        title: 'Form closed',
+        description: 'This form is not accepting answers.',
+      },
+      OPEN: {
+        title: 'Form open',
+        description: 'Answer by the end of the period ({{period}}).',
+      },
+    },
+    validation: {
+      tooLong: 'The answer is over the character limit.',
+      empty: 'Answer at least one question before sending.',
+      required: 'This question is required.',
+      invalidNumber: 'Enter a valid number.',
+      invalidDate: 'Enter a valid date.',
+      consent: 'Check "I have read and agree" to send.',
+    },
+    notices: {
+      invalidLink: {
+        title: 'Invalid link',
+        description:
+          'This link does not exist or was replaced by a newer email. Use the link from the latest email you received.',
+      },
+      invalidAnswers: {
+        title: 'Review your answers',
+        description: 'Some answers have problems. Fix the highlighted items and send again.',
+      },
+      conflict: {
+        title: 'Could not send',
+        description: 'The form was already answered with this link or is no longer open.',
+      },
+      unavailable: {
+        title: 'Service unavailable',
+        description: 'Could not load the form. Please try again shortly.',
+      },
+    },
+  },
+  statusDialog: {
+    message: 'Message in the email (optional)',
+    messagePlaceholder: 'E.g.: We count on your participation by Friday!',
+    messageHint: 'Shown in the email body, before the answer button.',
+    close: 'Close',
+    back: 'Back',
+    confirming: 'Saving…',
+  },
+  notices: {
+    invalidData: {
+      title: 'Data rejected',
+      description: 'Review the highlighted fields and try again.',
+    },
+    conflict: {
+      title: 'Could not save',
+      description: 'The form was changed or does not allow this action. Reload and try again.',
+    },
+    notFound: {
+      title: 'Form not found',
+      description: 'The form no longer exists or was deleted.',
+    },
+    accessDenied: {
+      title: 'Access denied',
+      description: 'Your account is not allowed to manage forms.',
+    },
+    unavailable: {
+      title: 'Service unavailable',
+      description: 'Could not reach the server. Please try again shortly.',
+    },
+  },
+  list: {
+    back: 'Back to Leadership',
+    title: 'Forms',
+    subtitle: 'Surveys, performance evaluations and other Leadership forms.',
+    create: 'New form',
+    statusFilter: 'Status',
+    allStatuses: 'All statuses',
+    empty: 'No forms created yet.',
+    emptyFiltered: 'No forms with this status.',
+    period: '{{start}} to {{end}}',
+    questionCount_one: '{{count}} question',
+    questionCount_other: '{{count}} questions',
+    recipientGroupCount_one: '{{count}} email group',
+    recipientGroupCount_other: '{{count}} email groups',
+    emailSummary: 'Emails sent on {{date}} · {{answered}} of {{invited}} answered',
+    answersPurged: 'Answers deleted on {{date}} (LGPD)',
+    loadMore: 'Load more',
+    loadingMore: 'Loading…',
+  },
+  deleteDialog: {
+    close: 'Close',
+    title: 'Delete form',
+    description: 'The form "{{title}}" will be permanently deleted. This cannot be undone.',
+    cancel: 'Cancel',
+    confirm: 'Delete',
+    confirming: 'Deleting…',
+    success: {
+      title: 'Form deleted',
+      description: 'The form "{{title}}" was deleted.',
+    },
+  },
+  validation: {
+    titleRequired: 'Enter the form name.',
+    titleTooLong: 'Use at most 120 characters.',
+    descriptionTooLong: 'Use at most 2,000 characters.',
+    dateInvalid: 'Enter a valid date.',
+    endsBeforeStart: 'The end date cannot be before the start date.',
+    endsInPast: 'To publish, the end date cannot be in the past.',
+    questionsRequired: 'Add at least one question.',
+    questionsTooMany: 'Use at most 50 questions.',
+    questionTitleRequired: 'Enter the question name.',
+    questionTitleTooLong: 'Use at most 200 characters.',
+    questionDescriptionTooLong: 'Use at most 500 characters.',
+    recipientsRequired: 'To publish, select at least one email group.',
+    optionRequired: 'Enter the option text.',
+    optionTooLong: 'Use at most 100 characters.',
+    optionsTooFew: 'Add at least 1 option.',
+    optionsTooMany: 'Use at most 20 options.',
+    optionsDuplicated: 'Options must be different from each other.',
+    scaleInvalid: 'The scale starts at 0 or 1 and ends after the start, up to 10.',
+    scaleLabelTooLong: 'Use at most 40 characters.',
+    scalePointRequired: 'Give this point a name.',
+    scalePointsDuplicated: 'Use a different name for each point.',
+    consentTooLong: 'Use at most 1,000 characters.',
+    anonymousEdit: 'Anonymous surveys do not allow changing the answer.',
+    invalid: 'Value rejected by the server.',
+  },
+  editor: {
+    back: 'Back to Forms',
+    createTitle: 'New form',
+    createSubtitle: 'Build the form, choose who receives it and publish when it is ready.',
+    editTitle: 'Edit form',
+    preview: 'Preview',
+    readOnly: {
+      title: 'Read-only',
+      description: 'Forms with status "{{status}}" can no longer be changed.',
+    },
+    sections: {
+      general: {
+        title: 'General information',
+        description: 'Header image, name, description, validity and status.',
+      },
+      questions: {
+        title: 'Questions',
+        description: 'Questions are shown in this order to respondents.',
+      },
+      recipients: {
+        title: 'Recipients',
+        description: 'Email groups that receive the form through "Send group emails".',
+      },
+      settings: {
+        title: 'Answer settings',
+        description: 'Anonymity, changing the answer and consent.',
+      },
+    },
+    cancel: 'Cancel',
+    backToList: 'Back to the list',
+    submit: 'Save form',
+    submitting: 'Saving…',
+    success: {
+      createTitle: 'Form created',
+      editTitle: 'Form updated',
+      description: 'The form "{{title}}" was saved.',
+    },
+    imageFailure: {
+      title: 'Image not saved',
+      description:
+        'The form "{{title}}" was saved, but the header image was not. Choose the image and save again.',
+    },
+    invalid: {
+      title: 'Review the form',
+      description: 'Some fields have problems. Fix the highlighted items and save again.',
+    },
+  },
+  fields: {
+    title: 'Form name',
+    titlePlaceholder: 'E.g.: Leaders performance evaluation',
+    description: 'Description (optional)',
+    descriptionPlaceholder: 'Explain the purpose of the form to respondents.',
+    startsOn: 'Start date',
+    endsOn: 'End date',
+    status: 'Status',
+    statusHint:
+      'Published sends the form to the selected groups. Finished and cancelled cannot be changed afterwards.',
+  },
+  headerImage: {
+    label: 'Header image (optional)',
+    previewAlt: 'Header image preview',
+    remove: 'Remove image',
+    dropzone: {
+      idle: 'PNG, JPG, JPEG or WebP, up to 2 MB.',
+      hover: 'Click here to select an image',
+      drag: 'Drop here to attach the image',
+    },
+    hint: 'Shown above the title, fitted to the screen up to 800 x 600 px.',
+    replaceHint: 'To replace it, drop another image on it or click it.',
+    details: '{{name}} · {{width}} x {{height}} px · {{size}}',
+    savedDetails: 'Saved image · {{width}} x {{height}} px · {{size}}',
+    issues: {
+      type: 'Format not accepted. Use PNG, JPG, JPEG or WebP.',
+      size: 'The image is larger than 2 MB. Choose a smaller file.',
+      unreadable: 'Could not read the image. Choose another file.',
+    },
+  },
+  questions: {
+    groupLabel: 'Question {{number}}',
+    number: 'Question {{number}}',
+    moveUp: 'Move question {{number}} up',
+    moveDown: 'Move question {{number}} down',
+    remove: 'Remove question {{number}}',
+    duplicate: 'Duplicate question {{number}}',
+    drag: 'Drag to reorder',
+    required: 'Required',
+    title: 'Question name',
+    titlePlaceholder: 'E.g.: What can we improve?',
+    fieldType: 'Field type',
+    description: 'Description (optional)',
+    descriptionPlaceholder: 'Guidance shown below the question name.',
+    add: 'Add question',
+  },
+  options: {
+    title: 'Answer options',
+    hints: {
+      CHECKBOX: 'Respondents can select several options.',
+      RADIO: 'Respondents can select only one option.',
+      SELECT: 'Respondents pick one option from a list.',
+    },
+    groupLabel: 'Options for question {{number}}',
+    label: 'Option {{number}}',
+    placeholder: 'Option {{number}}',
+    remove: 'Remove option {{number}}',
+    add: 'Add option',
+  },
+  recipients: {
+    legend: 'Recipient email groups',
+    count_one: '{{count}} recipient',
+    count_other: '{{count}} recipients',
+    unavailable: {
+      title: 'Email groups unavailable',
+      description: 'Could not load the email groups.',
+    },
+  },
+  preview: {
+    title: 'Preview',
+    description: 'This is how the form looks to respondents.',
+    close: 'Close preview',
+    untitled: 'Untitled form',
+    untitledQuestion: 'Untitled question {{number}}',
+    answerPlaceholder: 'Answer',
+    untitledOption: 'Option {{number}}',
+  },
+} as const satisfies Translations['forms'];
+
+export const communication = {
+  eyebrow: 'Communication',
+  dashboard: {
+    title: 'Emails',
+    subtitle: 'Recipient groups and email sending.',
+    cards: {
+      groups: {
+        title: 'Email groups',
+        description: 'Lists of accounts that receive the emails.',
+        details_one: '{{count}} recipient in total',
+        details_other: '{{count}} recipients in total',
+        open: 'Open groups',
+      },
+    },
+  },
+  actions: {
+    retry: 'Try again',
+    edit: 'Edit',
+    delete: 'Delete',
+    menu: 'More actions',
+    menuNamed: 'Actions for the group {{name}}',
+  },
+  notices: {
+    invalidData: {
+      title: 'Data rejected',
+      description: 'Review the highlighted fields and try again.',
+    },
+    conflict: {
+      title: 'Could not save',
+      description: 'The group was changed by someone else. Reload and try again.',
+    },
+    notFound: {
+      title: 'Group not found',
+      description: 'The group no longer exists or was deleted.',
+    },
+    accessDenied: {
+      title: 'Access denied',
+      description: 'Your account is not allowed to manage email groups.',
+    },
+    unavailable: {
+      title: 'Service unavailable',
+      description: 'Could not reach the server. Please try again shortly.',
+    },
+  },
+  list: {
+    back: 'Back to Emails',
+    title: 'Email groups',
+    subtitle: 'Choose which accounts receive each kind of communication, such as forms.',
+    create: 'New group',
+    empty: 'No email groups created yet.',
+    recipientCount_one: '{{count}} recipient',
+    recipientCount_other: '{{count}} recipients',
+  },
+  deleteDialog: {
+    close: 'Close',
+    title: 'Delete email group',
+    description:
+      'The group "{{name}}" will be permanently deleted. Forms that use it will need another group to be saved again.',
+    cancel: 'Cancel',
+    confirm: 'Delete',
+    confirming: 'Deleting…',
+    success: {
+      title: 'Group deleted',
+      description: 'The group "{{name}}" was deleted.',
+    },
+  },
+  validation: {
+    nameRequired: 'Enter the group name.',
+    nameTooLong: 'Use at most 80 characters.',
+    descriptionTooLong: 'Use at most 300 characters.',
+    invalid: 'Value rejected by the server. Check it and try again.',
+  },
+  editor: {
+    back: 'Back to the list',
+    backToList: 'Back to the list',
+    createTitle: 'New email group',
+    createSubtitle: 'Name the group and choose the accounts that receive the emails.',
+    editTitle: 'Edit email group',
+    sections: {
+      general: {
+        title: 'Group details',
+        description: 'Name and description shown when choosing the recipients of a form.',
+      },
+      recipients: {
+        title: 'Recipients',
+        description:
+          'Accounts with a verified email, members or not. Check accounts and move them between the lists, one by one or all at once.',
+      },
+    },
+    cancel: 'Cancel',
+    submit: 'Save group',
+    submitting: 'Saving…',
+    success: {
+      createTitle: 'Group created',
+      editTitle: 'Group updated',
+      description: 'The group "{{name}}" was saved.',
+    },
+    invalid: {
+      title: 'Review the group',
+      description: 'Some fields have problems. Fix the highlighted items and save again.',
+    },
+  },
+  fields: {
+    name: 'Name',
+    namePlaceholder: 'E.g.: Cell group leaders',
+    description: 'Description (optional)',
+    descriptionPlaceholder: 'What this group is for',
+  },
+  recipients: {
+    available: 'Available accounts',
+    selected: 'In the group',
+    searchPlaceholder: 'Search by name or email',
+    searchLabel: 'Search in {{list}}',
+    empty: 'No accounts in this list.',
+    noMatches: 'No accounts found.',
+    count_one: '{{count}} account',
+    count_other: '{{count}} accounts',
+    filteredCount: '{{shown}} of {{total}}',
+    addChecked: 'Add checked',
+    addAll: 'Add all',
+    removeChecked: 'Remove checked',
+    removeAll: 'Remove all',
+    memberBadge: 'Member',
+    unavailable: {
+      title: 'Accounts unavailable',
+      description: 'Could not load the accounts that can join the group.',
+    },
+    unavailableAccounts: {
+      title: 'Accounts that no longer receive emails',
+      description_one:
+        '{{count}} account in the group was suspended or lost its verified email and is not shown in the lists.',
+      description_other:
+        '{{count}} accounts in the group were suspended or lost their verified email and are not shown in the lists.',
+      remove: 'Remove from group',
+    },
+  },
+} as const satisfies Translations['communication'];

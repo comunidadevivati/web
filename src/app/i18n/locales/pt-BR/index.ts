@@ -1,8 +1,11 @@
 import { common } from '@/app/i18n/locales/pt-BR/common';
 import {
   auth,
+  communication,
   contact,
   dashboard,
+  departments,
+  forms,
   gallery,
   guestWifi,
   home,
@@ -27,4 +30,7 @@ export const ptBR = {
   gallery,
   photos,
   profile,
+  departments,
+  forms,
+  communication,
 } as const;

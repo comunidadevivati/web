@@ -26,8 +26,12 @@ import {
   CircleAlertIcon,
   GlobeIcon,
   ImagesIcon,
+  LandmarkIcon,
   LayoutDashboardIcon,
+  MailIcon,
+  MegaphoneIcon,
   MenuIcon,
+  NetworkIcon,
   UserCogIcon,
   UsersIcon,
 } from 'lucide-react';
@@ -103,6 +107,20 @@ export const AuthenticatedLayoutView = () => {
       label: t('navigation.members'),
       icon: UsersIcon,
       to: '/membros',
+      requiresMember: true,
+    },
+    {
+      label: t('navigation.departments'),
+      icon: NetworkIcon,
+      children: [
+        { label: t('navigation.leadership'), icon: LandmarkIcon, to: '/departamentos/lideranca' },
+      ],
+      requiresMember: true,
+    },
+    {
+      label: t('navigation.communication'),
+      icon: MegaphoneIcon,
+      children: [{ label: t('navigation.emails'), icon: MailIcon, to: '/comunicacao/emails' }],
       requiresMember: true,
     },
     {

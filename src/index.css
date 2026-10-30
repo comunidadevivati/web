@@ -91,6 +91,9 @@
   --color-chart-3: var(--chart-3);
   --color-chart-4: var(--chart-4);
 
+  /* Avaliação (estrelas da nota geral) */
+  --color-rating: var(--rating);
+
   /* Sobreposições */
   --color-overlay: var(--overlay);
   --color-overlay-foreground: var(--overlay-foreground);
@@ -247,6 +250,9 @@
   --chart-3: oklch(0.666 0.179 58.318);
   --chart-4: oklch(0.596 0.145 163.225);
 
+  /* Avaliação (estrelas da nota geral): contraste gráfico >= 3:1 sobre o card */
+  --rating: oklch(0.666 0.179 58.318);
+
   /* Sobreposições sobre fotos/mídia */
   --overlay: var(--viva-black);
   --overlay-foreground: var(--viva-white);
@@ -327,6 +333,9 @@
   --chart-2: oklch(0.702 0.183 293.541);
   --chart-3: oklch(0.828 0.189 84.429);
   --chart-4: oklch(0.765 0.177 163.223);
+
+  /* Avaliação (estrelas da nota geral) */
+  --rating: oklch(0.828 0.189 84.429);
 
   /* Sombras */
   --elevation: var(--viva-black);

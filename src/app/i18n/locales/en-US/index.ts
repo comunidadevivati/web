@@ -2,8 +2,11 @@ import type { Translations } from '@/app/i18n/i18n.model';
 import { common } from '@/app/i18n/locales/en-US/common';
 import {
   auth,
+  communication,
   contact,
   dashboard,
+  departments,
+  forms,
   gallery,
   guestWifi,
   home,
@@ -27,4 +30,7 @@ export const enUS = {
   gallery,
   photos,
   profile,
+  departments,
+  forms,
+  communication,
 } as const satisfies Translations;
