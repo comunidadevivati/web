@@ -21,6 +21,8 @@ export * from '@/components/ui/dialog';
 
 export * from '@/components/ui/dropdown-menu';
 
+export * from '@/components/ui/dropzone';
+
 export * from '@/components/ui/field';
 
 export * from '@/components/ui/field-control';
@@ -42,6 +44,8 @@ export * from '@/components/ui/loading-overlay';
 export * from '@/components/ui/popover';
 
 export * from '@/components/ui/progress';
+
+export * from '@/components/ui/radio';
 
 export * from '@/components/ui/select';
 

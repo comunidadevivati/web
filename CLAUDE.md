@@ -1230,6 +1230,45 @@ Feature `src/features/gallery` (namespace i18n `gallery`), consumindo `/api/v1/g
 
 ---
 
+## 15.5 Departamentos, formulários e grupos de e-mails
+
+Features `src/features/departments` (namespace `departments`), `src/features/forms` (namespace `forms`) e `src/features/communication` (namespace `communication`). Integradas ao BFF (ADR 0013 do backend: contextos Forms e Communication na Core API).
+
+- menu **Departamentos → Liderança** (somente contas de membros): rota `/departamentos/lideranca`, painel do departamento com o card **Formulários** (total e quantidade por status);
+- `/departamentos/lideranca/formularios`: lista paginada (mais recentes primeiro) e filtro por status. O ícone à esquerda de cada item abre a **pré-visualização** (com tooltip). O menu de três pontos mostra só as ações que o status permite (`getFormStatusActions`, `canEditForm` e `canDeleteForm` no domínio): não publicado → Editar, Publicar, Cancelar formulário, Excluir; publicado → Editar, Despublicar, Concluir, Cancelar formulário (não pode ser excluído); finalizado e cancelado → Visualizar (somente leitura) e Excluir. Publicar, despublicar, concluir e cancelar pedem confirmação (`FormStatusDialog`) e usam `PUT /api/v1/forms/:id/status`; a exclusão também pede confirmação e o formulário excluído sai da lista;
+- `/departamentos/lideranca/formularios/novo` e `/$formId`: editor com imagem do cabeçalho, nome, descrição, data de início e de fim, status, grupos de e-mail destinatários e perguntas (nome, descrição e tipo: `INPUT`, `TEXTAREA`, `CHECKBOX` = múltipla escolha ou `RADIO` = escolha única; adicionar, remover e reordenar). Checkbox e radio têm de 1 a 20 opções distintas (uma só serve para "concordo com os termos") (até 100 caracteres, `checkQuestionOptions` no domínio); ao trocar para um desses tipos, a pergunta ganha 1 opção em branco, e os tipos de texto enviam `options: []`. **Pré-visualizar** mostra a imagem acima do título;
+- status: `DRAFT` (não publicado), `PUBLISHED`, `FINISHED` e `CANCELLED`. Transições em `formStatusTransitions` (domínio); um novo nasce não publicado ou publicado; finalizado e cancelado são finais e abrem somente para leitura. Publicar exige ao menos um grupo de e-mail e data de fim que não passou;
+- imagem do cabeçalho: PNG, JPG, JPEG ou WebP e até 2 MB (`checkHeaderImage` no domínio); qualquer resolução é aceita. As dimensões são lidas no navegador só para exibição (`width`/`height`). Na tela ela se adapta à largura disponível até no máximo 800 x 600 px, mantendo a proporção e sem ampliar imagens menores; a escolha usa o `Dropzone` (`src/components/ui/dropzone.tsx`): soltar o arquivo ou clicar/Enter para abrir o seletor, com textos distintos no estado normal, com o mouse/foco em cima e durante o arrasto. Com imagem escolhida, ela aparece dentro do próprio dropzone (prop `preview`) e os textos de troca surgem por cima dela no hover/foco e no arrasto;
+- salvar = criar/editar (com `version`) e, depois, trocar ou remover a imagem (`saveFormUseCase`). A imagem vai direto ao bucket de mídia, como a foto do Perfil: pede a URL (`POST .../header-image/uploads`), envia com `PUT` (`directHeaderImageTransfer`, sem cookies) e confirma (`PUT .../header-image`). Se os dados forem salvos e a imagem falhar (`HeaderImageSaveError`), o toast avisa e o editor abre o formulário gravado, para não duplicar ao salvar de novo;
+- envio aos grupos: no menu do formulário publicado com grupos, **Enviar e-mails do grupo** (depois **Reenviar e-mails do grupo**, que só manda a quem ainda não respondeu, com link novo), com confirmação. Enquanto `emailDispatch.status` é `SENDING`, o item mostra "Enviando e-mails do grupo", o menu de ações fica desabilitado e o editor abre somente para leitura; a lista (e o editor) releem a cada 3 s até o fim, e um toast informa enviados e falhas. Depois, o item mostra a data do envio e quantos responderam (`invitedCount`/`answeredCount`). Publicar não envia e-mails;
+- resposta: página pública `/formularios/responder?token=...` (`FormAnswerView`, gateway `form-answers-http.gateway.ts`). O token sai da URL ao abrir e fica só na memória; nome e e-mail vêm do convite (não editáveis); uma resposta por link, só com o formulário publicado e dentro do período; já respondido mostra as respostas em modo leitura;
+- respostas: no menu do formulário com convites, **Respostas** abre `/departamentos/lideranca/formularios/$formId/respostas` (`FormResponsesView`; a edição passou para a rota `$formId/` index). Lista quem recebeu o convite com a situação (pendente, respondido pelo link, respondido em papel). Ações: **Ver respostas** (diálogo, com **Abrir PDF**: abre `/api/v1/forms/:id/invitations/:invitationId/answers.pdf` numa nova aba, no visualizador de PDF do navegador, via `open-pdf-tab.ts`), **Marcar como respondido em papel** (anexo opcional: PDF, JPG, JPEG ou PNG até 2 MB, enviado direto ao bucket; o arquivo escolhido aparece dentro do dropzone, com nome e tamanho), **Abrir PDF**/**Abrir imagem** (o anexo abre numa nova aba, no visualizador do navegador, que permite baixar e imprimir), **Anexar/Trocar anexo** e **Desfazer resposta em papel**. O e-mail do convite leva o PDF para impressão (gerado no BFF);
+- editor: tipos `INPUT`, `TEXTAREA`, `CHECKBOX`, `RADIO`, `SELECT` (lista), `SCALE` (escala 0/1 a 2..10, `QuestionScaleField`), `DATE` e `NUMBER`; pergunta obrigatória; arrastar pela alça para reordenar (HTML5, com os botões de subir/descer mantidos) e duplicar pergunta. Seção **Configurações das respostas**: anônimo, permitir alterar a resposta (desligado no anônimo) e texto de consentimento (LGPD). O campo de resposta de cada tipo é `QuestionAnswerField`, usado na página de resposta e na pré-visualização;
+- lista: **Duplicar**, **Relatório**, **Enviar lembrete aos pendentes** (com mensagem opcional, como no envio/reenvio) e **Apagar respostas** (finalizado/cancelado, LGPD). Novo formulário pode começar de um existente (modelo = cópia não publicada);
+- relatório: `$formId/relatorio` (`FormReportView`) com participação, card de **nota geral** (`OverallRatingCard`: média das respostas de escala convertidas para 0 a 5, com estrelas no token `rating`), barras por opção/valor (cor primária, quantidade e % visíveis), médias e respostas de texto com busca; **Exportar CSV** (link de download) e **Abrir PDF** (nova aba);
+- respostas: mostra a situação de entrega do e-mail de cada convite (webhook do Resend); página de resposta com rascunho automático no navegador e opção de receber a cópia das respostas em PDF;
+- menu **Comunicação → E-mails** (somente contas de membros): `/comunicacao/emails`, painel com o card **Grupos de e-mails**; `/comunicacao/emails/grupos` lista os grupos (menu de três pontos: Editar, Excluir com confirmação); `/novo` e `/$groupId` editam nome, descrição e destinatários. Os destinatários são escolhidos no `TransferList` (`src/components/molecules/transfer-list`): contas disponíveis à esquerda e do grupo à direita, com busca, marcação e botões para mover as marcadas ou todas as visíveis. As contas vêm de `GET /api/v1/email-recipients` (ativas e com e-mail verificado, membros ou não); contas do grupo que deixaram de ser elegíveis aparecem num aviso, com a opção de tirá-las. Salvar invalida `['email-groups']`, que inclui a lista do editor de formulários.
+
+Contrato (em `forms-http.gateway.ts` e `communication-http.gateway.ts`, erros RFC 9457):
+
+| Endpoint (BFF)                                             | Uso                                      |
+| ---------------------------------------------------------- | ---------------------------------------- |
+| `GET /api/v1/departments/:department/forms?status&cursor`  | lista paginada por cursor                |
+| `GET /api/v1/departments/:department/forms/summary`        | total e quantidade por status            |
+| `POST /api/v1/departments/:department/forms`               | cria                                     |
+| `GET/PATCH/DELETE /api/v1/forms/:id`                       | lê, edita (com `version`) e exclui       |
+| `PUT /api/v1/forms/:id/status`                             | muda só o status (`{ version, status }`) |
+| `POST /api/v1/forms/:id/header-image/uploads`              | URL pré-assinada de envio da imagem      |
+| `PUT/DELETE /api/v1/forms/:id/header-image`                | confirma o envio (`uploadId`) ou remove  |
+| `GET/POST /api/v1/email-groups`                            | lista e cria grupos de e-mails           |
+| `GET/PUT/DELETE /api/v1/email-groups/:id`                  | lê, substitui (com `version`) e exclui   |
+| `GET /api/v1/email-recipients`                             | contas que podem entrar nos grupos       |
+| `POST /api/v1/forms/:id/email-dispatches` (202)            | envia os e-mails aos grupos              |
+| `POST /api/v1/public/form-invitations/lookup` e `/answers` | resposta pelo link (sem sessão)          |
+| `GET /api/v1/forms/:id/invitations` e subrotas             | respostas, resposta em papel e anexo     |
+
+---
+
 ## 16. TanStack Query
 
 Configuração global atual:

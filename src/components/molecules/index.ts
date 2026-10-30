@@ -25,4 +25,6 @@ export * from '@/components/molecules/theme-toggle/theme-toggle';
 
 export * from '@/components/molecules/tooltip-hint/tooltip-hint';
 
+export * from '@/components/molecules/transfer-list/transfer-list';
+
 export * from '@/components/molecules/user-menu/user-menu';

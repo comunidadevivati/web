@@ -1260,3 +1260,763 @@ export const profile = {
     passwordSameAsCurrent: 'A nova senha precisa ser diferente da atual.',
   },
 } as const;
+
+export const departments = {
+  eyebrow: 'Departamentos',
+  leadership: {
+    title: 'Liderança',
+    subtitle: 'Ferramentas e acompanhamento do departamento de Liderança.',
+    cards: {
+      forms: {
+        title: 'Formulários',
+        description: 'Pesquisas e avaliações enviadas por e-mail.',
+        details: '{{published}} publicado(s) · {{draft}} não publicado(s)',
+        open: 'Abrir formulários',
+      },
+    },
+  },
+} as const;
+
+export const forms = {
+  report: {
+    title: 'Relatório',
+    toResponses: 'Ver respostas por pessoa',
+    exportCsv: 'Exportar CSV (Excel)',
+    openPdf: 'Abrir PDF',
+    anonymous:
+      'Os resultados são consolidados: não há como saber o que cada pessoa respondeu. O CSV não traz nomes nem datas.',
+    empty: 'Ainda não há respostas pelo link para consolidar.',
+    paperNote:
+      'Respostas em papel contam na participação, mas o conteúdo delas está nos anexos e não entra nos resultados abaixo.',
+    summary: {
+      invited: 'Convidados',
+      answered: 'Responderam',
+      digital: 'Pelo link',
+      paper: 'Em papel',
+      pending: 'Pendentes',
+    },
+    rating: {
+      title: 'Nota geral',
+      label: 'Nota geral {{value}} de {{max}}',
+    },
+    answeredCount_one: '{{count}} resposta',
+    answeredCount_other: '{{count}} respostas',
+    barValue: '{{count}} · {{percent}}%',
+    chartLabel: 'Resultado da pergunta {{title}}',
+    scaleAverage: 'média (de {{max}})',
+    stats: {
+      average: 'Média',
+      minimum: 'Mínimo',
+      maximum: 'Máximo',
+    },
+    searchLabel: 'Buscar nas respostas da pergunta {{title}}',
+    searchPlaceholder: 'Buscar nas respostas',
+    noMatches: 'Nenhuma resposta encontrada.',
+    purged: {
+      title: 'Respostas apagadas',
+      description:
+        'O conteúdo das respostas foi apagado em {{date}} (LGPD). Ficaram só os números de participação.',
+    },
+  },
+  settings: {
+    anonymous: 'Pesquisa anônima',
+    anonymousHint:
+      'O painel mostra quem respondeu, mas nunca o que cada pessoa respondeu: as respostas aparecem só no relatório consolidado. Não pode ser alterado depois da primeira resposta.',
+    allowAnswerEdit: 'Permitir alterar a resposta',
+    allowAnswerEditHint: 'Quem respondeu pelo link pode mudar a resposta até o fim do período.',
+    allowAnswerEditAnonymous:
+      'Indisponível em pesquisa anônima (a resposta não fica ligada à pessoa).',
+    consent: 'Texto de consentimento (LGPD)',
+    consentHint:
+      'Opcional. Quando preenchido, quem responde precisa marcar "Li e aceito" antes de enviar.',
+    consentPlaceholder:
+      'Ex.: Autorizo o uso das minhas respostas pela liderança para planejamento dos ministérios.',
+  },
+  scale: {
+    groupLabel: 'Configuração da escala da pergunta {{number}}',
+    min: 'Começa em',
+    max: 'Termina em',
+    minLabel: 'Rótulo do início (opcional)',
+    maxLabel: 'Rótulo do fim (opcional)',
+    minLabelPlaceholder: 'Ex.: Discordo totalmente',
+    maxLabelPlaceholder: 'Ex.: Concordo totalmente',
+    namedPoints: 'Dar um nome para cada ponto',
+    pointLabel: 'Nome do {{value}}',
+    preset: {
+      apply: 'Usar Péssimo, Ruim, Regular, Bom, Ótimo',
+      terrible: 'Péssimo',
+      bad: 'Ruim',
+      fair: 'Regular',
+      good: 'Bom',
+      excellent: 'Ótimo',
+    },
+  },
+  duplicate: {
+    success: {
+      title: 'Formulário duplicado',
+      description: 'A cópia "{{title}}" foi criada como não publicada.',
+    },
+  },
+  templates: {
+    label: 'Começar a partir de um formulário existente (modelo)',
+    placeholder: 'Escolha um formulário',
+    hint: 'Cria uma cópia não publicada com as perguntas, as configurações e a imagem. Convites e respostas não são copiados.',
+    use: 'Usar como modelo',
+    success: {
+      title: 'Cópia criada',
+      description: 'O formulário "{{title}}" foi criado a partir do modelo.',
+    },
+  },
+  status: {
+    DRAFT: 'Não publicado',
+    PUBLISHED: 'Publicado',
+    FINISHED: 'Finalizado',
+    CANCELLED: 'Cancelado',
+  },
+  fieldTypes: {
+    INPUT: 'Texto curto (input)',
+    TEXTAREA: 'Texto longo (textarea)',
+    CHECKBOX: 'Múltipla escolha (checkbox)',
+    RADIO: 'Escolha única (radio)',
+    SELECT: 'Lista suspensa (select)',
+    SCALE: 'Escala (ex.: 1 a 5)',
+    DATE: 'Data',
+    NUMBER: 'Número',
+  },
+  actions: {
+    retry: 'Tentar novamente',
+    edit: 'Editar',
+    duplicate: 'Duplicar',
+    report: 'Relatório',
+    view: 'Visualizar',
+    delete: 'Excluir',
+    preview: 'Pré-visualizar formulário',
+    previewNamed: 'Pré-visualizar o formulário {{title}}',
+    menu: 'Mais ações',
+    menuNamed: 'Ações do formulário {{title}}',
+    responses: 'Respostas',
+  },
+  statusActions: {
+    publish: {
+      label: 'Publicar',
+      title: 'Publicar formulário',
+      description:
+        'O formulário "{{title}}" será publicado. Para avisar as pessoas, use depois "Enviar e-mails do grupo".',
+      confirm: 'Publicar',
+      success: {
+        title: 'Formulário publicado',
+        description: 'O formulário "{{title}}" foi publicado.',
+      },
+    },
+    unpublish: {
+      label: 'Despublicar',
+      title: 'Despublicar formulário',
+      description:
+        'O formulário "{{title}}" volta a ficar não publicado e deixa de receber respostas até ser publicado de novo.',
+      confirm: 'Despublicar',
+      success: {
+        title: 'Formulário despublicado',
+        description: 'O formulário "{{title}}" voltou a ficar não publicado.',
+      },
+    },
+    finish: {
+      label: 'Concluir',
+      title: 'Concluir formulário',
+      description:
+        'O formulário "{{title}}" será finalizado: não receberá mais respostas nem poderá ser editado. Esta ação não pode ser desfeita.',
+      confirm: 'Concluir',
+      success: {
+        title: 'Formulário concluído',
+        description: 'O formulário "{{title}}" foi finalizado.',
+      },
+    },
+    cancel: {
+      label: 'Cancelar formulário',
+      title: 'Cancelar formulário',
+      description:
+        'O formulário "{{title}}" será cancelado: não receberá mais respostas nem poderá ser editado. Esta ação não pode ser desfeita.',
+      confirm: 'Cancelar formulário',
+      success: {
+        title: 'Formulário cancelado',
+        description: 'O formulário "{{title}}" foi cancelado.',
+      },
+    },
+    sendEmails: {
+      label: 'Enviar e-mails do grupo',
+      title: 'Enviar e-mails do grupo',
+      description:
+        'Cada pessoa dos grupos de "{{title}}" receberá um e-mail com um link pessoal para responder. Durante o envio, o formulário fica bloqueado.',
+      confirm: 'Enviar e-mails',
+      success: {
+        title: 'Envio iniciado',
+        description: 'Os e-mails de "{{title}}" estão sendo enviados.',
+      },
+    },
+    remindPending: {
+      label: 'Enviar lembrete aos pendentes',
+      title: 'Lembrete aos pendentes',
+      description:
+        'Quem ainda não respondeu "{{title}}" recebe um lembrete com um novo link (o anterior deixa de valer). Durante o envio, o formulário fica bloqueado.',
+      confirm: 'Enviar lembrete',
+      success: {
+        title: 'Lembrete iniciado',
+        description: 'Os lembretes de "{{title}}" estão sendo enviados.',
+      },
+    },
+    purgeAnswers: {
+      label: 'Apagar respostas',
+      title: 'Apagar respostas (LGPD)',
+      description:
+        'O conteúdo das respostas de "{{title}}" será apagado: respostas pelo link, respostas anônimas e anexos das respostas em papel. Fica registrado apenas quem respondeu e por qual canal. Esta ação não pode ser desfeita.',
+      confirm: 'Apagar respostas',
+      success: {
+        title: 'Respostas apagadas',
+        description: 'O conteúdo das respostas de "{{title}}" foi apagado.',
+      },
+    },
+    resendEmails: {
+      label: 'Reenviar e-mails do grupo',
+      title: 'Reenviar e-mails do grupo',
+      description:
+        'Quem ainda não respondeu "{{title}}" recebe um novo link (o anterior deixa de valer), e quem entrou nos grupos depois recebe o primeiro. Quem já respondeu não recebe de novo.',
+      confirm: 'Reenviar e-mails',
+      success: {
+        title: 'Reenvio iniciado',
+        description: 'Os e-mails de "{{title}}" estão sendo enviados.',
+      },
+    },
+  },
+  responses: {
+    title: 'Respostas',
+    toReport: 'Ver relatório consolidado',
+    anonymous: {
+      title: 'Pesquisa anônima',
+      description:
+        'Aqui aparece só quem respondeu. O que cada pessoa respondeu não fica ligado a ela e aparece apenas no relatório consolidado.',
+    },
+    summary: '{{answered}} de {{invited}} responderam',
+    empty: 'Nenhum convite enviado ainda. Use "Enviar e-mails do grupo" no menu do formulário.',
+    menuNamed: 'Ações de {{name}}',
+    sentAt: 'Convite enviado em {{date}}',
+    answeredAt: 'Respondido em {{date}}',
+    delivery: {
+      SENT: 'E-mail enviado',
+      DELAYED: 'Entrega do e-mail atrasada',
+      DELIVERED: 'E-mail entregue',
+      OPENED: 'E-mail aberto',
+      CLICKED: 'Link do e-mail clicado',
+      BOUNCED: 'E-mail devolvido (endereço inválido)',
+      COMPLAINED: 'E-mail marcado como spam',
+      FAILED: 'Falha no envio do e-mail',
+    },
+    states: {
+      PENDING: 'Pendente',
+      DIGITAL: 'Respondido pelo link',
+      PAPER: 'Respondido em papel',
+    },
+    actions: {
+      viewAnswers: 'Ver respostas',
+      markPaper: 'Marcar como respondido em papel',
+      attach: 'Anexar formulário preenchido',
+      replaceAttachment: 'Trocar anexo',
+      openPdf: 'Abrir PDF',
+      openImage: 'Abrir imagem',
+      unmark: 'Desfazer resposta em papel',
+    },
+    answersDialog: {
+      close: 'Fechar',
+      description: '{{email}} · respondido em {{date}}',
+      noAnswer: 'Sem resposta',
+      print: 'Abrir PDF',
+    },
+    print: {
+      blocked: {
+        title: 'Nova aba bloqueada',
+        description: 'Permita janelas pop-up para este site e tente de novo.',
+      },
+    },
+    paper: {
+      close: 'Fechar',
+      title: 'Resposta em papel',
+      description:
+        'Registre que {{name}} respondeu a versão impressa. Se quiser, anexe o formulário preenchido digitalizado.',
+      attachTitle: 'Anexo da resposta em papel',
+      attachDescription: 'Anexe o formulário preenchido por {{name}} (substitui o anexo atual).',
+      fileOptional: 'Formulário preenchido (opcional)',
+      fileRequired: 'Formulário preenchido',
+      dropzone: {
+        idle: 'PDF, JPG, JPEG ou PNG, até 2 MB.',
+        hover: 'Clique aqui para selecionar o arquivo',
+        drag: 'Solte aqui para anexar o arquivo',
+      },
+      replaceHint: 'Já existe um anexo. Escolha outro arquivo para substituí-lo.',
+      selectedHint: 'Para trocar, solte outro arquivo sobre ele ou clique nele.',
+      issues: {
+        type: 'Use um arquivo PDF, JPG, JPEG ou PNG.',
+        size: 'O arquivo passa de 2 MB.',
+      },
+      cancel: 'Cancelar',
+      confirm: 'Salvar',
+      confirming: 'Salvando…',
+      success: {
+        title: 'Resposta em papel registrada',
+        description: 'A resposta de {{name}} foi registrada.',
+      },
+    },
+    unmark: {
+      close: 'Fechar',
+      title: 'Desfazer resposta em papel',
+      description:
+        'A resposta em papel de {{name}} deixa de constar, e o anexo é apagado. O convite volta a ficar pendente.',
+      cancel: 'Cancelar',
+      confirm: 'Desfazer',
+      confirming: 'Desfazendo…',
+      success: {
+        title: 'Resposta em papel desfeita',
+        description: 'O convite de {{name}} voltou a ficar pendente.',
+      },
+    },
+  },
+  emailDispatch: {
+    sending: 'Enviando e-mails do grupo',
+    menuLocked: 'Aguarde o fim do envio dos e-mails',
+    editorLocked: 'O formulário fica bloqueado até o fim do envio dos e-mails aos grupos.',
+    sent: { title: 'E-mails enviados' },
+    failed: { title: 'Falha no envio dos e-mails' },
+    result: '"{{title}}": {{sent}} enviado(s), {{failed}} com falha.',
+  },
+  answer: {
+    fields: {
+      name: 'Nome',
+      email: 'E-mail',
+    },
+    submit: 'Enviar respostas',
+    update: 'Atualizar respostas',
+    requiredSr: '(obrigatória)',
+    requiredLegend: '* Pergunta obrigatória',
+    selectPlaceholder: 'Selecione uma opção',
+    sendCopy: 'Receber uma cópia das respostas em PDF em {{email}}',
+    draftRestored: 'Recuperamos o rascunho que você começou neste navegador.',
+    consent: {
+      label: 'Li e aceito',
+    },
+    anonymous: {
+      title: 'Respostas anônimas',
+      description:
+        'Seu nome aparece só para registrar que você respondeu. As respostas não ficam ligadas a você.',
+    },
+    submitting: 'Enviando…',
+    success: {
+      title: 'Respostas enviadas',
+      description: 'Obrigado! Suas respostas foram registradas.',
+      withCopy: 'Obrigado! Suas respostas foram registradas, e a cópia em PDF segue por e-mail.',
+    },
+    answered: {
+      title: 'Formulário respondido',
+      description:
+        'Suas respostas foram registradas em {{date}}. Veja abaixo o que você respondeu.',
+      paperDescription: 'Sua resposta na versão impressa foi registrada em {{date}}.',
+      anonymousDescription:
+        'Sua resposta anônima foi registrada em {{date}}. Por ser anônima, ela não pode ser exibida de volta.',
+      editableDescription:
+        'Suas respostas foram registradas em {{date}}. Você pode alterá-las abaixo até o fim do período.',
+    },
+    availability: {
+      NOT_STARTED: {
+        title: 'Ainda não começou',
+        description: 'Este formulário recebe respostas de {{period}}.',
+      },
+      ENDED: {
+        title: 'Prazo encerrado',
+        description: 'Este formulário recebeu respostas de {{period}}.',
+      },
+      CLOSED: {
+        title: 'Formulário fechado',
+        description: 'Este formulário não está recebendo respostas.',
+      },
+      OPEN: {
+        title: 'Formulário aberto',
+        description: 'Responda até o fim do período ({{period}}).',
+      },
+    },
+    validation: {
+      tooLong: 'A resposta passou do limite de caracteres.',
+      empty: 'Responda ao menos uma pergunta antes de enviar.',
+      required: 'Esta pergunta é obrigatória.',
+      invalidNumber: 'Informe um número válido.',
+      invalidDate: 'Informe uma data válida.',
+      consent: 'Marque "Li e aceito" para enviar.',
+    },
+    notices: {
+      invalidLink: {
+        title: 'Link inválido',
+        description:
+          'Este link não existe ou foi substituído por um envio mais recente. Use o link do último e-mail recebido.',
+      },
+      invalidAnswers: {
+        title: 'Revise as respostas',
+        description: 'Há respostas com problemas. Corrija os itens marcados e envie de novo.',
+      },
+      conflict: {
+        title: 'Não foi possível enviar',
+        description: 'O formulário já foi respondido por este link ou não está mais aberto.',
+      },
+      unavailable: {
+        title: 'Serviço indisponível',
+        description: 'Não foi possível carregar o formulário. Tente novamente em instantes.',
+      },
+    },
+  },
+  statusDialog: {
+    message: 'Mensagem no e-mail (opcional)',
+    messagePlaceholder: 'Ex.: Contamos com a sua participação até sexta-feira!',
+    messageHint: 'Aparece no corpo do e-mail, antes do botão de resposta.',
+    close: 'Fechar',
+    back: 'Voltar',
+    confirming: 'Salvando…',
+  },
+  notices: {
+    invalidData: {
+      title: 'Dados recusados',
+      description: 'Revise os campos marcados e tente novamente.',
+    },
+    conflict: {
+      title: 'Não foi possível salvar',
+      description:
+        'O formulário foi alterado ou não permite esta ação. Recarregue e tente de novo.',
+    },
+    notFound: {
+      title: 'Formulário não encontrado',
+      description: 'O formulário não existe mais ou foi excluído.',
+    },
+    accessDenied: {
+      title: 'Acesso negado',
+      description: 'Sua conta não tem permissão para gerenciar formulários.',
+    },
+    unavailable: {
+      title: 'Serviço indisponível',
+      description: 'Não foi possível falar com o servidor. Tente novamente em instantes.',
+    },
+  },
+  list: {
+    back: 'Voltar para Liderança',
+    title: 'Formulários',
+    subtitle: 'Pesquisas, avaliações de desempenho e outros formulários da Liderança.',
+    create: 'Novo formulário',
+    statusFilter: 'Status',
+    allStatuses: 'Todos os status',
+    empty: 'Nenhum formulário criado ainda.',
+    emptyFiltered: 'Nenhum formulário com este status.',
+    period: '{{start}} a {{end}}',
+    questionCount_one: '{{count}} pergunta',
+    questionCount_other: '{{count}} perguntas',
+    recipientGroupCount_one: '{{count}} grupo de e-mail',
+    recipientGroupCount_other: '{{count}} grupos de e-mail',
+    emailSummary: 'E-mails enviados em {{date}} · {{answered}} de {{invited}} responderam',
+    answersPurged: 'Respostas apagadas em {{date}} (LGPD)',
+    loadMore: 'Carregar mais',
+    loadingMore: 'Carregando…',
+  },
+  deleteDialog: {
+    close: 'Fechar',
+    title: 'Excluir formulário',
+    description:
+      'O formulário "{{title}}" será excluído definitivamente. Esta ação não pode ser desfeita.',
+    cancel: 'Cancelar',
+    confirm: 'Excluir',
+    confirming: 'Excluindo…',
+    success: {
+      title: 'Formulário excluído',
+      description: 'O formulário "{{title}}" foi excluído.',
+    },
+  },
+  validation: {
+    titleRequired: 'Informe o nome do formulário.',
+    titleTooLong: 'Use no máximo 120 caracteres.',
+    descriptionTooLong: 'Use no máximo 2.000 caracteres.',
+    dateInvalid: 'Informe uma data válida.',
+    endsBeforeStart: 'A data de fim não pode ser anterior à data de início.',
+    endsInPast: 'Para publicar, a data de fim não pode ter passado.',
+    questionsRequired: 'Adicione ao menos uma pergunta.',
+    questionsTooMany: 'Use no máximo 50 perguntas.',
+    questionTitleRequired: 'Informe o nome da pergunta.',
+    questionTitleTooLong: 'Use no máximo 200 caracteres.',
+    questionDescriptionTooLong: 'Use no máximo 500 caracteres.',
+    recipientsRequired: 'Para publicar, selecione ao menos um grupo de e-mail.',
+    optionRequired: 'Informe o texto da opção.',
+    optionTooLong: 'Use no máximo 100 caracteres.',
+    optionsTooFew: 'Adicione ao menos 1 opção.',
+    optionsTooMany: 'Use no máximo 20 opções.',
+    optionsDuplicated: 'As opções precisam ser diferentes entre si.',
+    scaleInvalid: 'A escala começa em 0 ou 1 e termina depois do início, até 10.',
+    scaleLabelTooLong: 'Use no máximo 40 caracteres.',
+    scalePointRequired: 'Dê um nome para este ponto.',
+    scalePointsDuplicated: 'Use um nome diferente em cada ponto.',
+    consentTooLong: 'Use no máximo 1.000 caracteres.',
+    anonymousEdit: 'Pesquisa anônima não permite alterar a resposta.',
+    invalid: 'Valor recusado pelo servidor.',
+  },
+  editor: {
+    back: 'Voltar para Formulários',
+    createTitle: 'Novo formulário',
+    createSubtitle: 'Monte o formulário, escolha quem recebe e publique quando estiver pronto.',
+    editTitle: 'Editar formulário',
+    preview: 'Pré-visualizar',
+    readOnly: {
+      title: 'Somente leitura',
+      description: 'Formulários com status "{{status}}" não podem mais ser alterados.',
+    },
+    sections: {
+      general: {
+        title: 'Informações gerais',
+        description: 'Imagem do cabeçalho, nome, descrição, validade e status.',
+      },
+      questions: {
+        title: 'Perguntas',
+        description: 'As perguntas aparecem nesta ordem para quem responde.',
+      },
+      recipients: {
+        title: 'Destinatários',
+        description:
+          'Grupos de e-mail que recebem o formulário pela ação "Enviar e-mails do grupo".',
+      },
+      settings: {
+        title: 'Configurações das respostas',
+        description: 'Anonimato, alteração da resposta e consentimento.',
+      },
+    },
+    cancel: 'Cancelar',
+    backToList: 'Voltar para a lista',
+    submit: 'Salvar formulário',
+    submitting: 'Salvando…',
+    success: {
+      createTitle: 'Formulário criado',
+      editTitle: 'Formulário atualizado',
+      description: 'O formulário "{{title}}" foi salvo.',
+    },
+    imageFailure: {
+      title: 'Imagem não salva',
+      description:
+        'O formulário "{{title}}" foi salvo, mas a imagem do cabeçalho não. Escolha a imagem e salve de novo.',
+    },
+    invalid: {
+      title: 'Revise o formulário',
+      description: 'Há campos com problemas. Corrija os itens marcados e salve novamente.',
+    },
+  },
+  fields: {
+    title: 'Nome do formulário',
+    titlePlaceholder: 'Ex.: Avaliação de desempenho dos líderes',
+    description: 'Descrição (opcional)',
+    descriptionPlaceholder: 'Explique o objetivo do formulário para quem vai responder.',
+    startsOn: 'Data de início',
+    endsOn: 'Data de fim',
+    status: 'Status',
+    statusHint:
+      'Publicado envia o formulário aos grupos selecionados. Finalizado e cancelado não podem ser alterados depois.',
+  },
+  headerImage: {
+    label: 'Imagem do cabeçalho (opcional)',
+    previewAlt: 'Prévia da imagem do cabeçalho',
+    remove: 'Remover imagem',
+    dropzone: {
+      idle: 'PNG, JPG, JPEG ou WebP, até 2 MB.',
+      hover: 'Clique aqui para selecionar uma imagem',
+      drag: 'Solte aqui para anexar a imagem',
+    },
+    hint: 'Aparece acima do título, ajustada à tela até 800 x 600 px.',
+    replaceHint: 'Para trocar, solte outra imagem sobre ela ou clique nela.',
+    details: '{{name}} · {{width}} x {{height}} px · {{size}}',
+    savedDetails: 'Imagem salva · {{width}} x {{height}} px · {{size}}',
+    issues: {
+      type: 'Formato não aceito. Use PNG, JPG, JPEG ou WebP.',
+      size: 'A imagem passa de 2 MB. Escolha um arquivo menor.',
+      unreadable: 'Não foi possível ler a imagem. Escolha outro arquivo.',
+    },
+  },
+  questions: {
+    groupLabel: 'Pergunta {{number}}',
+    number: 'Pergunta {{number}}',
+    moveUp: 'Mover a pergunta {{number}} para cima',
+    moveDown: 'Mover a pergunta {{number}} para baixo',
+    remove: 'Remover a pergunta {{number}}',
+    duplicate: 'Duplicar a pergunta {{number}}',
+    drag: 'Arraste para reordenar',
+    required: 'Obrigatória',
+    title: 'Nome da pergunta',
+    titlePlaceholder: 'Ex.: O que podemos melhorar?',
+    fieldType: 'Tipo de campo',
+    description: 'Descrição (opcional)',
+    descriptionPlaceholder: 'Orientação exibida abaixo do nome da pergunta.',
+    add: 'Adicionar pergunta',
+  },
+  options: {
+    title: 'Opções de resposta',
+    hints: {
+      CHECKBOX: 'Quem responde pode marcar várias opções.',
+      RADIO: 'Quem responde pode marcar apenas uma opção.',
+      SELECT: 'Quem responde escolhe uma opção numa lista.',
+    },
+    groupLabel: 'Opções da pergunta {{number}}',
+    label: 'Opção {{number}}',
+    placeholder: 'Opção {{number}}',
+    remove: 'Remover a opção {{number}}',
+    add: 'Adicionar opção',
+  },
+  recipients: {
+    legend: 'Grupos de e-mail destinatários',
+    count_one: '{{count}} destinatário',
+    count_other: '{{count}} destinatários',
+    unavailable: {
+      title: 'Grupos de e-mail indisponíveis',
+      description: 'Não foi possível carregar os grupos de e-mail.',
+    },
+  },
+  preview: {
+    title: 'Pré-visualização',
+    description: 'Assim o formulário aparece para quem vai responder.',
+    close: 'Fechar pré-visualização',
+    untitled: 'Formulário sem nome',
+    untitledQuestion: 'Pergunta {{number}} sem nome',
+    answerPlaceholder: 'Resposta',
+    untitledOption: 'Opção {{number}}',
+  },
+} as const;
+
+export const communication = {
+  eyebrow: 'Comunicação',
+  dashboard: {
+    title: 'E-mails',
+    subtitle: 'Grupos de destinatários e envios por e-mail.',
+    cards: {
+      groups: {
+        title: 'Grupos de e-mails',
+        description: 'Listas de contas que recebem os e-mails.',
+        details_one: '{{count}} destinatário no total',
+        details_other: '{{count}} destinatários no total',
+        open: 'Abrir grupos',
+      },
+    },
+  },
+  actions: {
+    retry: 'Tentar novamente',
+    edit: 'Editar',
+    delete: 'Excluir',
+    menu: 'Mais ações',
+    menuNamed: 'Ações do grupo {{name}}',
+  },
+  notices: {
+    invalidData: {
+      title: 'Dados recusados',
+      description: 'Revise os campos marcados e tente novamente.',
+    },
+    conflict: {
+      title: 'Não foi possível salvar',
+      description: 'O grupo foi alterado por outra pessoa. Recarregue e tente de novo.',
+    },
+    notFound: {
+      title: 'Grupo não encontrado',
+      description: 'O grupo não existe mais ou foi excluído.',
+    },
+    accessDenied: {
+      title: 'Acesso negado',
+      description: 'Sua conta não tem permissão para gerenciar grupos de e-mails.',
+    },
+    unavailable: {
+      title: 'Serviço indisponível',
+      description: 'Não foi possível falar com o servidor. Tente novamente em instantes.',
+    },
+  },
+  list: {
+    back: 'Voltar para E-mails',
+    title: 'Grupos de e-mails',
+    subtitle: 'Escolha quais contas recebem cada tipo de comunicação, como os formulários.',
+    create: 'Novo grupo',
+    empty: 'Nenhum grupo de e-mails criado ainda.',
+    recipientCount_one: '{{count}} destinatário',
+    recipientCount_other: '{{count}} destinatários',
+  },
+  deleteDialog: {
+    close: 'Fechar',
+    title: 'Excluir grupo de e-mails',
+    description:
+      'O grupo "{{name}}" será excluído definitivamente. Formulários que o usam precisarão de outro grupo para serem salvos de novo.',
+    cancel: 'Cancelar',
+    confirm: 'Excluir',
+    confirming: 'Excluindo…',
+    success: {
+      title: 'Grupo excluído',
+      description: 'O grupo "{{name}}" foi excluído.',
+    },
+  },
+  validation: {
+    nameRequired: 'Informe o nome do grupo.',
+    nameTooLong: 'Use no máximo 80 caracteres.',
+    descriptionTooLong: 'Use no máximo 300 caracteres.',
+    invalid: 'Valor recusado pelo servidor. Confira e tente novamente.',
+  },
+  editor: {
+    back: 'Voltar para a lista',
+    backToList: 'Voltar para a lista',
+    createTitle: 'Novo grupo de e-mails',
+    createSubtitle: 'Dê um nome ao grupo e escolha as contas que recebem os e-mails.',
+    editTitle: 'Editar grupo de e-mails',
+    sections: {
+      general: {
+        title: 'Dados do grupo',
+        description: 'Nome e descrição exibidos ao escolher os destinatários de um formulário.',
+      },
+      recipients: {
+        title: 'Destinatários',
+        description:
+          'Contas com e-mail verificado, membros ou não. Marque as contas e mova-as entre as listas, uma a uma ou todas de uma vez.',
+      },
+    },
+    cancel: 'Cancelar',
+    submit: 'Salvar grupo',
+    submitting: 'Salvando…',
+    success: {
+      createTitle: 'Grupo criado',
+      editTitle: 'Grupo atualizado',
+      description: 'O grupo "{{name}}" foi salvo.',
+    },
+    invalid: {
+      title: 'Revise o grupo',
+      description: 'Há campos com problemas. Corrija os itens marcados e salve novamente.',
+    },
+  },
+  fields: {
+    name: 'Nome',
+    namePlaceholder: 'Ex.: Líderes de célula',
+    description: 'Descrição (opcional)',
+    descriptionPlaceholder: 'Para que serve este grupo',
+  },
+  recipients: {
+    available: 'Contas disponíveis',
+    selected: 'No grupo',
+    searchPlaceholder: 'Buscar por nome ou e-mail',
+    searchLabel: 'Buscar em {{list}}',
+    empty: 'Nenhuma conta nesta lista.',
+    noMatches: 'Nenhuma conta encontrada.',
+    count_one: '{{count}} conta',
+    count_other: '{{count}} contas',
+    filteredCount: '{{shown}} de {{total}}',
+    addChecked: 'Adicionar marcadas',
+    addAll: 'Adicionar todas',
+    removeChecked: 'Remover marcadas',
+    removeAll: 'Remover todas',
+    memberBadge: 'Membro',
+    unavailable: {
+      title: 'Contas indisponíveis',
+      description: 'Não foi possível carregar as contas que podem entrar no grupo.',
+    },
+    unavailableAccounts: {
+      title: 'Contas que não recebem mais e-mails',
+      description_one:
+        '{{count}} conta do grupo foi suspensa ou deixou de ter e-mail verificado e não aparece nas listas.',
+      description_other:
+        '{{count}} contas do grupo foram suspensas ou deixaram de ter e-mail verificado e não aparecem nas listas.',
+      remove: 'Tirar do grupo',
+    },
+  },
+} as const;
