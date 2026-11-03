@@ -17,6 +17,8 @@
   "vars": {
     // Duração da liberação do Wi-Fi de visitantes, em minutos.
     "GUEST_WIFI_SESSION_MINUTES": "240",
+    // Health público da Core API do ambiente: GET /api/v1/wake também a acorda direto daqui.
+    "CORE_API_HEALTH_URL": "https://comvivati-core-api.onrender.com/api/v1/health",
   },
   // Secrets (não versionados), por ambiente: pnpm exec wrangler secret put <NOME> [--env hml]
   // OMADA_CONTROLLER_URL, OMADA_CONTROLLER_ID, OMADA_SITE_ID, OMADA_OPERATOR_USERNAME,
@@ -31,6 +33,7 @@
       "routes": [{ "pattern": "hml.comvivaeficaz.com.br", "custom_domain": true }],
       "vars": {
         "GUEST_WIFI_SESSION_MINUTES": "240",
+        "CORE_API_HEALTH_URL": "https://comvivati-core-api-hml.onrender.com/api/v1/health",
       },
     },
   },

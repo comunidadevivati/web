@@ -11,6 +11,10 @@ import { z } from 'zod';
  * (HttpOnly, SameSite=Lax) fica no domínio do front e não há CORS. Redirects e Set-Cookie do BFF
  * voltam ao navegador sem alteração.
  *
+ * GET /api/v1/wake
+ * Além de repassar ao BFF, acorda a Core API direto pela URL pública (CORE_API_HEALTH_URL): no
+ * Render Free, a chamada vinda da internet garante o despertar mesmo se o BFF não conseguir.
+ *
  * POST /api/guest-wifi/authorize
  * Libera a internet da rede "VIVA - Visitantes" no Omada Controller (External Portal Server).
  * As credenciais do Hotspot Operator ficam somente aqui, como secrets do Worker.
@@ -21,9 +25,16 @@ const GUEST_WIFI_AUTHORIZE_PATH = '/api/guest-wifi/authorize';
 
 const BFF_PROXY_PATH_PREFIXES = ['/auth/', '/api/v1/'];
 
+const WAKE_PATH = '/api/v1/wake';
+
+// Cold start da Core API no Render Free: de 30 a 60 s, às vezes mais.
+const CORE_API_WAKE_TIMEOUT_MS = 80_000;
+
 // BFF_ORIGIN é opcional enquanto o BFF não está publicado: sem ele, o proxy responde 503.
+// CORE_API_HEALTH_URL (vars do wrangler.jsonc) é opcional: sem ele, só o BFF acorda a Core API.
 type WorkerEnv = Env & {
   BFF_ORIGIN?: string;
+  CORE_API_HEALTH_URL?: string;
 };
 
 // Omada usa o formato AA-BB-CC-DD-EE-FF.
@@ -312,12 +323,43 @@ const proxyToBff = async (request: Request, env: WorkerEnv) => {
   }
 };
 
+// Espera a Core API responder ao health público; a própria requisição a tira do repouso.
+const wakeCoreApi = async (env: WorkerEnv) => {
+  if (!env.CORE_API_HEALTH_URL) {
+    return;
+  }
+
+  try {
+    await fetch(env.CORE_API_HEALTH_URL, {
+      signal: AbortSignal.timeout(CORE_API_WAKE_TIMEOUT_MS),
+    });
+  } catch (error) {
+    console.error('core-wake: request failed', error instanceof Error ? error.message : '');
+  }
+};
+
+// Acorda BFF e Core API em paralelo. Se o BFF respondeu 503 (Core API ainda subindo) e a Core API
+// acordou depois, pergunta de novo ao BFF, que agora a encontra de pé.
+const handleWake = async (request: Request, env: WorkerEnv) => {
+  const [, bffResponse] = await Promise.all([wakeCoreApi(env), proxyToBff(request, env)]);
+
+  if (bffResponse.status !== 503 || !env.CORE_API_HEALTH_URL) {
+    return bffResponse;
+  }
+
+  return proxyToBff(request, env);
+};
+
 export default {
   fetch: async (request, env) => {
     const { pathname } = new URL(request.url);
 
     if (pathname === GUEST_WIFI_AUTHORIZE_PATH) {
       return handleGuestWifiAuthorize(request, env);
+    }
+
+    if (pathname === WAKE_PATH && request.method === 'GET') {
+      return handleWake(request, env);
     }
 
     if (BFF_PROXY_PATH_PREFIXES.some((prefix) => pathname.startsWith(prefix))) {
