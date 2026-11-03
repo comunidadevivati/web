@@ -7,15 +7,19 @@ import {
 import { changeFormStatusUseCase } from '@/features/forms/application/use-cases/change-form-status.use-case';
 import { deleteFormUseCase } from '@/features/forms/application/use-cases/delete-form.use-case';
 import { duplicateFormUseCase } from '@/features/forms/application/use-cases/duplicate-form.use-case';
+import { openFormPrintoutUseCase } from '@/features/forms/application/use-cases/open-form-printout.use-case';
 import { purgeAnswersUseCase } from '@/features/forms/application/use-cases/purge-answers.use-case';
 import { startEmailDispatchUseCase } from '@/features/forms/application/use-cases/start-email-dispatch.use-case';
 import {
   canDeleteForm,
   canEditForm,
   canPurgeAnswers,
+  CANCELLATION_REASON_MAX_LENGTH,
+  CANCELLATION_REASON_MIN_LENGTH,
   canRemindPending,
   getFormEmailAction,
   getFormStatusActions,
+  hasRecipients,
   isSendingEmails,
   type Form,
   type FormPage,
@@ -24,6 +28,7 @@ import {
   formatCivilDate,
   getFormsNotice,
   getServerDetail,
+  getCancellationReasonIssue,
   isEmailAction,
   type FormMenuAction,
   type FormStatusFilter,
@@ -52,11 +57,13 @@ const runMenuAction = ({
   csrfToken,
   form,
   message,
+  reason,
 }: {
   action: FormMenuAction;
   csrfToken: string;
   form: Form;
   message: string;
+  reason: string;
 }) => {
   if (isEmailAction(action)) {
     return startEmailDispatchUseCase({
@@ -71,7 +78,7 @@ const runMenuAction = ({
     return purgeAnswersUseCase({ csrfToken, id: form.id });
   }
 
-  return changeFormStatusUseCase({ csrfToken, form, action });
+  return changeFormStatusUseCase({ csrfToken, form, action, reason: reason.trim() || null });
 };
 
 export const useFormsViewModel = () => {
@@ -93,6 +100,11 @@ export const useFormsViewModel = () => {
 
   // Mensagem opcional dos e-mails (convite, reenvio e lembrete).
   const [dispatchMessage, setDispatchMessage] = useState('');
+
+  // Motivo do cancelamento; o erro aparece depois de sair do campo ou de tentar confirmar.
+  const [cancellationReason, setCancellationReason] = useState('');
+
+  const [isReasonTouched, setIsReasonTouched] = useState(false);
 
   const {
     data,
@@ -148,7 +160,14 @@ export const useFormsViewModel = () => {
     }: {
       csrfToken: string;
       target: StatusTarget;
-    }) => runMenuAction({ action, csrfToken, form, message: dispatchMessage }),
+    }) =>
+      runMenuAction({
+        action,
+        csrfToken,
+        form,
+        message: dispatchMessage,
+        reason: cancellationReason,
+      }),
     onSuccess: async ({ title }, { target }) => {
       setStatusTarget(null);
 
@@ -248,6 +267,21 @@ export const useFormsViewModel = () => {
     });
   };
 
+  // Grupos e e-mails informados; sem nenhum, o formulário serve só para impressão.
+  const getRecipientSummary = (form: Form) => {
+    if (!hasRecipients(form)) {
+      return t('list.noRecipients');
+    }
+
+    const groups = t('list.recipientGroupCount', { count: form.recipientGroupIds.length });
+
+    const emails = t('list.recipientEmailCount', {
+      count: form.recipientAccountIds.length + form.recipientEmails.length,
+    });
+
+    return `${groups} · ${emails}`;
+  };
+
   // Envio em andamento: o servidor informa SENDING; enquanto a requisição de início não volta, o
   // próprio pedido também bloqueia o formulário.
   const startingId =
@@ -261,13 +295,16 @@ export const useFormsViewModel = () => {
     emailAction: getFormEmailAction(form),
     canRemind: canRemindPending(form),
     canPurge: canPurgeAnswers(form),
+    cancellationSummary: form.cancellationReason
+      ? t('list.cancellationReason', { reason: form.cancellationReason })
+      : null,
     purgedSummary: form.answersPurgedAt
       ? t('list.answersPurged', { date: formatDateTime(form.answersPurgedAt) })
       : null,
     emailSummary: getEmailSummary(form),
     period: formatPeriod(form),
     questionCount: t('list.questionCount', { count: form.questions.length }),
-    recipientCount: t('list.recipientGroupCount', { count: form.recipientGroupIds.length }),
+    recipientCount: getRecipientSummary(form),
     canEdit: canEditForm(form.status),
     canDelete: canDeleteForm(form.status),
     statusActions: getFormStatusActions(form.status),
@@ -326,6 +363,16 @@ export const useFormsViewModel = () => {
     setPreviewForm(form);
   };
 
+  // Formulário em branco em PDF, numa nova aba: o visualizador do navegador imprime ou baixa.
+  const printForm = (form: Form) => {
+    if (!openFormPrintoutUseCase(form.id)) {
+      notify.error({
+        title: t('responses.print.blocked.title'),
+        description: t('responses.print.blocked.description'),
+      });
+    }
+  };
+
   const changePreviewOpen = (open: boolean) => {
     if (!open) {
       setPreviewForm(null);
@@ -354,8 +401,21 @@ export const useFormsViewModel = () => {
     mutateDelete({ csrfToken: session.csrfToken, id: deleteTarget.id });
   };
 
+  const reasonIssue = getCancellationReasonIssue(cancellationReason);
+
+  const reasonError =
+    reasonIssue &&
+    t(`statusDialog.reason.${reasonIssue}`, {
+      min: CANCELLATION_REASON_MIN_LENGTH,
+      max: CANCELLATION_REASON_MAX_LENGTH,
+    });
+
   const requestStatusChange = (form: Form, action: FormMenuAction) => {
     setDispatchMessage('');
+
+    setCancellationReason('');
+
+    setIsReasonTouched(false);
 
     setStatusTarget({ form, action });
   };
@@ -366,6 +426,12 @@ export const useFormsViewModel = () => {
 
   const confirmStatusChange = () => {
     if (!statusTarget || !session || isChangingStatus) {
+      return;
+    }
+
+    if (statusTarget.action === 'cancel' && reasonIssue) {
+      setIsReasonTouched(true);
+
       return;
     }
 
@@ -395,12 +461,17 @@ export const useFormsViewModel = () => {
     openResponses,
     openPreview,
     preview: previewForm ? getPreview(previewForm) : null,
+    printForm,
     requestDelete,
     requestStatusChange,
     retry,
     statusFilter,
     changeDispatchMessage: setDispatchMessage,
     dispatchMessage,
+    cancellationReason,
+    changeCancellationReason: setCancellationReason,
+    touchCancellationReason: () => setIsReasonTouched(true),
+    cancellationReasonError: isReasonTouched ? reasonError : null,
     statusTarget: statusTarget
       ? { title: statusTarget.form.title, action: statusTarget.action }
       : null,

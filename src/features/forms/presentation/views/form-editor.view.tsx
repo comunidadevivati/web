@@ -10,8 +10,6 @@ import {
   CardContent,
   Checkbox,
   FieldGroup,
-  FieldLegend,
-  FieldSet,
   Form,
   Heading,
   Input,
@@ -25,7 +23,6 @@ import {
   Text,
   Textarea,
 } from '@/components/ui';
-import { EmailGroupTypeBadge } from '@/features/communication/presentation/components/email-group-type-badge';
 import {
   CONSENT_TEXT_MAX_LENGTH,
   FORM_DESCRIPTION_MAX_LENGTH,
@@ -39,6 +36,7 @@ import {
   type QuestionFieldType,
 } from '@/features/forms/domain/form';
 import { FormPreviewDialog } from '@/features/forms/presentation/components/form-preview-dialog';
+import { FormRecipientsField } from '@/features/forms/presentation/components/form-recipients-field';
 import { HeaderImageField } from '@/features/forms/presentation/components/header-image-field';
 import { QuestionOptionsField } from '@/features/forms/presentation/components/question-options-field';
 import { QuestionScaleField } from '@/features/forms/presentation/components/question-scale-field';
@@ -49,7 +47,6 @@ import {
   ArrowDownIcon,
   ArrowLeftIcon,
   ArrowUpIcon,
-  CircleAlertIcon,
   CopyIcon,
   EyeIcon,
   FileTextIcon,
@@ -58,7 +55,6 @@ import {
   LockIcon,
   MailIcon,
   PlusIcon,
-  RefreshCwIcon,
   SaveIcon,
   SettingsIcon,
   Trash2Icon,
@@ -107,6 +103,8 @@ export const FormEditorView = ({ form }: FormEditorViewProps) => {
     preview,
     questionFields,
     questionTypes,
+    recipients,
+    changeRecipients,
     refetchEmailGroups,
     removeHeaderImage,
     removeQuestion,
@@ -132,7 +130,10 @@ export const FormEditorView = ({ form }: FormEditorViewProps) => {
 
   const questionsError = getListError('questions');
 
-  const recipientsError = getListError('recipientGroupIds');
+  const recipientsError =
+    getListError('recipientGroupIds') ??
+    getListError('recipientAccountIds') ??
+    getListError('recipientEmails');
 
   const statusItems = statusOptions.map((value) => ({ value, label: t(`status.${value}`) }));
 
@@ -627,111 +628,16 @@ export const FormEditorView = ({ form }: FormEditorViewProps) => {
           />
 
           <CardContent className="grid gap-4">
-            {isLoadingEmailGroups && (
-              <Box className="flex justify-center py-6">
-                <Spinner className="size-6 text-primary-strong" />
-              </Box>
-            )}
-
-            {hasEmailGroupsError && (
-              <Alert variant="destructive">
-                <CircleAlertIcon />
-
-                <AlertTitle>{t('recipients.unavailable.title')}</AlertTitle>
-
-                <AlertDescription className="grid gap-3">
-                  {t('recipients.unavailable.description')}
-
-                  <Button
-                    className="w-fit"
-                    size="sm"
-                    type="button"
-                    variant="outline"
-                    onClick={refetchEmailGroups}
-                  >
-                    <RefreshCwIcon data-icon="inline-start" />
-                    {t('actions.retry')}
-                  </Button>
-                </AlertDescription>
-              </Alert>
-            )}
-
-            {!isLoadingEmailGroups && !hasEmailGroupsError && (
-              <Controller
-                control={control}
-                name="recipientGroupIds"
-                render={({ field: { onChange, value } }) => (
-                  <FieldSet
-                    aria-describedby={recipientsError ? 'form-recipients-error' : undefined}
-                    aria-invalid={Boolean(recipientsError)}
-                    className="gap-3"
-                  >
-                    <FieldLegend className="sr-only">{t('recipients.legend')}</FieldLegend>
-
-                    <Box className="grid gap-2 sm:grid-cols-2">
-                      {emailGroups.map(({ description, id, name, recipientCount, type }) => {
-                        const isChecked = value.includes(id);
-
-                        return (
-                          <Label
-                            key={id}
-                            className={cn(
-                              `
-                                flex min-h-11 cursor-pointer items-start gap-3 rounded-lg border
-                                border-border p-3 font-normal transition-colors
-                                hover:border-primary/40
-                              `,
-                              isChecked && 'border-primary/50 bg-primary/10',
-                              isLocked && 'cursor-not-allowed opacity-70',
-                            )}
-                            htmlFor={`form-recipient-${id}`}
-                          >
-                            <Checkbox
-                              checked={isChecked}
-                              className="mt-0.5"
-                              disabled={isLocked}
-                              id={`form-recipient-${id}`}
-                              onChange={({ target: { checked } }) =>
-                                onChange(
-                                  checked
-                                    ? [...value, id]
-                                    : value.filter((groupId) => groupId !== id),
-                                )
-                              }
-                            />
-
-                            <Box className="grid min-w-0 gap-1">
-                              <Box className="flex flex-wrap items-center gap-2">
-                                <Text className="text-sm font-semibold text-foreground">
-                                  {name}
-                                </Text>
-
-                                <EmailGroupTypeBadge type={type} />
-                              </Box>
-
-                              <Text className="text-xs text-muted-foreground">
-                                {t('recipients.count', { count: recipientCount })}
-                                {description ? ` · ${description}` : ''}
-                              </Text>
-                            </Box>
-                          </Label>
-                        );
-                      })}
-                    </Box>
-
-                    {recipientsError && (
-                      <Text
-                        className="text-sm text-destructive-strong"
-                        id="form-recipients-error"
-                        role="alert"
-                      >
-                        {recipientsError}
-                      </Text>
-                    )}
-                  </FieldSet>
-                )}
-              />
-            )}
+            <FormRecipientsField
+              disabled={isLocked}
+              emailGroups={emailGroups}
+              error={recipientsError}
+              hasGroupsError={hasEmailGroupsError}
+              isLoadingGroups={isLoadingEmailGroups}
+              value={recipients}
+              onChange={changeRecipients}
+              onRetryGroups={refetchEmailGroups}
+            />
           </CardContent>
         </Card>
 

@@ -55,6 +55,8 @@ const formSchema = z.object({
     }),
   ),
   recipientGroupIds: z.array(z.string()),
+  recipientAccountIds: z.array(z.string()),
+  recipientEmails: z.array(z.string()),
   anonymous: z.boolean(),
   allowAnswerEdit: z.boolean(),
   consentText: z.string().nullable(),
@@ -72,6 +74,7 @@ const formSchema = z.object({
   answeredCount: z.number().int(),
   pendingRecipientCount: z.number().int(),
   answersPurgedAt: z.string().nullable(),
+  cancellationReason: z.string().nullable(),
   version: z.number().int(),
   createdAt: z.string(),
   updatedAt: z.string(),
@@ -234,11 +237,11 @@ export const formsHttpGateway: FormsGateway = {
   },
 
   // Só o status, sem reenviar o conteúdo; aplica as mesmas regras de transição e publicação.
-  changeFormStatus: (csrfToken, id, version, status) => {
+  changeFormStatus: (csrfToken, id, version, status, reason) => {
     return request(formSchema, () =>
       bffClient.put(`${formPath(id)}/status`, {
         headers: csrfHeaders(csrfToken),
-        json: { version, status },
+        json: { version, status, reason },
       }),
     );
   },

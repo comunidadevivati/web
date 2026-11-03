@@ -1,4 +1,4 @@
-import type { FormHeaderImage, FormQuestion } from '@/features/forms/domain/form';
+import type { FormHeaderImage, FormQuestion, FormStatus } from '@/features/forms/domain/form';
 
 // Resposta de um formulário pelo link pessoal enviado por e-mail (ADR 0013 do backend). O token do
 // link é a credencial: a página é pública, sem sessão.
@@ -23,14 +23,18 @@ export type FormAnswer = {
   value: number | null;
 };
 
+// Fora de OPEN, o servidor devolve só o título, a imagem, o período e o status (sem perguntas,
+// respostas nem destinatário).
 export type FormInvitation = {
-  recipient: { name: string; email: string };
+  recipient: { name: string; email: string } | null;
   status: 'PENDING' | 'ANSWERED';
   // PAPER: a resposta foi registrada no painel a partir da versão impressa.
   answerChannel: 'DIGITAL' | 'PAPER' | null;
   answeredAt: string | null;
   answers: FormAnswer[];
   availability: InvitationAvailability;
+  // Status do formulário, para explicar por que não aceita respostas.
+  formStatus: FormStatus;
   form: {
     title: string;
     description: string | null;

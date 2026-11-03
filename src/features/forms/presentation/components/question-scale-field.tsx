@@ -68,10 +68,6 @@ export const QuestionScaleField = ({
 
   const minItems = toItems(SCALE_MIN_VALUES);
 
-  const maxItems = toItems(
-    Array.from({ length: SCALE_MAX_VALUE - min }, (_, index) => min + 1 + index),
-  );
-
   const points = Array.from({ length: Math.max(max - min + 1, 0) }, (_, offset) => min + offset);
 
   const applyPerformancePreset = () => {
@@ -142,7 +138,32 @@ export const QuestionScaleField = ({
       <Box className="grid gap-4 sm:grid-cols-2">
         {selectField('min', minItems)}
 
-        {selectField('max', maxItems)}
+        <FormField
+          description={t('scale.maxHint', { max: SCALE_MAX_VALUE })}
+          error={getError('max')}
+          id={`${prefix}-max`}
+          label={t('scale.max')}
+        >
+          <Controller
+            control={control}
+            name={`${path}.max`}
+            render={({ field: { onBlur, onChange, value } }) => (
+              <Input
+                id={`${prefix}-max`}
+                aria-describedby={`${prefix}-max-description`}
+                disabled={disabled}
+                inputMode="numeric"
+                max={SCALE_MAX_VALUE}
+                min={min + 1}
+                step={1}
+                type="number"
+                value={Number.isNaN(value) ? '' : String(value)}
+                onBlur={onBlur}
+                onChange={(event) => onChange(event.target.valueAsNumber)}
+              />
+            )}
+          />
+        </FormField>
       </Box>
 
       <Box className="flex flex-wrap items-center justify-between gap-3">

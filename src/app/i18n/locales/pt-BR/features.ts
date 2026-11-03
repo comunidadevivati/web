@@ -1336,6 +1336,7 @@ export const forms = {
     groupLabel: 'Configuração da escala da pergunta {{number}}',
     min: 'Começa em',
     max: 'Termina em',
+    maxHint: 'Número inteiro maior que o início, até {{max}}.',
     minLabel: 'Rótulo do início (opcional)',
     maxLabel: 'Rótulo do fim (opcional)',
     minLabelPlaceholder: 'Ex.: Discordo totalmente',
@@ -1392,6 +1393,8 @@ export const forms = {
     delete: 'Excluir',
     preview: 'Pré-visualizar formulário',
     previewNamed: 'Pré-visualizar o formulário {{title}}',
+    print: 'Imprimir (PDF)',
+    printNamed: 'Abrir o PDF do formulário {{title}} para imprimir',
     menu: 'Mais ações',
     menuNamed: 'Ações do formulário {{title}}',
     responses: 'Respostas',
@@ -1621,22 +1624,18 @@ export const forms = {
       editableDescription:
         'Suas respostas foram registradas em {{date}}. Você pode alterá-las abaixo até o fim do período.',
     },
-    availability: {
-      NOT_STARTED: {
-        title: 'Ainda não começou',
-        description: 'Este formulário recebe respostas de {{period}}.',
-      },
-      ENDED: {
-        title: 'Prazo encerrado',
-        description: 'Este formulário recebeu respostas de {{period}}.',
-      },
-      CLOSED: {
-        title: 'Formulário fechado',
-        description: 'Este formulário não está recebendo respostas.',
-      },
-      OPEN: {
-        title: 'Formulário aberto',
-        description: 'Responda até o fim do período ({{period}}).',
+    unavailable: {
+      title: 'Formulário indisponível',
+      description:
+        'Não é possível responder a este formulário porque ele está com o status "{{status}}".',
+      status: {
+        DRAFT: 'Despublicado',
+        PUBLISHED: 'Publicado',
+        FINISHED: 'Finalizado',
+        CANCELLED: 'Cancelado',
+        NOT_STARTED: 'Não iniciado',
+        ENDED: 'Expirado',
+        OPEN: 'Aberto',
       },
     },
     validation: {
@@ -1671,6 +1670,14 @@ export const forms = {
     message: 'Mensagem no e-mail (opcional)',
     messagePlaceholder: 'Ex.: Contamos com a sua participação até sexta-feira!',
     messageHint: 'Aparece no corpo do e-mail, antes do botão de resposta.',
+    reason: {
+      label: 'Motivo do cancelamento',
+      placeholder: 'Ex.: Pesquisa substituída por uma nova versão com outras perguntas.',
+      counter: '{{count}}/{{max}}',
+      required: 'Informe o motivo do cancelamento.',
+      tooShort: 'O motivo precisa ter no mínimo {{min}} caracteres.',
+      tooLong: 'O motivo pode ter no máximo {{max}} caracteres.',
+    },
     close: 'Fechar',
     back: 'Voltar',
     confirming: 'Salvando…',
@@ -1712,8 +1719,12 @@ export const forms = {
     questionCount_other: '{{count}} perguntas',
     recipientGroupCount_one: '{{count}} grupo de e-mail',
     recipientGroupCount_other: '{{count}} grupos de e-mail',
+    recipientEmailCount_one: '{{count}} e-mail individual',
+    recipientEmailCount_other: '{{count}} e-mails individuais',
+    noRecipients: 'Sem destinatários',
     emailSummary: 'E-mails enviados em {{date}} · {{answered}} de {{invited}} responderam',
     answersPurged: 'Respostas apagadas em {{date}} (LGPD)',
+    cancellationReason: 'Motivo do cancelamento: {{reason}}',
     loadMore: 'Carregar mais',
     loadingMore: 'Carregando…',
   },
@@ -1742,13 +1753,13 @@ export const forms = {
     questionTitleRequired: 'Informe o nome da pergunta.',
     questionTitleTooLong: 'Use no máximo 200 caracteres.',
     questionDescriptionTooLong: 'Use no máximo 500 caracteres.',
-    recipientsRequired: 'Para publicar, selecione ao menos um grupo de e-mail.',
     optionRequired: 'Informe o texto da opção.',
     optionTooLong: 'Use no máximo 100 caracteres.',
     optionsTooFew: 'Adicione ao menos 1 opção.',
     optionsTooMany: 'Use no máximo 20 opções.',
     optionsDuplicated: 'As opções precisam ser diferentes entre si.',
-    scaleInvalid: 'A escala começa em 0 ou 1 e termina depois do início, até 10.',
+    scaleInvalid:
+      'A escala começa em 0 ou 1 e termina num número inteiro depois do início, até 100.',
     scaleLabelTooLong: 'Use no máximo 40 caracteres.',
     scalePointRequired: 'Dê um nome para este ponto.',
     scalePointsDuplicated: 'Use um nome diferente em cada ponto.',
@@ -1778,7 +1789,7 @@ export const forms = {
       recipients: {
         title: 'Destinatários',
         description:
-          'Grupos de e-mail que recebem o formulário pela ação "Enviar e-mails do grupo".',
+          'Opcional. Grupos de e-mail e e-mails informados que recebem o formulário pela ação "Enviar e-mails do grupo".',
       },
       settings: {
         title: 'Configurações das respostas',
@@ -1864,12 +1875,71 @@ export const forms = {
     add: 'Adicionar opção',
   },
   recipients: {
-    legend: 'Grupos de e-mail destinatários',
-    count_one: '{{count}} destinatário',
-    count_other: '{{count}} destinatários',
+    legend: 'Grupos de e-mail',
+    count_one: '{{count}} e-mail',
+    count_other: '{{count}} e-mails',
     unavailable: {
-      title: 'Grupos de e-mail indisponíveis',
-      description: 'Não foi possível carregar os grupos de e-mail.',
+      title: 'Destinatários indisponíveis',
+      description: 'Não foi possível carregar os grupos e as contas de e-mail.',
+    },
+    noGroups: {
+      description:
+        'Nenhum grupo de e-mail cadastrado. Crie um em Comunicação → E-mails ou adicione os e-mails abaixo.',
+      create: 'Criar grupo de e-mail',
+      reload: 'Atualizar grupos',
+    },
+    search: {
+      label: 'Pesquisar grupo ou e-mail',
+      placeholder: 'Pesquisar por nome do grupo ou e-mail',
+      submit: 'Pesquisar',
+      clear: 'Limpar pesquisa',
+      noGroups: 'Nenhum grupo encontrado na pesquisa.',
+      noEmails: 'Nenhum e-mail da lista encontrado na pesquisa.',
+    },
+    groups: {
+      viewEmails: 'Ver e-mails',
+      viewEmailsNamed: 'Ver os e-mails do grupo {{name}}',
+      selectNamed: 'Selecionar o grupo {{name}}',
+      listed: {
+        all: 'Na lista: {{count}} de {{total}}',
+        some: 'Parcial: {{count}} de {{total}} na lista',
+      },
+    },
+    dialog: {
+      close: 'Fechar',
+      count_one: '{{count}} e-mail neste grupo',
+      count_other: '{{count}} e-mails neste grupo',
+      empty: 'Este grupo não tem e-mails que possam receber o formulário.',
+      external: 'E-mail avulso',
+      ineligible_one: '{{count}} conta do grupo não recebe (inativa ou sem e-mail verificado).',
+      ineligible_other:
+        '{{count}} contas do grupo não recebem (inativas ou sem e-mail verificado).',
+    },
+    emails: {
+      label: 'E-mail',
+      add: 'Adicionar e-mail',
+      placeholder: 'nome@exemplo.com',
+      confirm: 'Adicionar',
+      close: 'Fechar campo de e-mail',
+      remove: 'Remover {{email}} da lista',
+      invalid: 'Informe um e-mail válido (ex.: nome@exemplo.com).',
+      duplicate: 'Este e-mail já está na lista.',
+      tooMany: 'Limite de {{max}} e-mails atingido.',
+    },
+    list: {
+      title: 'E-mails adicionados',
+      count_one: '{{count}} e-mail na lista, sem repetição',
+      count_other: '{{count}} e-mails na lista, sem repetição',
+      filtered: 'Mostrando {{shown}} de {{total}}',
+      empty:
+        'Nenhum e-mail na lista. O formulário pode ser salvo e impresso; o envio dos e-mails fica disponível depois de marcar grupos ou adicionar e-mails.',
+      manual: 'Adicionado à mão',
+      sort: {
+        label: 'Ordenar lista',
+        recent: 'Últimos inseridos',
+        asc: 'Alfabética (A–Z)',
+        desc: 'Alfabética (Z–A)',
+      },
     },
   },
   preview: {

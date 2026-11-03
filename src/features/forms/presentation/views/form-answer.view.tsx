@@ -1,3 +1,4 @@
+import { StatusBadge } from '@/components/molecules';
 import { PreferencesControls } from '@/components/organisms';
 import {
   Alert,
@@ -108,7 +109,47 @@ export const FormAnswerView = () => {
       );
     }
 
-    const { form, recipient, status, availability } = invitation;
+    const { availability, form, formStatus, recipient, status } = invitation;
+
+    // Fechado, fora do período ou sem destinatário: só título, imagem e o status, sem nenhuma ação.
+    if (availability !== 'OPEN' || !recipient) {
+      const statusKey = availability === 'CLOSED' ? formStatus : availability;
+
+      const statusLabel = t(`answer.unavailable.status.${statusKey}`);
+
+      return (
+        <Box className="grid gap-6">
+          {form.headerImage && (
+            <Image
+              alt=""
+              aria-hidden="true"
+              className="mx-auto block h-auto max-h-150 w-auto max-w-full rounded-lg"
+              height={form.headerImage.height}
+              src={form.headerImage.url}
+              width={form.headerImage.width}
+            />
+          )}
+
+          <Box className="flex flex-wrap items-center gap-3">
+            <Heading className="text-2xl font-semibold tracking-tight text-foreground">
+              {form.title}
+            </Heading>
+
+            <StatusBadge label={statusLabel} tone="warning" />
+          </Box>
+
+          <Alert>
+            <LockIcon />
+
+            <AlertTitle>{t('answer.unavailable.title')}</AlertTitle>
+
+            <AlertDescription>
+              {t('answer.unavailable.description', { status: statusLabel })}
+            </AlertDescription>
+          </Alert>
+        </Box>
+      );
+    }
 
     // Papel, anônimo (respostas não voltam), editável até o fim do período ou respondido.
     const getAnsweredMessage = () => {
@@ -164,18 +205,6 @@ export const FormAnswerView = () => {
 
             <AlertDescription>
               {t(`answer.answered.${answeredMessage}`, { date: answeredAt ?? '' })}
-            </AlertDescription>
-          </Alert>
-        )}
-
-        {status === 'PENDING' && availability !== 'OPEN' && (
-          <Alert>
-            <LockIcon />
-
-            <AlertTitle>{t(`answer.availability.${availability}.title`)}</AlertTitle>
-
-            <AlertDescription>
-              {t(`answer.availability.${availability}.description`, { period })}
             </AlertDescription>
           </Alert>
         )}

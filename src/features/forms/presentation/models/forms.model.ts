@@ -3,6 +3,8 @@ import type { StatusBadgeTone } from '@/components/molecules';
 import {
   ACCEPTED_HEADER_IMAGE_EXTENSIONS,
   ACCEPTED_HEADER_IMAGE_TYPES,
+  CANCELLATION_REASON_MAX_LENGTH,
+  CANCELLATION_REASON_MIN_LENGTH,
   FORM_DESCRIPTION_MAX_LENGTH,
   FORM_STATUSES,
   FORM_TITLE_MAX_LENGTH,
@@ -11,6 +13,7 @@ import {
   FormNotFoundError,
   InvalidFormDataError,
   MAX_QUESTIONS,
+  MAX_RECIPIENT_EMAILS,
   QUESTION_DESCRIPTION_MAX_LENGTH,
   QUESTION_FIELD_TYPES,
   QUESTION_OPTION_MAX_LENGTH,
@@ -48,6 +51,23 @@ export type FormMenuAction = FormStatusAction | FormEmailAction | 'purgeAnswers'
 
 export const isEmailAction = (action: FormMenuAction): action is FormEmailAction =>
   action === 'sendEmails' || action === 'resendEmails' || action === 'remindPending';
+
+export type CancellationReasonIssue = 'required' | 'tooShort' | 'tooLong';
+
+// Motivo do cancelamento: obrigatório, de 10 a 255 caracteres sem contar espaços nas pontas.
+export const getCancellationReasonIssue = (reason: string): CancellationReasonIssue | null => {
+  const { length } = reason.trim();
+
+  if (length === 0) {
+    return 'required';
+  }
+
+  if (length < CANCELLATION_REASON_MIN_LENGTH) {
+    return 'tooShort';
+  }
+
+  return length > CANCELLATION_REASON_MAX_LENGTH ? 'tooLong' : null;
+};
 
 // Filtro da lista: um status ou todos.
 export type FormStatusFilter = FormStatus | 'ALL';
@@ -95,7 +115,6 @@ export const formsValidationMessages = {
   questionTitleRequired: 'validation.questionTitleRequired',
   questionTitleTooLong: 'validation.questionTitleTooLong',
   questionDescriptionTooLong: 'validation.questionDescriptionTooLong',
-  recipientsRequired: 'validation.recipientsRequired',
   optionRequired: 'validation.optionRequired',
   optionTooLong: 'validation.optionTooLong',
   optionsTooFew: 'validation.optionsTooFew',
@@ -223,7 +242,7 @@ const questionSchema = z
         });
       }
 
-      if (scale.max <= scale.min || scale.max > SCALE_MAX_VALUE) {
+      if (!Number.isInteger(scale.max) || scale.max <= scale.min || scale.max > SCALE_MAX_VALUE) {
         context.addIssue({
           code: 'custom',
           path: ['scale', 'max'],
@@ -279,44 +298,34 @@ export const formEditorSchema = z
       .array(questionSchema)
       .min(1, messages.questionsRequired)
       .max(MAX_QUESTIONS, messages.questionsTooMany),
+    // Destinatários são opcionais: o formulário pode ser usado só impresso. O envio dos e-mails é que
+    // exige grupos ou e-mails informados.
     recipientGroupIds: z.array(z.string()),
+    recipientAccountIds: z.array(z.string()).max(MAX_RECIPIENT_EMAILS),
+    recipientEmails: z.array(z.string()).max(MAX_RECIPIENT_EMAILS),
     anonymous: z.boolean(),
     allowAnswerEdit: z.boolean(),
     consentText: optionalText(CONSENT_TEXT_MAX_LENGTH, messages.consentTooLong),
   })
-  .superRefine(
-    ({ allowAnswerEdit, anonymous, endsOn, recipientGroupIds, startsOn, status }, context) => {
-      if (isValidIsoDate(startsOn) && isValidIsoDate(endsOn) && endsOn < startsOn) {
-        context.addIssue({ code: 'custom', path: ['endsOn'], message: messages.endsBeforeStart });
-      }
+  .superRefine(({ allowAnswerEdit, anonymous, endsOn, startsOn, status }, context) => {
+    if (isValidIsoDate(startsOn) && isValidIsoDate(endsOn) && endsOn < startsOn) {
+      context.addIssue({ code: 'custom', path: ['endsOn'], message: messages.endsBeforeStart });
+    }
 
-      // Resposta anônima não pode ser localizada depois para edição.
-      if (anonymous && allowAnswerEdit) {
-        context.addIssue({
-          code: 'custom',
-          path: ['allowAnswerEdit'],
-          message: messages.anonymousEdit,
-        });
-      }
+    // Resposta anônima não pode ser localizada depois para edição.
+    if (anonymous && allowAnswerEdit) {
+      context.addIssue({
+        code: 'custom',
+        path: ['allowAnswerEdit'],
+        message: messages.anonymousEdit,
+      });
+    }
 
-      // Publicar exige destinatários e um período ainda em vigor (o envio dos e-mails é à parte).
-      if (status !== 'PUBLISHED') {
-        return;
-      }
-
-      if (recipientGroupIds.length === 0) {
-        context.addIssue({
-          code: 'custom',
-          path: ['recipientGroupIds'],
-          message: messages.recipientsRequired,
-        });
-      }
-
-      if (isValidIsoDate(endsOn) && endsOn < getTodayIsoDate()) {
-        context.addIssue({ code: 'custom', path: ['endsOn'], message: messages.endsInPast });
-      }
-    },
-  );
+    // Publicar exige um período ainda em vigor.
+    if (status === 'PUBLISHED' && isValidIsoDate(endsOn) && endsOn < getTodayIsoDate()) {
+      context.addIssue({ code: 'custom', path: ['endsOn'], message: messages.endsInPast });
+    }
+  });
 
 export type FormEditorInput = z.input<typeof formEditorSchema>;
 
@@ -385,6 +394,8 @@ export const toFormEditorInput = (form: Form | null): FormEditorInput => {
       status: 'DRAFT',
       questions: [createEmptyQuestion()],
       recipientGroupIds: [],
+      recipientAccountIds: [],
+      recipientEmails: [],
       anonymous: false,
       allowAnswerEdit: false,
       consentText: '',
@@ -409,6 +420,8 @@ export const toFormEditorInput = (form: Form | null): FormEditorInput => {
       }),
     ),
     recipientGroupIds: form.recipientGroupIds,
+    recipientAccountIds: form.recipientAccountIds,
+    recipientEmails: form.recipientEmails,
     anonymous: form.anonymous,
     allowAnswerEdit: form.allowAnswerEdit,
     consentText: form.consentText ?? '',

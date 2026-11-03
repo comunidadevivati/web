@@ -40,6 +40,7 @@ import {
   type FormEditorData,
   type FormEditorInput,
 } from '@/features/forms/presentation/models/forms.model';
+import type { FormRecipientsValue } from '@/features/forms/presentation/view-models/form-recipients.view-model';
 import { useGlobalLoading } from '@/shared/feedback/global-loading';
 import { notify } from '@/shared/feedback/notify';
 import { zodResolver } from '@hookform/resolvers/zod';
@@ -57,6 +58,8 @@ const SERVER_FIELDS = [
   'endsOn',
   'status',
   'recipientGroupIds',
+  'recipientAccountIds',
+  'recipientEmails',
 ] as const;
 
 const QUESTION_FIELD_PATTERN =
@@ -119,7 +122,10 @@ export const useFormEditorViewModel = ({ form }: UseFormEditorViewModelOptions) 
   // Finalizado, cancelado ou com envio em andamento: somente leitura.
   const isReadOnly = form !== null && (isFinalFormStatus(form.status) || isSending);
 
-  const statusOptions = form ? formStatusTransitions[form.status] : INITIAL_FORM_STATUSES;
+  // Cancelar exige motivo: só pela ação "Cancelar formulário" da lista, não pelo editor.
+  const statusOptions = (form ? formStatusTransitions[form.status] : INITIAL_FORM_STATUSES).filter(
+    (status) => status !== 'CANCELLED' || form?.status === 'CANCELLED',
+  );
 
   const editorForm = useForm<FormEditorInput, unknown, FormEditorData>({
     resolver: zodResolver(formEditorSchema),
@@ -262,7 +268,12 @@ export const useFormEditorViewModel = ({ form }: UseFormEditorViewModelOptions) 
 
   // Erros de lista (perguntas, opções e destinatários) só aparecem depois do envio.
   const getListError = (
-    name: 'questions' | 'recipientGroupIds' | `questions.${number}.options`,
+    name:
+      | 'questions'
+      | 'recipientGroupIds'
+      | 'recipientAccountIds'
+      | 'recipientEmails'
+      | `questions.${number}.options`,
   ) => {
     const error = get(errors, name);
 
@@ -353,6 +364,14 @@ export const useFormEditorViewModel = ({ form }: UseFormEditorViewModelOptions) 
     if (to >= 0 && to < questionFields.length) {
       move(from, to);
     }
+  };
+
+  const changeRecipients = ({ accountIds, emails, groupIds }: FormRecipientsValue) => {
+    setValue('recipientGroupIds', groupIds, { shouldDirty: true });
+
+    setValue('recipientAccountIds', accountIds, { shouldDirty: true });
+
+    setValue('recipientEmails', emails, { shouldDirty: true });
   };
 
   const removeQuestion = (index: number) => {
@@ -521,6 +540,13 @@ export const useFormEditorViewModel = ({ form }: UseFormEditorViewModelOptions) 
     moveQuestion,
     preview,
     questionFields,
+    // Destinatários gravados (grupos completos, contas e e-mails escolhidos um a um).
+    recipients: {
+      groupIds: (values.recipientGroupIds ?? []).filter(Boolean) as string[],
+      accountIds: (values.recipientAccountIds ?? []).filter(Boolean) as string[],
+      emails: (values.recipientEmails ?? []).filter(Boolean) as string[],
+    },
+    changeRecipients,
     // Tipo atual de cada pergunta (define se a lista de opções aparece).
     questionTypes: (values.questions ?? []).map((question) => question?.fieldType ?? 'INPUT'),
     // Anônimo não permite editar a resposta depois.

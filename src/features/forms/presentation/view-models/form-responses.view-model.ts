@@ -8,6 +8,7 @@ import { openAnswersPdfUseCase } from '@/features/forms/application/use-cases/op
 import { openPaperAttachmentUseCase } from '@/features/forms/application/use-cases/open-paper-attachment.use-case';
 import { registerPaperAnswerUseCase } from '@/features/forms/application/use-cases/register-paper-answer.use-case';
 import { unmarkPaperAnswerUseCase } from '@/features/forms/application/use-cases/unmark-paper-answer.use-case';
+import { acceptsAnswers } from '@/features/forms/domain/form';
 import {
   checkPaperAttachment,
   type FormInvitationRecord,
@@ -23,6 +24,7 @@ import {
   formatFileSize,
   getFormsNotice,
   getServerDetail,
+  getTodayIsoDate,
 } from '@/features/forms/presentation/models/forms.model';
 import { useGlobalLoading } from '@/shared/feedback/global-loading';
 import { notify } from '@/shared/feedback/notify';
@@ -248,6 +250,8 @@ export const useFormResponsesViewModel = () => {
     confirmUnmark,
     openAttachment: (invitation: FormInvitationRecord) => void openAttachment(invitation),
     errorNotice: invitationsQuery.error ? getFormsNotice(invitationsQuery.error) : null,
+    // Resposta em papel (marcar, anexar, desfazer) só com o formulário aceitando respostas.
+    canChangePaperAnswers: form ? acceptsAnswers(form, getTodayIsoDate()) : false,
     form,
     formId,
     invitedCount: invitations.length,
