@@ -11,10 +11,12 @@ type ChangeFormStatusCommand = {
   // Formulário com a versão lida (concorrência otimista).
   form: Form;
   action: FormStatusAction;
+  // Motivo, obrigatório ao cancelar.
+  reason: string | null;
 };
 
 export const changeFormStatusUseCase = (
-  { action, csrfToken, form }: ChangeFormStatusCommand,
+  { action, csrfToken, form, reason }: ChangeFormStatusCommand,
   gateway: FormsGateway = formsHttpGateway,
 ) => {
   return gateway.changeFormStatus(
@@ -22,5 +24,6 @@ export const changeFormStatusUseCase = (
     form.id,
     form.version,
     formStatusActionTargets[action],
+    action === 'cancel' ? reason : null,
   );
 };

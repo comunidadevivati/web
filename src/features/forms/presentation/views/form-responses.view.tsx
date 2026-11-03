@@ -60,6 +60,7 @@ export const FormResponsesView = () => {
     formId,
     invitedCount,
     isLoading,
+    canChangePaperAnswers,
     isRegistering,
     isRetrying,
     isUnmarking,
@@ -79,6 +80,12 @@ export const FormResponsesView = () => {
   } = useFormResponsesViewModel();
 
   const { t } = useTranslation('forms');
+
+  // Menu só com alguma ação: ver respostas digitais, ou resposta em papel com o formulário aberto.
+  const hasMenuActions = (state: string, hasAttachment: boolean) =>
+    (state === 'DIGITAL' && !form?.anonymous) ||
+    (state === 'PENDING' && canChangePaperAnswers) ||
+    (state === 'PAPER' && (hasAttachment || canChangePaperAnswers));
 
   return (
     <Box className="grid gap-6">
@@ -253,7 +260,7 @@ export const FormResponsesView = () => {
                   )}
                 </Box>
 
-                {(state !== 'DIGITAL' || !form?.anonymous) && (
+                {hasMenuActions(state, Boolean(invitation.paperAttachment)) && (
                   <DropdownMenu>
                     <TooltipHint label={t('actions.menu')}>
                       <DropdownMenuTrigger
@@ -278,7 +285,7 @@ export const FormResponsesView = () => {
                         </DropdownMenuItem>
                       )}
 
-                      {state === 'PENDING' && (
+                      {state === 'PENDING' && canChangePaperAnswers && (
                         <DropdownMenuItem
                           className="px-2 py-2"
                           onClick={() => openPaperDialog(invitation)}
@@ -302,26 +309,30 @@ export const FormResponsesView = () => {
                             </DropdownMenuItem>
                           )}
 
-                          <DropdownMenuItem
-                            className="px-2 py-2"
-                            onClick={() => openPaperDialog(invitation)}
-                          >
-                            <FileUpIcon />
-                            {invitation.paperAttachment
-                              ? t('responses.actions.replaceAttachment')
-                              : t('responses.actions.attach')}
-                          </DropdownMenuItem>
+                          {canChangePaperAnswers && (
+                            <>
+                              <DropdownMenuItem
+                                className="px-2 py-2"
+                                onClick={() => openPaperDialog(invitation)}
+                              >
+                                <FileUpIcon />
+                                {invitation.paperAttachment
+                                  ? t('responses.actions.replaceAttachment')
+                                  : t('responses.actions.attach')}
+                              </DropdownMenuItem>
 
-                          <DropdownMenuSeparator />
+                              <DropdownMenuSeparator />
 
-                          <DropdownMenuItem
-                            className="px-2 py-2"
-                            variant="destructive"
-                            onClick={() => openUnmarkDialog(invitation)}
-                          >
-                            <Undo2Icon />
-                            {t('responses.actions.unmark')}
-                          </DropdownMenuItem>
+                              <DropdownMenuItem
+                                className="px-2 py-2"
+                                variant="destructive"
+                                onClick={() => openUnmarkDialog(invitation)}
+                              >
+                                <Undo2Icon />
+                                {t('responses.actions.unmark')}
+                              </DropdownMenuItem>
+                            </>
+                          )}
                         </>
                       )}
                     </DropdownMenuContent>

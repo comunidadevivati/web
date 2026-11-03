@@ -12,7 +12,10 @@ import {
   Text,
   Textarea,
 } from '@/components/ui';
-import { CONSENT_TEXT_MAX_LENGTH } from '@/features/forms/domain/form';
+import {
+  CANCELLATION_REASON_MAX_LENGTH,
+  CONSENT_TEXT_MAX_LENGTH,
+} from '@/features/forms/domain/form';
 import {
   isEmailAction,
   type FormMenuAction,
@@ -31,6 +34,11 @@ type FormStatusDialogProps = {
   // Mensagem opcional incluída nos e-mails (somente nas ações de envio).
   message: string;
   onMessageChange: (message: string) => void;
+  // Motivo do cancelamento (obrigatório só na ação de cancelar) e erro já traduzido.
+  reason: string;
+  reasonError: string | null;
+  onReasonChange: (reason: string) => void;
+  onReasonBlur: () => void;
   isPending: boolean;
   onCancel: () => void;
   onConfirm: () => void;
@@ -44,6 +52,10 @@ export const FormStatusDialog = ({
   onCancel,
   onConfirm,
   onMessageChange,
+  onReasonBlur,
+  onReasonChange,
+  reason,
+  reasonError,
   target,
 }: FormStatusDialogProps) => {
   const { t } = useTranslation('forms');
@@ -75,6 +87,48 @@ export const FormStatusDialog = ({
             {t(`statusActions.${action}.description`, { title: target?.title ?? '' })}
           </DialogDescription>
         </DialogHeader>
+
+        {action === 'cancel' && (
+          <Box className="grid gap-2">
+            <Label htmlFor="form-cancellation-reason">{t('statusDialog.reason.label')}</Label>
+
+            <Textarea
+              id="form-cancellation-reason"
+              aria-describedby={
+                reasonError ? 'form-cancellation-reason-error' : 'form-cancellation-reason-count'
+              }
+              aria-invalid={Boolean(reasonError)}
+              aria-required
+              disabled={isPending}
+              maxLength={CANCELLATION_REASON_MAX_LENGTH}
+              placeholder={t('statusDialog.reason.placeholder')}
+              rows={4}
+              value={reason}
+              onBlur={onReasonBlur}
+              onChange={({ target: { value } }) => onReasonChange(value)}
+            />
+
+            <Box className="flex items-start justify-between gap-3">
+              <Text
+                className="text-xs text-destructive-strong"
+                id="form-cancellation-reason-error"
+                role={reasonError ? 'alert' : undefined}
+              >
+                {reasonError}
+              </Text>
+
+              <Text
+                className="shrink-0 text-xs text-muted-foreground tabular-nums"
+                id="form-cancellation-reason-count"
+              >
+                {t('statusDialog.reason.counter', {
+                  count: reason.length,
+                  max: CANCELLATION_REASON_MAX_LENGTH,
+                })}
+              </Text>
+            </Box>
+          </Box>
+        )}
 
         {isEmailAction(action) && (
           <Box className="grid gap-2">

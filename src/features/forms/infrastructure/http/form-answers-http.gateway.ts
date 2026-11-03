@@ -1,4 +1,8 @@
-import { FormsUnavailableError, QUESTION_FIELD_TYPES } from '@/features/forms/domain/form';
+import {
+  FORM_STATUSES,
+  FormsUnavailableError,
+  QUESTION_FIELD_TYPES,
+} from '@/features/forms/domain/form';
 import {
   AnswerConflictError,
   InvalidAnswersError,
@@ -19,12 +23,13 @@ const answerSchema = z.object({
 });
 
 const invitationSchema = z.object({
-  recipient: z.object({ name: z.string(), email: z.string() }),
+  recipient: z.object({ name: z.string(), email: z.string() }).nullable(),
   status: z.enum(['PENDING', 'ANSWERED']),
   answerChannel: z.enum(['DIGITAL', 'PAPER']).nullable(),
   answeredAt: z.string().nullable(),
   answers: z.array(answerSchema),
   availability: z.enum(['OPEN', 'NOT_STARTED', 'ENDED', 'CLOSED']),
+  formStatus: z.enum(FORM_STATUSES),
   form: z.object({
     title: z.string(),
     description: z.string().nullable(),

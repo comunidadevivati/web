@@ -55,6 +55,7 @@ import {
   MailIcon,
   PencilIcon,
   PlusIcon,
+  PrinterIcon,
   RefreshCwIcon,
   SendIcon,
   Trash2Icon,
@@ -93,6 +94,7 @@ export const FormsView = () => {
     openForm,
     openPreview,
     openReport,
+    printForm,
     openResponses,
     preview,
     requestDelete,
@@ -102,6 +104,10 @@ export const FormsView = () => {
     statusTarget,
     changeDispatchMessage,
     dispatchMessage,
+    cancellationReason,
+    cancellationReasonError,
+    changeCancellationReason,
+    touchCancellationReason,
   } = useFormsViewModel();
 
   const { t } = useTranslation('forms');
@@ -222,6 +228,7 @@ export const FormsView = () => {
               canPurge,
               canRemind,
               purgedSummary,
+              cancellationSummary,
               emailAction,
               emailSummary,
               form,
@@ -318,6 +325,17 @@ export const FormsView = () => {
                       </Box>
                     )}
 
+                    {cancellationSummary && (
+                      <Box className="flex items-start gap-1.5">
+                        <BanIcon
+                          aria-hidden="true"
+                          className="mt-0.5 size-3.5 shrink-0 text-muted-foreground"
+                        />
+
+                        <Text className="text-xs text-muted-foreground">{cancellationSummary}</Text>
+                      </Box>
+                    )}
+
                     {purgedSummary && (
                       <Box className="flex items-center gap-1.5">
                         <EraserIcon aria-hidden="true" className="size-3.5 text-muted-foreground" />
@@ -327,6 +345,19 @@ export const FormsView = () => {
                     )}
                   </Box>
                 </Box>
+
+                <TooltipHint label={t('actions.print')}>
+                  <Button
+                    aria-label={t('actions.printNamed', { title: form.title })}
+                    className="size-10 shrink-0"
+                    size="icon"
+                    type="button"
+                    variant="ghost"
+                    onClick={() => printForm(form)}
+                  >
+                    <PrinterIcon />
+                  </Button>
+                </TooltipHint>
 
                 <DropdownMenu>
                   <TooltipHint
@@ -461,7 +492,11 @@ export const FormsView = () => {
       <FormStatusDialog
         isPending={isChangingStatus}
         message={dispatchMessage}
+        reason={cancellationReason}
+        reasonError={cancellationReasonError}
         onMessageChange={changeDispatchMessage}
+        onReasonBlur={touchCancellationReason}
+        onReasonChange={changeCancellationReason}
         target={statusTarget}
         onCancel={cancelStatusChange}
         onConfirm={confirmStatusChange}

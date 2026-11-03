@@ -47,7 +47,8 @@ export const scalePointLabel = (scale: QuestionScale | null, value: number): str
 
 export const SCALE_MIN_VALUES = [0, 1] as const;
 
-export const SCALE_MAX_VALUE = 10;
+// Teto de proteção (cada ponto vira um botão e um círculo no PDF), não regra de negócio.
+export const SCALE_MAX_VALUE = 100;
 
 export const SCALE_LABEL_MAX_LENGTH = 40;
 
@@ -103,6 +104,10 @@ export type Form = {
   questions: FormQuestion[];
   // Grupos de e-mail que recebem o formulário (pela ação "Enviar e-mails do grupo").
   recipientGroupIds: string[];
+  // Contas escolhidas uma a uma (fora de um grupo completo).
+  recipientAccountIds: string[];
+  // E-mails informados à mão no formulário, em minúsculas.
+  recipientEmails: string[];
   // Anônimo: o painel mostra quem respondeu, nunca o que cada pessoa respondeu.
   anonymous: boolean;
   // Quem respondeu pelo link pode alterar a resposta até o fim do período (não vale para anônimo).
@@ -118,6 +123,8 @@ export type Form = {
   pendingRecipientCount: number;
   // Respostas apagadas (LGPD): o conteúdo saiu; a participação continua registrada.
   answersPurgedAt: string | null;
+  // Motivo informado ao cancelar.
+  cancellationReason: string | null;
   // Versão lida: a edição a devolve (concorrência otimista).
   version: number;
   createdAt: string;
@@ -166,11 +173,27 @@ export const canPurgeAnswers = (
   return isFinalFormStatus(form.status) && form.invitedCount > 0 && form.answersPurgedAt === null;
 };
 
-// O reenvio só aparece enquanto alguém dos grupos não respondeu.
+// Formulário com destinatários: grupos completos, contas ou e-mails escolhidos um a um.
+export const hasRecipients = (
+  form: Pick<Form, 'recipientGroupIds' | 'recipientAccountIds' | 'recipientEmails'>,
+) =>
+  form.recipientGroupIds.length > 0 ||
+  form.recipientAccountIds.length > 0 ||
+  form.recipientEmails.length > 0;
+
+// O envio exige destinatários; o reenvio só aparece enquanto alguém não respondeu.
 export const getFormEmailAction = (
-  form: Pick<Form, 'status' | 'recipientGroupIds' | 'emailDispatch' | 'pendingRecipientCount'>,
+  form: Pick<
+    Form,
+    | 'status'
+    | 'recipientGroupIds'
+    | 'recipientAccountIds'
+    | 'recipientEmails'
+    | 'emailDispatch'
+    | 'pendingRecipientCount'
+  >,
 ): FormEmailAction | null => {
-  if (form.status !== 'PUBLISHED' || form.recipientGroupIds.length === 0 || isSendingEmails(form)) {
+  if (form.status !== 'PUBLISHED' || !hasRecipients(form) || isSendingEmails(form)) {
     return null;
   }
 
@@ -212,6 +235,8 @@ export type FormDetails = {
   status: FormStatus;
   questions: QuestionDetails[];
   recipientGroupIds: string[];
+  recipientAccountIds: string[];
+  recipientEmails: string[];
   anonymous: boolean;
   allowAnswerEdit: boolean;
   consentText: string | null;
@@ -236,6 +261,9 @@ export const QUESTION_TITLE_MAX_LENGTH = 200;
 export const QUESTION_DESCRIPTION_MAX_LENGTH = 500;
 
 export const MAX_QUESTIONS = 50;
+
+// E-mails informados à mão no formulário (o mesmo limite dos grupos de e-mail).
+export const MAX_RECIPIENT_EMAILS = 5000;
 
 // Perguntas de escolha (checkbox e radio): de 1 a 20 opções, com rótulos distintos. Uma opção só
 // atende casos como "Li e concordo com os termos".
@@ -277,12 +305,21 @@ export const formStatusTransitions: Record<FormStatus, FormStatus[]> = {
   CANCELLED: ['CANCELLED'],
 };
 
+// Motivo obrigatório ao cancelar (o servidor aplica os mesmos limites, sem espaços nas pontas).
+export const CANCELLATION_REASON_MIN_LENGTH = 10;
+
+export const CANCELLATION_REASON_MAX_LENGTH = 255;
+
 // Status possíveis ao criar um formulário.
 export const INITIAL_FORM_STATUSES: FormStatus[] = ['DRAFT', 'PUBLISHED'];
 
 export const isFinalFormStatus = (status: FormStatus) => {
   return status === 'FINISHED' || status === 'CANCELLED';
 };
+
+// Aceita respostas (pelo link ou em papel): publicado e dentro do período (o servidor confere o mesmo).
+export const acceptsAnswers = (form: Pick<Form, 'status' | 'startsOn' | 'endsOn'>, today: string) =>
+  form.status === 'PUBLISHED' && form.startsOn <= today && today <= form.endsOn;
 
 export const canChangeFormStatus = (from: FormStatus, to: FormStatus) => {
   return formStatusTransitions[from].includes(to);
@@ -441,11 +478,13 @@ export interface FormsGateway {
     version: number,
     details: FormDetails,
   ) => Promise<Form>;
+  // reason: motivo, obrigatório ao cancelar.
   changeFormStatus: (
     csrfToken: string,
     id: string,
     version: number,
     status: FormStatus,
+    reason: string | null,
   ) => Promise<Form>;
   // Começa o envio dos e-mails aos grupos (convite ou lembrete aos pendentes, com mensagem opcional);
   // o formulário volta com o envio em andamento (SENDING).

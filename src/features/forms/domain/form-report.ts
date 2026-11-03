@@ -29,20 +29,23 @@ export type FormReport = {
 // Nota máxima da nota geral (estrelas).
 export const OVERALL_RATING_MAX = 5;
 
-// Nota geral: média de todas as respostas das perguntas de escala, cada uma convertida para 0 a 5
-// (valor / máximo da escala × 5; numa escala de 1 a 5, a própria nota). null sem respostas de escala.
+// Nota geral: média de todas as respostas das perguntas de escala, cada uma convertida para 0 a 5 pela
+// posição na escala ((valor − início) / (fim − início) × 5): a primeira opção vale sempre 0 e a última
+// sempre 5, qualquer que seja o tamanho da escala. null sem respostas de escala.
 export const getOverallRating = (questions: readonly QuestionReport[]): number | null => {
   let total = 0;
 
   let count = 0;
 
   questions.forEach(({ fieldType, scale }) => {
-    if (fieldType !== 'SCALE' || !scale || scale.max <= 0) {
+    if (fieldType !== 'SCALE' || !scale || scale.max <= scale.min) {
       return;
     }
 
+    const range = scale.max - scale.min;
+
     scale.distribution.forEach(({ count: answers, value }) => {
-      total += answers * (value / scale.max) * OVERALL_RATING_MAX;
+      total += answers * ((value - scale.min) / range) * OVERALL_RATING_MAX;
 
       count += answers;
     });

@@ -1334,6 +1334,7 @@ export const forms = {
     groupLabel: 'Scale settings for question {{number}}',
     min: 'Starts at',
     max: 'Ends at',
+    maxHint: 'Whole number greater than the start, up to {{max}}.',
     minLabel: 'Start label (optional)',
     maxLabel: 'End label (optional)',
     minLabelPlaceholder: 'E.g.: Strongly disagree',
@@ -1390,6 +1391,8 @@ export const forms = {
     delete: 'Delete',
     preview: 'Preview form',
     previewNamed: 'Preview the form {{title}}',
+    print: 'Print (PDF)',
+    printNamed: 'Open the PDF of the form {{title}} to print',
     menu: 'More actions',
     menuNamed: 'Actions for the form {{title}}',
     responses: 'Answers',
@@ -1618,22 +1621,17 @@ export const forms = {
       editableDescription:
         'Your answers were recorded on {{date}}. You can change them below until the end of the period.',
     },
-    availability: {
-      NOT_STARTED: {
-        title: 'Not open yet',
-        description: 'This form accepts answers from {{period}}.',
-      },
-      ENDED: {
-        title: 'Period ended',
-        description: 'This form accepted answers from {{period}}.',
-      },
-      CLOSED: {
-        title: 'Form closed',
-        description: 'This form is not accepting answers.',
-      },
-      OPEN: {
-        title: 'Form open',
-        description: 'Answer by the end of the period ({{period}}).',
+    unavailable: {
+      title: 'Form unavailable',
+      description: 'This form can no longer be answered because its status is "{{status}}".',
+      status: {
+        DRAFT: 'Unpublished',
+        PUBLISHED: 'Published',
+        FINISHED: 'Finished',
+        CANCELLED: 'Cancelled',
+        NOT_STARTED: 'Not started',
+        ENDED: 'Expired',
+        OPEN: 'Open',
       },
     },
     validation: {
@@ -1668,6 +1666,14 @@ export const forms = {
     message: 'Message in the email (optional)',
     messagePlaceholder: 'E.g.: We count on your participation by Friday!',
     messageHint: 'Shown in the email body, before the answer button.',
+    reason: {
+      label: 'Cancellation reason',
+      placeholder: 'E.g.: Survey replaced by a new version with other questions.',
+      counter: '{{count}}/{{max}}',
+      required: 'Enter the cancellation reason.',
+      tooShort: 'The reason must have at least {{min}} characters.',
+      tooLong: 'The reason can have at most {{max}} characters.',
+    },
     close: 'Close',
     back: 'Back',
     confirming: 'Saving…',
@@ -1708,8 +1714,12 @@ export const forms = {
     questionCount_other: '{{count}} questions',
     recipientGroupCount_one: '{{count}} email group',
     recipientGroupCount_other: '{{count}} email groups',
+    recipientEmailCount_one: '{{count}} individual email',
+    recipientEmailCount_other: '{{count}} individual emails',
+    noRecipients: 'No recipients',
     emailSummary: 'Emails sent on {{date}} · {{answered}} of {{invited}} answered',
     answersPurged: 'Answers deleted on {{date}} (LGPD)',
+    cancellationReason: 'Cancellation reason: {{reason}}',
     loadMore: 'Load more',
     loadingMore: 'Loading…',
   },
@@ -1737,13 +1747,13 @@ export const forms = {
     questionTitleRequired: 'Enter the question name.',
     questionTitleTooLong: 'Use at most 200 characters.',
     questionDescriptionTooLong: 'Use at most 500 characters.',
-    recipientsRequired: 'To publish, select at least one email group.',
     optionRequired: 'Enter the option text.',
     optionTooLong: 'Use at most 100 characters.',
     optionsTooFew: 'Add at least 1 option.',
     optionsTooMany: 'Use at most 20 options.',
     optionsDuplicated: 'Options must be different from each other.',
-    scaleInvalid: 'The scale starts at 0 or 1 and ends after the start, up to 10.',
+    scaleInvalid:
+      'The scale starts at 0 or 1 and ends at a whole number after the start, up to 100.',
     scaleLabelTooLong: 'Use at most 40 characters.',
     scalePointRequired: 'Give this point a name.',
     scalePointsDuplicated: 'Use a different name for each point.',
@@ -1772,7 +1782,8 @@ export const forms = {
       },
       recipients: {
         title: 'Recipients',
-        description: 'Email groups that receive the form through "Send group emails".',
+        description:
+          'Optional. Email groups and entered emails that receive the form through "Send group emails".',
       },
       settings: {
         title: 'Answer settings',
@@ -1858,12 +1869,71 @@ export const forms = {
     add: 'Add option',
   },
   recipients: {
-    legend: 'Recipient email groups',
-    count_one: '{{count}} recipient',
-    count_other: '{{count}} recipients',
+    legend: 'Email groups',
+    count_one: '{{count}} email',
+    count_other: '{{count}} emails',
     unavailable: {
-      title: 'Email groups unavailable',
-      description: 'Could not load the email groups.',
+      title: 'Recipients unavailable',
+      description: 'Could not load the email groups and accounts.',
+    },
+    noGroups: {
+      description:
+        'No email groups yet. Create one in Communication → Emails or add the emails below.',
+      create: 'Create email group',
+      reload: 'Reload groups',
+    },
+    search: {
+      label: 'Search group or email',
+      placeholder: 'Search by group name or email',
+      submit: 'Search',
+      clear: 'Clear search',
+      noGroups: 'No groups match the search.',
+      noEmails: 'No emails in the list match the search.',
+    },
+    groups: {
+      viewEmails: 'View emails',
+      viewEmailsNamed: 'View the emails of the group {{name}}',
+      selectNamed: 'Select the group {{name}}',
+      listed: {
+        all: 'In the list: {{count}} of {{total}}',
+        some: 'Partial: {{count}} of {{total}} in the list',
+      },
+    },
+    dialog: {
+      close: 'Close',
+      count_one: '{{count}} email in this group',
+      count_other: '{{count}} emails in this group',
+      empty: 'This group has no emails that can receive the form.',
+      external: 'Standalone email',
+      ineligible_one: '{{count}} group account will not receive it (inactive or unverified email).',
+      ineligible_other:
+        '{{count}} group accounts will not receive it (inactive or unverified email).',
+    },
+    emails: {
+      label: 'Email',
+      add: 'Add email',
+      placeholder: 'name@example.com',
+      confirm: 'Add',
+      close: 'Close email field',
+      remove: 'Remove {{email}} from the list',
+      invalid: 'Enter a valid email (e.g. name@example.com).',
+      duplicate: 'This email is already in the list.',
+      tooMany: 'Limit of {{max}} emails reached.',
+    },
+    list: {
+      title: 'Added emails',
+      count_one: '{{count}} email in the list, without repeats',
+      count_other: '{{count}} emails in the list, without repeats',
+      filtered: 'Showing {{shown}} of {{total}}',
+      empty:
+        'No emails in the list. The form can be saved and printed; sending emails becomes available after checking groups or adding emails.',
+      manual: 'Added by hand',
+      sort: {
+        label: 'Sort list',
+        recent: 'Latest added',
+        asc: 'Alphabetical (A–Z)',
+        desc: 'Alphabetical (Z–A)',
+      },
     },
   },
   preview: {
