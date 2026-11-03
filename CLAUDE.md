@@ -1328,7 +1328,7 @@ Clientes existentes (`src/shared/http`):
 
 - `bffClient`: BFF, na mesma origem (`/auth/*` e `/api/v1/*`, repassadas pelo Worker/proxy do Vite); trata 401 fora de `/auth/*` como sessão expirada;
 - `workerApiClient`: endpoints do próprio Worker (`/api/*`).
-- `keepServersAwake` (`wake-servers.ts`, chamado no `main.tsx`): ao abrir o site e ao voltar para a aba (no máximo a cada 5 min), chama `GET /api/v1/wake` no BFF, que acorda PostgreSQL e Core API; não bloqueia a tela.
+- `keepServersAwake` (`wake-servers.ts`, chamado no `main.tsx`): ao abrir o site e ao voltar para a aba (no máximo a cada 5 min), chama `GET /api/v1/wake` no BFF (tempo limite de 120 s), que acorda PostgreSQL e Core API; não bloqueia a tela. O Worker (`worker/index.ts`) intercepta essa rota e, em paralelo ao BFF, chama o health público da Core API (`CORE_API_HEALTH_URL` nos `vars` do `wrangler.jsonc`, por ambiente) por até 80 s; se o BFF respondeu 503, pergunta de novo depois que a Core API acordou.
 
 Regras:
 

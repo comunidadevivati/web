@@ -3,6 +3,9 @@ import { bffClient } from '@/shared/http/bff-client';
 // Intervalo mínimo entre chamadas: o Render Free põe os serviços em repouso após ~15 min sem uso.
 const WAKE_INTERVAL_MS = 5 * 60_000;
 
+// O Worker espera a Core API acordar (até 80 s) e depois pergunta de novo ao BFF.
+const WAKE_TIMEOUT_MS = 120_000;
+
 let lastWakeAt = 0;
 
 // Acorda BFF, PostgreSQL e Core API (GET /api/v1/wake) sem bloquear a tela. Enquanto demora, o
@@ -14,7 +17,7 @@ const wakeServers = () => {
 
   lastWakeAt = Date.now();
 
-  bffClient.get('api/v1/wake').catch(() => {
+  bffClient.get('api/v1/wake', { timeout: WAKE_TIMEOUT_MS }).catch(() => {
     // Falha não impede o uso: a próxima chamada ao BFF tenta acordá-lo de novo.
     lastWakeAt = 0;
   });
