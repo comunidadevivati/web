@@ -1885,7 +1885,7 @@ export const communication = {
     cards: {
       groups: {
         title: 'Email groups',
-        description: 'Lists of accounts that receive the emails.',
+        description: 'Lists of recipients that receive the emails.',
         details_one: '{{count}} recipient in total',
         details_other: '{{count}} recipients in total',
         open: 'Open groups',
@@ -1924,7 +1924,7 @@ export const communication = {
   list: {
     back: 'Back to Emails',
     title: 'Email groups',
-    subtitle: 'Choose which accounts receive each kind of communication, such as forms.',
+    subtitle: 'Choose who receives each kind of communication, such as forms.',
     create: 'New group',
     empty: 'No email groups created yet.',
     recipientCount_one: '{{count}} recipient',
@@ -1953,18 +1953,34 @@ export const communication = {
     back: 'Back to the list',
     backToList: 'Back to the list',
     createTitle: 'New email group',
-    createSubtitle: 'Name the group and choose the accounts that receive the emails.',
+    createSubtitle: 'Name the group, choose its type and who receives the emails.',
     editTitle: 'Edit email group',
     sections: {
       general: {
         title: 'Group details',
-        description: 'Name and description shown when choosing the recipients of a form.',
+        description: 'Name, description and type shown when choosing the recipients of a form.',
       },
       recipients: {
-        title: 'Recipients',
+        title: 'Verified accounts',
         description:
           'Accounts with a verified email, members or not. Check accounts and move them between the lists, one by one or all at once.',
       },
+      externalEmails: {
+        title: 'Standalone emails',
+        description:
+          'Addresses typed in by hand, for people without an account (neither members nor users). They are not verified: double-check them before saving.',
+      },
+    },
+    discarded: {
+      title: 'Recipients that will leave the group',
+      accounts_one:
+        'The chosen type does not accept accounts from the list: {{count}} account will be removed on save.',
+      accounts_other:
+        'The chosen type does not accept accounts from the list: {{count}} accounts will be removed on save.',
+      emails_one:
+        'The chosen type does not accept standalone emails: {{count}} email will be removed on save.',
+      emails_other:
+        'The chosen type does not accept standalone emails: {{count}} emails will be removed on save.',
     },
     cancel: 'Cancel',
     submit: 'Save group',
@@ -1984,6 +2000,37 @@ export const communication = {
     namePlaceholder: 'E.g.: Cell group leaders',
     description: 'Description (optional)',
     descriptionPlaceholder: 'What this group is for',
+    type: 'Group type',
+  },
+  groupTypes: {
+    RESTRICTED: {
+      label: 'Restricted',
+      description: 'Only accounts with a verified email, chosen from the list.',
+    },
+    OPEN: {
+      label: 'Open',
+      description: 'Only emails typed in by hand, from anyone.',
+    },
+    MIXED: {
+      label: 'Mixed',
+      description: 'Verified accounts from the list and emails typed in by hand.',
+    },
+  },
+  externalEmails: {
+    label: 'Add emails',
+    placeholder: 'name@example.com',
+    hint: 'Separate several with commas, spaces or line breaks. Enter adds them.',
+    add: 'Add',
+    count_one: '{{count}} standalone email',
+    count_other: '{{count}} standalone emails',
+    empty: 'No standalone emails in the group.',
+    removeAll: 'Remove all',
+    remove: 'Remove {{email}}',
+    invalid_one: 'Invalid email: {{values}}',
+    invalid_other: 'Invalid emails: {{values}}',
+    duplicates_one: 'Already in the group: {{values}}',
+    duplicates_other: 'Already in the group: {{values}}',
+    invalidPending: 'Fix or clear the invalid emails in the standalone emails field.',
   },
   recipients: {
     available: 'Available accounts',

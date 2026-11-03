@@ -4,6 +4,7 @@ import {
   EmailGroupConflictError,
   EmailGroupNotFoundError,
   InvalidEmailGroupDataError,
+  EMAIL_GROUP_TYPES,
   type CommunicationGateway,
 } from '@/features/communication/domain/email-group';
 import { bffClient } from '@/shared/http/bff-client';
@@ -16,7 +17,9 @@ const emailGroupSchema = z.object({
   id: z.string(),
   name: z.string(),
   description: z.string().nullable(),
+  type: z.enum(EMAIL_GROUP_TYPES),
   memberAccountIds: z.array(z.string()),
+  externalEmails: z.array(z.string()),
   version: z.number().int(),
   createdAt: z.string(),
   updatedAt: z.string(),
@@ -28,6 +31,7 @@ const emailGroupListSchema = z.object({
       id: z.string(),
       name: z.string(),
       description: z.string().nullable(),
+      type: z.enum(EMAIL_GROUP_TYPES),
       recipientCount: z.number().int(),
       updatedAt: z.string(),
     }),
@@ -133,7 +137,7 @@ export const communicationHttpGateway: CommunicationGateway = {
     );
   },
 
-  // Substituição completa (nome, descrição e contas).
+  // Substituição completa (nome, descrição, tipo, contas e e-mails avulsos).
   updateEmailGroup: (csrfToken, id, version, details) => {
     return request(emailGroupSchema, () =>
       bffClient.put(groupPath(id), {

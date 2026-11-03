@@ -1,12 +1,33 @@
-// Grupos de e-mails (ADR 0013 do backend): listas nomeadas de contas verificadas que recebem
-// comunicações, como os formulários dos departamentos.
+// Grupos de e-mails (ADR 0013 do backend): listas nomeadas de destinatários de comunicações, como os
+// formulários dos departamentos. O tipo define quem entra: contas verificadas (restrito), e-mails
+// informados à mão (aberto) ou os dois (misto).
+
+export const EMAIL_GROUP_TYPES = ['RESTRICTED', 'OPEN', 'MIXED'] as const;
+
+export type EmailGroupType = (typeof EMAIL_GROUP_TYPES)[number];
+
+// O tipo aceita contas verificadas (lista) e/ou e-mails avulsos (informados à mão).
+export const acceptsAccounts = (type: EmailGroupType) => type !== 'OPEN';
+
+export const acceptsExternalEmails = (type: EmailGroupType) => type !== 'RESTRICTED';
+
+// Formato prático de e-mail (o servidor aplica o mesmo); a entrega confirma o restante.
+const EMAIL_PATTERN = /^[^\s@]+@[^\s@.]+(?:\.[^\s@.]+)+$/u;
+
+export const EMAIL_MAX_LENGTH = 320;
+
+export const isValidEmail = (value: string) =>
+  value.length <= EMAIL_MAX_LENGTH && EMAIL_PATTERN.test(value);
 
 export type EmailGroup = {
   id: string;
   name: string;
   description: string | null;
+  type: EmailGroupType;
   // Contas (usuários do BFF) que fazem parte do grupo.
   memberAccountIds: string[];
+  // E-mails avulsos (pessoas sem conta), em minúsculas.
+  externalEmails: string[];
   // Versão lida: a edição a devolve (concorrência otimista).
   version: number;
   createdAt: string;
@@ -17,6 +38,8 @@ export type EmailGroupSummary = {
   id: string;
   name: string;
   description: string | null;
+  type: EmailGroupType;
+  // Contas e e-mails avulsos somados.
   recipientCount: number;
   updatedAt: string;
 };
@@ -32,7 +55,10 @@ export type EmailRecipient = {
 export type EmailGroupDetails = {
   name: string;
   description: string | null;
+  type: EmailGroupType;
   memberAccountIds: string[];
+  // E-mails avulsos (pessoas sem conta), em minúsculas.
+  externalEmails: string[];
 };
 
 // Limites do grupo (o servidor aplica os mesmos).

@@ -1,3 +1,5 @@
+import type { EmailGroupType } from '@/features/communication/domain/email-group';
+
 // Formulários dos departamentos (pesquisas, avaliações de desempenho...), ADR 0013 do backend.
 
 // DRAFT = não publicado. FINISHED e CANCELLED são finais: o formulário não muda mais.
@@ -219,6 +221,8 @@ export type EmailGroup = {
   id: string;
   name: string;
   description: string | null;
+  // Restrito (contas verificadas), aberto (e-mails avulsos) ou misto.
+  type: EmailGroupType;
   recipientCount: number;
 };
 

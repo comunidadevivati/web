@@ -25,6 +25,7 @@ import {
   Text,
   Textarea,
 } from '@/components/ui';
+import { EmailGroupTypeBadge } from '@/features/communication/presentation/components/email-group-type-badge';
 import {
   CONSENT_TEXT_MAX_LENGTH,
   FORM_DESCRIPTION_MAX_LENGTH,
@@ -668,7 +669,7 @@ export const FormEditorView = ({ form }: FormEditorViewProps) => {
                     <FieldLegend className="sr-only">{t('recipients.legend')}</FieldLegend>
 
                     <Box className="grid gap-2 sm:grid-cols-2">
-                      {emailGroups.map(({ description, id, name, recipientCount }) => {
+                      {emailGroups.map(({ description, id, name, recipientCount, type }) => {
                         const isChecked = value.includes(id);
 
                         return (
@@ -700,7 +701,13 @@ export const FormEditorView = ({ form }: FormEditorViewProps) => {
                             />
 
                             <Box className="grid min-w-0 gap-1">
-                              <Text className="text-sm font-semibold text-foreground">{name}</Text>
+                              <Box className="flex flex-wrap items-center gap-2">
+                                <Text className="text-sm font-semibold text-foreground">
+                                  {name}
+                                </Text>
+
+                                <EmailGroupTypeBadge type={type} />
+                              </Box>
 
                               <Text className="text-xs text-muted-foreground">
                                 {t('recipients.count', { count: recipientCount })}

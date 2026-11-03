@@ -1,3 +1,4 @@
+import { EMAIL_GROUP_TYPES } from '@/features/communication/domain/email-group';
 import {
   ACCEPTED_HEADER_IMAGE_TYPES,
   EMAIL_DISPATCH_STATUSES,
@@ -104,6 +105,7 @@ const emailGroupsSchema = z.object({
       id: z.string(),
       name: z.string(),
       description: z.string().nullable(),
+      type: z.enum(EMAIL_GROUP_TYPES),
       recipientCount: z.number().int(),
     }),
   ),

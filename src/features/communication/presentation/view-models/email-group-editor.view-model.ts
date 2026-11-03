@@ -9,13 +9,17 @@ import { saveEmailGroupUseCase } from '@/features/communication/application/use-
 import {
   EmailGroupConflictError,
   InvalidEmailGroupDataError,
+  acceptsAccounts,
+  acceptsExternalEmails,
   type EmailGroup,
+  type EmailGroupType,
 } from '@/features/communication/domain/email-group';
 import {
   emailGroupEditorSchema,
   emailGroupValidationMessages,
   getCommunicationNotice,
   getServerDetail,
+  parseExternalEmails,
   toEmailGroupDetails,
   toEmailGroupEditorInput,
   type EmailGroupEditorData,
@@ -26,10 +30,17 @@ import { notify } from '@/shared/feedback/notify';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
+import { useState, type BaseSyntheticEvent } from 'react';
 import { useForm, useWatch, type FieldPath } from 'react-hook-form';
 import { useTranslation } from 'react-i18next';
 
-const SERVER_FIELDS = ['name', 'description'] as const;
+const SERVER_FIELDS = ['name', 'description', 'externalEmails'] as const;
+
+// Retorno do campo de e-mails avulsos após tentar adicionar (inválidos e repetidos ficam no campo).
+export type ExternalEmailsFeedback =
+  | { kind: 'invalid'; values: string[] }
+  | { kind: 'duplicates'; values: string[] }
+  | null;
 
 type UseEmailGroupEditorViewModelOptions = {
   // Grupo em edição; null cria um novo.
@@ -68,6 +79,16 @@ export const useEmailGroupEditorViewModel = ({ group }: UseEmailGroupEditorViewM
   } = editorForm;
 
   const memberAccountIds = useWatch({ control, name: 'memberAccountIds' });
+
+  const type = useWatch({ control, name: 'type' });
+
+  const externalEmails = useWatch({ control, name: 'externalEmails' });
+
+  // Texto ainda não adicionado no campo de e-mails avulsos.
+  const [externalEmailDraft, setExternalEmailDraft] = useState('');
+
+  const [externalEmailsFeedback, setExternalEmailsFeedback] =
+    useState<ExternalEmailsFeedback>(null);
 
   const { isPending, mutate } = useMutation({
     mutationFn: ({ csrfToken, data }: { csrfToken: string; data: EmailGroupEditorData }) =>
@@ -135,9 +156,23 @@ export const useEmailGroupEditorViewModel = ({ group }: UseEmailGroupEditorViewM
   // Contas do grupo que não aparecem mais entre as disponíveis (suspensas, por exemplo).
   const knownIds = new Set(recipients.map(({ id }) => id));
 
-  const unavailableCount = isLoadingRecipients
-    ? 0
-    : memberAccountIds.filter((id) => !knownIds.has(id)).length;
+  const showsAccounts = acceptsAccounts(type);
+
+  const showsExternalEmails = acceptsExternalEmails(type);
+
+  const unavailableCount =
+    isLoadingRecipients || !showsAccounts
+      ? 0
+      : memberAccountIds.filter((id) => !knownIds.has(id)).length;
+
+  // O que o tipo escolhido esconde e que sai do grupo ao salvar.
+  const discardedAccountCount = showsAccounts ? 0 : memberAccountIds.length;
+
+  const discardedEmailCount = showsExternalEmails ? 0 : externalEmails.length;
+
+  const changeType = (value: EmailGroupType) => {
+    setValue('type', value, { shouldDirty: true });
+  };
 
   const changeMembers = (ids: string[]) => {
     setValue('memberAccountIds', ids, { shouldDirty: true });
@@ -148,7 +183,49 @@ export const useEmailGroupEditorViewModel = ({ group }: UseEmailGroupEditorViewM
     changeMembers(memberAccountIds.filter((id) => knownIds.has(id)));
   };
 
-  const submit = handleSubmit(
+  const changeExternalEmailDraft = (value: string) => {
+    setExternalEmailDraft(value);
+
+    setExternalEmailsFeedback(null);
+  };
+
+  // Adiciona os e-mails válidos do campo; os inválidos continuam nele para correção. Devolve false
+  // quando sobrou algo inválido.
+  const addExternalEmails = () => {
+    const current = getValues('externalEmails');
+
+    const { added, duplicates, invalid } = parseExternalEmails(externalEmailDraft, current);
+
+    if (added.length > 0) {
+      setValue('externalEmails', [...current, ...added], { shouldDirty: true });
+    }
+
+    setExternalEmailDraft(invalid.join(', '));
+
+    if (invalid.length > 0) {
+      setExternalEmailsFeedback({ kind: 'invalid', values: invalid });
+    } else if (duplicates.length > 0) {
+      setExternalEmailsFeedback({ kind: 'duplicates', values: duplicates });
+    } else {
+      setExternalEmailsFeedback(null);
+    }
+
+    return invalid.length === 0;
+  };
+
+  const removeExternalEmail = (email: string) => {
+    setValue(
+      'externalEmails',
+      getValues('externalEmails').filter((item) => item !== email),
+      { shouldDirty: true },
+    );
+  };
+
+  const removeAllExternalEmails = () => {
+    setValue('externalEmails', [], { shouldDirty: true });
+  };
+
+  const submitForm = handleSubmit(
     (data) => {
       if (isPending || !session) {
         return;
@@ -164,9 +241,34 @@ export const useEmailGroupEditorViewModel = ({ group }: UseEmailGroupEditorViewM
     },
   );
 
+  // E-mails digitados e ainda não adicionados entram no grupo ao salvar; se algum for inválido, o
+  // salvamento espera a correção.
+  const submit = (event?: BaseSyntheticEvent) => {
+    if (showsExternalEmails && externalEmailDraft.trim() !== '' && !addExternalEmails()) {
+      event?.preventDefault();
+
+      notify.error({
+        title: t('editor.invalid.title'),
+        description: t('externalEmails.invalidPending'),
+      });
+
+      return;
+    }
+
+    void submitForm(event);
+  };
+
   return {
+    addExternalEmails,
+    changeExternalEmailDraft,
     changeMembers,
+    changeType,
+    discardedAccountCount,
+    discardedEmailCount,
     editorForm,
+    externalEmailDraft,
+    externalEmails,
+    externalEmailsFeedback,
     getFieldError,
     hasRecipientsError,
     isEditing: group !== null,
@@ -175,8 +277,13 @@ export const useEmailGroupEditorViewModel = ({ group }: UseEmailGroupEditorViewM
     memberAccountIds,
     recipientItems,
     refetchRecipients: () => void refetchRecipients(),
+    removeAllExternalEmails,
+    removeExternalEmail,
     removeUnavailable,
+    showsAccounts,
+    showsExternalEmails,
     submit,
+    type,
     unavailableCount,
   };
 };
