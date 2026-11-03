@@ -1891,7 +1891,7 @@ export const communication = {
     cards: {
       groups: {
         title: 'Grupos de e-mails',
-        description: 'Listas de contas que recebem os e-mails.',
+        description: 'Listas de destinatários que recebem os e-mails.',
         details_one: '{{count}} destinatário no total',
         details_other: '{{count}} destinatários no total',
         open: 'Abrir grupos',
@@ -1930,7 +1930,7 @@ export const communication = {
   list: {
     back: 'Voltar para E-mails',
     title: 'Grupos de e-mails',
-    subtitle: 'Escolha quais contas recebem cada tipo de comunicação, como os formulários.',
+    subtitle: 'Escolha quem recebe cada tipo de comunicação, como os formulários.',
     create: 'Novo grupo',
     empty: 'Nenhum grupo de e-mails criado ainda.',
     recipientCount_one: '{{count}} destinatário',
@@ -1959,18 +1959,35 @@ export const communication = {
     back: 'Voltar para a lista',
     backToList: 'Voltar para a lista',
     createTitle: 'Novo grupo de e-mails',
-    createSubtitle: 'Dê um nome ao grupo e escolha as contas que recebem os e-mails.',
+    createSubtitle: 'Dê um nome ao grupo, escolha o tipo e quem recebe os e-mails.',
     editTitle: 'Editar grupo de e-mails',
     sections: {
       general: {
         title: 'Dados do grupo',
-        description: 'Nome e descrição exibidos ao escolher os destinatários de um formulário.',
+        description:
+          'Nome, descrição e tipo exibidos ao escolher os destinatários de um formulário.',
       },
       recipients: {
-        title: 'Destinatários',
+        title: 'Contas verificadas',
         description:
           'Contas com e-mail verificado, membros ou não. Marque as contas e mova-as entre as listas, uma a uma ou todas de uma vez.',
       },
+      externalEmails: {
+        title: 'E-mails avulsos',
+        description:
+          'Endereços informados à mão, de pessoas sem conta (nem membros, nem usuários). Eles não passam por verificação: confira antes de salvar.',
+      },
+    },
+    discarded: {
+      title: 'Destinatários que sairão do grupo',
+      accounts_one:
+        'O tipo escolhido não aceita contas da lista: {{count}} conta será removida ao salvar.',
+      accounts_other:
+        'O tipo escolhido não aceita contas da lista: {{count}} contas serão removidas ao salvar.',
+      emails_one:
+        'O tipo escolhido não aceita e-mails avulsos: {{count}} e-mail será removido ao salvar.',
+      emails_other:
+        'O tipo escolhido não aceita e-mails avulsos: {{count}} e-mails serão removidos ao salvar.',
     },
     cancel: 'Cancelar',
     submit: 'Salvar grupo',
@@ -1990,6 +2007,37 @@ export const communication = {
     namePlaceholder: 'Ex.: Líderes de célula',
     description: 'Descrição (opcional)',
     descriptionPlaceholder: 'Para que serve este grupo',
+    type: 'Tipo do grupo',
+  },
+  groupTypes: {
+    RESTRICTED: {
+      label: 'Restrito',
+      description: 'Só contas com e-mail verificado, escolhidas da lista.',
+    },
+    OPEN: {
+      label: 'Aberto',
+      description: 'Só e-mails informados à mão, de qualquer pessoa.',
+    },
+    MIXED: {
+      label: 'Misto',
+      description: 'Contas verificadas da lista e e-mails informados à mão.',
+    },
+  },
+  externalEmails: {
+    label: 'Adicionar e-mails',
+    placeholder: 'nome@exemplo.com',
+    hint: 'Separe vários por vírgula, espaço ou quebra de linha. Enter adiciona.',
+    add: 'Adicionar',
+    count_one: '{{count}} e-mail avulso',
+    count_other: '{{count}} e-mails avulsos',
+    empty: 'Nenhum e-mail avulso no grupo.',
+    removeAll: 'Remover todos',
+    remove: 'Remover {{email}}',
+    invalid_one: 'E-mail inválido: {{values}}',
+    invalid_other: 'E-mails inválidos: {{values}}',
+    duplicates_one: 'Já estava no grupo: {{values}}',
+    duplicates_other: 'Já estavam no grupo: {{values}}',
+    invalidPending: 'Corrija ou apague os e-mails inválidos do campo de e-mails avulsos.',
   },
   recipients: {
     available: 'Contas disponíveis',

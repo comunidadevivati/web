@@ -18,6 +18,7 @@ import {
   Text,
 } from '@/components/ui';
 import { DeleteEmailGroupDialog } from '@/features/communication/presentation/components/delete-email-group-dialog';
+import { EmailGroupTypeBadge } from '@/features/communication/presentation/components/email-group-type-badge';
 import { useEmailGroupsViewModel } from '@/features/communication/presentation/view-models/email-groups.view-model';
 import { cn } from '@/lib/utils';
 import { Link } from '@tanstack/react-router';
@@ -151,7 +152,13 @@ export const EmailGroupsView = () => {
               </Box>
 
               <Box className="grid min-w-0 flex-1 gap-1">
-                <Text className="truncate text-sm font-semibold text-foreground">{group.name}</Text>
+                <Box className="flex min-w-0 flex-wrap items-center gap-2">
+                  <Text className="truncate text-sm font-semibold text-foreground">
+                    {group.name}
+                  </Text>
+
+                  <EmailGroupTypeBadge type={group.type} />
+                </Box>
 
                 {group.description && (
                   <Text className="truncate text-xs text-muted-foreground">
