@@ -7,6 +7,7 @@ import {
   type ForgotPasswordNotice,
 } from '@/features/auth/presentation/models/forgot-password.model';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation } from '@tanstack/react-query';
 import { useForm, useWatch } from 'react-hook-form';
@@ -37,6 +38,8 @@ export const useForgotPasswordViewModel = ({ onOpenChange }: UseForgotPasswordVi
     },
     mode: 'onTouched',
   });
+
+  const hasValidationErrors = useHasValidationErrors(form.control);
 
   const {
     control,
@@ -110,6 +113,7 @@ export const useForgotPasswordViewModel = ({ onOpenChange }: UseForgotPasswordVi
   });
 
   return {
+    hasValidationErrors,
     emailError,
     form,
     handleOpenChange,

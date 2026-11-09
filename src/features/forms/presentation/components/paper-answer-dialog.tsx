@@ -118,7 +118,7 @@ export const PaperAnswerDialog = ({
           )}
 
           {issue && (
-            <Text className="text-sm text-destructive-strong" id={`${INPUT_ID}-error`} role="alert">
+            <Text className="text-sm text-destructive italic" id={`${INPUT_ID}-error`} role="alert">
               {t(`responses.paper.issues.${issue}`)}
             </Text>
           )}
@@ -138,7 +138,7 @@ export const PaperAnswerDialog = ({
           <Button
             aria-busy={isPending}
             className="h-11 w-full sm:w-auto sm:px-5"
-            disabled={isPending || (isAttachOnly && !file)}
+            disabled={isPending || Boolean(issue) || (isAttachOnly && !file)}
             type="button"
             onClick={onConfirm}
           >

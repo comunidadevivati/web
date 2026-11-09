@@ -25,6 +25,7 @@ type ForgotPasswordViewProps = {
 // Modal de recuperação de senha, aberto a partir do login.
 export const ForgotPasswordView = ({ onOpenChange, open }: ForgotPasswordViewProps) => {
   const {
+    hasValidationErrors,
     emailError,
     form,
     handleOpenChange,
@@ -111,7 +112,7 @@ export const ForgotPasswordView = ({ onOpenChange, open }: ForgotPasswordViewPro
                 <Button
                   aria-busy={isSubmitting}
                   className="h-11 w-full sm:w-auto sm:px-5"
-                  disabled={isSubmitting}
+                  disabled={isSubmitting || hasValidationErrors}
                   type="submit"
                 >
                   {isSubmitting ? (

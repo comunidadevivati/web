@@ -45,6 +45,7 @@ const SEX_OPTIONS = ['', 'MALE', 'FEMALE'] as const;
 // Dados pessoais, endereço e redes sociais do Perfil, gravados juntos.
 export const ProfileFormView = ({ profile }: ProfileFormViewProps) => {
   const {
+    hasValidationErrors,
     addressErrors,
     control,
     discard,
@@ -429,7 +430,11 @@ export const ProfileFormView = ({ profile }: ProfileFormViewProps) => {
           {t('actions.discard')}
         </Button>
 
-        <Button className="h-11" disabled={!isDirty || isSubmitting} type="submit">
+        <Button
+          className="h-11"
+          disabled={!isDirty || isSubmitting || hasValidationErrors}
+          type="submit"
+        >
           {isSubmitting ? (
             <Spinner data-icon="inline-start" />
           ) : (

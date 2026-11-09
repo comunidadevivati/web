@@ -83,7 +83,7 @@ export const UserActionDialog = ({
             className="h-11 w-full sm:w-auto sm:px-5"
             disabled={isPending}
             type="button"
-            variant={action === 'reactivate' ? 'default' : 'destructive'}
+            variant={action === 'reactivate' ? 'primary' : 'destructive'}
             onClick={onConfirm}
           >
             {isPending ? <Spinner data-icon="inline-start" /> : <Icon data-icon="inline-start" />}

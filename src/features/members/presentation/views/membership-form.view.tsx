@@ -38,6 +38,7 @@ type MembershipFormViewProps = {
 // Modal de registro de um vínculo do membro com uma congregação ativa.
 export const MembershipFormView = ({ member, onOpenChange, open }: MembershipFormViewProps) => {
   const {
+    hasValidationErrors,
     congregationError,
     congregationOptions,
     form,
@@ -152,7 +153,7 @@ export const MembershipFormView = ({ member, onOpenChange, open }: MembershipFor
             <Button
               aria-busy={isSubmitting}
               className="h-11 w-full sm:w-auto sm:px-5"
-              disabled={isSubmitting || hasNoCongregations}
+              disabled={isSubmitting || hasNoCongregations || hasValidationErrors}
               type="submit"
             >
               {isSubmitting ? (

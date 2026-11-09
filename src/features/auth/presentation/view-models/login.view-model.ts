@@ -12,6 +12,7 @@ import {
   type LoginNotice,
 } from '@/features/auth/presentation/models/login.model';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
@@ -48,6 +49,8 @@ export const useLoginViewModel = () => {
     },
     mode: 'onTouched',
   });
+
+  const hasValidationErrors = useHasValidationErrors(form.control);
 
   const {
     control,
@@ -137,6 +140,7 @@ export const useLoginViewModel = () => {
   };
 
   return {
+    hasValidationErrors,
     form,
     isForgotPasswordOpen,
     openForgotPassword,

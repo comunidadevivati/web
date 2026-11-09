@@ -34,6 +34,7 @@ import { useTranslation } from 'react-i18next';
 // editáveis), e cada link aceita uma única resposta enquanto o formulário estiver aberto.
 export const FormAnswerView = () => {
   const {
+    hasValidationErrors,
     answerForm,
     answeredAt,
     canAnswer,
@@ -286,7 +287,7 @@ export const FormAnswerView = () => {
             </Label>
 
             {consentError && (
-              <Text className="text-sm text-destructive-strong" id="answer-consent-error">
+              <Text className="text-sm text-destructive italic" id="answer-consent-error">
                 {consentError}
               </Text>
             )}
@@ -319,7 +320,7 @@ export const FormAnswerView = () => {
           <Button
             aria-busy={isSubmitting}
             className="h-11 w-full sm:ml-auto sm:w-auto sm:px-6"
-            disabled={isSubmitting}
+            disabled={isSubmitting || hasValidationErrors}
             type="submit"
           >
             {isSubmitting ? (

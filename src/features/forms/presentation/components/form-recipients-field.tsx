@@ -453,7 +453,7 @@ export const FormRecipientsField = ({
 
         {(draftMessage ?? error) && (
           <Text
-            className="text-sm text-destructive-strong"
+            className="text-sm text-destructive italic"
             id="form-recipient-email-error"
             role="alert"
           >

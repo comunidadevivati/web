@@ -90,7 +90,7 @@ export const StatusChangeDialog = ({
             className="h-11 w-full sm:w-auto sm:px-5"
             disabled={isPending}
             type="button"
-            variant={action === 'deactivate' ? 'destructive' : 'default'}
+            variant={action === 'deactivate' ? 'destructive' : 'primary'}
             onClick={onConfirm}
           >
             {isPending ? <Spinner data-icon="inline-start" /> : <Icon data-icon="inline-start" />}

@@ -127,7 +127,7 @@ export const PhotoTile = ({
             disabled={(isPublished ? !canUnpublish : !canPublish) || isBusy}
             size="xs"
             type="button"
-            variant={isPublished ? 'secondary' : 'default'}
+            variant={isPublished ? 'secondary' : 'primary'}
             onClick={() => onTogglePublication(photo)}
           >
             {isBusy ? (

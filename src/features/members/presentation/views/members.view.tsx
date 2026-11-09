@@ -138,7 +138,7 @@ export const MembersView = () => {
             className="h-10 rounded-full px-4"
             size="sm"
             type="button"
-            variant={isSelected ? 'default' : 'outline'}
+            variant={isSelected ? 'primary' : 'outline'}
             onClick={() => setStatusFilter(value)}
           >
             {label}

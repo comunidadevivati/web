@@ -18,6 +18,7 @@ import {
   type AlbumFormInput,
 } from '@/features/gallery/presentation/models/gallery.model';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
@@ -51,6 +52,8 @@ export const useAlbumFormViewModel = ({ album, onOpenChange }: UseAlbumFormViewM
     defaultValues: toAlbumFormInput(album),
     mode: 'onTouched',
   });
+
+  const hasValidationErrors = useHasValidationErrors(form.control);
 
   const {
     formState: { errors, isSubmitted, touchedFields },
@@ -157,6 +160,7 @@ export const useAlbumFormViewModel = ({ album, onOpenChange }: UseAlbumFormViewM
   });
 
   return {
+    hasValidationErrors,
     fieldErrors,
     form,
     handleOpenChange,

@@ -10,6 +10,7 @@ import {
   type ChangePasswordFormData,
 } from '@/features/profile/presentation/models/profile.model';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import {
   getPasswordRequirements,
   getPasswordStrength,
@@ -39,6 +40,8 @@ export const useChangePasswordViewModel = ({ onOpenChange }: UseChangePasswordVi
     defaultValues: { currentPassword: '', newPassword: '', confirmPassword: '' },
     mode: 'onTouched',
   });
+
+  const hasValidationErrors = useHasValidationErrors(form.control);
 
   const {
     control,
@@ -103,6 +106,7 @@ export const useChangePasswordViewModel = ({ onOpenChange }: UseChangePasswordVi
   });
 
   return {
+    hasValidationErrors,
     cancel,
     fieldErrors: {
       currentPassword: getFieldError('currentPassword'),

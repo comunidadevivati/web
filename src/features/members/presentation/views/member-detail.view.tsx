@@ -162,7 +162,7 @@ export const MemberDetailView = () => {
                       className="h-10"
                       type="button"
                       variant={
-                        action === 'deactivate' || action === 'archive' ? 'destructive' : 'default'
+                        action === 'deactivate' || action === 'archive' ? 'destructive' : 'primary'
                       }
                       onClick={() => requestMemberAction(action)}
                     >

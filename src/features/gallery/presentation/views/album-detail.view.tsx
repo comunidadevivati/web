@@ -217,7 +217,7 @@ export const AlbumDetailView = () => {
                           : undefined
                       }
                       type="button"
-                      variant={action === 'publish' ? 'default' : 'outline'}
+                      variant={action === 'publish' ? 'primary' : 'outline'}
                       onClick={() => publication.changeStatus(action)}
                     >
                       {isPending ? (

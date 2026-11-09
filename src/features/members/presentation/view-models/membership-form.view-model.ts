@@ -13,6 +13,7 @@ import {
 } from '@/features/members/presentation/models/members.model';
 import { congregationOptionsQueryOptions } from '@/features/organization/application/queries/organization.query';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm } from 'react-hook-form';
@@ -51,8 +52,10 @@ export const useMembershipFormViewModel = ({
     mode: 'onTouched',
   });
 
+  const hasValidationErrors = useHasValidationErrors(form.control);
+
   const {
-    formState: { errors, isSubmitted },
+    formState: { errors },
     handleSubmit,
     reset,
     setError,
@@ -94,10 +97,9 @@ export const useMembershipFormViewModel = ({
 
   const congregationMessage = errors.congregationId?.message;
 
-  const congregationError =
-    congregationMessage && isSubmitted
-      ? t(congregationMessage as TranslationKey<'members'>)
-      : undefined;
+  const congregationError = congregationMessage
+    ? t(congregationMessage as TranslationKey<'members'>)
+    : undefined;
 
   // O modal só fecha pelo botão "X" e nunca durante o envio.
   const handleOpenChange = (open: boolean, reason?: string) => {
@@ -127,6 +129,7 @@ export const useMembershipFormViewModel = ({
   });
 
   return {
+    hasValidationErrors,
     congregationError,
     congregationOptions,
     form,

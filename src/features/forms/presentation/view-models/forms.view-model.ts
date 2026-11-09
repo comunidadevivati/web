@@ -472,6 +472,7 @@ export const useFormsViewModel = () => {
     changeCancellationReason: setCancellationReason,
     touchCancellationReason: () => setIsReasonTouched(true),
     cancellationReasonError: isReasonTouched ? reasonError : null,
+    isCancellationReasonInvalid: statusTarget?.action === 'cancel' && Boolean(reasonIssue),
     statusTarget: statusTarget
       ? { title: statusTarget.form.title, action: statusTarget.action }
       : null,

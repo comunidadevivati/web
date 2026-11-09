@@ -50,6 +50,7 @@ export const CongregationFormView = ({
   open,
 }: CongregationFormViewProps) => {
   const {
+    hasValidationErrors,
     addressFields,
     fieldErrors,
     form,
@@ -211,7 +212,7 @@ export const CongregationFormView = ({
             <Button
               aria-busy={isSubmitting}
               className="h-11 w-full sm:w-auto sm:px-5"
-              disabled={isSubmitting}
+              disabled={isSubmitting || hasValidationErrors}
               type="submit"
             >
               {isSubmitting ? (

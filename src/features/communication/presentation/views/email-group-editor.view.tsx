@@ -57,6 +57,7 @@ const describedBy = (id: string, error?: string) => {
 // mão.
 export const EmailGroupEditorView = ({ group }: EmailGroupEditorViewProps) => {
   const {
+    hasValidationErrors,
     addExternalEmails,
     changeExternalEmailDraft,
     changeMembers,
@@ -465,7 +466,12 @@ export const EmailGroupEditorView = ({ group }: EmailGroupEditorViewProps) => {
           <Button
             aria-busy={isSubmitting}
             className="h-11 sm:px-5"
-            disabled={isSubmitting || (showsAccounts && isLoadingRecipients)}
+            disabled={
+              isSubmitting ||
+              (showsAccounts && isLoadingRecipients) ||
+              hasValidationErrors ||
+              externalEmailsFeedback?.kind === 'invalid'
+            }
             type="submit"
           >
             {isSubmitting ? (

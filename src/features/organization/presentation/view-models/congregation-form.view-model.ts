@@ -24,6 +24,7 @@ import {
   type CongregationFormInput,
 } from '@/features/organization/presentation/models/organization.model';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { get, useForm, type FieldPath } from 'react-hook-form';
@@ -65,6 +66,8 @@ export const useCongregationFormViewModel = ({
     defaultValues: toCongregationFormInput(congregation),
     mode: 'onTouched',
   });
+
+  const hasValidationErrors = useHasValidationErrors(form.control);
 
   const {
     formState: { errors, isSubmitted, touchedFields },
@@ -200,6 +203,7 @@ export const useCongregationFormViewModel = ({
   });
 
   return {
+    hasValidationErrors,
     addressFields,
     fieldErrors,
     form,

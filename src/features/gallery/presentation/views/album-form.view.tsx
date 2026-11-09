@@ -40,6 +40,7 @@ const describedBy = (id: string, error?: string) => {
 // Modal de criação ou edição dos dados do álbum. O endereço público (slug) não muda na edição.
 export const AlbumFormView = ({ album, onOpenChange, open }: AlbumFormViewProps) => {
   const {
+    hasValidationErrors,
     fieldErrors,
     form,
     handleOpenChange,
@@ -145,7 +146,7 @@ export const AlbumFormView = ({ album, onOpenChange, open }: AlbumFormViewProps)
             <Button
               aria-busy={isSubmitting}
               className="h-11 w-full sm:w-auto sm:px-5"
-              disabled={isSubmitting}
+              disabled={isSubmitting || hasValidationErrors}
               type="submit"
             >
               {isSubmitting ? (
