@@ -43,6 +43,7 @@ import {
 import type { FormRecipientsValue } from '@/features/forms/presentation/view-models/form-recipients.view-model';
 import { useGlobalLoading } from '@/shared/feedback/global-loading';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
@@ -132,6 +133,8 @@ export const useFormEditorViewModel = ({ form }: UseFormEditorViewModelOptions) 
     defaultValues: toFormEditorInput(form),
     mode: 'onTouched',
   });
+
+  const hasValidationErrors = useHasValidationErrors(editorForm.control);
 
   const {
     control,
@@ -279,7 +282,7 @@ export const useFormEditorViewModel = ({ form }: UseFormEditorViewModelOptions) 
 
     const message: string | undefined = error?.root?.message ?? error?.message;
 
-    return message && isSubmitted ? t(message as TranslationKey<'forms'>) : undefined;
+    return message ? t(message as TranslationKey<'forms'>) : undefined;
   };
 
   const selectHeaderImage = async (file: File) => {
@@ -367,11 +370,11 @@ export const useFormEditorViewModel = ({ form }: UseFormEditorViewModelOptions) 
   };
 
   const changeRecipients = ({ accountIds, emails, groupIds }: FormRecipientsValue) => {
-    setValue('recipientGroupIds', groupIds, { shouldDirty: true });
+    setValue('recipientGroupIds', groupIds, { shouldDirty: true, shouldValidate: true });
 
-    setValue('recipientAccountIds', accountIds, { shouldDirty: true });
+    setValue('recipientAccountIds', accountIds, { shouldDirty: true, shouldValidate: true });
 
-    setValue('recipientEmails', emails, { shouldDirty: true });
+    setValue('recipientEmails', emails, { shouldDirty: true, shouldValidate: true });
   };
 
   const removeQuestion = (index: number) => {
@@ -382,7 +385,7 @@ export const useFormEditorViewModel = ({ form }: UseFormEditorViewModelOptions) 
   const anonymousField = editorForm.register('anonymous', {
     onChange: ({ target }: { target: HTMLInputElement }) => {
       if (target.checked) {
-        setValue('allowAnswerEdit', false, { shouldDirty: true });
+        setValue('allowAnswerEdit', false, { shouldDirty: true, shouldValidate: true });
       }
     },
   });
@@ -436,7 +439,10 @@ export const useFormEditorViewModel = ({ form }: UseFormEditorViewModelOptions) 
 
   // Ao virar checkbox ou radio sem opções, a pergunta já ganha a opção mínima em branco.
   const changeFieldType = (index: number, fieldType: QuestionFieldType) => {
-    setValue(`questions.${index}.fieldType`, fieldType, { shouldDirty: true });
+    setValue(`questions.${index}.fieldType`, fieldType, {
+      shouldDirty: true,
+      shouldValidate: true,
+    });
 
     const options = getValues(`questions.${index}.options`);
 
@@ -444,7 +450,7 @@ export const useFormEditorViewModel = ({ form }: UseFormEditorViewModelOptions) 
       setValue(
         `questions.${index}.options`,
         Array.from({ length: MIN_QUESTION_OPTIONS }, createEmptyOption),
-        { shouldDirty: true },
+        { shouldDirty: true, shouldValidate: true },
       );
     }
   };
@@ -514,6 +520,7 @@ export const useFormEditorViewModel = ({ form }: UseFormEditorViewModelOptions) 
   };
 
   return {
+    hasValidationErrors,
     addQuestion,
     canAddQuestion: questionFields.length < MAX_QUESTIONS,
     anonymousField,

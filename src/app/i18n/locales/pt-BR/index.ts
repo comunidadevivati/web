@@ -1,6 +1,7 @@
 import { common } from '@/app/i18n/locales/pt-BR/common';
 import {
   auth,
+  backlog,
   communication,
   contact,
   dashboard,
@@ -33,4 +34,5 @@ export const ptBR = {
   departments,
   forms,
   communication,
+  backlog,
 } as const;

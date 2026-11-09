@@ -10,6 +10,7 @@ import {
   type ChangeEmailFormData,
 } from '@/features/profile/presentation/models/profile.model';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery } from '@tanstack/react-query';
 import { get, useForm, type FieldPath } from 'react-hook-form';
@@ -33,6 +34,8 @@ export const useChangeEmailViewModel = ({ onOpenChange }: UseChangeEmailViewMode
     defaultValues: { newEmail: '', currentPassword: '' },
     mode: 'onTouched',
   });
+
+  const hasValidationErrors = useHasValidationErrors(form.control);
 
   const {
     formState: { errors, isSubmitted, touchedFields },
@@ -93,6 +96,7 @@ export const useChangeEmailViewModel = ({ onOpenChange }: UseChangeEmailViewMode
   });
 
   return {
+    hasValidationErrors,
     cancel,
     fieldErrors: {
       newEmail: getFieldError('newEmail'),

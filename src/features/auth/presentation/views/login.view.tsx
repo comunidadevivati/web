@@ -24,6 +24,7 @@ import { useTranslation } from 'react-i18next';
 
 export const LoginView = () => {
   const {
+    hasValidationErrors,
     form,
     fieldErrors,
     isForgotPasswordOpen,
@@ -157,7 +158,7 @@ export const LoginView = () => {
               <Button
                 aria-busy={isSubmitting}
                 className="mt-1 h-11 w-full"
-                disabled={isSubmitting}
+                disabled={isSubmitting || hasValidationErrors}
                 type="submit"
               >
                 <LogInIcon data-icon="inline-start" />

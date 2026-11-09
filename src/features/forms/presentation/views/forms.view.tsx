@@ -106,6 +106,7 @@ export const FormsView = () => {
     dispatchMessage,
     cancellationReason,
     cancellationReasonError,
+    isCancellationReasonInvalid,
     changeCancellationReason,
     touchCancellationReason,
   } = useFormsViewModel();
@@ -493,6 +494,7 @@ export const FormsView = () => {
         isPending={isChangingStatus}
         message={dispatchMessage}
         reason={cancellationReason}
+        isReasonInvalid={isCancellationReasonInvalid}
         reasonError={cancellationReasonError}
         onMessageChange={changeDispatchMessage}
         onReasonBlur={touchCancellationReason}

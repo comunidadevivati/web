@@ -45,6 +45,8 @@
   --color-muted-foreground: var(--muted-foreground);
   --color-secondary: var(--secondary);
   --color-secondary-foreground: var(--secondary-foreground);
+  --color-tertiary: var(--tertiary);
+  --color-tertiary-foreground: var(--tertiary-foreground);
   --color-border: var(--border);
   --color-input: var(--input);
   --color-input-border: var(--input-border);
@@ -93,6 +95,11 @@
 
   /* Avaliação (estrelas da nota geral) */
   --color-rating: var(--rating);
+
+  /* Etapas do backlog sem cor funcional equivalente */
+  --color-backlog-testing: var(--backlog-testing);
+  --color-backlog-homologated: var(--backlog-homologated);
+  --color-backlog-deployed: var(--backlog-deployed);
 
   /* Sobreposições */
   --color-overlay: var(--overlay);
@@ -187,6 +194,8 @@
   --muted-foreground: var(--viva-teal-800);
   --secondary: var(--viva-teal-100);
   --secondary-foreground: var(--viva-teal-950);
+  --tertiary: var(--viva-platinum);
+  --tertiary-foreground: var(--viva-charcoal-brown);
   --border: var(--viva-teal-400);
   --input: var(--viva-teal-400);
   /* Borda de campos: light-sea-green nos dois modos (decisão de identidade; no claro fica 2:1) */
@@ -253,6 +262,11 @@
   /* Avaliação (estrelas da nota geral): contraste gráfico >= 3:1 sobre o card */
   --rating: oklch(0.666 0.179 58.318);
 
+  /* Etapas do backlog sem cor funcional equivalente */
+  --backlog-testing: var(--viva-rosy-copper);
+  --backlog-homologated: var(--viva-dark-cyan);
+  --backlog-deployed: var(--viva-deep-space-blue);
+
   /* Sobreposições sobre fotos/mídia */
   --overlay: var(--viva-black);
   --overlay-foreground: var(--viva-white);
@@ -287,6 +301,8 @@
   --muted-foreground: var(--viva-teal-200);
   --secondary: var(--viva-teal-700);
   --secondary-foreground: var(--viva-teal-50);
+  --tertiary: var(--viva-blue-slate);
+  --tertiary-foreground: var(--viva-white);
   --border: var(--viva-teal-700);
   --input: var(--viva-teal-700);
   --input-background: var(--viva-charcoal);
@@ -336,6 +352,11 @@
 
   /* Avaliação (estrelas da nota geral) */
   --rating: oklch(0.828 0.189 84.429);
+
+  /* Etapas do backlog sem cor funcional equivalente */
+  --backlog-testing: var(--viva-grapefruit-pink);
+  --backlog-homologated: var(--viva-dark-cyan);
+  --backlog-deployed: var(--viva-platinum);
 
   /* Sombras */
   --elevation: var(--viva-black);

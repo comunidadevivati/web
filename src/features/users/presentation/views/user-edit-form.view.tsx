@@ -33,6 +33,7 @@ type UserEditFormViewProps = {
 // Modal de edição de nome, telefone e e-mail. A senha não é alterada aqui (recuperação de senha).
 export const UserEditFormView = ({ onOpenChange, open, user }: UserEditFormViewProps) => {
   const {
+    hasValidationErrors,
     fieldErrors,
     form,
     handleOpenChange,
@@ -139,7 +140,7 @@ export const UserEditFormView = ({ onOpenChange, open, user }: UserEditFormViewP
             <Button
               aria-busy={isSubmitting}
               className="h-11 w-full sm:w-auto sm:px-5"
-              disabled={isSubmitDisabled}
+              disabled={isSubmitDisabled || hasValidationErrors}
               type="submit"
             >
               {isSubmitting ? (

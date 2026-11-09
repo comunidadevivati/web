@@ -75,6 +75,7 @@ const describedBy = (id: string, error?: string) => {
 // e-mail destinatários. Finalizado ou cancelado abre somente para leitura.
 export const FormEditorView = ({ form }: FormEditorViewProps) => {
   const {
+    hasValidationErrors,
     addQuestion,
     canAddQuestion,
     changeFieldType,
@@ -528,7 +529,7 @@ export const FormEditorView = ({ form }: FormEditorViewProps) => {
             })}
 
             {questionsError && (
-              <Text className="text-sm text-destructive-strong" role="alert">
+              <Text className="text-sm text-destructive italic" role="alert">
                 {questionsError}
               </Text>
             )}
@@ -653,7 +654,7 @@ export const FormEditorView = ({ form }: FormEditorViewProps) => {
             <Button
               aria-busy={isSubmitting}
               className="h-11 sm:px-5"
-              disabled={isSubmitting || isInspectingImage}
+              disabled={isSubmitting || isInspectingImage || hasValidationErrors}
               type="submit"
             >
               {isSubmitting ? (

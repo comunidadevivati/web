@@ -143,7 +143,7 @@ export const OrganizationView = () => {
                 <Button
                   className="h-10"
                   type="button"
-                  variant={isActive ? 'destructive' : 'default'}
+                  variant={isActive ? 'destructive' : 'primary'}
                   onClick={toggleStatus}
                 >
                   {isActive ? (

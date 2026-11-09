@@ -2,6 +2,7 @@ import type { Translations } from '@/app/i18n/i18n.model';
 import { common } from '@/app/i18n/locales/en-US/common';
 import {
   auth,
+  backlog,
   communication,
   contact,
   dashboard,
@@ -33,4 +34,5 @@ export const enUS = {
   departments,
   forms,
   communication,
+  backlog,
 } as const satisfies Translations;

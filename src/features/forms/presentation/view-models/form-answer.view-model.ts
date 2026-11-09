@@ -20,6 +20,7 @@ import {
 import { formatCivilDate } from '@/features/forms/presentation/models/forms.model';
 import { useGlobalLoading } from '@/shared/feedback/global-loading';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate, useSearch } from '@tanstack/react-router';
@@ -69,12 +70,15 @@ export const useFormAnswerViewModel = () => {
       consentAccepted: false,
       sendCopy: true,
     },
+    mode: 'onTouched',
     resetOptions: { keepDirtyValues: true },
   });
 
+  const hasValidationErrors = useHasValidationErrors(answerForm.control);
+
   const {
     control,
-    formState: { errors, isDirty, isSubmitted },
+    formState: { errors, isDirty },
     handleSubmit,
     setValue,
   } = answerForm;
@@ -114,7 +118,7 @@ export const useFormAnswerViewModel = () => {
       const answer = draft[id];
 
       if (answer) {
-        setValue(`answers.${id}`, answer, { shouldDirty: true });
+        setValue(`answers.${id}`, answer, { shouldDirty: true, shouldValidate: true });
       }
     });
 
@@ -170,20 +174,20 @@ export const useFormAnswerViewModel = () => {
   const getAnswerError = (questionId: string) => {
     const message = errors.answers?.[questionId]?.message;
 
-    return message && isSubmitted ? t(message as TranslationKey<'forms'>) : undefined;
+    return message ? t(message as TranslationKey<'forms'>) : undefined;
   };
 
   const getConsentError = () => {
     const message = errors.consentAccepted?.message;
 
-    return message && isSubmitted ? t(message as TranslationKey<'forms'>) : undefined;
+    return message ? t(message as TranslationKey<'forms'>) : undefined;
   };
 
   // Nenhuma pergunta respondida (erro do formulário todo).
   const getEmptyError = () => {
     const message = errors.answers?.root?.message ?? errors.answers?.message;
 
-    return message && isSubmitted ? t(message as TranslationKey<'forms'>) : undefined;
+    return message ? t(message as TranslationKey<'forms'>) : undefined;
   };
 
   const getPeriod = () => {
@@ -222,6 +226,7 @@ export const useFormAnswerViewModel = () => {
   );
 
   return {
+    hasValidationErrors,
     answerForm,
     answeredAt: getAnsweredAt(),
     canAnswer,

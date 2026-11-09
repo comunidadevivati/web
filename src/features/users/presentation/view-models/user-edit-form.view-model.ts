@@ -12,6 +12,7 @@ import {
   type UserEditFormInput,
 } from '@/features/users/presentation/models/users.model';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useForm, useWatch } from 'react-hook-form';
@@ -42,6 +43,8 @@ export const useUserEditFormViewModel = ({
     defaultValues: toUserEditFormInput(user),
     mode: 'onTouched',
   });
+
+  const hasValidationErrors = useHasValidationErrors(form.control);
 
   const {
     control,
@@ -131,6 +134,7 @@ export const useUserEditFormViewModel = ({
   });
 
   return {
+    hasValidationErrors,
     fieldErrors,
     form,
     handleOpenChange,

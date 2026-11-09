@@ -227,7 +227,7 @@ export const FieldError = ({ className, children, errors, ...props }: FieldError
 
   return (
     <div
-      className={cn('text-sm font-normal text-destructive-strong', className)}
+      className={cn('text-sm font-normal text-destructive italic', className)}
       data-slot="field-error"
       role="alert"
       {...props}

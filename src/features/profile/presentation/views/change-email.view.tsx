@@ -24,8 +24,15 @@ type ChangeEmailViewProps = {
 
 // Modal de troca do e-mail de acesso: novo e-mail e senha atual; a troca vale depois do link.
 export const ChangeEmailView = ({ onOpenChange, open }: ChangeEmailViewProps) => {
-  const { cancel, fieldErrors, handleOpenChange, isSubmitting, register, submit } =
-    useChangeEmailViewModel({ onOpenChange });
+  const {
+    hasValidationErrors,
+    cancel,
+    fieldErrors,
+    handleOpenChange,
+    isSubmitting,
+    register,
+    submit,
+  } = useChangeEmailViewModel({ onOpenChange });
 
   const { t } = useTranslation('profile');
 
@@ -91,7 +98,7 @@ export const ChangeEmailView = ({ onOpenChange, open }: ChangeEmailViewProps) =>
               {t('changeEmail.cancel')}
             </Button>
 
-            <Button disabled={isSubmitting} type="submit">
+            <Button disabled={isSubmitting || hasValidationErrors} type="submit">
               {isSubmitting ? (
                 <Spinner data-icon="inline-start" />
               ) : (

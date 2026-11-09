@@ -24,6 +24,7 @@ import {
   Building2Icon,
   ChurchIcon,
   CircleAlertIcon,
+  CpuIcon,
   GlobeIcon,
   ImagesIcon,
   LandmarkIcon,
@@ -114,6 +115,7 @@ export const AuthenticatedLayoutView = () => {
       icon: NetworkIcon,
       children: [
         { label: t('navigation.leadership'), icon: LandmarkIcon, to: '/departamentos/lideranca' },
+        { label: t('navigation.technology'), icon: CpuIcon, to: '/departamentos/tecnologia' },
       ],
       requiresMember: true,
     },

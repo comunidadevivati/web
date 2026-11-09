@@ -80,7 +80,7 @@ export const ConfirmActionDialog = ({
             className="h-11 w-full sm:w-auto sm:px-5"
             disabled={isPending}
             type="button"
-            variant={content?.isDestructive ? 'destructive' : 'default'}
+            variant={content?.isDestructive ? 'destructive' : 'primary'}
             onClick={onConfirm}
           >
             {isPending && <Spinner data-icon="inline-start" />}

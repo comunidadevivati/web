@@ -25,6 +25,7 @@ import {
   type ProfileFormInput,
 } from '@/features/profile/presentation/models/profile.model';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useEffect, useState } from 'react';
@@ -48,6 +49,8 @@ export const useProfileFormViewModel = ({ profile }: UseProfileFormViewModelOpti
     defaultValues: toProfileFormInput(profile),
     mode: 'onTouched',
   });
+
+  const hasValidationErrors = useHasValidationErrors(form.control);
 
   const {
     control,
@@ -169,6 +172,7 @@ export const useProfileFormViewModel = ({ profile }: UseProfileFormViewModelOpti
   });
 
   return {
+    hasValidationErrors,
     addressErrors,
     control,
     discard,

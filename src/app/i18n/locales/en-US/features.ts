@@ -1272,7 +1272,121 @@ export const departments = {
       },
     },
   },
+  technology: {
+    title: 'Technology',
+    subtitle: 'Tools and follow-up for the Technology department.',
+    cards: {
+      requests: {
+        title: 'Requests',
+        description: 'Features, bugs and adjustments requested by members.',
+        details: '{{open}} open · {{inProgress}} in progress',
+        open: 'Open requests',
+      },
+    },
+  },
 } as const satisfies Translations['departments'];
+
+export const backlog = {
+  title: 'Requests',
+  subtitle: 'Features, bugs and adjustments requested by members.',
+  statuses: {
+    CREATED: 'Created',
+    PRIORITIZED: 'Prioritized',
+    REFINED: 'Refined',
+    IN_PROGRESS: 'In progress',
+    TESTING: 'Testing',
+    HOMOLOGATED: 'Approved',
+    DONE: 'Done',
+    DEPLOYED: 'Deployed',
+  },
+  types: {
+    FEATURE: 'Feature',
+    BUG: 'Bug',
+    ADJUSTMENT: 'Adjustment',
+  },
+  board: {
+    back: 'Back to Technology',
+    create: 'New card',
+    addCard: 'Add card',
+    addCardTo: 'Add card to {{status}}',
+    label: 'Requests board',
+    previous: 'See previous stages',
+    next: 'See next stages',
+    retry: 'Try again',
+  },
+  card: {
+    createdAt: 'Created',
+    updatedAt: 'Updated',
+    statusChangedAt: 'Status changed',
+    move: 'Move',
+    moveLabel: 'Move the card "{{title}}" to another stage',
+    delete: 'Delete card',
+  },
+  fields: {
+    title: 'Title',
+    titlePlaceholder: 'Summarize the request',
+    description: 'Description',
+    descriptionPlaceholder: 'Explain what needs to be done and why',
+    type: 'Type',
+    status: 'Status',
+  },
+  dialog: {
+    createTitle: 'New card',
+    createDescription: 'The card enters the backlog in the {{status}} stage.',
+    editTitle: 'Edit card',
+    editDescription: 'To change the stage, move the card on the board.',
+    close: 'Close',
+    cancel: 'Cancel',
+    submit: 'Save',
+    submitting: 'Saving...',
+    success: {
+      createTitle: 'Card created',
+      editTitle: 'Card updated',
+      description: '"{{title}}" was saved.',
+    },
+  },
+  deleteDialog: {
+    title: 'Delete card',
+    description: 'The card "{{title}}" will be permanently deleted.',
+    close: 'Close',
+    cancel: 'Cancel',
+    confirm: 'Delete',
+    confirming: 'Deleting...',
+    success: {
+      title: 'Card deleted',
+      description: '"{{title}}" was removed from the backlog.',
+    },
+  },
+  validation: {
+    titleRequired: 'Enter the title.',
+    titleTooLong: 'The title must have at most 120 characters.',
+    descriptionRequired: 'Enter the description.',
+    descriptionTooLong: 'The description must have at most 5000 characters.',
+    invalid: 'Value rejected by the server.',
+  },
+  notices: {
+    invalidData: {
+      title: 'Data rejected',
+      description: 'Review the highlighted fields and try again.',
+    },
+    conflict: {
+      title: 'Could not save',
+      description: 'The card was changed by someone else. Reload and try again.',
+    },
+    notFound: {
+      title: 'Card not found',
+      description: 'The card no longer exists or was deleted.',
+    },
+    accessDenied: {
+      title: 'Access denied',
+      description: 'Your account is not allowed to access the backlog.',
+    },
+    unavailable: {
+      title: 'Service unavailable',
+      description: 'Could not reach the server. Try again in a moment.',
+    },
+  },
+} as const satisfies Translations['backlog'];
 
 export const forms = {
   report: {

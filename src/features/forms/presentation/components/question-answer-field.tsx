@@ -293,7 +293,7 @@ export const QuestionAnswerField = ({
       {renderControl()}
 
       {error && (
-        <Text className="text-sm text-destructive-strong" id={errorId}>
+        <Text className="text-sm text-destructive italic" id={errorId}>
           {error}
         </Text>
       )}

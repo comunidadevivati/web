@@ -37,6 +37,8 @@ type FormStatusDialogProps = {
   // Motivo do cancelamento (obrigatório só na ação de cancelar) e erro já traduzido.
   reason: string;
   reasonError: string | null;
+  // Motivo inválido, mesmo antes de o campo ser tocado: impede a confirmação.
+  isReasonInvalid: boolean;
   onReasonChange: (reason: string) => void;
   onReasonBlur: () => void;
   isPending: boolean;
@@ -56,6 +58,7 @@ export const FormStatusDialog = ({
   onReasonChange,
   reason,
   reasonError,
+  isReasonInvalid,
   target,
 }: FormStatusDialogProps) => {
   const { t } = useTranslation('forms');
@@ -110,7 +113,7 @@ export const FormStatusDialog = ({
 
             <Box className="flex items-start justify-between gap-3">
               <Text
-                className="text-xs text-destructive-strong"
+                className="text-xs text-destructive italic"
                 id="form-cancellation-reason-error"
                 role={reasonError ? 'alert' : undefined}
               >
@@ -166,9 +169,9 @@ export const FormStatusDialog = ({
             aria-busy={isPending}
             autoFocus
             className="h-11 w-full sm:w-auto sm:px-5"
-            disabled={isPending}
+            disabled={isPending || isReasonInvalid}
             type="button"
-            variant={isIrreversible ? 'destructive' : 'default'}
+            variant={isIrreversible ? 'destructive' : 'primary'}
             onClick={onConfirm}
           >
             {isPending && <Spinner data-icon="inline-start" />}

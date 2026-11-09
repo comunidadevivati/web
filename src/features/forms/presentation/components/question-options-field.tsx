@@ -113,7 +113,7 @@ export const QuestionOptionsField = ({
             </Box>
 
             {error && (
-              <Text className="pl-6 text-sm text-destructive-strong" id={`${id}-error`}>
+              <Text className="pl-6 text-sm text-destructive italic" id={`${id}-error`}>
                 {error}
               </Text>
             )}
@@ -122,7 +122,7 @@ export const QuestionOptionsField = ({
       })}
 
       {listError && (
-        <Text className="text-sm text-destructive-strong" id={`${listId}-error`} role="alert">
+        <Text className="text-sm text-destructive italic" id={`${listId}-error`} role="alert">
           {listError}
         </Text>
       )}

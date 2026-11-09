@@ -86,7 +86,7 @@ export const HeaderImageField = ({
       </Text>
 
       {error && (
-        <Text className="text-sm text-destructive-strong" id={`${INPUT_ID}-error`} role="alert">
+        <Text className="text-sm text-destructive italic" id={`${INPUT_ID}-error`} role="alert">
           {error}
         </Text>
       )}

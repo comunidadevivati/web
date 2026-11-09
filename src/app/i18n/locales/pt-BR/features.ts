@@ -1275,6 +1275,120 @@ export const departments = {
       },
     },
   },
+  technology: {
+    title: 'Tecnologia',
+    subtitle: 'Ferramentas e acompanhamento do departamento de Tecnologia.',
+    cards: {
+      requests: {
+        title: 'Solicitações',
+        description: 'Funcionalidades, erros e ajustes pedidos pelos membros.',
+        details: '{{open}} aberta(s) · {{inProgress}} em andamento',
+        open: 'Abrir solicitações',
+      },
+    },
+  },
+} as const;
+
+export const backlog = {
+  title: 'Solicitações',
+  subtitle: 'Funcionalidades, erros e ajustes pedidos pelos membros.',
+  statuses: {
+    CREATED: 'Criado',
+    PRIORITIZED: 'Priorizado',
+    REFINED: 'Refinado',
+    IN_PROGRESS: 'Em andamento',
+    TESTING: 'Testando',
+    HOMOLOGATED: 'Homologado',
+    DONE: 'Concluído',
+    DEPLOYED: 'Implantado',
+  },
+  types: {
+    FEATURE: 'Funcionalidade',
+    BUG: 'Erro',
+    ADJUSTMENT: 'Ajuste',
+  },
+  board: {
+    back: 'Voltar para Tecnologia',
+    create: 'Novo card',
+    addCard: 'Adicionar card',
+    addCardTo: 'Adicionar card em {{status}}',
+    label: 'Quadro de solicitações',
+    previous: 'Ver etapas anteriores',
+    next: 'Ver próximas etapas',
+    retry: 'Tentar novamente',
+  },
+  card: {
+    createdAt: 'Criado em',
+    updatedAt: 'Alterado em',
+    statusChangedAt: 'Status alterado em',
+    move: 'Mover',
+    moveLabel: 'Mover o card "{{title}}" para outra etapa',
+    delete: 'Excluir card',
+  },
+  fields: {
+    title: 'Título',
+    titlePlaceholder: 'Resuma a solicitação',
+    description: 'Descrição',
+    descriptionPlaceholder: 'Explique o que precisa ser feito e por quê',
+    type: 'Tipo',
+    status: 'Status',
+  },
+  dialog: {
+    createTitle: 'Novo card',
+    createDescription: 'O card entra no backlog na etapa {{status}}.',
+    editTitle: 'Editar card',
+    editDescription: 'Para mudar a etapa, mova o card no quadro.',
+    close: 'Fechar',
+    cancel: 'Cancelar',
+    submit: 'Salvar',
+    submitting: 'Salvando...',
+    success: {
+      createTitle: 'Card criado',
+      editTitle: 'Card atualizado',
+      description: '"{{title}}" foi salvo.',
+    },
+  },
+  deleteDialog: {
+    title: 'Excluir card',
+    description: 'O card "{{title}}" será excluído definitivamente.',
+    close: 'Fechar',
+    cancel: 'Cancelar',
+    confirm: 'Excluir',
+    confirming: 'Excluindo...',
+    success: {
+      title: 'Card excluído',
+      description: '"{{title}}" foi removido do backlog.',
+    },
+  },
+  validation: {
+    titleRequired: 'Informe o título.',
+    titleTooLong: 'O título deve ter no máximo 120 caracteres.',
+    descriptionRequired: 'Informe a descrição.',
+    descriptionTooLong: 'A descrição deve ter no máximo 5000 caracteres.',
+    invalid: 'Valor recusado pelo servidor.',
+  },
+  notices: {
+    invalidData: {
+      title: 'Dados recusados',
+      description: 'Revise os campos marcados e tente novamente.',
+    },
+    conflict: {
+      title: 'Não foi possível salvar',
+      description: 'O card foi alterado por outra pessoa. Recarregue e tente de novo.',
+    },
+    notFound: {
+      title: 'Card não encontrado',
+      description: 'O card não existe mais ou foi excluído.',
+    },
+    accessDenied: {
+      title: 'Acesso negado',
+      description: 'Sua conta não tem permissão para acessar o backlog.',
+    },
+    unavailable: {
+      title: 'Serviço indisponível',
+      description: 'Não foi possível falar com o servidor. Tente novamente em instantes.',
+    },
+  },
 } as const;
 
 export const forms = {

@@ -25,6 +25,7 @@ type ChangePasswordViewProps = {
 // Modal de troca de senha: senha atual, nova senha (com medidor de força) e confirmação.
 export const ChangePasswordView = ({ onOpenChange, open }: ChangePasswordViewProps) => {
   const {
+    hasValidationErrors,
     cancel,
     fieldErrors,
     handleOpenChange,
@@ -122,7 +123,7 @@ export const ChangePasswordView = ({ onOpenChange, open }: ChangePasswordViewPro
               {t('changePassword.cancel')}
             </Button>
 
-            <Button disabled={isSubmitting} type="submit">
+            <Button disabled={isSubmitting || hasValidationErrors} type="submit">
               {isSubmitting ? (
                 <Spinner data-icon="inline-start" />
               ) : (

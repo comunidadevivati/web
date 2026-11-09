@@ -213,7 +213,7 @@ export const GuestWifiView = () => {
                   />
 
                   {errors.fullName?.message && (
-                    <Text className="text-destructive-strong" role="alert">
+                    <Text className="text-destructive italic" role="alert">
                       {getFieldError(errors.fullName.message)}
                     </Text>
                   )}
@@ -233,7 +233,7 @@ export const GuestWifiView = () => {
                   />
 
                   {errors.phone?.message && (
-                    <Text className="text-destructive-strong" role="alert">
+                    <Text className="text-destructive italic" role="alert">
                       {getFieldError(errors.phone.message)}
                     </Text>
                   )}

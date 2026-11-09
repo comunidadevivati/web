@@ -27,6 +27,7 @@ import {
 } from '@/features/communication/presentation/models/email-groups.model';
 import { useGlobalLoading } from '@/shared/feedback/global-loading';
 import { notify } from '@/shared/feedback/notify';
+import { useHasValidationErrors } from '@/shared/forms/use-has-validation-errors';
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import { useNavigate } from '@tanstack/react-router';
@@ -68,6 +69,8 @@ export const useEmailGroupEditorViewModel = ({ group }: UseEmailGroupEditorViewM
     defaultValues: toEmailGroupEditorInput(group),
     mode: 'onTouched',
   });
+
+  const hasValidationErrors = useHasValidationErrors(editorForm.control);
 
   const {
     control,
@@ -171,11 +174,11 @@ export const useEmailGroupEditorViewModel = ({ group }: UseEmailGroupEditorViewM
   const discardedEmailCount = showsExternalEmails ? 0 : externalEmails.length;
 
   const changeType = (value: EmailGroupType) => {
-    setValue('type', value, { shouldDirty: true });
+    setValue('type', value, { shouldDirty: true, shouldValidate: true });
   };
 
   const changeMembers = (ids: string[]) => {
-    setValue('memberAccountIds', ids, { shouldDirty: true });
+    setValue('memberAccountIds', ids, { shouldDirty: true, shouldValidate: true });
   };
 
   // Remove do grupo as contas que não podem mais receber e-mails.
@@ -197,7 +200,10 @@ export const useEmailGroupEditorViewModel = ({ group }: UseEmailGroupEditorViewM
     const { added, duplicates, invalid } = parseExternalEmails(externalEmailDraft, current);
 
     if (added.length > 0) {
-      setValue('externalEmails', [...current, ...added], { shouldDirty: true });
+      setValue('externalEmails', [...current, ...added], {
+        shouldDirty: true,
+        shouldValidate: true,
+      });
     }
 
     setExternalEmailDraft(invalid.join(', '));
@@ -217,12 +223,12 @@ export const useEmailGroupEditorViewModel = ({ group }: UseEmailGroupEditorViewM
     setValue(
       'externalEmails',
       getValues('externalEmails').filter((item) => item !== email),
-      { shouldDirty: true },
+      { shouldDirty: true, shouldValidate: true },
     );
   };
 
   const removeAllExternalEmails = () => {
-    setValue('externalEmails', [], { shouldDirty: true });
+    setValue('externalEmails', [], { shouldDirty: true, shouldValidate: true });
   };
 
   const submitForm = handleSubmit(
@@ -259,6 +265,7 @@ export const useEmailGroupEditorViewModel = ({ group }: UseEmailGroupEditorViewM
   };
 
   return {
+    hasValidationErrors,
     addExternalEmails,
     changeExternalEmailDraft,
     changeMembers,
