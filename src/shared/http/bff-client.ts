@@ -25,7 +25,9 @@ export const bffClient = ky.create({
     limit: 2,
     methods: ['get', 'put', 'head', 'delete', 'options', 'trace'],
     // 524: tempo limite do Cloudflare (100 s), possível se BFF e Core API acordam juntos.
-    statusCodes: [408, 413, 429, 500, 502, 503, 504, 524],
+    // 429 fica de fora: no Render ele vem do bloqueio da borda (hibernate-rate-limited / desafio
+    // do Cloudflare), que dura minutos; repetir só multiplica as requisições e prolonga o bloqueio.
+    statusCodes: [408, 413, 500, 502, 503, 504, 524],
   },
   hooks: {
     beforeRequest: [

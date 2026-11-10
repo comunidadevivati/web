@@ -1,4 +1,5 @@
 import { bffClient } from '@/shared/http/bff-client';
+import { isHTTPError } from 'ky';
 
 // Intervalo mínimo entre chamadas: o Render Free põe os serviços em repouso após ~15 min sem uso.
 const WAKE_INTERVAL_MS = 5 * 60_000;
@@ -17,8 +18,13 @@ const wakeServers = () => {
 
   lastWakeAt = Date.now();
 
-  bffClient.get('api/v1/wake', { timeout: WAKE_TIMEOUT_MS }).catch(() => {
-    // Falha não impede o uso: a próxima chamada ao BFF tenta acordá-lo de novo.
+  bffClient.get('api/v1/wake', { timeout: WAKE_TIMEOUT_MS }).catch((error: unknown) => {
+    // 429: o Render está limitando os despertares; insistir a cada volta à aba só prolonga o
+    // bloqueio, então mantém o intervalo mínimo. Outras falhas: a próxima volta à aba tenta de novo.
+    if (isHTTPError(error) && error.response.status === 429) {
+      return;
+    }
+
     lastWakeAt = 0;
   });
 };
